@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4305D7FB1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */; };
 		434202671EAE08F80012983A /* MerchantKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4342025D1EAE08F80012983A /* MerchantKit.framework */; };
 		4342026C1EAE08F80012983A /* MerchantKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4342026B1EAE08F80012983A /* MerchantKitTests.swift */; };
 		4342026E1EAE08F80012983A /* MerchantKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 434202601EAE08F80012983A /* MerchantKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -32,6 +33,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreKitTransactionObserver.swift; sourceTree = "<group>"; };
 		4342025D1EAE08F80012983A /* MerchantKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MerchantKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		434202601EAE08F80012983A /* MerchantKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MerchantKit.h; sourceTree = "<group>"; };
 		434202611EAE08F80012983A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 				434202781EAE09100012983A /* PurchaseRecord.swift */,
 				434202791EAE09100012983A /* PurchaseStorage.swift */,
 				4342027A1EAE09100012983A /* UserDefaultsPurchaseStorage.swift */,
+				4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */,
 				4342027B1EAE09100012983A /* Product.swift */,
 				4342027C1EAE09100012983A /* PurchasedState.swift */,
 				4342027D1EAE09100012983A /* ReceiptDataTransformer.swift */,
@@ -227,6 +230,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				434202801EAE09100012983A /* Merchant.swift in Sources */,
+				4305D7FB1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift in Sources */,
 				434202861EAE09100012983A /* ReceiptDataTransformer.swift in Sources */,
 				434202831EAE09100012983A /* UserDefaultsPurchaseStorage.swift in Sources */,
 				434202841EAE09100012983A /* Product.swift in Sources */,
@@ -444,6 +448,7 @@
 				434202731EAE08F80012983A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		434202741EAE08F80012983A /* Build configuration list for PBXNativeTarget "MerchantKitTests" */ = {
 			isa = XCConfigurationList;
@@ -452,6 +457,7 @@
 				434202761EAE08F80012983A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
