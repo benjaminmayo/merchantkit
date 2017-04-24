@@ -12,11 +12,22 @@ public final class Merchant {
     fileprivate let storage: PurchaseStorage
     private let transactionObserver = StoreKitTransactionObserver()
     
-    fileprivate var registeredProducts = [String : Product]()
+    fileprivate var _registeredProducts = [String : Product]() // TODO: Consider alternative data structure
+    private var activeTasks = [MerchantTask]()
     
     public init(delegate: MerchantDelegate) {
         self.delegate = delegate
         self.storage = UserDefaultsPurchaseStorage()
+    }
+    
+    internal var registeredProducts: Set<Product> { // TODO: Consider making this public API
+        return Set(self._registeredProducts.values)
+    }
+    
+    public func register<Products : Sequence>(_ products: Products) where Products.Iterator.Element == Product {
+        for product in products {
+            self._registeredProducts[product.identifier] = product
+        }
     }
     
     public func beginObservingTransactions() {
@@ -25,14 +36,8 @@ public final class Merchant {
         SKPaymentQueue.default().add(self.transactionObserver)
     }
     
-    public func register<Products : Sequence>(_ products: Products) where Products.Iterator.Element == Product {
-        for product in products {
-            self.registeredProducts[product.identifier] = product
-        }
-    }
-    
     public func state(forProductWithIdentifier productIdentifier: String) -> PurchasedState {
-        guard let product = self.registeredProducts[productIdentifier] else {
+        guard let product = self._registeredProducts[productIdentifier] else {
             return .unknown
         }
         
@@ -61,6 +66,18 @@ public final class Merchant {
                 }
         }
     }
+    
+    private func addTask(_ task: MerchantTask) {
+        self.activeTasks.append(task)
+    }
+    
+    public func availablePurchasesTask() -> AvailablePurchasesTask {
+        let task = AvailablePurchasesTask(for: self)
+
+        self.addTask(task)
+        
+        return task
+    }
 }
 
 extension Merchant {
@@ -71,7 +88,7 @@ extension Merchant {
 
 extension Merchant : StoreKitTransactionObserverDelegate {
     internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didPurchaseProductWith identifier: String) {
-        guard let product = self.registeredProducts[identifier] else { print("unrecognized product identifier"); return } // TODO: Consider error handling
+        guard let product = self._registeredProducts[identifier] else { print("unrecognized product identifier"); return } // TODO: Consider error handling
         
         guard product.kind == .nonConsumable else { print(product.kind, "not supported via storekit observation"); return } // TODO: Implement consumable support, Decide correct flow for subscription products
         
