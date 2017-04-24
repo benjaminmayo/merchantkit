@@ -1,23 +1,30 @@
 import Foundation
-import Security
 
 public final class ServerReceiptValidator {
-    public let receipt: Receipt
+    public typealias Completion = (Result<Receipt>) -> Void
+    public let receiptData: Data
+    
+    public var onCompletion: Completion?
+    
     fileprivate let session = URLSession(configuration: .default)
     fileprivate let sharedSecret: String
     
-    public init(receipt: Receipt, sharedSecret: String) {
-        self.receipt = receipt
+    public init(receiptData: Data, sharedSecret: String) {
+        self.receiptData = receiptData
         self.sharedSecret = sharedSecret
     }
     
-    func validate() {
-        
+    public func start() {
+        self.sendServerRequest(for: .production)
     }
 }
 
 extension ServerReceiptValidator {
-    private enum StoreEnvironment {
+    private func complete(with result: Result<Receipt>) {
+        self.onCompletion?(result)
+    }
+    
+    fileprivate enum StoreEnvironment {
         case sandbox
         case production
     }
@@ -31,10 +38,10 @@ extension ServerReceiptValidator {
         }
     }
 
-    private func sendServerRequest(for environment: StoreEnvironment) {
+    fileprivate func sendServerRequest(for environment: StoreEnvironment) {
         let urlRequest: URLRequest = {
             let requestDictionary: [String : Any] = [
-                "receipt-data": self.receipt.data.base64EncodedString(),
+                "receipt-data": self.receiptData.base64EncodedString(),
                 "password": self.sharedSecret
             ]
             
@@ -65,12 +72,33 @@ extension ServerReceiptValidator {
                 if status != 0 {
                     throw ReceiptServerError(rawValue: status)!
                 }
+                
+                let validated = try self.validatedReceipt(from: object)
+                
+                self.complete(with: .succeeded(validated))
             }
         } catch ReceiptServerError.receiptIncompatibleWithProductionEnvironment {
             self.sendServerRequest(for: .sandbox)
         } catch let error {
             print(error)
+            
+            self.complete(with: .failed(error))
         }
+    }
+    
+    private func validatedReceipt(from object: [String : Any]) throws -> Receipt {
+        guard let inAppPurchaseInfos = object["in_app"] as? [[String : Any]] else { throw ReceiptParseError.malformed }
+        guard let latestPurchaseInfos = object["latest_receipt_info"] as? [[String : Any]] else { throw ReceiptParseError.malformed }
+    
+        let allInfos = inAppPurchaseInfos + latestPurchaseInfos
+        
+        let entries = try allInfos.map { info in
+            try self.receiptEntry(fromJSONObject: info)
+        }
+        
+        let receipt = Receipt(entries: entries)
+        
+        return receipt
     }
         
     private enum ResponseError : Swift.Error {
@@ -85,6 +113,23 @@ extension ServerReceiptValidator {
         case sharedSecretNotMatch = 21004
         case receiptServerUnavailable = 21005
         case receiptIncompatibleWithProductionEnvironment = 21007
-        case recenitIncompatibleWithSandboxEnvironment = 21008
+        case receiptIncompatibleWithSandboxEnvironment = 21008
+    }
+    
+    private enum ReceiptParseError : Swift.Error {
+        case malformed
+    }
+    
+    private func receiptEntry(fromJSONObject object: [String : Any]) throws -> Receipt.Entry {
+        guard let productIdentifier = object["product_id"] as? String else { throw ReceiptParseError.malformed }
+        
+        let expiryDate: Date?
+        if let formattedExpiry = object["expires_date_ms"] as? String, let milliseconds = Int(formattedExpiry) {
+            expiryDate = Date(millisecondsSince1970: milliseconds)
+        } else {
+            expiryDate = nil
+        }
+        
+        return Receipt.Entry(productIdentifier: productIdentifier, expiryDate: expiryDate)
     }
 }

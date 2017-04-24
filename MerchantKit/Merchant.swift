@@ -3,7 +3,7 @@ import StoreKit
 
 public protocol MerchantDelegate : class {
     func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Product>)
-    func merchant(_ merchant: Merchant, validate receipt: Receipt, completion: @escaping (_ isValid: Bool) -> Void)
+    func merchant(_ merchant: Merchant, validate receiptData: Data, completion: @escaping (_ result: Result<Receipt>) -> Void)
 }
 
 public final class Merchant {

@@ -27,6 +27,7 @@
 		434202881EAE09100012983A /* LocalConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4342027F1EAE09100012983A /* LocalConfiguration.swift */; };
 		436CE12E1EAE4B5B00AB41CD /* DescriptionUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */; };
 		436CE1301EAE7B6400AB41CD /* PriceFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */; };
+		436CE1321EAEA55D00AB41CD /* DateUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE1311EAEA55D00AB41CD /* DateUtilities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		4342027F1EAE09100012983A /* LocalConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalConfiguration.swift; sourceTree = "<group>"; };
 		436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DescriptionUtilities.swift; sourceTree = "<group>"; };
 		436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceFormatter.swift; sourceTree = "<group>"; };
+		436CE1311EAEA55D00AB41CD /* DateUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateUtilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +126,7 @@
 				4342027E1EAE09100012983A /* Receipt.swift */,
 				4342027F1EAE09100012983A /* LocalConfiguration.swift */,
 				436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */,
+				436CE1311EAEA55D00AB41CD /* DateUtilities.swift */,
 			);
 			path = MerchantKit;
 			sourceTree = "<group>";
@@ -256,6 +259,7 @@
 				434202861EAE09100012983A /* ServerReceiptValidator.swift in Sources */,
 				434202831EAE09100012983A /* UserDefaultsPurchaseStorage.swift in Sources */,
 				436CE12E1EAE4B5B00AB41CD /* DescriptionUtilities.swift in Sources */,
+				436CE1321EAEA55D00AB41CD /* DateUtilities.swift in Sources */,
 				434202841EAE09100012983A /* Product.swift in Sources */,
 				434202871EAE09100012983A /* Receipt.swift in Sources */,
 				436CE1301EAE7B6400AB41CD /* PriceFormatter.swift in Sources */,
