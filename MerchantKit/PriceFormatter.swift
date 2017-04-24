@@ -18,7 +18,7 @@ public final class PriceFormatter {
     
     public func string(from price: Price) -> String {
         let (number, _) = price.value
-        print(number)
+
         let isFree = number.compare(PriceFormatter.zero) != .orderedDescending
         
         if isFree && !self.freeText.isEmpty {

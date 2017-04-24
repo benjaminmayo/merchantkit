@@ -24,7 +24,7 @@ public final class AvailablePurchasesTask : NSObject, MerchantTask {
         self.skRequest.start()
     }
     
-    private func finish(with result: TaskResult<Purchases>) {
+    private func finish(with result: Result<Purchases>) {
         self.onCompletion(result)
         
         self.merchant.resignActiveTask(self)
@@ -40,8 +40,6 @@ extension AvailablePurchasesTask : SKProductsRequestDelegate {
             
             return Purchase(productIdentifier: skProduct.productIdentifier, price: price, skProduct: skProduct)
         }
-        
-        print(purchases)
         
         self.onCompletion(.succeeded(Set(purchases)))
     }
