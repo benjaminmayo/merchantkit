@@ -97,6 +97,52 @@ extension Merchant {
 }
 
 extension Merchant {
+    fileprivate func checkReceipt() {
+        if let url = Bundle.main.appStoreReceiptURL, let data = try? Data(contentsOf: url) {
+            self.validateReceipt(with: data)
+        } else {
+            self.refreshReceipt()
+        }
+    }
+    
+    fileprivate func validateReceipt(with data: Data) {
+        self.delegate.merchant(self, validate: data, completion: { result in
+            switch result {
+                case .succeeded(let receipt):
+                    self.updateStorageFrom(receipt)
+                case .failed(let error):
+                    print(error)
+            }
+        })
+    }
+    
+    fileprivate func refreshReceipt() {
+        fatalError("not implemented")
+    }
+    
+    fileprivate func updateStorageFrom(_ receipt: Receipt) {
+        var updatedProducts = Set<Product>()
+        
+        for identifier in receipt.productIdentifiers {
+            let entries = receipt.entries(forProductIdentifier: identifier)
+            
+            let isPurchased = !entries.isEmpty
+            let expiryDate = entries.flatMap { $0.expiryDate }.max()
+            
+            let record = PurchaseRecord(productIdentifier: identifier, expiryDate: expiryDate, isPurchased: isPurchased)
+            
+            let result = self.storage.save(record)
+            
+            if result == .didChangeRecords, let product = self._registeredProducts[identifier] {
+                updatedProducts.insert(product)
+            }
+        }
+        
+        self.didChangeState(for: updatedProducts)
+    }
+}
+
+extension Merchant {
     fileprivate func didChangeState(for products: Set<Product>) {
         self.delegate.merchant(self, didChangeStatesFor: products)
     }
