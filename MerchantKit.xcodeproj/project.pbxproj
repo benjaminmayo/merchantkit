@@ -12,6 +12,7 @@
 		432133B81EAE311E0096919B /* MerchantTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133B71EAE311E0096919B /* MerchantTask.swift */; };
 		432133BA1EAE36170096919B /* Purchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133B91EAE36170096919B /* Purchase.swift */; };
 		432133BC1EAE39640096919B /* Price.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133BB1EAE39640096919B /* Price.swift */; };
+		432133BE1EAE3DFB0096919B /* TaskResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133BD1EAE3DFB0096919B /* TaskResult.swift */; };
 		434202671EAE08F80012983A /* MerchantKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4342025D1EAE08F80012983A /* MerchantKit.framework */; };
 		4342026C1EAE08F80012983A /* MerchantKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4342026B1EAE08F80012983A /* MerchantKitTests.swift */; };
 		4342026E1EAE08F80012983A /* MerchantKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 434202601EAE08F80012983A /* MerchantKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -42,6 +43,7 @@
 		432133B71EAE311E0096919B /* MerchantTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MerchantTask.swift; sourceTree = "<group>"; };
 		432133B91EAE36170096919B /* Purchase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Purchase.swift; sourceTree = "<group>"; };
 		432133BB1EAE39640096919B /* Price.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Price.swift; sourceTree = "<group>"; };
+		432133BD1EAE3DFB0096919B /* TaskResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskResult.swift; sourceTree = "<group>"; };
 		4342025D1EAE08F80012983A /* MerchantKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MerchantKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		434202601EAE08F80012983A /* MerchantKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MerchantKit.h; sourceTree = "<group>"; };
 		434202611EAE08F80012983A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				432133BB1EAE39640096919B /* Price.swift */,
 				434202781EAE09100012983A /* PurchaseRecord.swift */,
 				434202791EAE09100012983A /* PurchaseStorage.swift */,
+				432133BD1EAE3DFB0096919B /* TaskResult.swift */,
 				4342027A1EAE09100012983A /* UserDefaultsPurchaseStorage.swift */,
 				4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */,
 				4342027C1EAE09100012983A /* PurchasedState.swift */,
@@ -251,6 +254,7 @@
 				432133B81EAE311E0096919B /* MerchantTask.swift in Sources */,
 				434202821EAE09100012983A /* PurchaseStorage.swift in Sources */,
 				432133B61EAE2FEA0096919B /* AvailablePurchasesTask.swift in Sources */,
+				432133BE1EAE3DFB0096919B /* TaskResult.swift in Sources */,
 				434202811EAE09100012983A /* PurchaseRecord.swift in Sources */,
 				434202851EAE09100012983A /* PurchasedState.swift in Sources */,
 				432133BA1EAE36170096919B /* Purchase.swift in Sources */,

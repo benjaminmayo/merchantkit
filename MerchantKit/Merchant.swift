@@ -13,7 +13,7 @@ public final class Merchant {
     private let transactionObserver = StoreKitTransactionObserver()
     
     fileprivate var _registeredProducts = [String : Product]() // TODO: Consider alternative data structure
-    private var activeTasks = [MerchantTask]()
+    fileprivate var activeTasks = [MerchantTask]()
     
     public init(delegate: MerchantDelegate) {
         self.delegate = delegate
@@ -67,16 +67,32 @@ public final class Merchant {
         }
     }
     
-    private func addTask(_ task: MerchantTask) {
+    public func availablePurchasesTask() -> AvailablePurchasesTask {
+        return self.makeTask(initializing: {
+            let task = AvailablePurchasesTask(for: self)
+    
+            return task
+        })
+    }
+}
+
+extension Merchant {
+    fileprivate func makeTask<Task : MerchantTask>(initializing creator: () -> Task) -> Task {
+        let task = creator()
+        
+        self.addActiveTask(task)
+        
+        return task
+    }
+    
+    private func addActiveTask(_ task: MerchantTask) {
         self.activeTasks.append(task)
     }
     
-    public func availablePurchasesTask() -> AvailablePurchasesTask {
-        let task = AvailablePurchasesTask(for: self)
-
-        self.addTask(task)
+    internal func resignActiveTask(_ task: MerchantTask) {
+        guard let index = self.activeTasks.index(where: { $0 === task }) else { return }
         
-        return task
+        self.activeTasks.remove(at: index)
     }
 }
 

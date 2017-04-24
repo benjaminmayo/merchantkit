@@ -1,10 +1,15 @@
+import StoreKit
+
 public struct Purchase : Hashable {
     public let productIdentifier: String
     public let price: Price
     
-    internal init(productIdentifier: String, price: Price) {
+    internal let skProduct: SKProduct
+    
+    internal init(productIdentifier: String, price: Price, skProduct: SKProduct) {
         self.productIdentifier = productIdentifier
         self.price = price
+        self.skProduct = skProduct
     }
     
     public var hashValue: Int {
