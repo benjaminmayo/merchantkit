@@ -1,6 +1,6 @@
 import StoreKit
 
-public struct Purchase : Hashable {
+public struct Purchase : Hashable, CustomStringConvertible {
     public let productIdentifier: String
     public let price: Price
     
@@ -10,6 +10,10 @@ public struct Purchase : Hashable {
         self.productIdentifier = productIdentifier
         self.price = price
         self.skProduct = skProduct
+    }
+    
+    public var description: String {
+        return self.defaultDescription(withProperties: ("", "'\(self.productIdentifier)'"), ("price", self.price))
     }
     
     public var hashValue: Int {

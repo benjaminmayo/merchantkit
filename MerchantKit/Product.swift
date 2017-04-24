@@ -1,10 +1,14 @@
-public struct Product : Hashable {
+public struct Product : Hashable, CustomStringConvertible {
     public let identifier: String
     public let kind: Kind
     
     public init(identifier: String, kind: Kind) {
         self.identifier = identifier
         self.kind = kind
+    }
+    
+    public var description: String {
+        return self.defaultDescription(withProperties: ("", "'\(self.identifier)'"))
     }
     
     public var hashValue: Int {

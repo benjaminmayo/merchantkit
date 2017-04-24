@@ -25,6 +25,8 @@
 		434202861EAE09100012983A /* ReceiptDataTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4342027D1EAE09100012983A /* ReceiptDataTransformer.swift */; };
 		434202871EAE09100012983A /* Receipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4342027E1EAE09100012983A /* Receipt.swift */; };
 		434202881EAE09100012983A /* LocalConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4342027F1EAE09100012983A /* LocalConfiguration.swift */; };
+		436CE12E1EAE4B5B00AB41CD /* DescriptionUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */; };
+		436CE1301EAE7B6400AB41CD /* PriceFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +61,8 @@
 		4342027D1EAE09100012983A /* ReceiptDataTransformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReceiptDataTransformer.swift; sourceTree = "<group>"; };
 		4342027E1EAE09100012983A /* Receipt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Receipt.swift; sourceTree = "<group>"; };
 		4342027F1EAE09100012983A /* LocalConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalConfiguration.swift; sourceTree = "<group>"; };
+		436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DescriptionUtilities.swift; sourceTree = "<group>"; };
+		436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceFormatter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +114,7 @@
 				432133B71EAE311E0096919B /* MerchantTask.swift */,
 				432133BD1EAE3DFB0096919B /* TaskResult.swift */,
 				432133BB1EAE39640096919B /* Price.swift */,
+				436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */,
 				434202781EAE09100012983A /* PurchaseRecord.swift */,
 				434202791EAE09100012983A /* PurchaseStorage.swift */,
 				4342027A1EAE09100012983A /* UserDefaultsPurchaseStorage.swift */,
@@ -118,6 +123,7 @@
 				4342027D1EAE09100012983A /* ReceiptDataTransformer.swift */,
 				4342027E1EAE09100012983A /* Receipt.swift */,
 				4342027F1EAE09100012983A /* LocalConfiguration.swift */,
+				436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */,
 			);
 			path = MerchantKit;
 			sourceTree = "<group>";
@@ -249,8 +255,10 @@
 				4305D7FB1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift in Sources */,
 				434202861EAE09100012983A /* ReceiptDataTransformer.swift in Sources */,
 				434202831EAE09100012983A /* UserDefaultsPurchaseStorage.swift in Sources */,
+				436CE12E1EAE4B5B00AB41CD /* DescriptionUtilities.swift in Sources */,
 				434202841EAE09100012983A /* Product.swift in Sources */,
 				434202871EAE09100012983A /* Receipt.swift in Sources */,
+				436CE1301EAE7B6400AB41CD /* PriceFormatter.swift in Sources */,
 				432133B81EAE311E0096919B /* MerchantTask.swift in Sources */,
 				434202821EAE09100012983A /* PurchaseStorage.swift in Sources */,
 				432133B61EAE2FEA0096919B /* AvailablePurchasesTask.swift in Sources */,
