@@ -15,13 +15,11 @@ public final class Merchant {
     fileprivate var _registeredProducts = [String : Product]() // TODO: Consider alternative data structure
     fileprivate var activeTasks = [MerchantTask]()
     
+    fileprivate var purchaseObservers = [String : [MerchantPurchaseObserver]]()
+    
     public init(delegate: MerchantDelegate) {
         self.delegate = delegate
         self.storage = UserDefaultsPurchaseStorage()
-    }
-    
-    internal var registeredProducts: Set<Product> { // TODO: Consider making this public API
-        return Set(self._registeredProducts.values)
     }
     
     public func register<Products : Sequence>(_ products: Products) where Products.Iterator.Element == Product {
@@ -83,6 +81,32 @@ public final class Merchant {
             
             return task 
         })
+    }
+}
+
+extension Merchant {
+    internal var registeredProducts: Set<Product> { // TODO: Consider making this public API
+        return Set(self._registeredProducts.values)
+    }
+    
+    func addPurchaseObserver(_ observer: MerchantPurchaseObserver, forProductIdentifier productIdentifier: String) {
+        var observers = self.purchaseObservers[productIdentifier] ?? []
+        
+        if !observers.contains(where: { $0 === observer }) {
+            observers.append(observer)
+        }
+        
+        self.purchaseObservers[productIdentifier] = observers
+    }
+    
+    func removePurchaseObserver(_ observer: MerchantPurchaseObserver, forProductIdentifier productIdentifier: String) {
+        if var observers = self.purchaseObservers[productIdentifier] {
+            if let index = observers.index(where: { $0 === observer }) {
+                observers.remove(at: index)
+            }
+            
+            self.purchaseObservers[productIdentifier] = observers
+        }
     }
 }
 
@@ -165,10 +189,21 @@ extension Merchant : StoreKitTransactionObserverDelegate {
         guard product.kind == .nonConsumable else { print(product.kind, "not supported via storekit observation"); return } // TODO: Implement consumable support, Decide correct flow for subscription products
         
         let record = PurchaseRecord(productIdentifier: identifier, expiryDate: nil, isPurchased: true)
+        print(record)
         let result = self.storage.save(record)
         
         if result == .didChangeRecords {
             self.didChangeState(for: [product])
+        }
+        
+        for observer in self.purchaseObservers[product.identifier] ?? [] {
+            observer.merchant(self, didCompletePurchaseForProductWith: product.identifier)
+        }
+    }
+    
+    func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFailToPurchaseWith error: Error, forProductWith identifier: String) {
+        for observer in self.purchaseObservers[identifier] ?? [] {
+            observer.merchant(self, didFailPurchaseWith: error, forProductWith: identifier)
         }
     }
 }

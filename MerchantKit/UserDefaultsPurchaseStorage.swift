@@ -10,7 +10,8 @@ public final class UserDefaultsPurchaseStorage : PurchaseStorage {
     private let storageKeyPrefix: String = "productStore"
     
     internal func record(forProductIdentifier productIdentifier: String) -> PurchaseRecord? {
-        guard let dict = self.defaults.dictionary(forKey: productIdentifier) else { return nil }
+        let storageKey = self.storageKey(forProductIdentifier: productIdentifier)
+        guard let dict = self.defaults.dictionary(forKey: storageKey) else { return nil }
         
         let record = self.record(from: dict)
         
