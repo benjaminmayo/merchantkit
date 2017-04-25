@@ -6,19 +6,21 @@ public final class AvailablePurchasesTask : NSObject, MerchantTask {
     public var onCompletion: TaskCompletion<Purchases>!
     
     private unowned let merchant: Merchant
+    private let requestedProductIdentifiers: Set<String>
     private var skRequest: SKProductsRequest!
     
-    internal init(for merchant: Merchant) {
+    internal init(forProductIdentifiers productIdentifiers: Set<String>, with merchant: Merchant) {
+        self.requestedProductIdentifiers = productIdentifiers
         self.merchant = merchant
     }
     
     public func start() {
-        let products = self.merchant.registeredProducts.filter {
-            !self.merchant.state(forProductWithIdentifier: $0.identifier).isPurchased
-        }
-        let productIdentifiers = Set(products.map { $0.identifier})
+        let productIdentifiers = self.requestedProductIdentifiers.isEmpty ? Set(self.merchant.registeredProducts.map { $0.identifier }) : self.requestedProductIdentifiers
+        let purchasableProductIdentifiers = Set(productIdentifiers.filter {
+            !self.merchant.state(forProductWithIdentifier: $0).isPurchased
+        })
         
-        self.skRequest = SKProductsRequest(productIdentifiers: productIdentifiers)
+        self.skRequest = SKProductsRequest(productIdentifiers: purchasableProductIdentifiers)
         self.skRequest.delegate = self
         
         self.skRequest.start()

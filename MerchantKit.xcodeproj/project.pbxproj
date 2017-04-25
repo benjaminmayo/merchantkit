@@ -28,6 +28,7 @@
 		436CE12E1EAE4B5B00AB41CD /* DescriptionUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */; };
 		436CE1301EAE7B6400AB41CD /* PriceFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */; };
 		436CE1321EAEA55D00AB41CD /* DateUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE1311EAEA55D00AB41CD /* DateUtilities.swift */; };
+		436CE1341EAF3D5200AB41CD /* CommitPurchaseTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE1331EAF3D5200AB41CD /* CommitPurchaseTask.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,8 +49,8 @@
 		432133BB1EAE39640096919B /* Price.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Price.swift; sourceTree = "<group>"; };
 		432133BD1EAE3DFB0096919B /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		4342025D1EAE08F80012983A /* MerchantKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MerchantKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		434202601EAE08F80012983A /* MerchantKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MerchantKit.h; sourceTree = "<group>"; };
-		434202611EAE08F80012983A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		434202601EAE08F80012983A /* MerchantKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MerchantKit.h; path = MerchantKit/MerchantKit.h; sourceTree = "<group>"; };
+		434202611EAE08F80012983A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = MerchantKit/Info.plist; sourceTree = "<group>"; };
 		434202661EAE08F80012983A /* MerchantKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MerchantKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4342026B1EAE08F80012983A /* MerchantKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantKitTests.swift; sourceTree = "<group>"; };
 		4342026D1EAE08F80012983A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -65,6 +66,7 @@
 		436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DescriptionUtilities.swift; sourceTree = "<group>"; };
 		436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceFormatter.swift; sourceTree = "<group>"; };
 		436CE1311EAEA55D00AB41CD /* DateUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateUtilities.swift; sourceTree = "<group>"; };
+		436CE1331EAF3D5200AB41CD /* CommitPurchaseTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommitPurchaseTask.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,8 @@
 			isa = PBXGroup;
 			children = (
 				4342025F1EAE08F80012983A /* MerchantKit */,
+				434202601EAE08F80012983A /* MerchantKit.h */,
+				434202611EAE08F80012983A /* Info.plist */,
 				4342026A1EAE08F80012983A /* MerchantKitTests */,
 				4342025E1EAE08F80012983A /* Products */,
 			);
@@ -107,26 +111,15 @@
 		4342025F1EAE08F80012983A /* MerchantKit */ = {
 			isa = PBXGroup;
 			children = (
-				434202601EAE08F80012983A /* MerchantKit.h */,
-				434202611EAE08F80012983A /* Info.plist */,
 				434202771EAE09100012983A /* Merchant.swift */,
-				4342027B1EAE09100012983A /* Product.swift */,
-				432133B91EAE36170096919B /* Purchase.swift */,
-				432133B51EAE2FEA0096919B /* AvailablePurchasesTask.swift */,
-				432133B71EAE311E0096919B /* MerchantTask.swift */,
-				432133BD1EAE3DFB0096919B /* Result.swift */,
-				432133BB1EAE39640096919B /* Price.swift */,
-				436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */,
-				434202781EAE09100012983A /* PurchaseRecord.swift */,
-				434202791EAE09100012983A /* PurchaseStorage.swift */,
-				4342027A1EAE09100012983A /* UserDefaultsPurchaseStorage.swift */,
-				4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */,
-				4342027C1EAE09100012983A /* PurchasedState.swift */,
-				4342027D1EAE09100012983A /* ServerReceiptValidator.swift */,
-				4342027E1EAE09100012983A /* Receipt.swift */,
-				4342027F1EAE09100012983A /* LocalConfiguration.swift */,
-				436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */,
-				436CE1311EAEA55D00AB41CD /* DateUtilities.swift */,
+				436CE13B1EAF42E600AB41CD /* Model */,
+				436CE1381EAF428800AB41CD /* Tasks */,
+				436CE1391EAF42A000AB41CD /* User Interface */,
+				436CE13A1EAF42D800AB41CD /* Persistence Storage */,
+				436CE1361EAF424B00AB41CD /* Receipt Validators */,
+				436CE1371EAF426500AB41CD /* Utilities */,
+				436CE13C1EAF432300AB41CD /* Internal Helpers */,
+				436CE1351EAF421400AB41CD /* Internal Utilities */,
 			);
 			path = MerchantKit;
 			sourceTree = "<group>";
@@ -138,6 +131,80 @@
 				4342026D1EAE08F80012983A /* Info.plist */,
 			);
 			path = MerchantKitTests;
+			sourceTree = "<group>";
+		};
+		436CE1351EAF421400AB41CD /* Internal Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */,
+				436CE1311EAEA55D00AB41CD /* DateUtilities.swift */,
+			);
+			name = "Internal Utilities";
+			sourceTree = "<group>";
+		};
+		436CE1361EAF424B00AB41CD /* Receipt Validators */ = {
+			isa = PBXGroup;
+			children = (
+				4342027D1EAE09100012983A /* ServerReceiptValidator.swift */,
+			);
+			name = "Receipt Validators";
+			sourceTree = "<group>";
+		};
+		436CE1371EAF426500AB41CD /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				4342027F1EAE09100012983A /* LocalConfiguration.swift */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
+		436CE1381EAF428800AB41CD /* Tasks */ = {
+			isa = PBXGroup;
+			children = (
+				432133B71EAE311E0096919B /* MerchantTask.swift */,
+				432133B51EAE2FEA0096919B /* AvailablePurchasesTask.swift */,
+				436CE1331EAF3D5200AB41CD /* CommitPurchaseTask.swift */,
+			);
+			name = Tasks;
+			sourceTree = "<group>";
+		};
+		436CE1391EAF42A000AB41CD /* User Interface */ = {
+			isa = PBXGroup;
+			children = (
+				436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */,
+			);
+			name = "User Interface";
+			sourceTree = "<group>";
+		};
+		436CE13A1EAF42D800AB41CD /* Persistence Storage */ = {
+			isa = PBXGroup;
+			children = (
+				434202781EAE09100012983A /* PurchaseRecord.swift */,
+				434202791EAE09100012983A /* PurchaseStorage.swift */,
+				4342027A1EAE09100012983A /* UserDefaultsPurchaseStorage.swift */,
+			);
+			name = "Persistence Storage";
+			sourceTree = "<group>";
+		};
+		436CE13B1EAF42E600AB41CD /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4342027C1EAE09100012983A /* PurchasedState.swift */,
+				4342027B1EAE09100012983A /* Product.swift */,
+				432133B91EAE36170096919B /* Purchase.swift */,
+				4342027E1EAE09100012983A /* Receipt.swift */,
+				432133BD1EAE3DFB0096919B /* Result.swift */,
+				432133BB1EAE39640096919B /* Price.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		436CE13C1EAF432300AB41CD /* Internal Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */,
+			);
+			name = "Internal Helpers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,6 +326,7 @@
 				434202861EAE09100012983A /* ServerReceiptValidator.swift in Sources */,
 				434202831EAE09100012983A /* UserDefaultsPurchaseStorage.swift in Sources */,
 				436CE12E1EAE4B5B00AB41CD /* DescriptionUtilities.swift in Sources */,
+				436CE1341EAF3D5200AB41CD /* CommitPurchaseTask.swift in Sources */,
 				436CE1321EAEA55D00AB41CD /* DateUtilities.swift in Sources */,
 				434202841EAE09100012983A /* Product.swift in Sources */,
 				434202871EAE09100012983A /* Receipt.swift in Sources */,
