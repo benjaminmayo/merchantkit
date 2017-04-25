@@ -67,11 +67,21 @@ public final class Merchant {
         }
     }
     
-    public func availablePurchasesTask() -> AvailablePurchasesTask {
+    /// Find possible purchases for the given product identifiers. If `productIdentifiers` is empty, then the merchant looks up all purchases for all registered products.
+    public func availablePurchasesTask(forProductIdentifiers productIdentifiers: Set<String> = []) -> AvailablePurchasesTask {
         return self.makeTask(initializing: {
-            let task = AvailablePurchasesTask(for: self)
+            let task = AvailablePurchasesTask(forProductIdentifiers: productIdentifiers, with: self)
     
             return task
+        })
+    }
+    
+    /// Begin buying a specific purchase.
+    public func commitPurchaseTask(for purchase: Purchase) -> CommitPurchaseTask {
+        return self.makeTask(initializing: {
+            let task = CommitPurchaseTask(for: purchase, with: self)
+            
+            return task 
         })
     }
 }
@@ -117,7 +127,7 @@ extension Merchant {
     }
     
     fileprivate func refreshReceipt() {
-        fatalError("not implemented")
+        fatalError("not yet implemented")
     }
     
     fileprivate func updateStorageFrom(_ receipt: Receipt) {
