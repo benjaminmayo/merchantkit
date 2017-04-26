@@ -1,5 +1,3 @@
-import StoreKit
-
 public final class CommitPurchaseTask : MerchantTask {
     public let purchase: Purchase
     
@@ -7,6 +5,7 @@ public final class CommitPurchaseTask : MerchantTask {
     
     fileprivate unowned let merchant: Merchant
     
+    // Create a task by using the `Merchant.commitPurchaseTask(for:)` API.
     internal init(for purchase: Purchase, with merchant: Merchant) {
         self.purchase = purchase
         self.merchant = merchant
@@ -19,6 +18,7 @@ public final class CommitPurchaseTask : MerchantTask {
         SKPaymentQueue.default().add(payment)
     }
     
+    /// Cancel the task. Cancellation does not fire the `onCompletion` handler.
     public func cancel() {
         self.merchant.removePurchaseObserver(self, forProductIdentifier: self.purchase.productIdentifier)
         

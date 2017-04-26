@@ -1,10 +1,10 @@
 public protocol PurchaseStorage : class {
     func record(forProductIdentifier productIdentifier: String) -> PurchaseRecord?
-    func save(_ record: PurchaseRecord) -> SaveResult
-    func removeRecord(forProductIdentifier productIdentifier: String)
+    func save(_ record: PurchaseRecord) -> StorageUpdateResult
+    func removeRecord(forProductIdentifier productIdentifier: String) -> StorageUpdateResult
 }
 
-public enum SaveResult {
+public enum StorageUpdateResult {
     case didChangeRecords
     case noChanges
 }

@@ -2,7 +2,7 @@ import Foundation
 
 public struct LocalConfiguration {
     public let products: Set<Product>
-    public let sharedSecret: String
+    public let userInfo: [String : Any]
     
     public init(fromResourceNamed resourceName: String, extension: String) throws {
         guard let url = Bundle.main.url(forResource: resourceName, withExtension: `extension`) else {
@@ -43,9 +43,9 @@ public struct LocalConfiguration {
             
             return Product(identifier: identifier, kind: kind)
         }
-        
-        self.sharedSecret = try requiredValue(for: "SharedSecret", in: object, ofType: String.self)
+
         self.products = Set(products)
+        self.userInfo = object["UserInfo"] as? [String : Any] ?? [:]
     }
     
     public func product(withIdentifier identifier: String) -> Product? {

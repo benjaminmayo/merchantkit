@@ -1,5 +1,4 @@
-import StoreKit
-
+/// This task fetches possible purchases the user may wish to execute, and automatically excludes purchases the user has already purchased.
 public final class AvailablePurchasesTask : NSObject, MerchantTask {
     public typealias Purchases = Set<Purchase>
     
@@ -9,6 +8,7 @@ public final class AvailablePurchasesTask : NSObject, MerchantTask {
     private let requestedProductIdentifiers: Set<String>
     private var skRequest: SKProductsRequest!
     
+    // Create a task using the `Merchant.availablePurchasesTask(forProductIdentifiers(for:)` API. 
     internal init(forProductIdentifiers productIdentifiers: Set<String>, with merchant: Merchant) {
         self.requestedProductIdentifiers = productIdentifiers
         self.merchant = merchant
@@ -24,6 +24,13 @@ public final class AvailablePurchasesTask : NSObject, MerchantTask {
         self.skRequest.delegate = self
         
         self.skRequest.start()
+    }
+    
+    /// Cancel the task. Cancellation does not fire the `onCompletion` handler.
+    public func cancel() {
+        self.skRequest?.cancel()
+        
+        self.merchant.resignActiveTask(self)
     }
     
     private func finish(with result: Result<Purchases>) {

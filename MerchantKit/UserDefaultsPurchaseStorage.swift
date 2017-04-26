@@ -16,7 +16,7 @@ public final class UserDefaultsPurchaseStorage : PurchaseStorage {
         return PurchaseRecord(from: dict)
     }
     
-    public func save(_ record: PurchaseRecord) -> SaveResult {
+    public func save(_ record: PurchaseRecord) -> StorageUpdateResult {
         let previousRecord = self.record(forProductIdentifier: record.productIdentifier)
         
         guard record != previousRecord else {
@@ -31,10 +31,12 @@ public final class UserDefaultsPurchaseStorage : PurchaseStorage {
         return .didChangeRecords
     }
     
-    public func removeRecord(forProductIdentifier productIdentifier: String) {
+    public func removeRecord(forProductIdentifier productIdentifier: String) -> StorageUpdateResult {
         let key = self.storageKey(forProductIdentifier: productIdentifier)
         
         self.defaults.removeObject(forKey: key)
+        
+        return .didChangeRecords
     }
     
     private func storageKey(forProductIdentifier productIdentifier: String) -> String {

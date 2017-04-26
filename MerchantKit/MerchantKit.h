@@ -6,7 +6,8 @@
 //  Copyright © 2017 Benjamin. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <StoreKit/StoreKit.h>
 
 //! Project version number for MerchantKit.
 FOUNDATION_EXPORT double MerchantKitVersionNumber;

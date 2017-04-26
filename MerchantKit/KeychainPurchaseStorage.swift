@@ -29,7 +29,7 @@ public final class KeychainPurchaseStorage : PurchaseStorage {
         return nil
     }
     
-    public func save(_ record: PurchaseRecord) -> SaveResult {
+    public func save(_ record: PurchaseRecord) -> StorageUpdateResult {
         let storageKey = self.storageKey(forProductIdentifier: record.productIdentifier)
 
         do {
@@ -44,11 +44,17 @@ public final class KeychainPurchaseStorage : PurchaseStorage {
         }
     }
     
-    public func removeRecord(forProductIdentifier productIdentifier: String) {
+    public func removeRecord(forProductIdentifier productIdentifier: String) -> StorageUpdateResult {
         let storageKey = self.storageKey(forProductIdentifier: productIdentifier)
         self.purchaseRecordCache.removeValue(forKey: productIdentifier)
 
-        try? self.removeDictFromKeychain(forKey: storageKey)
+        do {
+            try self.removeDictFromKeychain(forKey: storageKey)
+            
+            return .didChangeRecords
+        } catch {
+            return .noChanges
+        }
     }
     
     private func storageKey(forProductIdentifier productIdentifier: String) -> String {

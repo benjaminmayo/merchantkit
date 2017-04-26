@@ -82,9 +82,7 @@ extension ServerReceiptValidator {
             }
         } catch ReceiptServerError.receiptIncompatibleWithProductionEnvironment {
             self.sendServerRequest(for: .sandbox)
-        } catch let error {
-            print(error)
-            
+        } catch let error {            
             self.complete(with: .failed(error))
         }
     }

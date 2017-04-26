@@ -1,17 +1,21 @@
-import Foundation
-
+/// The purchased state of a product as deemed by the `Merchant`.
 public enum PurchasedState : Equatable {
-    case unknown
-    case notPurchased
-    case isSubscribed(expiryDate: Date?)
-    case isConsumable
+    case unknown // User may or may not have purchased the product. The application should decide to be lenient or strict regarding whether the user can access the product.
+    case notPurchased // User has not purchased the product. The application should not allow the user to access the product.
+    case isSold // User has bought the non-consumable product.
+    case isSubscribed(expiryDate: Date?) // User has subscribed to the subscription product. An expiry date may not be available for display at all times.
     
+    /// If you do not want to distinguish by product kind, check the `isPurchased` property to see if the associated product should be accessible to the user.
     public var isPurchased: Bool {
         switch self {
-            case .isSubscribed(_): return true
-            case .isConsumable: return true
-            case .notPurchased: return false
-            case .unknown: return false
+            case .unknown:
+                return false
+            case .notPurchased:
+                return false
+            case .isSold:
+                return true
+            case .isSubscribed(_):
+                return true
         }
     }
     
@@ -19,8 +23,8 @@ public enum PurchasedState : Equatable {
         switch (lhs, rhs) {
             case (.unknown, .unknown): return true
             case (.notPurchased, .notPurchased): return true
+            case (.isSold, .isSold): return true
             case (.isSubscribed(let a), .isSubscribed(let b)): return a == b
-            case (.isConsumable, .isConsumable): return true 
             default: return false
         }
     }

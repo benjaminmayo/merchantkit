@@ -1,6 +1,6 @@
-import Foundation
-
+/// The `Price` encapsulates a numeric value and locale. Use a `PriceFormatter` to display the purchase price of a product in UI.
 public struct Price : Hashable, CustomStringConvertible {
+    /// Underlying values that make up the `Price`
     public let value: (NSDecimalNumber, Locale)
     
     internal init(from number: NSDecimalNumber, in locale: Locale) {

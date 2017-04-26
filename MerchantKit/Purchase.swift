@@ -1,5 +1,7 @@
 import StoreKit
 
+/// A `Purchase` represents a possible transaction between the application and the user. 
+// A typical flow comprises fetching possible purchases using the `AvailablePurchasesTask`, then displaying these purchases to the user in UI. Begin buying a `Purchase` using the `CommitPurchaseTask`.
 public struct Purchase : Hashable, CustomStringConvertible {
     public let productIdentifier: String
     public let price: Price

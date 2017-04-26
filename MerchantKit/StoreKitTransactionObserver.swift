@@ -1,6 +1,9 @@
 import StoreKit
 
 internal protocol StoreKitTransactionObserverDelegate : class {
+    func storeKitTransactionObserverWillUpdatePurchases(_ observer: StoreKitTransactionObserver)
+    func storeKitTransactionObserverDidUpdatePurchases(_ observer: StoreKitTransactionObserver)
+    
     func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didPurchaseProductWith identifier: String)
     func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFailToPurchaseWith error: Error, forProductWith identifier: String)
 }
@@ -13,9 +16,9 @@ internal final class StoreKitTransactionObserver : NSObject, SKPaymentTransactio
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        self.delegate?.storeKitTransactionObserverWillUpdatePurchases(self)
+        
         for transaction in transactions {
-            print(transaction)
-            
             switch transaction.transactionState {
                 case .purchased:
                     self.completePurchase(for: transaction)
@@ -29,6 +32,8 @@ internal final class StoreKitTransactionObserver : NSObject, SKPaymentTransactio
                     break
             }
         }
+        
+        self.delegate?.storeKitTransactionObserverDidUpdatePurchases(self)
     }
     
     private func completePurchase(for transaction: SKPaymentTransaction) {

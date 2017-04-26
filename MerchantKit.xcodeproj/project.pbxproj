@@ -34,6 +34,10 @@
 		436CE1521EB0A61200AB41CD /* Buckets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE1511EB0A61200AB41CD /* Buckets.swift */; };
 		436CE1541EB0B3F600AB41CD /* StoreKitReceiptDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE1531EB0B3F600AB41CD /* StoreKitReceiptDataFetcher.swift */; };
 		436CE1561EB0C0D300AB41CD /* KeychainPurchaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE1551EB0C0D300AB41CD /* KeychainPurchaseStorage.swift */; };
+		436CE15A1EB0DCBC00AB41CD /* ErrorCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE1591EB0DCBC00AB41CD /* ErrorCategory.swift */; };
+		436CE15C1EB0E0C200AB41CD /* MerchantDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE15B1EB0E0C200AB41CD /* MerchantDelegate.swift */; };
+		436CE15F1EB0EF3D00AB41CD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436CE15E1EB0EF3D00AB41CD /* Foundation.framework */; };
+		436CE1611EB0EF4100AB41CD /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436CE1601EB0EF4100AB41CD /* StoreKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +81,10 @@
 		436CE1511EB0A61200AB41CD /* Buckets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buckets.swift; sourceTree = "<group>"; };
 		436CE1531EB0B3F600AB41CD /* StoreKitReceiptDataFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreKitReceiptDataFetcher.swift; sourceTree = "<group>"; };
 		436CE1551EB0C0D300AB41CD /* KeychainPurchaseStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainPurchaseStorage.swift; sourceTree = "<group>"; };
+		436CE1591EB0DCBC00AB41CD /* ErrorCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorCategory.swift; sourceTree = "<group>"; };
+		436CE15B1EB0E0C200AB41CD /* MerchantDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MerchantDelegate.swift; sourceTree = "<group>"; };
+		436CE15E1EB0EF3D00AB41CD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		436CE1601EB0EF4100AB41CD /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +92,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				436CE1611EB0EF4100AB41CD /* StoreKit.framework in Frameworks */,
+				436CE15F1EB0EF3D00AB41CD /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,6 +116,7 @@
 				434202611EAE08F80012983A /* Info.plist */,
 				4342026A1EAE08F80012983A /* MerchantKitTests */,
 				4342025E1EAE08F80012983A /* Products */,
+				436CE15D1EB0EF3D00AB41CD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -122,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				434202771EAE09100012983A /* Merchant.swift */,
+				436CE15B1EB0E0C200AB41CD /* MerchantDelegate.swift */,
 				436CE13B1EAF42E600AB41CD /* Model */,
 				436CE1381EAF428800AB41CD /* Tasks */,
 				436CE1391EAF42A000AB41CD /* User Interface */,
@@ -206,6 +218,7 @@
 				4342027E1EAE09100012983A /* Receipt.swift */,
 				432133BD1EAE3DFB0096919B /* Result.swift */,
 				432133BB1EAE39640096919B /* Price.swift */,
+				436CE1591EB0DCBC00AB41CD /* ErrorCategory.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -220,6 +233,15 @@
 				436CE1511EB0A61200AB41CD /* Buckets.swift */,
 			);
 			name = "Internal Helpers";
+			sourceTree = "<group>";
+		};
+		436CE15D1EB0EF3D00AB41CD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				436CE1601EB0EF4100AB41CD /* StoreKit.framework */,
+				436CE15E1EB0EF3D00AB41CD /* Foundation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -341,6 +363,7 @@
 				4305D7FB1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift in Sources */,
 				434202861EAE09100012983A /* ServerReceiptValidator.swift in Sources */,
 				434202831EAE09100012983A /* UserDefaultsPurchaseStorage.swift in Sources */,
+				436CE15C1EB0E0C200AB41CD /* MerchantDelegate.swift in Sources */,
 				436CE12E1EAE4B5B00AB41CD /* DescriptionUtilities.swift in Sources */,
 				436CE1341EAF3D5200AB41CD /* CommitPurchaseTask.swift in Sources */,
 				436CE1321EAEA55D00AB41CD /* DateUtilities.swift in Sources */,
@@ -359,6 +382,7 @@
 				432133BA1EAE36170096919B /* Purchase.swift in Sources */,
 				434202881EAE09100012983A /* LocalConfiguration.swift in Sources */,
 				436CE1521EB0A61200AB41CD /* Buckets.swift in Sources */,
+				436CE15A1EB0DCBC00AB41CD /* ErrorCategory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
