@@ -7,6 +7,18 @@ MerchantKit handles retrieving purchases, tracking purchased products, watching 
 
 MerchantKit is designed for apps that have a finite set of purchasable products (although it is flexible enough to work with other types of apps too). For example, MerchantKit is a great way to add an unlockable 'pro tier' to an application, as a one-time purchase or ongoing subscription.
 
+## Hello World
+
+Find out if a product has been purchased:
+
+    let merchant = Merchant(storage: ..., delegate: self)
+    print("isPurchased", merchant.state(forProductWithIdentifier: "MyProductIdentifier").isPurchased)
+    
+Buy a product:
+
+    let task = merchant.commitPurchaseTask(for: purchase)
+    task.start()
+
 ## Project Goals
 
 - Straightforward, concise, API to support non-consumable, consumable and subscription In-App Purchases.
