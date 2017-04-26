@@ -91,7 +91,7 @@ let config = try! MerchantKit.LocalConfiguration(fromResourceNamed: "MerchantCon
 self.merchant.register(config.products)
 
 ```
-4. Call the `setup` method on the merchant instance before escaping the `application(_:, didFinishLaunchingWithOptions:)` method. This tells the merchant to start observing the payment queue.`
+4. Call `Merchant.setup()` on the merchant instance before escaping the `application(_:, didFinishLaunchingWithOptions:)` method. This tells the merchant to start observing the payment queue.`
 ```swift
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     self.merchant = Merchant(storage: KeychainPurchaseStorage(serviceName: "AppName"), delegate: self)    
