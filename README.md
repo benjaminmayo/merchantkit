@@ -11,13 +11,25 @@ MerchantKit is designed for apps that have a finite set of purchasable products 
 
 Find out if a product has been purchased:
 
-    let merchant = Merchant(storage: ..., delegate: self)
-    print("isPurchased", merchant.state(forProductWithIdentifier: "MyProductIdentifier").isPurchased)
-    
+```swift
+let merchant = Merchant(storage: ..., delegate: self)
+print("isPurchased", merchant.state(forProductWithIdentifier: "MyProductIdentifier").isPurchased)
+```
+
 Buy a product:
 
-    let task = merchant.commitPurchaseTask(for: purchase)
-    task.start()
+```swift
+let task = merchant.commitPurchaseTask(for: purchase)
+task.onCompletion = { result in 
+    switch result {
+        case .succeeded(_):
+            print("purchase completed")
+        case .failed(let error):
+            print("\(error)")
+    }
+}
+task.start()
+```
 
 ## Project Goals
 
