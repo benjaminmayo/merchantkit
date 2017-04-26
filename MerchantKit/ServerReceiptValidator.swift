@@ -67,13 +67,16 @@ extension ServerReceiptValidator {
                 throw error
             } else if let data = data {
                 guard let json = try? JSONSerialization.jsonObject(with: data, options: []), let object = json as? [String : Any] else { throw ResponseError.noData }
+                                
                 guard let status = object["status"] as? Int else { throw ResponseError.malformed }
                 
                 if status != 0 {
                     throw ReceiptServerError(rawValue: status)!
                 }
                 
-                let validated = try self.validatedReceipt(from: object)
+                guard let receiptObject = object["receipt"] as? [String : Any] else { throw ResponseError.malformed }
+                
+                let validated = try self.validatedReceipt(from: receiptObject)
                 
                 self.complete(with: .succeeded(validated))
             }
@@ -88,15 +91,18 @@ extension ServerReceiptValidator {
     
     private func validatedReceipt(from object: [String : Any]) throws -> Receipt {
         guard let inAppPurchaseInfos = object["in_app"] as? [[String : Any]] else { throw ReceiptParseError.malformed }
-        guard let latestPurchaseInfos = object["latest_receipt_info"] as? [[String : Any]] else { throw ReceiptParseError.malformed }
-    
-        let allInfos = inAppPurchaseInfos + latestPurchaseInfos
         
+        var allInfos = inAppPurchaseInfos
+        
+        if let latestPurchaseInfos = object["latest_receipt_info"] as? [[String : Any]] {
+            allInfos.append(contentsOf: latestPurchaseInfos)
+        }
+    
         let entries = try allInfos.map { info in
             try self.receiptEntry(fromJSONObject: info)
         }
         
-        let receipt = Receipt(entries: entries)
+        let receipt = ConstructedReceipt(from: entries)
         
         return receipt
     }
@@ -120,7 +126,7 @@ extension ServerReceiptValidator {
         case malformed
     }
     
-    private func receiptEntry(fromJSONObject object: [String : Any]) throws -> Receipt.Entry {
+    private func receiptEntry(fromJSONObject object: [String : Any]) throws -> ReceiptEntry {
         guard let productIdentifier = object["product_id"] as? String else { throw ReceiptParseError.malformed }
         
         let expiryDate: Date?
@@ -130,6 +136,6 @@ extension ServerReceiptValidator {
             expiryDate = nil
         }
         
-        return Receipt.Entry(productIdentifier: productIdentifier, expiryDate: expiryDate)
+        return ReceiptEntry(productIdentifier: productIdentifier, expiryDate: expiryDate)
     }
 }

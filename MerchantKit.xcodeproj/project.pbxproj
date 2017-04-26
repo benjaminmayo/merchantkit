@@ -30,6 +30,10 @@
 		436CE1321EAEA55D00AB41CD /* DateUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE1311EAEA55D00AB41CD /* DateUtilities.swift */; };
 		436CE1341EAF3D5200AB41CD /* CommitPurchaseTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE1331EAF3D5200AB41CD /* CommitPurchaseTask.swift */; };
 		436CE13E1EAF462B00AB41CD /* MerchantProductObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE13D1EAF462B00AB41CD /* MerchantProductObserver.swift */; };
+		436CE1501EB0A5B900AB41CD /* ConstructedReceipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE14F1EB0A5B900AB41CD /* ConstructedReceipt.swift */; };
+		436CE1521EB0A61200AB41CD /* Buckets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE1511EB0A61200AB41CD /* Buckets.swift */; };
+		436CE1541EB0B3F600AB41CD /* StoreKitReceiptDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE1531EB0B3F600AB41CD /* StoreKitReceiptDataFetcher.swift */; };
+		436CE1561EB0C0D300AB41CD /* KeychainPurchaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE1551EB0C0D300AB41CD /* KeychainPurchaseStorage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +73,10 @@
 		436CE1311EAEA55D00AB41CD /* DateUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateUtilities.swift; sourceTree = "<group>"; };
 		436CE1331EAF3D5200AB41CD /* CommitPurchaseTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommitPurchaseTask.swift; sourceTree = "<group>"; };
 		436CE13D1EAF462B00AB41CD /* MerchantProductObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MerchantProductObserver.swift; sourceTree = "<group>"; };
+		436CE14F1EB0A5B900AB41CD /* ConstructedReceipt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstructedReceipt.swift; sourceTree = "<group>"; };
+		436CE1511EB0A61200AB41CD /* Buckets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buckets.swift; sourceTree = "<group>"; };
+		436CE1531EB0B3F600AB41CD /* StoreKitReceiptDataFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreKitReceiptDataFetcher.swift; sourceTree = "<group>"; };
+		436CE1551EB0C0D300AB41CD /* KeychainPurchaseStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainPurchaseStorage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +192,7 @@
 				434202781EAE09100012983A /* PurchaseRecord.swift */,
 				434202791EAE09100012983A /* PurchaseStorage.swift */,
 				4342027A1EAE09100012983A /* UserDefaultsPurchaseStorage.swift */,
+				436CE1551EB0C0D300AB41CD /* KeychainPurchaseStorage.swift */,
 			);
 			name = "Persistence Storage";
 			sourceTree = "<group>";
@@ -205,7 +214,10 @@
 			isa = PBXGroup;
 			children = (
 				4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */,
+				436CE1531EB0B3F600AB41CD /* StoreKitReceiptDataFetcher.swift */,
 				436CE13D1EAF462B00AB41CD /* MerchantProductObserver.swift */,
+				436CE14F1EB0A5B900AB41CD /* ConstructedReceipt.swift */,
+				436CE1511EB0A61200AB41CD /* Buckets.swift */,
 			);
 			name = "Internal Helpers";
 			sourceTree = "<group>";
@@ -323,6 +335,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				436CE1501EB0A5B900AB41CD /* ConstructedReceipt.swift in Sources */,
 				434202801EAE09100012983A /* Merchant.swift in Sources */,
 				432133BC1EAE39640096919B /* Price.swift in Sources */,
 				4305D7FB1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift in Sources */,
@@ -334,6 +347,7 @@
 				434202841EAE09100012983A /* Product.swift in Sources */,
 				434202871EAE09100012983A /* Receipt.swift in Sources */,
 				436CE1301EAE7B6400AB41CD /* PriceFormatter.swift in Sources */,
+				436CE1561EB0C0D300AB41CD /* KeychainPurchaseStorage.swift in Sources */,
 				436CE13E1EAF462B00AB41CD /* MerchantProductObserver.swift in Sources */,
 				432133B81EAE311E0096919B /* MerchantTask.swift in Sources */,
 				434202821EAE09100012983A /* PurchaseStorage.swift in Sources */,
@@ -341,8 +355,10 @@
 				432133BE1EAE3DFB0096919B /* Result.swift in Sources */,
 				434202811EAE09100012983A /* PurchaseRecord.swift in Sources */,
 				434202851EAE09100012983A /* PurchasedState.swift in Sources */,
+				436CE1541EB0B3F600AB41CD /* StoreKitReceiptDataFetcher.swift in Sources */,
 				432133BA1EAE36170096919B /* Purchase.swift in Sources */,
 				434202881EAE09100012983A /* LocalConfiguration.swift in Sources */,
+				436CE1521EB0A61200AB41CD /* Buckets.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,16 +10,16 @@ public final class Merchant {
     public let delegate: MerchantDelegate
     
     fileprivate let storage: PurchaseStorage
-    private let transactionObserver = StoreKitTransactionObserver()
+    fileprivate let transactionObserver = StoreKitTransactionObserver()
     
     fileprivate var _registeredProducts = [String : Product]() // TODO: Consider alternative data structure
     fileprivate var activeTasks = [MerchantTask]()
     
-    fileprivate var purchaseObservers = [String : [MerchantPurchaseObserver]]()
+    fileprivate var purchaseObservers = Buckets<String, MerchantPurchaseObserver>()
     
-    public init(delegate: MerchantDelegate) {
+    public init(storage: PurchaseStorage, delegate: MerchantDelegate) {
         self.delegate = delegate
-        self.storage = UserDefaultsPurchaseStorage()
+        self.storage = storage
     }
     
     public func register<Products : Sequence>(_ products: Products) where Products.Iterator.Element == Product {
@@ -28,10 +28,10 @@ public final class Merchant {
         }
     }
     
-    public func beginObservingTransactions() {
-        self.transactionObserver.delegate = self
+    public func setup() {
+        self.beginObservingTransactions()
         
-        SKPaymentQueue.default().add(self.transactionObserver)
+        self.checkReceipt(updateProducts: .all)
     }
     
     public func state(forProductWithIdentifier productIdentifier: String) -> PurchasedState {
@@ -74,7 +74,7 @@ public final class Merchant {
         })
     }
     
-    /// Begin buying a specific purchase.
+    /// Begin buying a product, supplying a `purchase` fetched from the `AvailablePurchasesTask`.
     public func commitPurchaseTask(for purchase: Purchase) -> CommitPurchaseTask {
         return self.makeTask(initializing: {
             let task = CommitPurchaseTask(for: purchase, with: self)
@@ -90,7 +90,7 @@ extension Merchant {
     }
     
     func addPurchaseObserver(_ observer: MerchantPurchaseObserver, forProductIdentifier productIdentifier: String) {
-        var observers = self.purchaseObservers[productIdentifier] ?? []
+        var observers = self.purchaseObservers[productIdentifier]
         
         if !observers.contains(where: { $0 === observer }) {
             observers.append(observer)
@@ -100,10 +100,10 @@ extension Merchant {
     }
     
     func removePurchaseObserver(_ observer: MerchantPurchaseObserver, forProductIdentifier productIdentifier: String) {
-        if var observers = self.purchaseObservers[productIdentifier] {
-            if let index = observers.index(where: { $0 === observer }) {
-                observers.remove(at: index)
-            }
+        var observers = self.purchaseObservers[productIdentifier]
+        
+        if let index = observers.index(where: { $0 === observer }) {
+            observers.remove(at: index)
             
             self.purchaseObservers[productIdentifier] = observers
         }
@@ -131,33 +131,53 @@ extension Merchant {
 }
 
 extension Merchant {
-    fileprivate func checkReceipt() {
-        if let url = Bundle.main.appStoreReceiptURL, let data = try? Data(contentsOf: url) {
-            self.validateReceipt(with: data)
-        } else {
-            self.refreshReceipt()
-        }
+    fileprivate func beginObservingTransactions() {
+        self.transactionObserver.delegate = self
+        
+        SKPaymentQueue.default().add(self.transactionObserver)
     }
     
-    fileprivate func validateReceipt(with data: Data) {
-        self.delegate.merchant(self, validate: data, completion: { result in
-            switch result {
-                case .succeeded(let receipt):
-                    self.updateStorageFrom(receipt)
+    fileprivate func checkReceipt(updateProducts updateType: ReceiptUpdateType) {
+        let dataFetcher = StoreKitReceiptDataFetcher()
+        dataFetcher.onCompletion = { dataResult in
+            switch dataResult {
+                case .succeeded(let receiptData):
+                    self.fetchValidatedReceipt(with: receiptData, completion: { validateResult in
+                        switch validateResult {
+                            case .succeeded(let receipt):
+                                self.updateStorageWithValidatedReceipt(receipt, updateProducts: updateType)
+                            case .failed(let error):
+                                print(error)
+                        }
+                    })
                 case .failed(let error):
                     print(error)
             }
-        })
+        }
+    
+        dataFetcher.start()
     }
     
-    fileprivate func refreshReceipt() {
+    fileprivate func fetchValidatedReceipt(with data: Data, completion: @escaping (Result<Receipt>) -> Void) {
+        self.delegate.merchant(self, validate: data, completion: completion)
+    }
+    
+    fileprivate func refreshReceiptData() {
         fatalError("not yet implemented")
     }
     
-    fileprivate func updateStorageFrom(_ receipt: Receipt) {
+    fileprivate func updateStorageWithValidatedReceipt(_ receipt: Receipt, updateProducts updateType: ReceiptUpdateType) {
         var updatedProducts = Set<Product>()
+        let productIdentifiers: Set<String>
         
-        for identifier in receipt.productIdentifiers {
+        switch updateType {
+            case .all:
+                productIdentifiers = receipt.productIdentifiers
+            case .specific(let identifiers):
+                productIdentifiers = identifiers
+        }
+        
+        for identifier in productIdentifiers {
             let entries = receipt.entries(forProductIdentifier: identifier)
             
             let isPurchased = !entries.isEmpty
@@ -172,7 +192,24 @@ extension Merchant {
             }
         }
         
-        self.didChangeState(for: updatedProducts)
+        if case .all = updateType {
+            for (identifier, product) in self._registeredProducts {
+                if !receipt.productIdentifiers.contains(identifier) {
+                    self.storage.removeRecord(forProductIdentifier: identifier)
+                    
+                    updatedProducts.insert(product)
+                }
+            }
+        }
+        
+        DispatchQueue.main.async {
+            self.didChangeState(for: updatedProducts)
+        }
+    }
+    
+    fileprivate enum ReceiptUpdateType {
+        case all
+        case specific(productIdentifiers: Set<String>)
     }
 }
 
@@ -189,20 +226,23 @@ extension Merchant : StoreKitTransactionObserverDelegate {
         guard product.kind == .nonConsumable else { print(product.kind, "not supported via storekit observation"); return } // TODO: Implement consumable support, Decide correct flow for subscription products
         
         let record = PurchaseRecord(productIdentifier: identifier, expiryDate: nil, isPurchased: true)
-        print(record)
         let result = self.storage.save(record)
         
         if result == .didChangeRecords {
             self.didChangeState(for: [product])
         }
         
-        for observer in self.purchaseObservers[product.identifier] ?? [] {
+        for observer in self.purchaseObservers[product.identifier] {
             observer.merchant(self, didCompletePurchaseForProductWith: product.identifier)
+        }
+        
+        if case .subscription(_) = product.kind { // if the product is a subscription, check the receipt to get additional metadata (expiry date)
+            self.checkReceipt(updateProducts: .specific(productIdentifiers: [product.identifier]))
         }
     }
     
     func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFailToPurchaseWith error: Error, forProductWith identifier: String) {
-        for observer in self.purchaseObservers[identifier] ?? [] {
+        for observer in self.purchaseObservers[identifier] {
             observer.merchant(self, didFailPurchaseWith: error, forProductWith: identifier)
         }
     }

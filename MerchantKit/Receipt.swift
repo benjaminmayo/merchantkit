@@ -1,32 +1,17 @@
-public struct Receipt {
-    public let productIdentifiers: Set<String>
-    private let entriesForProductIdentifiers: [String : [Entry]]
+public protocol Receipt {
+    /// Product identifiers represented in this receipt
+    var productIdentifiers: Set<String> { get }
     
-    public init(entries: [Entry]) {
-        var data = [String : [Entry]]()
-        
-        for entry in entries {
-            var entriesForProductIdentifier = data[entry.productIdentifier] ?? []
-            entriesForProductIdentifier.append(entry)
-            
-            data[entry.productIdentifier] = entriesForProductIdentifier
-        }
-        
-        self.productIdentifiers = Set(data.keys)
-        self.entriesForProductIdentifiers = data
-    }
+    /// All entries available for the given `productIdentifier`.
+    func entries(forProductIdentifier productIdentifier: String) -> [ReceiptEntry]
+}
+
+public struct ReceiptEntry { // Ideally, this would be Receipt.Entry
+    public let productIdentifier: String
+    public let expiryDate: Date?
     
-    public func entries(forProductIdentifier productIdentifier: String) -> [Entry] {
-        return self.entriesForProductIdentifiers[productIdentifier] ?? []
-    }
-    
-    public struct Entry {
-        public let productIdentifier: String
-        public let expiryDate: Date?
-        
-        init(productIdentifier: String, expiryDate: Date?) {
-            self.productIdentifier = productIdentifier
-            self.expiryDate = expiryDate
-        }
+    public init(productIdentifier: String, expiryDate: Date?) {
+        self.productIdentifier = productIdentifier
+        self.expiryDate = expiryDate
     }
 }

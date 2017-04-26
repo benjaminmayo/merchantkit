@@ -48,6 +48,12 @@ public struct LocalConfiguration {
         self.products = Set(products)
     }
     
+    public func product(withIdentifier identifier: String) -> Product? {
+        return self.products.first(where: { candidate in
+            candidate.identifier == identifier
+        })
+    }
+    
     public enum ResourceError : Swift.Error {
         case notFound
         case invalidFormat
