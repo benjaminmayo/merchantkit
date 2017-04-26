@@ -7,7 +7,7 @@ MerchantKit handles retrieving purchases, tracking purchased products, watching 
 
 MerchantKit is designed for apps that have a finite set of purchasable products (although it is flexible enough to work with other types of apps too). For example, MerchantKit is a great way to add an unlockable 'pro tier' to an application, as a one-time purchase or ongoing subscription.
 
-## Hello World
+## Example Snippets
 
 Find out if a product has been purchased:
 
@@ -54,6 +54,50 @@ public func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Prod
 - No external dependencies beyond Foundation and StoreKit.
 - Prioritise developer convenience and accessibility over security. MerchantKit should support secure anti-piracy methods where possible without compromising developer ease-of-use.
 - Do-whatever-you-want open source license.
-- Written for the most modern public Swift version using idiomatic language constructs.
+- Compatibility with latest Swift version using idiomatic language constructs.
 
-The codebase is in flux right now. MerchantKit is by no means finished and there are major components that are in the project's scope but completely unimplemented (consumable products are not supported). 
+The codebase is in flux right now. MerchantKit is by no means finished and there are major components that are in the project's scope but completely unimplemented (consumable products are not supported). The test suite is currently bare.
+
+## Getting Started
+
+1. Compile the MerchantKit framework and embed it in your application. In your app delegate, import `MerchantKit` create a `Merchant` instance in `application(_:, didFinishLaunchingWithOptions:)`. Supply a storage object (recommended: KeychainPurchaseStorage) and a delegate.
+```swift
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    self.merchant = Merchant(storage: KeychainPurchaseStorage(serviceName: "AppName"), delegate: self)    
+    ...
+}
+```
+
+2. Implement the two required delegate methods to validate receipt data and receive notifications when PurchasedState changes for products.
+```swift
+func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Product>) {
+    for product in products {
+        print("updated \(product)")
+    }
+ }
+    
+func merchant(_ merchant: Merchant, validate receiptData: Data, completion: @escaping (Result<Receipt>) -> Void) {
+    let validator = ServerReceiptValidator(receiptData: receiptData, sharedSecret: "iTunesStoreSharedSecretGoesHere")
+    validator.onCompletion = { result in
+        completion(result)
+    }
+        
+    validator.start()
+}
+```
+3. Register products as soon as possible (typically within `application(_:, didFinishLaunchingWithOptions:)`). You may want to load these products from a resource file. The included `LocalConfiguration` object provides a mechanism for this.
+```swift
+let config = try! MerchantKit.LocalConfiguration(fromResourceNamed: "MerchantConfig", extension: "plist")
+self.merchant.register(config.products)
+
+```
+4. Call the `setup` method on the merchant instance before leaving `application(_:, didFinishLaunchingWithOptions:). This tells the merchant to start observing the payment queue.`
+```swift
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    self.merchant = Merchant(storage: KeychainPurchaseStorage(serviceName: "AppName"), delegate: self)    
+    ...
+    self.merchant.setup()
+    ...
+}
+```
+5. That's it.
