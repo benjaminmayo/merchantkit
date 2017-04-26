@@ -60,7 +60,7 @@ The codebase is in flux right now. MerchantKit is by no means finished and there
 
 ## Getting Started
 
-1. Compile the MerchantKit framework and embed it in your application. In your app delegate, import `MerchantKit` create a `Merchant` instance in `application(_:, didFinishLaunchingWithOptions:)`. Supply a storage object (recommended: KeychainPurchaseStorage) and a delegate.
+1. Compile the MerchantKit framework and embed it in your application. In your app delegate, import `MerchantKit` create a `Merchant` instance in `application(_:, didFinishLaunchingWithOptions:)`. Supply a storage object (recommended: `KeychainPurchaseStorage`) and a delegate.
 ```swift
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     self.merchant = Merchant(storage: KeychainPurchaseStorage(serviceName: "AppName"), delegate: self)    
