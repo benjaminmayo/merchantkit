@@ -13,7 +13,7 @@ Find out if a product has been purchased:
 
 ```swift
 let merchant = Merchant(storage: ..., delegate: self)
-print("isPurchased", merchant.state(forProductWithIdentifier: "MyProductIdentifier").isPurchased)
+print("isPurchased", merchant.state(forProductWithIdentifier: "iap.productidentifier").isPurchased)
 ```
 
 Buy a product:
@@ -29,6 +29,23 @@ task.onCompletion = { result in
     }
 }
 task.start()
+```
+
+Get notified when a subscription expires:
+
+```swift
+public func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Product>) {
+    if let subscriptionProduct = products.first(where: { $0.identifier == "subscription.protier") }) {
+        let state = merchant.state(forProductWithIdentifier: "subscription.protier").isPurchased
+        
+        switch state {
+            case .isSubscribed(let expiryDate):
+                print("subscribed, expires \(expiryDate)")
+            default:
+                print("subscription expired")
+        }
+    }
+}
 ```
 
 ## Project Goals
