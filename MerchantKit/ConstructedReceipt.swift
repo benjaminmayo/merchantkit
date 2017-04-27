@@ -1,3 +1,5 @@
+/// `ConstructedReceipt` accepts an eager array of `ReceiptEntry` items and interfaces as a `Receipt`.
+/// This is used by the `ServerReceiptResponseParser` to make its validated receipt.
 internal struct ConstructedReceipt : Receipt {
     var productIdentifiers: Set<String> {
         return self.entries.keys

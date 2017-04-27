@@ -1,5 +1,5 @@
-import Foundation
-
+/// Sends a validation request to the iTunes server. 
+/// Attempts to make a validated receipt from the response and calls `onCompletion` when finished.
 public final class ServerReceiptValidator {
     public typealias Completion = (Result<Receipt>) -> Void
     public let receiptData: Data
@@ -66,74 +66,15 @@ extension ServerReceiptValidator {
             if let error = error {
                 throw error
             } else if let data = data {
-                guard let json = try? JSONSerialization.jsonObject(with: data, options: []), let object = json as? [String : Any] else { throw ResponseError.noData }
-                                
-                guard let status = object["status"] as? Int else { throw ResponseError.malformed }
+                let parser = ServerReceiptResponseParser() // this object handles the actual parsing of the data
+                let validatedReceipt = try parser.receipt(from: data)
                 
-                if status != 0 {
-                    throw ReceiptServerError(rawValue: status)!
-                }
-                
-                guard let receiptObject = object["receipt"] as? [String : Any] else { throw ResponseError.malformed }
-                
-                let validated = try self.validatedReceipt(from: receiptObject)
-                
-                self.complete(with: .succeeded(validated))
+                self.complete(with: .succeeded(validatedReceipt))
             }
-        } catch ReceiptServerError.receiptIncompatibleWithProductionEnvironment {
+        } catch ServerReceiptResponseParser.ReceiptStatusError.receiptIncompatibleWithProductionEnvironment {
             self.sendServerRequest(for: .sandbox)
         } catch let error {            
             self.complete(with: .failed(error))
         }
-    }
-    
-    private func validatedReceipt(from object: [String : Any]) throws -> Receipt {
-        guard let inAppPurchaseInfos = object["in_app"] as? [[String : Any]] else { throw ReceiptParseError.malformed }
-        
-        var allInfos = inAppPurchaseInfos
-        
-        if let latestPurchaseInfos = object["latest_receipt_info"] as? [[String : Any]] {
-            allInfos.append(contentsOf: latestPurchaseInfos)
-        }
-    
-        let entries = try allInfos.map { info in
-            try self.receiptEntry(fromJSONObject: info)
-        }
-        
-        let receipt = ConstructedReceipt(from: entries)
-        
-        return receipt
-    }
-        
-    private enum ResponseError : Swift.Error {
-        case noData
-        case malformed
-    }
-    
-    private enum ReceiptServerError : Int, Swift.Error {
-        case generic = 21000
-        case malformedRequest = 21002
-        case authenticationFailed = 21003
-        case sharedSecretNotMatch = 21004
-        case receiptServerUnavailable = 21005
-        case receiptIncompatibleWithProductionEnvironment = 21007
-        case receiptIncompatibleWithSandboxEnvironment = 21008
-    }
-    
-    private enum ReceiptParseError : Swift.Error {
-        case malformed
-    }
-    
-    private func receiptEntry(fromJSONObject object: [String : Any]) throws -> ReceiptEntry {
-        guard let productIdentifier = object["product_id"] as? String else { throw ReceiptParseError.malformed }
-        
-        let expiryDate: Date?
-        if let formattedExpiry = object["expires_date_ms"] as? String, let milliseconds = Int(formattedExpiry) {
-            expiryDate = Date(millisecondsSince1970: milliseconds)
-        } else {
-            expiryDate = nil
-        }
-        
-        return ReceiptEntry(productIdentifier: productIdentifier, expiryDate: expiryDate)
     }
 }

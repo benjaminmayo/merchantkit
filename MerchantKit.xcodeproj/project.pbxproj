@@ -13,6 +13,11 @@
 		432133BA1EAE36170096919B /* Purchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133B91EAE36170096919B /* Purchase.swift */; };
 		432133BC1EAE39640096919B /* Price.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133BB1EAE39640096919B /* Price.swift */; };
 		432133BE1EAE3DFB0096919B /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133BD1EAE3DFB0096919B /* Result.swift */; };
+		4337A8951EB1EC2B00EAF633 /* ServerReceiptResponseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4337A8941EB1EC2B00EAF633 /* ServerReceiptResponseParser.swift */; };
+		4337A8971EB1F1CA00EAF633 /* ServerReceiptResponseParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4337A8961EB1F1CA00EAF633 /* ServerReceiptResponseParserTests.swift */; };
+		4337A8991EB1F1EB00EAF633 /* testSubscriptionReceiptResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 4337A8981EB1F1EB00EAF633 /* testSubscriptionReceiptResponse.json */; };
+		4337A89B1EB1FAAD00EAF633 /* BucketsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4337A89A1EB1FAAD00EAF633 /* BucketsTests.swift */; };
+		4337A89D1EB1FE3300EAF633 /* PurchaseRecordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4337A89C1EB1FE3300EAF633 /* PurchaseRecordTests.swift */; };
 		434202671EAE08F80012983A /* MerchantKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4342025D1EAE08F80012983A /* MerchantKit.framework */; };
 		4342026C1EAE08F80012983A /* MerchantKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4342026B1EAE08F80012983A /* MerchantKitTests.swift */; };
 		4342026E1EAE08F80012983A /* MerchantKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 434202601EAE08F80012983A /* MerchantKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -57,6 +62,11 @@
 		432133B91EAE36170096919B /* Purchase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Purchase.swift; sourceTree = "<group>"; };
 		432133BB1EAE39640096919B /* Price.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Price.swift; sourceTree = "<group>"; };
 		432133BD1EAE3DFB0096919B /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		4337A8941EB1EC2B00EAF633 /* ServerReceiptResponseParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerReceiptResponseParser.swift; sourceTree = "<group>"; };
+		4337A8961EB1F1CA00EAF633 /* ServerReceiptResponseParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerReceiptResponseParserTests.swift; sourceTree = "<group>"; };
+		4337A8981EB1F1EB00EAF633 /* testSubscriptionReceiptResponse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testSubscriptionReceiptResponse.json; sourceTree = "<group>"; };
+		4337A89A1EB1FAAD00EAF633 /* BucketsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BucketsTests.swift; sourceTree = "<group>"; };
+		4337A89C1EB1FE3300EAF633 /* PurchaseRecordTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseRecordTests.swift; sourceTree = "<group>"; };
 		4342025D1EAE08F80012983A /* MerchantKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MerchantKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		434202601EAE08F80012983A /* MerchantKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MerchantKit.h; path = MerchantKit/MerchantKit.h; sourceTree = "<group>"; };
 		434202611EAE08F80012983A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = MerchantKit/Info.plist; sourceTree = "<group>"; };
@@ -108,6 +118,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4337A89E1EB1FE3900EAF633 /* Test Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4337A8981EB1F1EB00EAF633 /* testSubscriptionReceiptResponse.json */,
+			);
+			name = "Test Resources";
+			sourceTree = "<group>";
+		};
 		434202531EAE08F80012983A = {
 			isa = PBXGroup;
 			children = (
@@ -150,6 +168,10 @@
 			isa = PBXGroup;
 			children = (
 				4342026B1EAE08F80012983A /* MerchantKitTests.swift */,
+				4337A8961EB1F1CA00EAF633 /* ServerReceiptResponseParserTests.swift */,
+				4337A89A1EB1FAAD00EAF633 /* BucketsTests.swift */,
+				4337A89C1EB1FE3300EAF633 /* PurchaseRecordTests.swift */,
+				4337A89E1EB1FE3900EAF633 /* Test Resources */,
 				4342026D1EAE08F80012983A /* Info.plist */,
 			);
 			path = MerchantKitTests;
@@ -228,6 +250,7 @@
 			children = (
 				4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */,
 				436CE1531EB0B3F600AB41CD /* StoreKitReceiptDataFetcher.swift */,
+				4337A8941EB1EC2B00EAF633 /* ServerReceiptResponseParser.swift */,
 				436CE13D1EAF462B00AB41CD /* MerchantProductObserver.swift */,
 				436CE14F1EB0A5B900AB41CD /* ConstructedReceipt.swift */,
 				436CE1511EB0A61200AB41CD /* Buckets.swift */,
@@ -347,6 +370,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4337A8991EB1F1EB00EAF633 /* testSubscriptionReceiptResponse.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -360,6 +384,7 @@
 				436CE1501EB0A5B900AB41CD /* ConstructedReceipt.swift in Sources */,
 				434202801EAE09100012983A /* Merchant.swift in Sources */,
 				432133BC1EAE39640096919B /* Price.swift in Sources */,
+				4337A8951EB1EC2B00EAF633 /* ServerReceiptResponseParser.swift in Sources */,
 				4305D7FB1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift in Sources */,
 				434202861EAE09100012983A /* ServerReceiptValidator.swift in Sources */,
 				434202831EAE09100012983A /* UserDefaultsPurchaseStorage.swift in Sources */,
@@ -391,6 +416,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4342026C1EAE08F80012983A /* MerchantKitTests.swift in Sources */,
+				4337A89D1EB1FE3300EAF633 /* PurchaseRecordTests.swift in Sources */,
+				4337A89B1EB1FAAD00EAF633 /* BucketsTests.swift in Sources */,
+				4337A8971EB1F1CA00EAF633 /* ServerReceiptResponseParserTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
