@@ -45,7 +45,8 @@ public struct LocalConfiguration {
         }
 
         self.products = Set(products)
-        self.userInfo = object["UserInfo"] as? [String : Any] ?? [:]
+                
+        self.userInfo = object["User Info"] as? [String : Any] ?? [:]
     }
     
     public func product(withIdentifier identifier: String) -> Product? {
