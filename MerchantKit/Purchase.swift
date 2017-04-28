@@ -8,9 +8,9 @@ public struct Purchase : Hashable, CustomStringConvertible {
     
     internal let skProduct: SKProduct
     
-    internal init(productIdentifier: String, price: Price, skProduct: SKProduct) {
-        self.productIdentifier = productIdentifier
-        self.price = price
+    internal init(from skProduct: SKProduct) {
+        self.productIdentifier = skProduct.productIdentifier
+        self.price = Price(from: skProduct.price, in: skProduct.priceLocale)
         self.skProduct = skProduct
     }
     

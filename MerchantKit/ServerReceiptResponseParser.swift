@@ -25,9 +25,7 @@ internal struct ServerReceiptResponseParser {
             allInfos = inAppPurchaseInfos
         }
             
-        let entries = try allInfos.map { info in
-            try self.receiptEntry(fromJSONObject: info)
-        }
+        let entries = try allInfos.map(self.receiptEntry(fromJSONObject:))
             
         let receipt = ConstructedReceipt(from: entries)
             

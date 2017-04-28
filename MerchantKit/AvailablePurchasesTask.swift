@@ -43,11 +43,7 @@ extension AvailablePurchasesTask : SKProductsRequestDelegate {
     public func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         let skProducts = response.products
         
-        let purchases: [Purchase] = skProducts.map { skProduct in
-            let price = Price(from: skProduct.price, in: skProduct.priceLocale)
-            
-            return Purchase(productIdentifier: skProduct.productIdentifier, price: price, skProduct: skProduct)
-        }
+        let purchases: [Purchase] = skProducts.map(Purchase.init(from:))
         
         self.onCompletion(.succeeded(Set(purchases)))
     }

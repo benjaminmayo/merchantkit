@@ -22,7 +22,7 @@ public final class Merchant {
     }
     
     /// Products must be registered before their states are consistently valid. Products should be registered as early as possible.
-    /// See `LocalConfiguration` for a naive way to register products using a locally stored file.
+    /// See `LocalConfiguration` for a basic way to register products using a locally stored file.
     public func register<Products : Sequence>(_ products: Products) where Products.Iterator.Element == Product {
         for product in products {
             self._registeredProducts[product.identifier] = product
@@ -202,7 +202,7 @@ extension Merchant {
             
             if isPurchased {
                 let expiryDate = entries.flatMap { $0.expiryDate }.max()
-            
+                
                 let record = PurchaseRecord(productIdentifier: identifier, expiryDate: expiryDate)
                 
                 result = self.storage.save(record)
