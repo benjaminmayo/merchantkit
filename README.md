@@ -107,7 +107,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 - Add tests to the bare test suite. MerchantKit components can be tested separately, including the validators and `PurchaseStorage` types.
 - Add a validator for In-App Purchase data that does not depend on network requests. This requires parsing the ASN resource from the local bundle. The tricky part is implementing this without relying on external dependencies. Help would be appreciated in this area.
-- Implement consumable purchases somehow. This requires some notion of a 'stock' system although it's unclear at this point how much of this is in `MerchantKit`'s scope and how much should be delegated out to the application. Either way, some work is required.
+- Implement consumable purchases somehow. This will likely involve a special delegate callback to tell the application to update its quantities.
 - Extend the API of `PriceFormatter` to be a comprehensive formatter for product prices. This includes adding ways to express subscription periods (eg: '£3.99 per month').
 - Probably a lot more stuff I haven't thought of yet.
 
