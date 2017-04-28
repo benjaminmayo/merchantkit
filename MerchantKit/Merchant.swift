@@ -36,12 +36,12 @@ public final class Merchant {
         self.checkReceipt(updateProducts: .all, fetchBehavior: .onlyFetch)
     }
     
-    /// Gets a registered product for a given `productIdentifier`.
+    /// Returns a registered product for a given `productIdentifier`, or `nil` if not found.
     public func product(withIdentifier productIdentifier: String) -> Product? {
         return self._registeredProducts[productIdentifier]
     }
     
-    /// Returns the state for a product associated to a `productIdentifier`.
+    /// Returns the state for a `product`.
     public func state(for product: Product) -> PurchasedState {
         guard let record = self.storage.record(forProductIdentifier: product.identifier) else {
             return .notPurchased
@@ -225,8 +225,10 @@ extension Merchant {
             }
         }
         
-        DispatchQueue.main.async {
-            self.didChangeState(for: updatedProducts)
+        if !updatedProducts.isEmpty {
+            DispatchQueue.main.async {
+                self.didChangeState(for: updatedProducts)
+            }
         }
     }
     
