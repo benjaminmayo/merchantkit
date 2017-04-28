@@ -12,8 +12,8 @@ MerchantKit is designed for apps that have a finite set of purchasable products 
 Find out if a product has been purchased:
 
 ```swift
-let merchant = Merchant(storage: ..., delegate: self)
-print("isPurchased", merchant.state(forProductWithIdentifier: "iap.productidentifier").isPurchased)
+let product = merchant.product(withIdentifier "iap.productidentifier")
+print("isPurchased", merchant.state(for: product).isPurchased)
 ```
 
 Buy a product:
@@ -36,7 +36,7 @@ Get notified when a subscription expires:
 ```swift
 public func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Product>) {
     if let subscriptionProduct = products.first(where: { $0.identifier == "subscription.protier") }) {
-        let state = merchant.state(forProductWithIdentifier: "subscription.protier")
+        let state = merchant.state(for: subscriptionProduct)
         
         switch state {
             case .isSubscribed(let expiryDate):
@@ -95,6 +95,7 @@ self.merchant.register(config.products)
 ```swift
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     self.merchant = Merchant(storage: KeychainPurchaseStorage(serviceName: "AppName"), delegate: self)    
+    self.merchant.register(...)
     ...
     self.merchant.setup()
     ...
