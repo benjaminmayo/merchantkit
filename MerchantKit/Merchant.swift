@@ -36,13 +36,14 @@ public final class Merchant {
         self.checkReceipt(updateProducts: .all, fetchBehavior: .onlyFetch)
     }
     
+    /// Gets a registered product for a given `productIdentifier`.
+    public func product(withIdentifier productIdentifier: String) -> Product? {
+        return self._registeredProducts[productIdentifier]
+    }
+    
     /// Returns the state for a product associated to a `productIdentifier`.
-    public func state(forProductWithIdentifier productIdentifier: String) -> PurchasedState {
-        guard let product = self._registeredProducts[productIdentifier] else {
-            return .unknown
-        }
-        
-        guard let record = self.storage.record(forProductIdentifier: productIdentifier) else {
+    public func state(for product: Product) -> PurchasedState {
+        guard let record = self.storage.record(forProductIdentifier: product.identifier) else {
             return .notPurchased
         }
         
@@ -67,10 +68,12 @@ public final class Merchant {
         self.checkReceipt(updateProducts: .all, fetchBehavior: .alwaysRefresh)
     }
     
-    /// Find possible purchases for the given product identifiers. If `productIdentifiers` is empty, then the merchant looks up all purchases for all registered products.
-    public func availablePurchasesTask(forProductIdentifiers productIdentifiers: Set<String> = []) -> AvailablePurchasesTask {
+    /// Find possible purchases for the given products. If `products` is empty, then the merchant looks up all purchases for all registered products.
+    public func availablePurchasesTask(for products: Set<Product> = []) -> AvailablePurchasesTask {
         return self.makeTask(initializing: {
-            let task = AvailablePurchasesTask(forProductIdentifiers: productIdentifiers, with: self)
+            let products = products.isEmpty ? Set(self._registeredProducts.values) : products
+            
+            let task = AvailablePurchasesTask(for: products, with: self)
     
             return task
         })
@@ -87,10 +90,6 @@ public final class Merchant {
 }
 
 extension Merchant {
-    internal var registeredProducts: Set<Product> { // TODO: Consider making this public API
-        return Set(self._registeredProducts.values)
-    }
-    
     internal func handleError(_ error: Error, in category: ErrorCategory) {
         self.delegate.merchant(self, didEncounter: error, in: category)
     }
@@ -211,7 +210,7 @@ extension Merchant {
                 result = self.storage.removeRecord(forProductIdentifier: identifier)
             }
             
-            if result == .didChangeRecords, let product = self._registeredProducts[identifier] {
+            if result == .didChangeRecords, let product = self.product(withIdentifier: identifier) {
                 updatedProducts.insert(product)
             }
         }
@@ -256,7 +255,7 @@ extension Merchant : StoreKitTransactionObserverDelegate {
             observer.merchant(self, didCompletePurchaseForProductWith: identifier)
         }
         
-        if let product = self._registeredProducts[identifier] {
+        if let product = self.product(withIdentifier: identifier) {
             if result == .didChangeRecords {
                 self.didChangeState(for: [product])
             }
