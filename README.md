@@ -36,7 +36,7 @@ Get notified when a subscription expires:
 ```swift
 public func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Product>) {
     if let subscriptionProduct = products.first(where: { $0.identifier == "subscription.protier") }) {
-        let state = merchant.state(forProductWithIdentifier: "subscription.protier").isPurchased
+        let state = merchant.state(forProductWithIdentifier: "subscription.protier")
         
         switch state {
             case .isSubscribed(let expiryDate):
@@ -68,7 +68,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 }
 ```
 
-2. Implement the two required methods in `MerchantDelegate` to validate receipt data and receive notifications when the PurchasedState changes for registered products.
+2. Implement the two required methods in `MerchantDelegate` to validate receipt data and receive notifications when the `PurchasedState` changes for registered products.
 ```swift
 func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Product>) {
     for product in products {
