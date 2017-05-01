@@ -31,6 +31,7 @@
 		434202861EAE09100012983A /* ServerReceiptValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4342027D1EAE09100012983A /* ServerReceiptValidator.swift */; };
 		434202871EAE09100012983A /* Receipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4342027E1EAE09100012983A /* Receipt.swift */; };
 		434202881EAE09100012983A /* LocalConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4342027F1EAE09100012983A /* LocalConfiguration.swift */; };
+		4350D4761EB3931300DA47C5 /* RestorePurchasesTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4350D4751EB3931300DA47C5 /* RestorePurchasesTask.swift */; };
 		436CE12E1EAE4B5B00AB41CD /* DescriptionUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */; };
 		436CE1301EAE7B6400AB41CD /* PriceFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */; };
 		436CE1321EAEA55D00AB41CD /* DateUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE1311EAEA55D00AB41CD /* DateUtilities.swift */; };
@@ -40,7 +41,6 @@
 		436CE1521EB0A61200AB41CD /* Buckets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE1511EB0A61200AB41CD /* Buckets.swift */; };
 		436CE1541EB0B3F600AB41CD /* StoreKitReceiptDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE1531EB0B3F600AB41CD /* StoreKitReceiptDataFetcher.swift */; };
 		436CE1561EB0C0D300AB41CD /* KeychainPurchaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE1551EB0C0D300AB41CD /* KeychainPurchaseStorage.swift */; };
-		436CE15A1EB0DCBC00AB41CD /* ErrorCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE1591EB0DCBC00AB41CD /* ErrorCategory.swift */; };
 		436CE15C1EB0E0C200AB41CD /* MerchantDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE15B1EB0E0C200AB41CD /* MerchantDelegate.swift */; };
 		436CE15F1EB0EF3D00AB41CD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436CE15E1EB0EF3D00AB41CD /* Foundation.framework */; };
 		436CE1611EB0EF4100AB41CD /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436CE1601EB0EF4100AB41CD /* StoreKit.framework */; };
@@ -84,6 +84,7 @@
 		4342027D1EAE09100012983A /* ServerReceiptValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerReceiptValidator.swift; sourceTree = "<group>"; };
 		4342027E1EAE09100012983A /* Receipt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Receipt.swift; sourceTree = "<group>"; };
 		4342027F1EAE09100012983A /* LocalConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalConfiguration.swift; sourceTree = "<group>"; };
+		4350D4751EB3931300DA47C5 /* RestorePurchasesTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestorePurchasesTask.swift; sourceTree = "<group>"; };
 		436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DescriptionUtilities.swift; sourceTree = "<group>"; };
 		436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceFormatter.swift; sourceTree = "<group>"; };
 		436CE1311EAEA55D00AB41CD /* DateUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateUtilities.swift; sourceTree = "<group>"; };
@@ -93,7 +94,6 @@
 		436CE1511EB0A61200AB41CD /* Buckets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buckets.swift; sourceTree = "<group>"; };
 		436CE1531EB0B3F600AB41CD /* StoreKitReceiptDataFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreKitReceiptDataFetcher.swift; sourceTree = "<group>"; };
 		436CE1551EB0C0D300AB41CD /* KeychainPurchaseStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainPurchaseStorage.swift; sourceTree = "<group>"; };
-		436CE1591EB0DCBC00AB41CD /* ErrorCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorCategory.swift; sourceTree = "<group>"; };
 		436CE15B1EB0E0C200AB41CD /* MerchantDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MerchantDelegate.swift; sourceTree = "<group>"; };
 		436CE15E1EB0EF3D00AB41CD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		436CE1601EB0EF4100AB41CD /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -210,6 +210,7 @@
 				432133B71EAE311E0096919B /* MerchantTask.swift */,
 				432133B51EAE2FEA0096919B /* AvailablePurchasesTask.swift */,
 				436CE1331EAF3D5200AB41CD /* CommitPurchaseTask.swift */,
+				4350D4751EB3931300DA47C5 /* RestorePurchasesTask.swift */,
 			);
 			name = Tasks;
 			sourceTree = "<group>";
@@ -243,7 +244,6 @@
 				4342027E1EAE09100012983A /* Receipt.swift */,
 				432133BD1EAE3DFB0096919B /* Result.swift */,
 				432133BB1EAE39640096919B /* Price.swift */,
-				436CE1591EB0DCBC00AB41CD /* ErrorCategory.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -385,6 +385,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				436CE1501EB0A5B900AB41CD /* ConstructedReceipt.swift in Sources */,
+				4350D4761EB3931300DA47C5 /* RestorePurchasesTask.swift in Sources */,
 				434202801EAE09100012983A /* Merchant.swift in Sources */,
 				4337A8A31EB2433A00EAF633 /* EphemeralPurchaseStorage.swift in Sources */,
 				432133BC1EAE39640096919B /* Price.swift in Sources */,
@@ -411,7 +412,6 @@
 				432133BA1EAE36170096919B /* Purchase.swift in Sources */,
 				434202881EAE09100012983A /* LocalConfiguration.swift in Sources */,
 				436CE1521EB0A61200AB41CD /* Buckets.swift in Sources */,
-				436CE15A1EB0DCBC00AB41CD /* ErrorCategory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,7 +12,7 @@ public final class Merchant {
     
     fileprivate var purchaseObservers = Buckets<String, MerchantPurchaseObserver>()
     
-    fileprivate var receiptDataFetcher: StoreKitReceiptDataFetcher?
+    fileprivate var receiptFetchers: [StoreKitReceiptDataFetcher.FetchPolicy : StoreKitReceiptDataFetcher] = [:]
     fileprivate var identifiersForPendingObservedPurchases = Set<String>()
     
     /// Create a Merchant, at application launch. Assign a consistent `storage` and a `delegate` to receive callbacks. 
@@ -33,7 +33,7 @@ public final class Merchant {
     public func setup() {
         self.beginObservingTransactions()
         
-        self.checkReceipt(updateProducts: .all, fetchBehavior: .onlyFetch)
+        self.checkReceipt(updateProducts: .all, fetchPolicy: .onlyFetch, completion: { _ in })
     }
     
     /// Returns a registered product for a given `productIdentifier`, or `nil` if not found.
@@ -64,8 +64,12 @@ public final class Merchant {
     }
     
     /// Restore the user's purchases. Calling this method may present modal UI.
-    public func restorePurchases() {
-        self.checkReceipt(updateProducts: .all, fetchBehavior: .alwaysRefresh)
+    public func restorePurchasesTask() -> RestorePurchasesTask {
+        return self.makeTask(initializing: {
+            let task = RestorePurchasesTask(with: self)
+            
+            return task
+        })
     }
     
     /// Find possible purchases for the given products. If `products` is empty, then the merchant looks up all purchases for all registered products.
@@ -90,10 +94,6 @@ public final class Merchant {
 }
 
 extension Merchant {
-    internal func handleError(_ error: Error, in category: ErrorCategory) {
-        self.delegate.merchant(self, didEncounter: error, in: category)
-    }
-    
     internal func addPurchaseObserver(_ observer: MerchantPurchaseObserver, forProductIdentifier productIdentifier: String) {
         var observers = self.purchaseObservers[productIdentifier]
         
@@ -112,6 +112,10 @@ extension Merchant {
             
             self.purchaseObservers[productIdentifier] = observers
         }
+    }
+    
+    internal func restorePurchases(completion: @escaping CheckReceiptCompletion) {
+        self.checkReceipt(updateProducts: .all, fetchPolicy: .alwaysRefresh, completion: completion)
     }
 }
 
@@ -142,13 +146,23 @@ extension Merchant {
         SKPaymentQueue.default().add(self.transactionObserver)
     }
     
-    fileprivate func checkReceipt(updateProducts updateType: ReceiptUpdateType, fetchBehavior: StoreKitReceiptDataFetcher.FetchBehavior) {
-        self.receiptDataFetcher?.cancel()
+    typealias CheckReceiptCompletion = (_ updatedProducts: Set<Product>, Error?) -> Void
+    
+    fileprivate func checkReceipt(updateProducts updateType: ReceiptUpdateType, fetchPolicy: StoreKitReceiptDataFetcher.FetchPolicy, completion: @escaping CheckReceiptCompletion) {
+        let fetcher: StoreKitReceiptDataFetcher
+        let isStarted: Bool
         
-        let dataFetcher = StoreKitReceiptDataFetcher()
-        dataFetcher.fetchBehavior = fetchBehavior
+        if let activeFetcher = self.receiptFetchers[fetchPolicy] {
+            fetcher = activeFetcher
+            isStarted = true
+        } else {
+            fetcher = StoreKitReceiptDataFetcher(policy: fetchPolicy)
+            isStarted = false
+            
+            self.receiptFetchers[fetchPolicy] = fetcher
+        }
         
-        dataFetcher.onCompletion = { [weak self] dataResult in
+        fetcher.addCompletion { [weak self] dataResult in
             guard let strongSelf = self else { return }
             
             switch dataResult {
@@ -156,24 +170,29 @@ extension Merchant {
                     strongSelf.validateReceipt(with: receiptData, completion: { validateResult in
                         switch validateResult {
                             case .succeeded(let receipt):
-                                strongSelf.updateStorageWithValidatedReceipt(receipt, updateProducts: updateType)
-                            case .failed(let error):
-                                DispatchQueue.main.async {
-                                    strongSelf.handleError(error, in: .receiptVerification)
+                                let updatedProducts = strongSelf.updateStorageWithValidatedReceipt(receipt, updateProducts: updateType)
+                            
+                                if !updatedProducts.isEmpty {
+                                    DispatchQueue.main.async {
+                                        strongSelf.didChangeState(for: updatedProducts)
+                                    }
                                 }
+                                
+                                completion(updatedProducts, nil)
+                            case .failed(let error):
+                                completion([], error)
                         }
                     })
                 case .failed(let error):
-                    DispatchQueue.main.async {
-                        strongSelf.handleError(error, in: .receiptFetch)
-                    }
+                    completion([], error)
             }
             
-            self?.receiptDataFetcher = nil
+            strongSelf.receiptFetchers.removeValue(forKey: fetchPolicy)
         }
-    
-        dataFetcher.start()
-        self.receiptDataFetcher = dataFetcher
+        
+        if !isStarted {
+            fetcher.start()
+        }
     }
     
     fileprivate func validateReceipt(with data: Data, completion: @escaping (Result<Receipt>) -> Void) {
@@ -182,7 +201,7 @@ extension Merchant {
         }
     }
     
-    fileprivate func updateStorageWithValidatedReceipt(_ receipt: Receipt, updateProducts updateType: ReceiptUpdateType) {
+    fileprivate func updateStorageWithValidatedReceipt(_ receipt: Receipt, updateProducts updateType: ReceiptUpdateType) -> Set<Product> {
         var updatedProducts = Set<Product>()
         let productIdentifiers: Set<String>
         
@@ -225,11 +244,7 @@ extension Merchant {
             }
         }
         
-        if !updatedProducts.isEmpty {
-            DispatchQueue.main.async {
-                self.didChangeState(for: updatedProducts)
-            }
-        }
+        return updatedProducts
     }
     
     fileprivate enum ReceiptUpdateType {
@@ -253,10 +268,6 @@ extension Merchant : StoreKitTransactionObserverDelegate {
         let record = PurchaseRecord(productIdentifier: identifier, expiryDate: nil)
         let result = self.storage.save(record)
         
-        for observer in self.purchaseObservers[identifier] {
-            observer.merchant(self, didCompletePurchaseForProductWith: identifier)
-        }
-        
         if let product = self.product(withIdentifier: identifier) {
             if result == .didChangeRecords {
                 self.didChangeState(for: [product])
@@ -266,18 +277,20 @@ extension Merchant : StoreKitTransactionObserverDelegate {
                 self.identifiersForPendingObservedPurchases.insert(product.identifier)
             }
         }
+        
+        for observer in self.purchaseObservers[identifier] {
+            observer.merchant(self, didCompletePurchaseForProductWith: identifier)
+        }
     }
     
     func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFailToPurchaseWith error: Error, forProductWith identifier: String) {
         for observer in self.purchaseObservers[identifier] {
             observer.merchant(self, didFailPurchaseWith: error, forProductWith: identifier)
         }
-        
-        self.handleError(error, in: .purchaseTransactions)
     }
     
     func storeKitTransactionObserverDidUpdatePurchases(_ observer: StoreKitTransactionObserver) {
-        self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedPurchases), fetchBehavior: .onlyFetch)
+        self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedPurchases), fetchPolicy: .onlyFetch, completion: { _ in })
         
         self.identifiersForPendingObservedPurchases.removeAll()
     }

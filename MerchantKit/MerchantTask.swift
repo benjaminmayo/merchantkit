@@ -5,4 +5,5 @@ internal protocol MerchantTask : class {
     func start()
 }
 
+// The prototype completion handler for a `MerchantTask`. This may be called from any thread. See individual task interfaces for usage details.
 public typealias TaskCompletion<Value> = (Result<Value>) -> Void

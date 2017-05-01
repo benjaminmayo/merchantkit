@@ -18,7 +18,7 @@ internal final class StoreKitTransactionObserver : NSObject, SKPaymentTransactio
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         self.delegate?.storeKitTransactionObserverWillUpdatePurchases(self)
         
-        for transaction in transactions {
+        for transaction in transactions {            
             switch transaction.transactionState {
                 case .purchased:
                     self.completePurchase(for: transaction)

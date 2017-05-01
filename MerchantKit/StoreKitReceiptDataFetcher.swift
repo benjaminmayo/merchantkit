@@ -1,17 +1,22 @@
 import StoreKit
 
 internal class StoreKitReceiptDataFetcher : NSObject {
-    var onCompletion: ((Result<Data>) -> Void)?
-    var request: SKReceiptRefreshRequest?
+    typealias Completion = ((Result<Data>) -> Void)
     
-    var fetchBehavior: FetchBehavior = .fetchElseRefresh
+    private var completionHandlers = [Completion]()
     
-    override init() {
+    fileprivate var request: SKReceiptRefreshRequest?
+    
+    let policy: FetchPolicy
+    
+    init(policy: FetchPolicy) {
+        self.policy = policy
+        
         super.init()
     }
     
     func start() {
-        switch self.fetchBehavior {
+        switch self.policy {
             case .alwaysRefresh:
                 self.startRefreshRequest()
             case .fetchElseRefresh:
@@ -23,6 +28,10 @@ internal class StoreKitReceiptDataFetcher : NSObject {
                     self.finish(with: .failed(Error.receiptUnavailableWithoutUserInteraction))
                 })
         }
+    }
+    
+    func addCompletion(_ completion: @escaping Completion) {
+        self.completionHandlers.append(completion)
     }
     
     func cancel() {
@@ -45,10 +54,12 @@ internal class StoreKitReceiptDataFetcher : NSObject {
     }
     
     fileprivate func finish(with result: Result<Data>) {
-        self.onCompletion?(result)
+        for completion in self.completionHandlers {
+            completion(result)
+        }
     }
     
-    enum FetchBehavior {
+    enum FetchPolicy {
         case alwaysRefresh
         case fetchElseRefresh
         case onlyFetch
