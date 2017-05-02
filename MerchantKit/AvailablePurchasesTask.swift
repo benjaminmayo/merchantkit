@@ -3,6 +3,7 @@ public final class AvailablePurchasesTask : NSObject, MerchantTask {
     public typealias Purchases = Set<Purchase>
     
     public var onCompletion: TaskCompletion<Purchases>!
+    public private(set) var isStarted: Bool = false
     
     private unowned let merchant: Merchant
     private let products: Set<Product>
@@ -15,6 +16,11 @@ public final class AvailablePurchasesTask : NSObject, MerchantTask {
     }
     
     public func start() {
+        self.assertIfStartedBefore()
+        
+        self.isStarted = true
+        self.merchant.updateActiveTask(self)
+        
         let identifiersForPurchasableProducts = self.products.filter {
             !self.merchant.state(for: $0).isPurchased
         }.map { $0.identifier }
@@ -32,7 +38,7 @@ public final class AvailablePurchasesTask : NSObject, MerchantTask {
         self.merchant.resignActiveTask(self)
     }
     
-    private func finish(with result: Result<Purchases>) {
+    fileprivate func finish(with result: Result<Purchases>) {
         self.onCompletion(result)
         
         self.merchant.resignActiveTask(self)
@@ -45,10 +51,10 @@ extension AvailablePurchasesTask : SKProductsRequestDelegate {
         
         let purchases: [Purchase] = skProducts.map(Purchase.init(from:))
         
-        self.onCompletion(.succeeded(Set(purchases)))
+        self.finish(with: .succeeded(Set(purchases)))
     }
     
     public func request(_ request: SKRequest, didFailWithError error: Error) {
-        self.onCompletion(.failed(error))
+        self.finish(with: .failed(error))
     }
 }

@@ -1,6 +1,8 @@
 /// Merchant Tasks are vended by a `Merchant` instance. Use the callbacks associated with each `MerchantTask` to be notified of task progress.
-/// Tasks must be started using the `start` method. Some tasks may be cancellable.
-internal protocol MerchantTask : class {
+/// Tasks must be started using the `start` method, typically immediately after configuration. Some tasks may be cancellable.
+public protocol MerchantTask : class {
+    var isStarted: Bool { get }
+    
     /// Start the task, after previously configuring how it behaves.
     func start()
 }

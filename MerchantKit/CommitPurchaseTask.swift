@@ -1,7 +1,9 @@
+/// This task starts the purchase flow for a purchase discovered by a previous `AvailablePurchasesTask` callback.
 public final class CommitPurchaseTask : MerchantTask {
     public let purchase: Purchase
     
     public var onCompletion: TaskCompletion<Void>!
+    public private(set) var isStarted: Bool = false
     
     fileprivate unowned let merchant: Merchant
     
@@ -12,6 +14,11 @@ public final class CommitPurchaseTask : MerchantTask {
     }
     
     public func start() {
+        self.assertIfStartedBefore()
+        
+        self.isStarted = true
+        self.merchant.updateActiveTask(self)
+        
         self.merchant.addPurchaseObserver(self, forProductIdentifier: self.purchase.productIdentifier)
         
         let payment = SKPayment(product: self.purchase.skProduct)

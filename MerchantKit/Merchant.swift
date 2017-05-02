@@ -15,7 +15,9 @@ public final class Merchant {
     fileprivate var receiptFetchers: [StoreKitReceiptDataFetcher.FetchPolicy : StoreKitReceiptDataFetcher] = [:]
     fileprivate var identifiersForPendingObservedPurchases = Set<String>()
     
-    /// Create a Merchant, at application launch. Assign a consistent `storage` and a `delegate` to receive callbacks. 
+    public fileprivate(set) var isLoading: Bool = false
+    
+    /// Create a `Merchant`, at application launch. Assign a consistent `storage` and a `delegate` to receive callbacks.
     public init(storage: PurchaseStorage, delegate: MerchantDelegate) {
         self.delegate = delegate
         self.storage = storage
@@ -114,6 +116,7 @@ extension Merchant {
         }
     }
     
+    // Right now, Merchant relies on refreshing receipts to restore purchases. The implementation may be changed in future.
     internal func restorePurchases(completion: @escaping CheckReceiptCompletion) {
         self.checkReceipt(updateProducts: .all, fetchPolicy: .alwaysRefresh, completion: completion)
     }
@@ -130,12 +133,38 @@ extension Merchant {
     
     private func addActiveTask(_ task: MerchantTask) {
         self.activeTasks.append(task)
+        self.updateLoadingStateIfNecessary()
     }
     
+    // Call on main thread only.
+    internal func updateActiveTask(_ task: MerchantTask) {
+        self.updateLoadingStateIfNecessary()
+    }
+    
+    // Call on main thread only.
     internal func resignActiveTask(_ task: MerchantTask) {
         guard let index = self.activeTasks.index(where: { $0 === task }) else { return }
         
         self.activeTasks.remove(at: index)
+        self.updateLoadingStateIfNecessary()
+    }
+}
+
+extension Merchant {
+    private var _isLoading: Bool {
+        return !self.activeTasks.filter { $0.isStarted }.isEmpty || !self.receiptFetchers.isEmpty
+    }
+    
+    /// Call on main thread only.
+    fileprivate func updateLoadingStateIfNecessary() {
+        let isLoading = self.isLoading
+        let updatedIsLoading = self._isLoading
+        
+        if updatedIsLoading != isLoading {
+            self.isLoading = updatedIsLoading
+            
+            self.delegate.merchantDidChangeLoadingState(self)
+        }
     }
 }
 
@@ -188,10 +217,20 @@ extension Merchant {
             }
             
             strongSelf.receiptFetchers.removeValue(forKey: fetchPolicy)
+            
+            if strongSelf.receiptFetchers.isEmpty && strongSelf.isLoading {
+                DispatchQueue.main.async {
+                    strongSelf.updateLoadingStateIfNecessary()
+                }
+            }
         }
         
         if !isStarted {
             fetcher.start()
+            
+            if !self.receiptFetchers.isEmpty && !self.isLoading {
+                self.updateLoadingStateIfNecessary()
+            }
         }
     }
     
@@ -254,8 +293,9 @@ extension Merchant {
 }
 
 extension Merchant {
+    /// Call on main thread only.
     fileprivate func didChangeState(for products: Set<Product>) {
-        self.delegate.merchant(self, didChangeStatesFor: products)
+        self.delegate.merchant(self, didChangeStateFor: products)
     }
 }
 
@@ -274,7 +314,7 @@ extension Merchant : StoreKitTransactionObserverDelegate {
             }
             
             if case .subscription(_) = product.kind {
-                self.identifiersForPendingObservedPurchases.insert(product.identifier)
+                self.identifiersForPendingObservedPurchases.insert(product.identifier) // we need to get the receipt to find the expiry date
             }
         }
         

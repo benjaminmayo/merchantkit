@@ -1,18 +1,31 @@
+/// Restore completed purchases made by a user in the past.
 public final class RestorePurchasesTask : MerchantTask {
-    public var onCompletion: TaskCompletion<Set<Product>>?
+    public typealias RestoredPurchases = Set<Product>
+    
+    public var onCompletion: TaskCompletion<RestoredPurchases>?
+    public private(set) var isStarted: Bool = false
     
     private unowned let merchant: Merchant
     
+    // Create a task using the `Merchant.restorePurchasesTask()` API.
     internal init(with merchant: Merchant) {
         self.merchant = merchant
     }
     
     public func start() {
+        self.assertIfStartedBefore()
+        
+        self.isStarted = true
+        self.merchant.updateActiveTask(self)
+        
         self.merchant.restorePurchases(completion: { updatedProducts, error in
             if let error = error {
                 self.onCompletion?(.failed(error))
             } else {
                 self.onCompletion?(.succeeded(updatedProducts))
+            }
+            
+            DispatchQueue.main.async {
                 self.merchant.resignActiveTask(self)
             }
         })
