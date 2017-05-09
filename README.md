@@ -12,7 +12,7 @@ MerchantKit is designed for apps that have a finite set of purchasable products 
 Find out if a product has been purchased:
 
 ```swift
-let product = merchant.product(withIdentifier "iap.productidentifier")
+let product = merchant.product(withIdentifier: "iap.productidentifier")
 print("isPurchased", merchant.state(for: product).isPurchased)
 ```
 
@@ -70,7 +70,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 2. Implement the two required methods in `MerchantDelegate` to validate receipt data and receive notifications when the `PurchasedState` changes for registered products.
 ```swift
-func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Product>) {
+func merchant(_ merchant: Merchant, didChangeStateFor products: Set<Product>) {
     for product in products {
         print("updated \(product)")
     }
