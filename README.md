@@ -52,7 +52,7 @@ public func merchant(_ merchant: Merchant, didChangeStateFor products: Set<Produ
 
 - Straightforward, concise, API to support non-consumable, consumable and subscription In-App Purchases.
 - No external dependencies beyond Foundation and StoreKit.
-- Prioritise developer convenience and accessibility over security. MerchantKit should support secure anti-piracy methods where possible without compromising developer ease-of-use.
+- Prioritise developer convenience and accessibility over security. MerchantKit users accept that some level of piracy is inevitable and not worth chasing.
 - Do-whatever-you-want open source license.
 - Compatibility with latest Swift version using idiomatic language constructs.
 
@@ -107,8 +107,10 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 - Add tests to the bare test suite. MerchantKit components can be tested separately, including the validators and `PurchaseStorage` types.
 - Add a validator for In-App Purchase data that does not depend on network requests. This requires parsing the ASN resource from the local bundle. The tricky part is implementing this without relying on external dependencies. Help would be appreciated in this area.
-- Implement consumable purchases somehow. This will likely involve a special delegate callback to tell the application to update its quantities.
-- Extend the API of `PriceFormatter` to be a comprehensive formatter for product prices. This includes adding ways to express subscription periods (eg: '£3.99 per month').
+- Implement consumable purchases. This will likely involve a special delegate callback to tell the application to update its quantities.
+- Enhance the API of `PriceFormatter` to be a comprehensive formatter for product prices. This includes adding ways to express subscription periods (eg: '£3.99 per month').
+- Extended documentation with example usage projects.
+- Support downloadable content In-App Purchases.
 - Probably a lot more stuff I haven't thought of yet.
 
 ## Credits
