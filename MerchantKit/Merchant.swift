@@ -35,7 +35,9 @@ public final class Merchant {
     public func setup() {
         self.beginObservingTransactions()
         
-        self.checkReceipt(updateProducts: .all, fetchPolicy: .onlyFetch, completion: { _ in })
+        self.checkReceipt(updateProducts: .all, fetchPolicy: .onlyFetch, completion: { _ in
+        
+        })
     }
     
     /// Returns a registered product for a given `productIdentifier`, or `nil` if not found.
@@ -57,10 +59,10 @@ public final class Merchant {
             case .subscription(_):
                 let now = Date()
                 
-                if let expiryDate = record.expiryDate, expiryDate > now {
-                    return .isSubscribed(expiryDate: expiryDate)
+                if let expiryDate = record.expiryDate, expiryDate < now {
+                    return .notPurchased
                 } else {
-                    return .isSubscribed(expiryDate: nil)
+                    return .isSubscribed(expiryDate: record.expiryDate)
                 }
         }
     }

@@ -37,9 +37,7 @@ public final class KeychainPurchaseStorage : PurchaseStorage {
             self.purchaseRecordCache.removeValue(forKey: record.productIdentifier)
 
             return .didChangeRecords
-        } catch let error {
-            print(error)
-            
+        } catch {
             return .noChanges
         }
     }

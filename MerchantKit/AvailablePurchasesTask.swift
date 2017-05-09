@@ -1,6 +1,6 @@
 /// This task fetches possible purchases the user may wish to execute, and automatically excludes purchases the user has already purchased.
 public final class AvailablePurchasesTask : NSObject, MerchantTask {
-    public typealias Purchases = Set<Purchase>
+    public typealias Purchases = PurchaseSet
     
     public var onCompletion: TaskCompletion<Purchases>!
     public private(set) var isStarted: Bool = false
@@ -51,7 +51,7 @@ extension AvailablePurchasesTask : SKProductsRequestDelegate {
         
         let purchases: [Purchase] = skProducts.map(Purchase.init(from:))
         
-        self.finish(with: .succeeded(Set(purchases)))
+        self.finish(with: .succeeded(PurchaseSet(from: purchases)))
     }
     
     public func request(_ request: SKRequest, didFailWithError error: Error) {

@@ -1,5 +1,5 @@
 /// A Receipt instance represents a `StoreKit` receipt that has been parsed from raw data and then validated. Receipts can be produced using a custom flow or using a framework-provided validator.
-public protocol Receipt {
+public protocol Receipt : CustomStringConvertible {
     /// Product identifiers represented in this receipt
     var productIdentifiers: Set<String> { get }
     

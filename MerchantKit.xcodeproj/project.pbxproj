@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4305D7FB1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */; };
+		431C84451EC1D2C50098516E /* PurchaseSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431C84441EC1D2C50098516E /* PurchaseSet.swift */; };
 		432133B61EAE2FEA0096919B /* AvailablePurchasesTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133B51EAE2FEA0096919B /* AvailablePurchasesTask.swift */; };
 		432133B81EAE311E0096919B /* MerchantTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133B71EAE311E0096919B /* MerchantTask.swift */; };
 		432133BA1EAE36170096919B /* Purchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133B91EAE36170096919B /* Purchase.swift */; };
@@ -59,6 +60,7 @@
 
 /* Begin PBXFileReference section */
 		4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreKitTransactionObserver.swift; sourceTree = "<group>"; };
+		431C84441EC1D2C50098516E /* PurchaseSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseSet.swift; sourceTree = "<group>"; };
 		432133B51EAE2FEA0096919B /* AvailablePurchasesTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvailablePurchasesTask.swift; sourceTree = "<group>"; };
 		432133B71EAE311E0096919B /* MerchantTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MerchantTask.swift; sourceTree = "<group>"; };
 		432133B91EAE36170096919B /* Purchase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Purchase.swift; sourceTree = "<group>"; };
@@ -244,9 +246,10 @@
 				4342027C1EAE09100012983A /* PurchasedState.swift */,
 				4342027B1EAE09100012983A /* Product.swift */,
 				432133B91EAE36170096919B /* Purchase.swift */,
+				432133BB1EAE39640096919B /* Price.swift */,
+				431C84441EC1D2C50098516E /* PurchaseSet.swift */,
 				4342027E1EAE09100012983A /* Receipt.swift */,
 				432133BD1EAE3DFB0096919B /* Result.swift */,
-				432133BB1EAE39640096919B /* Price.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -414,6 +417,7 @@
 				434202851EAE09100012983A /* PurchasedState.swift in Sources */,
 				436CE1541EB0B3F600AB41CD /* StoreKitReceiptDataFetcher.swift in Sources */,
 				432133BA1EAE36170096919B /* Purchase.swift in Sources */,
+				431C84451EC1D2C50098516E /* PurchaseSet.swift in Sources */,
 				434202881EAE09100012983A /* LocalConfiguration.swift in Sources */,
 				436CE1521EB0A61200AB41CD /* Buckets.swift in Sources */,
 			);

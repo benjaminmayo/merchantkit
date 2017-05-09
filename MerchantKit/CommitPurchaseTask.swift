@@ -43,7 +43,7 @@ extension CommitPurchaseTask {
 }
 
 extension CommitPurchaseTask : MerchantPurchaseObserver {
-    func merchant(_ merchant: Merchant, didCompletePurchaseForProductWith productIdentifier: String) {
+    func merchant(_ merchant: Merchant, didCompletePurchaseForProductWith productIdentifier: String) {        
         self.finish(with: .succeeded(()))
     }
     

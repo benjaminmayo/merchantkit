@@ -36,7 +36,8 @@ public struct LocalConfiguration {
                 case "Consumable":
                     kind = .consumable
                 case "Subscription":
-                    kind = .subscription(automaticallyRenews: false)
+                    let automaticallyRenews = try requiredValue(for: "Automatically Renews", in: productObject, ofType: Bool.self)
+                    kind = .subscription(automaticallyRenews: automaticallyRenews)
                 default:
                     throw ResourceError.invalidValue(forKey: "Kind", reason: "\(kindIdentifier) not recognized as a product kind")
             }
