@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		4305D7FB1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */; };
 		431C84451EC1D2C50098516E /* PurchaseSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431C84441EC1D2C50098516E /* PurchaseSet.swift */; };
-		431C84481EC1E3490098516E /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 431C84461EC1E3490098516E /* Info.plist */; };
 		431C84491EC1E3490098516E /* MerchantKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 431C84471EC1E3490098516E /* MerchantKit.h */; };
 		432133B61EAE2FEA0096919B /* AvailablePurchasesTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133B51EAE2FEA0096919B /* AvailablePurchasesTask.swift */; };
 		432133B81EAE311E0096919B /* MerchantTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133B71EAE311E0096919B /* MerchantTask.swift */; };
@@ -90,7 +89,7 @@
 		4342027E1EAE09100012983A /* Receipt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Receipt.swift; sourceTree = "<group>"; };
 		4342027F1EAE09100012983A /* LocalConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalConfiguration.swift; sourceTree = "<group>"; };
 		4350D4751EB3931300DA47C5 /* RestorePurchasesTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestorePurchasesTask.swift; sourceTree = "<group>"; };
-		436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DescriptionUtilities.swift; path = ../DescriptionUtilities.swift; sourceTree = "<group>"; };
+		436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DescriptionUtilities.swift; sourceTree = "<group>"; };
 		436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceFormatter.swift; sourceTree = "<group>"; };
 		436CE1311EAEA55D00AB41CD /* DateUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateUtilities.swift; sourceTree = "<group>"; };
 		436CE1331EAF3D5200AB41CD /* CommitPurchaseTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommitPurchaseTask.swift; sourceTree = "<group>"; };
@@ -366,7 +365,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				431C84481EC1E3490098516E /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
