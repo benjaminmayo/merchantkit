@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		4305D7FB1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */; };
 		431C84451EC1D2C50098516E /* PurchaseSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431C84441EC1D2C50098516E /* PurchaseSet.swift */; };
-		431C84491EC1E3490098516E /* MerchantKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 431C84471EC1E3490098516E /* MerchantKit.h */; };
+		431C84491EC1E3490098516E /* MerchantKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 431C84471EC1E3490098516E /* MerchantKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		432133B61EAE2FEA0096919B /* AvailablePurchasesTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133B51EAE2FEA0096919B /* AvailablePurchasesTask.swift */; };
 		432133B81EAE311E0096919B /* MerchantTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133B71EAE311E0096919B /* MerchantTask.swift */; };
 		432133BA1EAE36170096919B /* Purchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133B91EAE36170096919B /* Purchase.swift */; };
