@@ -61,8 +61,8 @@
 /* Begin PBXFileReference section */
 		4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreKitTransactionObserver.swift; sourceTree = "<group>"; };
 		431C84441EC1D2C50098516E /* PurchaseSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseSet.swift; sourceTree = "<group>"; };
-		431C84461EC1E3490098516E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		431C84471EC1E3490098516E /* MerchantKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MerchantKit.h; sourceTree = "<group>"; };
+		431C84461EC1E3490098516E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Source/Info.plist; sourceTree = "<group>"; };
+		431C84471EC1E3490098516E /* MerchantKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MerchantKit.h; path = Source/MerchantKit.h; sourceTree = "<group>"; };
 		432133B51EAE2FEA0096919B /* AvailablePurchasesTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvailablePurchasesTask.swift; sourceTree = "<group>"; };
 		432133B71EAE311E0096919B /* MerchantTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MerchantTask.swift; sourceTree = "<group>"; };
 		432133B91EAE36170096919B /* Purchase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Purchase.swift; sourceTree = "<group>"; };
@@ -124,19 +124,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4337A89E1EB1FE3900EAF633 /* Test Resources */ = {
+		4337A89E1EB1FE3900EAF633 /* Sample Resources */ = {
 			isa = PBXGroup;
 			children = (
 				4337A8981EB1F1EB00EAF633 /* testSubscriptionReceiptResponse.json */,
 			);
-			name = "Test Resources";
+			path = "Sample Resources";
 			sourceTree = "<group>";
 		};
 		434202531EAE08F80012983A = {
 			isa = PBXGroup;
 			children = (
-				4342025F1EAE08F80012983A /* MerchantKit */,
-				4342026A1EAE08F80012983A /* MerchantKitTests */,
+				4342025F1EAE08F80012983A /* Source */,
+				431C84461EC1E3490098516E /* Info.plist */,
+				431C84471EC1E3490098516E /* MerchantKit.h */,
+				4342026A1EAE08F80012983A /* Tests */,
 				4342025E1EAE08F80012983A /* Products */,
 				436CE15D1EB0EF3D00AB41CD /* Frameworks */,
 			);
@@ -151,11 +153,9 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		4342025F1EAE08F80012983A /* MerchantKit */ = {
+		4342025F1EAE08F80012983A /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				431C84461EC1E3490098516E /* Info.plist */,
-				431C84471EC1E3490098516E /* MerchantKit.h */,
 				434202771EAE09100012983A /* Merchant.swift */,
 				436CE15B1EB0E0C200AB41CD /* MerchantDelegate.swift */,
 				436CE13B1EAF42E600AB41CD /* Model */,
@@ -166,21 +166,20 @@
 				436CE1371EAF426500AB41CD /* Utilities */,
 				436CE13C1EAF432300AB41CD /* Internal */,
 			);
-			name = MerchantKit;
 			path = Source;
 			sourceTree = "<group>";
 		};
-		4342026A1EAE08F80012983A /* MerchantKitTests */ = {
+		4342026A1EAE08F80012983A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
 				4342026B1EAE08F80012983A /* MerchantKitTests.swift */,
 				4337A8961EB1F1CA00EAF633 /* ServerReceiptResponseParserTests.swift */,
 				4337A89A1EB1FAAD00EAF633 /* BucketsTests.swift */,
 				4337A89C1EB1FE3300EAF633 /* PurchaseRecordTests.swift */,
-				4337A89E1EB1FE3900EAF633 /* Test Resources */,
+				4337A89E1EB1FE3900EAF633 /* Sample Resources */,
 				4342026D1EAE08F80012983A /* Info.plist */,
 			);
-			path = MerchantKitTests;
+			path = Tests;
 			sourceTree = "<group>";
 		};
 		436CE1361EAF424B00AB41CD /* Receipt Validators */ = {
