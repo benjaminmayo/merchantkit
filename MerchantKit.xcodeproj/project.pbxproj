@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		4305D7FB1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */; };
 		431C84451EC1D2C50098516E /* PurchaseSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431C84441EC1D2C50098516E /* PurchaseSet.swift */; };
+		431C84481EC1E3490098516E /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 431C84461EC1E3490098516E /* Info.plist */; };
+		431C84491EC1E3490098516E /* MerchantKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 431C84471EC1E3490098516E /* MerchantKit.h */; };
 		432133B61EAE2FEA0096919B /* AvailablePurchasesTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133B51EAE2FEA0096919B /* AvailablePurchasesTask.swift */; };
 		432133B81EAE311E0096919B /* MerchantTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133B71EAE311E0096919B /* MerchantTask.swift */; };
 		432133BA1EAE36170096919B /* Purchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133B91EAE36170096919B /* Purchase.swift */; };
@@ -23,7 +25,6 @@
 		4337A8A31EB2433A00EAF633 /* EphemeralPurchaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4337A8A21EB2433A00EAF633 /* EphemeralPurchaseStorage.swift */; };
 		434202671EAE08F80012983A /* MerchantKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4342025D1EAE08F80012983A /* MerchantKit.framework */; };
 		4342026C1EAE08F80012983A /* MerchantKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4342026B1EAE08F80012983A /* MerchantKitTests.swift */; };
-		4342026E1EAE08F80012983A /* MerchantKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 434202601EAE08F80012983A /* MerchantKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		434202801EAE09100012983A /* Merchant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434202771EAE09100012983A /* Merchant.swift */; };
 		434202811EAE09100012983A /* PurchaseRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434202781EAE09100012983A /* PurchaseRecord.swift */; };
 		434202821EAE09100012983A /* PurchaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434202791EAE09100012983A /* PurchaseStorage.swift */; };
@@ -61,6 +62,8 @@
 /* Begin PBXFileReference section */
 		4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreKitTransactionObserver.swift; sourceTree = "<group>"; };
 		431C84441EC1D2C50098516E /* PurchaseSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseSet.swift; sourceTree = "<group>"; };
+		431C84461EC1E3490098516E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		431C84471EC1E3490098516E /* MerchantKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MerchantKit.h; sourceTree = "<group>"; };
 		432133B51EAE2FEA0096919B /* AvailablePurchasesTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvailablePurchasesTask.swift; sourceTree = "<group>"; };
 		432133B71EAE311E0096919B /* MerchantTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MerchantTask.swift; sourceTree = "<group>"; };
 		432133B91EAE36170096919B /* Purchase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Purchase.swift; sourceTree = "<group>"; };
@@ -74,8 +77,6 @@
 		4337A89C1EB1FE3300EAF633 /* PurchaseRecordTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseRecordTests.swift; sourceTree = "<group>"; };
 		4337A8A21EB2433A00EAF633 /* EphemeralPurchaseStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EphemeralPurchaseStorage.swift; sourceTree = "<group>"; };
 		4342025D1EAE08F80012983A /* MerchantKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MerchantKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		434202601EAE08F80012983A /* MerchantKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MerchantKit.h; path = MerchantKit/MerchantKit.h; sourceTree = "<group>"; };
-		434202611EAE08F80012983A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = MerchantKit/Info.plist; sourceTree = "<group>"; };
 		434202661EAE08F80012983A /* MerchantKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MerchantKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4342026B1EAE08F80012983A /* MerchantKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantKitTests.swift; sourceTree = "<group>"; };
 		4342026D1EAE08F80012983A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -89,7 +90,7 @@
 		4342027E1EAE09100012983A /* Receipt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Receipt.swift; sourceTree = "<group>"; };
 		4342027F1EAE09100012983A /* LocalConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalConfiguration.swift; sourceTree = "<group>"; };
 		4350D4751EB3931300DA47C5 /* RestorePurchasesTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestorePurchasesTask.swift; sourceTree = "<group>"; };
-		436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DescriptionUtilities.swift; sourceTree = "<group>"; };
+		436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DescriptionUtilities.swift; path = ../DescriptionUtilities.swift; sourceTree = "<group>"; };
 		436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceFormatter.swift; sourceTree = "<group>"; };
 		436CE1311EAEA55D00AB41CD /* DateUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateUtilities.swift; sourceTree = "<group>"; };
 		436CE1331EAF3D5200AB41CD /* CommitPurchaseTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommitPurchaseTask.swift; sourceTree = "<group>"; };
@@ -136,8 +137,6 @@
 			isa = PBXGroup;
 			children = (
 				4342025F1EAE08F80012983A /* MerchantKit */,
-				434202601EAE08F80012983A /* MerchantKit.h */,
-				434202611EAE08F80012983A /* Info.plist */,
 				4342026A1EAE08F80012983A /* MerchantKitTests */,
 				4342025E1EAE08F80012983A /* Products */,
 				436CE15D1EB0EF3D00AB41CD /* Frameworks */,
@@ -156,6 +155,8 @@
 		4342025F1EAE08F80012983A /* MerchantKit */ = {
 			isa = PBXGroup;
 			children = (
+				431C84461EC1E3490098516E /* Info.plist */,
+				431C84471EC1E3490098516E /* MerchantKit.h */,
 				434202771EAE09100012983A /* Merchant.swift */,
 				436CE15B1EB0E0C200AB41CD /* MerchantDelegate.swift */,
 				436CE13B1EAF42E600AB41CD /* Model */,
@@ -164,10 +165,10 @@
 				436CE13A1EAF42D800AB41CD /* Persistence Storage */,
 				436CE1361EAF424B00AB41CD /* Receipt Validators */,
 				436CE1371EAF426500AB41CD /* Utilities */,
-				436CE13C1EAF432300AB41CD /* Internal Helpers */,
-				436CE1351EAF421400AB41CD /* Internal Utilities */,
+				436CE13C1EAF432300AB41CD /* Internal */,
 			);
-			path = MerchantKit;
+			name = MerchantKit;
+			path = Source;
 			sourceTree = "<group>";
 		};
 		4342026A1EAE08F80012983A /* MerchantKitTests */ = {
@@ -183,22 +184,12 @@
 			path = MerchantKitTests;
 			sourceTree = "<group>";
 		};
-		436CE1351EAF421400AB41CD /* Internal Utilities */ = {
-			isa = PBXGroup;
-			children = (
-				436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */,
-				436CE1311EAEA55D00AB41CD /* DateUtilities.swift */,
-				4329BE491EB8A43400052D3E /* MerchantTaskUtilities.swift */,
-			);
-			name = "Internal Utilities";
-			sourceTree = "<group>";
-		};
 		436CE1361EAF424B00AB41CD /* Receipt Validators */ = {
 			isa = PBXGroup;
 			children = (
 				4342027D1EAE09100012983A /* ServerReceiptValidator.swift */,
 			);
-			name = "Receipt Validators";
+			path = "Receipt Validators";
 			sourceTree = "<group>";
 		};
 		436CE1371EAF426500AB41CD /* Utilities */ = {
@@ -206,7 +197,7 @@
 			children = (
 				4342027F1EAE09100012983A /* LocalConfiguration.swift */,
 			);
-			name = Utilities;
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		436CE1381EAF428800AB41CD /* Tasks */ = {
@@ -217,7 +208,7 @@
 				436CE1331EAF3D5200AB41CD /* CommitPurchaseTask.swift */,
 				4350D4751EB3931300DA47C5 /* RestorePurchasesTask.swift */,
 			);
-			name = Tasks;
+			path = Tasks;
 			sourceTree = "<group>";
 		};
 		436CE1391EAF42A000AB41CD /* User Interface */ = {
@@ -225,7 +216,7 @@
 			children = (
 				436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */,
 			);
-			name = "User Interface";
+			path = "User Interface";
 			sourceTree = "<group>";
 		};
 		436CE13A1EAF42D800AB41CD /* Persistence Storage */ = {
@@ -237,7 +228,7 @@
 				436CE1551EB0C0D300AB41CD /* KeychainPurchaseStorage.swift */,
 				4337A8A21EB2433A00EAF633 /* EphemeralPurchaseStorage.swift */,
 			);
-			name = "Persistence Storage";
+			path = "Persistence Storage";
 			sourceTree = "<group>";
 		};
 		436CE13B1EAF42E600AB41CD /* Model */ = {
@@ -251,10 +242,10 @@
 				4342027E1EAE09100012983A /* Receipt.swift */,
 				432133BD1EAE3DFB0096919B /* Result.swift */,
 			);
-			name = Model;
+			path = Model;
 			sourceTree = "<group>";
 		};
-		436CE13C1EAF432300AB41CD /* Internal Helpers */ = {
+		436CE13C1EAF432300AB41CD /* Internal */ = {
 			isa = PBXGroup;
 			children = (
 				4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */,
@@ -263,8 +254,11 @@
 				436CE13D1EAF462B00AB41CD /* MerchantProductObserver.swift */,
 				436CE14F1EB0A5B900AB41CD /* ConstructedReceipt.swift */,
 				436CE1511EB0A61200AB41CD /* Buckets.swift */,
+				436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */,
+				436CE1311EAEA55D00AB41CD /* DateUtilities.swift */,
+				4329BE491EB8A43400052D3E /* MerchantTaskUtilities.swift */,
 			);
-			name = "Internal Helpers";
+			path = Internal;
 			sourceTree = "<group>";
 		};
 		436CE15D1EB0EF3D00AB41CD /* Frameworks */ = {
@@ -283,7 +277,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4342026E1EAE08F80012983A /* MerchantKit.h in Headers */,
+				431C84491EC1E3490098516E /* MerchantKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,6 +366,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				431C84481EC1E3490098516E /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -556,7 +551,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = MerchantKit/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anthonymayo.MerchantKit;
@@ -577,7 +572,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = MerchantKit/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anthonymayo.MerchantKit;
