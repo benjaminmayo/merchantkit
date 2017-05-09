@@ -1,4 +1,4 @@
-/// A `Product` represents something that the user could purchase.
+/// A `Product` represents something that the user may have purchased.
 public struct Product : Hashable, CustomStringConvertible {
     public let identifier: String
     public let kind: Kind
@@ -20,7 +20,7 @@ public struct Product : Hashable, CustomStringConvertible {
         return lhs.identifier == rhs.identifier && lhs.hashValue == rhs.hashValue
     }
     
-    /// Declare what type of In-App Purchase the product is.
+    /// Represents the possible In-App Purchases types.
     public enum Kind : Equatable {
         case consumable
         case nonConsumable
