@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4305D7FB1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */; };
+		43128DD11EC38A3600DBA2EE /* PurchaseSetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43128DCF1EC38A3000DBA2EE /* PurchaseSetTests.swift */; };
 		431C84451EC1D2C50098516E /* PurchaseSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431C84441EC1D2C50098516E /* PurchaseSet.swift */; };
 		431C84491EC1E3490098516E /* MerchantKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 431C84471EC1E3490098516E /* MerchantKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		432133B61EAE2FEA0096919B /* AvailablePurchasesTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133B51EAE2FEA0096919B /* AvailablePurchasesTask.swift */; };
@@ -23,7 +24,6 @@
 		4337A89D1EB1FE3300EAF633 /* PurchaseRecordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4337A89C1EB1FE3300EAF633 /* PurchaseRecordTests.swift */; };
 		4337A8A31EB2433A00EAF633 /* EphemeralPurchaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4337A8A21EB2433A00EAF633 /* EphemeralPurchaseStorage.swift */; };
 		434202671EAE08F80012983A /* MerchantKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4342025D1EAE08F80012983A /* MerchantKit.framework */; };
-		4342026C1EAE08F80012983A /* MerchantKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4342026B1EAE08F80012983A /* MerchantKitTests.swift */; };
 		434202801EAE09100012983A /* Merchant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434202771EAE09100012983A /* Merchant.swift */; };
 		434202811EAE09100012983A /* PurchaseRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434202781EAE09100012983A /* PurchaseRecord.swift */; };
 		434202821EAE09100012983A /* PurchaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434202791EAE09100012983A /* PurchaseStorage.swift */; };
@@ -60,6 +60,7 @@
 
 /* Begin PBXFileReference section */
 		4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreKitTransactionObserver.swift; sourceTree = "<group>"; };
+		43128DCF1EC38A3000DBA2EE /* PurchaseSetTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseSetTests.swift; sourceTree = "<group>"; };
 		431C84441EC1D2C50098516E /* PurchaseSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseSet.swift; sourceTree = "<group>"; };
 		431C84461EC1E3490098516E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Source/Info.plist; sourceTree = "<group>"; };
 		431C84471EC1E3490098516E /* MerchantKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MerchantKit.h; path = Source/MerchantKit.h; sourceTree = "<group>"; };
@@ -77,7 +78,6 @@
 		4337A8A21EB2433A00EAF633 /* EphemeralPurchaseStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EphemeralPurchaseStorage.swift; sourceTree = "<group>"; };
 		4342025D1EAE08F80012983A /* MerchantKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MerchantKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		434202661EAE08F80012983A /* MerchantKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MerchantKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4342026B1EAE08F80012983A /* MerchantKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantKitTests.swift; sourceTree = "<group>"; };
 		4342026D1EAE08F80012983A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		434202771EAE09100012983A /* Merchant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Merchant.swift; sourceTree = "<group>"; };
 		434202781EAE09100012983A /* PurchaseRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseRecord.swift; sourceTree = "<group>"; };
@@ -172,10 +172,10 @@
 		4342026A1EAE08F80012983A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				4342026B1EAE08F80012983A /* MerchantKitTests.swift */,
 				4337A8961EB1F1CA00EAF633 /* ServerReceiptResponseParserTests.swift */,
 				4337A89A1EB1FAAD00EAF633 /* BucketsTests.swift */,
 				4337A89C1EB1FE3300EAF633 /* PurchaseRecordTests.swift */,
+				43128DCF1EC38A3000DBA2EE /* PurchaseSetTests.swift */,
 				4337A89E1EB1FE3900EAF633 /* Sample Resources */,
 				4342026D1EAE08F80012983A /* Info.plist */,
 			);
@@ -419,7 +419,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4342026C1EAE08F80012983A /* MerchantKitTests.swift in Sources */,
+				43128DD11EC38A3600DBA2EE /* PurchaseSetTests.swift in Sources */,
 				4337A89D1EB1FE3300EAF633 /* PurchaseRecordTests.swift in Sources */,
 				4337A89B1EB1FAAD00EAF633 /* BucketsTests.swift in Sources */,
 				4337A8971EB1F1CA00EAF633 /* ServerReceiptResponseParserTests.swift in Sources */,
@@ -584,7 +584,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = 2ZTW4G3PG5;
-				INFOPLIST_FILE = MerchantKitTests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anthonymayo.MerchantKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -597,7 +597,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = 2ZTW4G3PG5;
-				INFOPLIST_FILE = MerchantKitTests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anthonymayo.MerchantKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
