@@ -96,6 +96,7 @@ public final class Merchant {
     }
 }
 
+// MARK: Purchase observers
 extension Merchant {
     internal func addPurchaseObserver(_ observer: MerchantPurchaseObserver, forProductIdentifier productIdentifier: String) {
         var observers = self.purchaseObservers[productIdentifier]
@@ -116,13 +117,9 @@ extension Merchant {
             self.purchaseObservers[productIdentifier] = observers
         }
     }
-    
-    // Right now, Merchant relies on refreshing receipts to restore purchases. The implementation may be changed in future.
-    internal func restorePurchases(completion: @escaping CheckReceiptCompletion) {
-        self.checkReceipt(updateProducts: .all, policy: .alwaysRefresh, completion: completion)
-    }
 }
 
+// MARK: Task management
 extension Merchant {
     fileprivate func makeTask<Task : MerchantTask>(initializing creator: () -> Task) -> Task {
         let task = creator()
@@ -151,6 +148,7 @@ extension Merchant {
     }
 }
 
+// MARK: Loading state changes
 extension Merchant {
     private var _isLoading: Bool {
         return !self.activeTasks.filter { $0.isStarted }.isEmpty || !self.receiptFetchers.isEmpty
@@ -169,6 +167,7 @@ extension Merchant {
     }
 }
 
+// MARK: Subscription utilities
 extension Merchant {
     fileprivate func isSubscriptionActive(forExpiryDate expiryDate: Date) -> Bool {
         // TODO: Consider determining subscription expiration non-dynamically. This involves replacing the now Date() with a constant determ
@@ -179,6 +178,7 @@ extension Merchant {
     }
 }
 
+// MARK: Payment queue related behaviour
 extension Merchant {
     fileprivate func beginObservingTransactions() {
         self.transactionObserver.delegate = self
@@ -186,6 +186,18 @@ extension Merchant {
         SKPaymentQueue.default().add(self.transactionObserver)
     }
     
+    fileprivate func stopObservingTransactions() {
+        SKPaymentQueue.default().remove(self.transactionObserver)
+    }
+    
+    // Right now, Merchant relies on refreshing receipts to restore purchases. The implementation may be changed in future.
+    internal func restorePurchases(completion: @escaping CheckReceiptCompletion) {
+        self.checkReceipt(updateProducts: .all, policy: .alwaysRefresh, completion: completion)
+    }
+}
+
+// MARK: Receipt fetch and validation
+extension Merchant {
     typealias CheckReceiptCompletion = (_ updatedProducts: Set<Product>, Error?) -> Void
     
     fileprivate func checkReceipt(updateProducts updateType: ReceiptUpdateType, policy: StoreKitReceiptDataFetcher.FetchPolicy, completion: @escaping CheckReceiptCompletion) {
@@ -245,13 +257,13 @@ extension Merchant {
         }
     }
     
-    fileprivate func validateReceipt(with data: Data, completion: @escaping (Result<Receipt>) -> Void) {
+    private func validateReceipt(with data: Data, completion: @escaping (Result<Receipt>) -> Void) {
         DispatchQueue.main.async {
             self.delegate.merchant(self, validate: data, completion: completion)
         }
     }
     
-    fileprivate func updateStorageWithValidatedReceipt(_ receipt: Receipt, updateProducts updateType: ReceiptUpdateType) -> Set<Product> {
+    private func updateStorageWithValidatedReceipt(_ receipt: Receipt, updateProducts updateType: ReceiptUpdateType) -> Set<Product> {
         var updatedProducts = Set<Product>()
         let productIdentifiers: Set<String>
         
@@ -307,6 +319,7 @@ extension Merchant {
     }
 }
 
+// MARK: Product state changes
 extension Merchant {
     /// Call on main thread only.
     fileprivate func didChangeState(for products: Set<Product>) {
@@ -314,6 +327,7 @@ extension Merchant {
     }
 }
 
+// MARK: `StoreKitTransactionObserverDelegate` Conformance
 extension Merchant : StoreKitTransactionObserverDelegate {
     func storeKitTransactionObserverWillUpdatePurchases(_ observer: StoreKitTransactionObserver) {
         
@@ -345,7 +359,9 @@ extension Merchant : StoreKitTransactionObserverDelegate {
     }
     
     func storeKitTransactionObserverDidUpdatePurchases(_ observer: StoreKitTransactionObserver) {
-        self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedPurchases), policy: .onlyFetch, completion: { _ in })
+        if !self.identifiersForPendingObservedPurchases.isEmpty {
+            self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedPurchases), policy: .onlyFetch, completion: { _ in })
+        }
         
         self.identifiersForPendingObservedPurchases.removeAll()
     }
