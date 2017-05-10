@@ -1,11 +1,9 @@
 # MerchantKit
 A modern In-App Purchases management framework for iOS developers.
 
-MerchantKit dramatically simplifies the work indie developers have to do in order to add premium monetizable components to their applications.
+MerchantKit dramatically simplifies the work indie developers have to do in order to add premium monetizable components to their applications. Track purchased products, retrieve purchases, manage subscription expiration dates, restore transactions, validate receipts, and more.
 
-MerchantKit handles retrieving purchases, tracking purchased products, watching for renewal and expiration of subscriptions, restoring transactions, validating iTunes Store receipts, and more. 
-
-MerchantKit is designed for apps that have a finite set of purchasable products (although it is flexible enough to work with other types of apps too). For example, MerchantKit is a great way to add an unlockable 'pro tier' to an application, as a one-time purchase or ongoing subscription.
+Designed for apps that have a finite set of purchasable products, MerchantKit is a great way to add an unlockable 'pro tier' to an application, as a one-time purchase or ongoing subscription.
 
 ## Example Snippets
 
@@ -28,6 +26,7 @@ task.onCompletion = { result in
             print("\(error)")
     }
 }
+
 task.start()
 ```
 
@@ -35,7 +34,7 @@ Get notified when a subscription expires:
 
 ```swift
 public func merchant(_ merchant: Merchant, didChangeStateFor products: Set<Product>) {
-    if let subscriptionProduct = products.first(where: { $0.identifier == "subscription.protier") }) {
+    if let subscriptionProduct = products.first(where: { $0.identifier == "subscription.protier" }) {
         let state = merchant.state(for: subscriptionProduct)
         
         switch state {
@@ -52,7 +51,7 @@ public func merchant(_ merchant: Merchant, didChangeStateFor products: Set<Produ
 
 - Straightforward, concise, API to support non-consumable, consumable and subscription In-App Purchases.
 - No external dependencies beyond Foundation and StoreKit.
-- Prioritise developer convenience and accessibility over security. MerchantKit should support secure anti-piracy methods where possible without compromising developer ease-of-use.
+- Prioritise developer convenience and accessibility over security. MerchantKit users accept that some level of piracy is inevitable and not worth chasing.
 - Do-whatever-you-want open source license.
 - Compatibility with latest Swift version using idiomatic language constructs.
 
@@ -64,7 +63,6 @@ The codebase is in flux right now. MerchantKit is by no means finished and there
 ```swift
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     self.merchant = Merchant(storage: KeychainPurchaseStorage(serviceName: "AppName"), delegate: self)    
-    ...
 }
 ```
 
@@ -98,7 +96,6 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
     self.merchant.register(...)
     ...
     self.merchant.setup()
-    ...
 }
 ```
 5. Profit! Or something.
@@ -107,8 +104,10 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 - Add tests to the bare test suite. MerchantKit components can be tested separately, including the validators and `PurchaseStorage` types.
 - Add a validator for In-App Purchase data that does not depend on network requests. This requires parsing the ASN resource from the local bundle. The tricky part is implementing this without relying on external dependencies. Help would be appreciated in this area.
-- Implement consumable purchases somehow. This will likely involve a special delegate callback to tell the application to update its quantities.
-- Extend the API of `PriceFormatter` to be a comprehensive formatter for product prices. This includes adding ways to express subscription periods (eg: '£3.99 per month').
+- Implement consumable purchases. This will likely involve a special delegate callback to tell the application to update its quantities.
+- Enhance the API of `PriceFormatter` to be a comprehensive formatter for product prices. This includes adding ways to express subscription periods (eg: '£3.99 per month').
+- Extended documentation with example usage projects.
+- Support downloadable content In-App Purchases.
 - Probably a lot more stuff I haven't thought of yet.
 
 ## Credits
