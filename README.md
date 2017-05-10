@@ -1,9 +1,7 @@
 # MerchantKit
 A modern In-App Purchases management framework for iOS developers.
 
-MerchantKit dramatically simplifies the work indie developers have to do in order to add premium monetizable components to their applications.
-
-MerchantKit handles retrieving purchases, tracking purchased products, watching for renewal and expiration of subscriptions, restoring transactions, validating iTunes Store receipts, and more. 
+MerchantKit dramatically simplifies the work indie developers have to do in order to add premium monetizable components to their applications. Track purchased products, retrieve purchases, manage subscription expiration dates, restore transactions, validate receipts, and more.
 
 Designed for apps that have a finite set of purchasable products, MerchantKit is a great way to add an unlockable 'pro tier' to an application, as a one-time purchase or ongoing subscription.
 
