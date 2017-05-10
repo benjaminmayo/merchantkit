@@ -36,7 +36,7 @@ Get notified when a subscription expires:
 
 ```swift
 public func merchant(_ merchant: Merchant, didChangeStateFor products: Set<Product>) {
-    if let subscriptionProduct = products.first(where: { $0.identifier == "subscription.protier") }) {
+    if let subscriptionProduct = products.first(where: { $0.identifier == "subscription.protier" }) {
         let state = merchant.state(for: subscriptionProduct)
         
         switch state {
@@ -65,7 +65,6 @@ The codebase is in flux right now. MerchantKit is by no means finished and there
 ```swift
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     self.merchant = Merchant(storage: KeychainPurchaseStorage(serviceName: "AppName"), delegate: self)    
-    ...
 }
 ```
 
@@ -99,7 +98,6 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
     self.merchant.register(...)
     ...
     self.merchant.setup()
-    ...
 }
 ```
 5. Profit! Or something.
