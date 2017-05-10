@@ -9,6 +9,8 @@ internal class StoreKitReceiptDataFetcher : NSObject {
     
     let policy: FetchPolicy
     
+    private(set) var isFinished: Bool = false
+    
     init(policy: FetchPolicy) {
         self.policy = policy
         
@@ -30,12 +32,15 @@ internal class StoreKitReceiptDataFetcher : NSObject {
         }
     }
     
-    func addCompletion(_ completion: @escaping Completion) {
+    func enqueueCompletion(_ completion: @escaping Completion) {
+        assert(!self.isFinished, "completion blocks cannot be added after the fetcher is finished")
+        
         self.completionHandlers.append(completion)
     }
     
     func cancel() {
         self.request?.cancel()
+        self.isFinished = true
     }
     
     fileprivate func startRefreshRequest() {
@@ -57,6 +62,8 @@ internal class StoreKitReceiptDataFetcher : NSObject {
         for completion in self.completionHandlers {
             completion(result)
         }
+        
+        self.isFinished = true
     }
     
     enum FetchPolicy {
