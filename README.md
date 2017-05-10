@@ -5,7 +5,7 @@ MerchantKit dramatically simplifies the work indie developers have to do in orde
 
 MerchantKit handles retrieving purchases, tracking purchased products, watching for renewal and expiration of subscriptions, restoring transactions, validating iTunes Store receipts, and more. 
 
-MerchantKit is designed for apps that have a finite set of purchasable products (although it is flexible enough to work with other types of apps too). For example, MerchantKit is a great way to add an unlockable 'pro tier' to an application, as a one-time purchase or ongoing subscription.
+Designed for apps that have a finite set of purchasable products, MerchantKit is a great way to add an unlockable 'pro tier' to an application, as a one-time purchase or ongoing subscription.
 
 ## Example Snippets
 
@@ -28,6 +28,7 @@ task.onCompletion = { result in
             print("\(error)")
     }
 }
+
 task.start()
 ```
 
