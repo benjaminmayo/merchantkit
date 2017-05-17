@@ -17,6 +17,8 @@ public final class Merchant {
     
     public fileprivate(set) var isLoading: Bool = false
     
+    fileprivate var nowDate = Date()
+    
     /// Create a `Merchant`, at application launch. Assign a consistent `storage` and a `delegate` to receive callbacks.
     public init(storage: PurchaseStorage, delegate: MerchantDelegate) {
         self.delegate = delegate
@@ -57,12 +59,7 @@ public final class Merchant {
             case .nonConsumable:
                 return .isSold
             case .subscription(_):
-                // TODO: Consider determining subscription expiration non-dynamically.
-                if let expiryDate = record.expiryDate, self.isSubscriptionActive(forExpiryDate: expiryDate) {
-                    return .notPurchased
-                } else {
-                    return .isSubscribed(expiryDate: record.expiryDate)
-                }
+                return .isSubscribed(expiryDate: record.expiryDate)
         }
     }
     
@@ -93,6 +90,13 @@ public final class Merchant {
             
             return task 
         })
+    }
+    
+    /// Checks if active subscriptions have become invalid. The product states may be changed after this method returns.
+    /// Suggested usage: Call this method periodically to update expiring subscriptions whilst the app is running. It is called implicitly at app launch.
+    public func updateSubscriptions() {
+        self.updateNowDate()
+        self.updateActiveSubscriptions()
     }
 }
 
@@ -170,11 +174,35 @@ extension Merchant {
 // MARK: Subscription utilities
 extension Merchant {
     fileprivate func isSubscriptionActive(forExpiryDate expiryDate: Date) -> Bool {
-        // TODO: Consider determining subscription expiration non-dynamically. This involves replacing the now Date() with a constant determ
-
-        let now = Date() // TODO: Consider storing initialization date and using that to determine expiry. This would prevent expiration at any time.
-
-        return expiryDate < now
+        return expiryDate < self.nowDate
+    }
+    
+    fileprivate func updateNowDate() {
+        self.nowDate = Date()
+    }
+    
+    fileprivate func updateActiveSubscriptions() {
+        var updatedProducts = Set<Product>()
+        
+        for (identifier, product) in self._registeredProducts {
+            guard
+                case .subscription(_) = product.kind,
+                let record = self.storage.record(forProductIdentifier: identifier),
+                let expiryDate = record.expiryDate
+            else { continue }
+            
+            if !self.isSubscriptionActive(forExpiryDate: expiryDate) {
+                let result = self.storage.removeRecord(forProductIdentifier: identifier)
+                
+                if result == .didChangeRecords {
+                    updatedProducts.insert(product)
+                }
+            }
+        }
+        
+        if updatedProducts.isEmpty {
+            self.didChangeState(for: updatedProducts)
+        }
     }
 }
 
