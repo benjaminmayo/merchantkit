@@ -46,6 +46,8 @@
 		436CE15C1EB0E0C200AB41CD /* MerchantDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE15B1EB0E0C200AB41CD /* MerchantDelegate.swift */; };
 		436CE15F1EB0EF3D00AB41CD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436CE15E1EB0EF3D00AB41CD /* Foundation.framework */; };
 		436CE1611EB0EF4100AB41CD /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436CE1601EB0EF4100AB41CD /* StoreKit.framework */; };
+		436EA3BD1ED5B336005F3B3B /* LocalReceiptValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436EA3BC1ED5B336005F3B3B /* LocalReceiptValidator.swift */; };
+		436EA3BF1ED5B3E4005F3B3B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436EA3BE1ED5B3E4005F3B3B /* Security.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,6 +103,8 @@
 		436CE15B1EB0E0C200AB41CD /* MerchantDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MerchantDelegate.swift; sourceTree = "<group>"; };
 		436CE15E1EB0EF3D00AB41CD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		436CE1601EB0EF4100AB41CD /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		436EA3BC1ED5B336005F3B3B /* LocalReceiptValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalReceiptValidator.swift; sourceTree = "<group>"; };
+		436EA3BE1ED5B3E4005F3B3B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +112,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				436EA3BF1ED5B3E4005F3B3B /* Security.framework in Frameworks */,
 				436CE1611EB0EF4100AB41CD /* StoreKit.framework in Frameworks */,
 				436CE15F1EB0EF3D00AB41CD /* Foundation.framework in Frameworks */,
 			);
@@ -186,6 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				4342027D1EAE09100012983A /* ServerReceiptValidator.swift */,
+				436EA3BC1ED5B336005F3B3B /* LocalReceiptValidator.swift */,
 			);
 			path = "Receipt Validators";
 			sourceTree = "<group>";
@@ -262,6 +268,7 @@
 		436CE15D1EB0EF3D00AB41CD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				436EA3BE1ED5B3E4005F3B3B /* Security.framework */,
 				436CE1601EB0EF4100AB41CD /* StoreKit.framework */,
 				436CE15E1EB0EF3D00AB41CD /* Foundation.framework */,
 			);
@@ -325,18 +332,19 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = Benjamin;
 				TargetAttributes = {
 					4342025C1EAE08F80012983A = {
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = 2ZTW4G3PG5;
-						LastSwiftMigration = 0830;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 					434202651EAE08F80012983A = {
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = 2ZTW4G3PG5;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -406,6 +414,7 @@
 				432133B61EAE2FEA0096919B /* AvailablePurchasesTask.swift in Sources */,
 				432133BE1EAE3DFB0096919B /* Result.swift in Sources */,
 				434202811EAE09100012983A /* PurchaseRecord.swift in Sources */,
+				436EA3BD1ED5B336005F3B3B /* LocalReceiptValidator.swift in Sources */,
 				434202851EAE09100012983A /* PurchasedState.swift in Sources */,
 				436CE1541EB0B3F600AB41CD /* StoreKitReceiptDataFetcher.swift in Sources */,
 				432133BA1EAE36170096919B /* Purchase.swift in Sources */,
@@ -447,7 +456,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -455,7 +466,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -501,7 +516,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -509,7 +526,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -555,7 +576,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -575,7 +597,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.anthonymayo.MerchantKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -588,7 +611,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anthonymayo.MerchantKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -601,7 +625,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anthonymayo.MerchantKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};

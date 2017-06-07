@@ -60,7 +60,7 @@ public final class KeychainPurchaseStorage : PurchaseStorage {
     }
     
     private func saveToKeychain(_ dict: [String : Any], forKey key: String) throws {
-        let encodedData = try PropertyListSerialization.data(fromPropertyList: dict, format: .binary, options: .allZeros)
+        let encodedData = try PropertyListSerialization.data(fromPropertyList: dict, format: .binary, options: 0)
     
         let (status, _) = self.resultFromKeychain(forQuery: self.keychainFindQuery(forKey: key))
         

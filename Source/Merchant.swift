@@ -37,7 +37,7 @@ public final class Merchant {
     public func setup() {
         self.beginObservingTransactions()
         
-        self.checkReceipt(updateProducts: .all, policy: .onlyFetch, completion: { _ in
+        self.checkReceipt(updateProducts: .all, policy: .onlyFetch, completion: { _, _ in
         
         })
     }
@@ -388,7 +388,7 @@ extension Merchant : StoreKitTransactionObserverDelegate {
     
     func storeKitTransactionObserverDidUpdatePurchases(_ observer: StoreKitTransactionObserver) {
         if !self.identifiersForPendingObservedPurchases.isEmpty {
-            self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedPurchases), policy: .onlyFetch, completion: { _ in })
+            self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedPurchases), policy: .onlyFetch, completion: { _, _ in })
         }
         
         self.identifiersForPendingObservedPurchases.removeAll()
