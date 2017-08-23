@@ -48,6 +48,8 @@
 		436CE1611EB0EF4100AB41CD /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436CE1601EB0EF4100AB41CD /* StoreKit.framework */; };
 		436EA3BD1ED5B336005F3B3B /* LocalReceiptValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436EA3BC1ED5B336005F3B3B /* LocalReceiptValidator.swift */; };
 		436EA3BF1ED5B3E4005F3B3B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436EA3BE1ED5B3E4005F3B3B /* Security.framework */; };
+		43DBC1091F26283700DB4B25 /* PurchaseInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */; };
+		43DBC10B1F26288500DB4B25 /* NetworkAvailabilityCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,6 +107,8 @@
 		436CE1601EB0EF4100AB41CD /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		436EA3BC1ED5B336005F3B3B /* LocalReceiptValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalReceiptValidator.swift; sourceTree = "<group>"; };
 		436EA3BE1ED5B3E4005F3B3B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseInterfaceController.swift; sourceTree = "<group>"; };
+		43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAvailabilityCenter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +223,7 @@
 			isa = PBXGroup;
 			children = (
 				436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */,
+				43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */,
 			);
 			path = "User Interface";
 			sourceTree = "<group>";
@@ -261,6 +266,7 @@
 				436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */,
 				436CE1311EAEA55D00AB41CD /* DateUtilities.swift */,
 				4329BE491EB8A43400052D3E /* MerchantTaskUtilities.swift */,
+				43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */,
 			);
 			path = Internal;
 			sourceTree = "<group>";
@@ -394,6 +400,7 @@
 				4350D4761EB3931300DA47C5 /* RestorePurchasesTask.swift in Sources */,
 				434202801EAE09100012983A /* Merchant.swift in Sources */,
 				4337A8A31EB2433A00EAF633 /* EphemeralPurchaseStorage.swift in Sources */,
+				43DBC1091F26283700DB4B25 /* PurchaseInterfaceController.swift in Sources */,
 				432133BC1EAE39640096919B /* Price.swift in Sources */,
 				4337A8951EB1EC2B00EAF633 /* ServerReceiptResponseParser.swift in Sources */,
 				4305D7FB1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift in Sources */,
@@ -411,6 +418,7 @@
 				4329BE4A1EB8A43400052D3E /* MerchantTaskUtilities.swift in Sources */,
 				432133B81EAE311E0096919B /* MerchantTask.swift in Sources */,
 				434202821EAE09100012983A /* PurchaseStorage.swift in Sources */,
+				43DBC10B1F26288500DB4B25 /* NetworkAvailabilityCenter.swift in Sources */,
 				432133B61EAE2FEA0096919B /* AvailablePurchasesTask.swift in Sources */,
 				432133BE1EAE3DFB0096919B /* Result.swift in Sources */,
 				434202811EAE09100012983A /* PurchaseRecord.swift in Sources */,

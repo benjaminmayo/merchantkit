@@ -374,7 +374,7 @@ extension Merchant : StoreKitTransactionObserverDelegate {
                 self.identifiersForPendingObservedPurchases.insert(product.identifier) // we need to get the receipt to find the expiry date
             }
         }
-        
+
         for observer in self.purchaseObservers[identifier] {
             observer.merchant(self, didCompletePurchaseForProductWith: identifier)
         }
