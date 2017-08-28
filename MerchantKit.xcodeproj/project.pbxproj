@@ -48,6 +48,7 @@
 		436CE1611EB0EF4100AB41CD /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436CE1601EB0EF4100AB41CD /* StoreKit.framework */; };
 		436EA3BD1ED5B336005F3B3B /* LocalReceiptValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436EA3BC1ED5B336005F3B3B /* LocalReceiptValidator.swift */; };
 		436EA3BF1ED5B3E4005F3B3B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436EA3BE1ED5B3E4005F3B3B /* Security.framework */; };
+		438C9DA81F548E7A00C5F0E0 /* ReceiptValidationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438C9DA71F548E7A00C5F0E0 /* ReceiptValidationRequest.swift */; };
 		43DBC1091F26283700DB4B25 /* PurchaseInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */; };
 		43DBC10B1F26288500DB4B25 /* NetworkAvailabilityCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */; };
 /* End PBXBuildFile section */
@@ -107,6 +108,7 @@
 		436CE1601EB0EF4100AB41CD /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		436EA3BC1ED5B336005F3B3B /* LocalReceiptValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalReceiptValidator.swift; sourceTree = "<group>"; };
 		436EA3BE1ED5B3E4005F3B3B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		438C9DA71F548E7A00C5F0E0 /* ReceiptValidationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptValidationRequest.swift; sourceTree = "<group>"; };
 		43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseInterfaceController.swift; sourceTree = "<group>"; };
 		43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAvailabilityCenter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -248,6 +250,7 @@
 				432133B91EAE36170096919B /* Purchase.swift */,
 				432133BB1EAE39640096919B /* Price.swift */,
 				431C84441EC1D2C50098516E /* PurchaseSet.swift */,
+				438C9DA71F548E7A00C5F0E0 /* ReceiptValidationRequest.swift */,
 				4342027E1EAE09100012983A /* Receipt.swift */,
 				432133BD1EAE3DFB0096919B /* Result.swift */,
 			);
@@ -396,6 +399,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				438C9DA81F548E7A00C5F0E0 /* ReceiptValidationRequest.swift in Sources */,
 				436CE1501EB0A5B900AB41CD /* ConstructedReceipt.swift in Sources */,
 				4350D4761EB3931300DA47C5 /* RestorePurchasesTask.swift in Sources */,
 				434202801EAE09100012983A /* Merchant.swift in Sources */,

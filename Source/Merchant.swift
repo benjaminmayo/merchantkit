@@ -37,7 +37,7 @@ public final class Merchant {
     public func setup() {
         self.beginObservingTransactions()
         
-        self.checkReceipt(updateProducts: .all, policy: .onlyFetch, completion: { _, _ in
+        self.checkReceipt(updateProducts: .all, policy: .onlyFetch, reason: .initialization, completion: { _, _ in
         
         })
     }
@@ -220,7 +220,7 @@ extension Merchant {
     
     // Right now, Merchant relies on refreshing receipts to restore purchases. The implementation may be changed in future.
     internal func restorePurchases(completion: @escaping CheckReceiptCompletion) {
-        self.checkReceipt(updateProducts: .all, policy: .alwaysRefresh, completion: completion)
+        self.checkReceipt(updateProducts: .all, policy: .alwaysRefresh, reason: .restorePurchases, completion: completion)
     }
 }
 
@@ -228,7 +228,7 @@ extension Merchant {
 extension Merchant {
     typealias CheckReceiptCompletion = (_ updatedProducts: Set<Product>, Error?) -> Void
     
-    fileprivate func checkReceipt(updateProducts updateType: ReceiptUpdateType, policy: StoreKitReceiptDataFetcher.FetchPolicy, completion: @escaping CheckReceiptCompletion) {
+    fileprivate func checkReceipt(updateProducts updateType: ReceiptUpdateType, policy: StoreKitReceiptDataFetcher.FetchPolicy, reason: ReceiptValidationRequest.Reason, completion: @escaping CheckReceiptCompletion) {
         let fetcher: StoreKitReceiptDataFetcher
         let isStarted: Bool
         
@@ -247,7 +247,7 @@ extension Merchant {
             
             switch dataResult {
                 case .succeeded(let receiptData):
-                    strongSelf.validateReceipt(with: receiptData, completion: { validateResult in
+                    strongSelf.validateReceipt(with: receiptData, reason: reason, completion: { validateResult in
                         switch validateResult {
                             case .succeeded(let receipt):
                                 let updatedProducts = strongSelf.updateStorageWithValidatedReceipt(receipt, updateProducts: updateType)
@@ -285,9 +285,11 @@ extension Merchant {
         }
     }
     
-    private func validateReceipt(with data: Data, completion: @escaping (Result<Receipt>) -> Void) {
+    private func validateReceipt(with data: Data, reason: ReceiptValidationRequest.Reason, completion: @escaping (Result<Receipt>) -> Void) {
         DispatchQueue.main.async {
-            self.delegate.merchant(self, validate: data, completion: completion)
+            let request = ReceiptValidationRequest(data: data, reason: reason)
+            
+            self.delegate.merchant(self, validate: request, completion: completion)
         }
     }
     
@@ -388,7 +390,7 @@ extension Merchant : StoreKitTransactionObserverDelegate {
     
     func storeKitTransactionObserverDidUpdatePurchases(_ observer: StoreKitTransactionObserver) {
         if !self.identifiersForPendingObservedPurchases.isEmpty {
-            self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedPurchases), policy: .onlyFetch, completion: { _, _ in })
+            self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedPurchases), policy: .onlyFetch, reason: .completePurchase, completion: { _, _ in })
         }
         
         self.identifiersForPendingObservedPurchases.removeAll()

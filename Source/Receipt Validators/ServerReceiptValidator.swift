@@ -2,15 +2,15 @@
 /// Attempts to make a validated receipt from the response and calls `onCompletion` when finished.
 public final class ServerReceiptValidator {
     public typealias Completion = (Result<Receipt>) -> Void
-    public let receiptData: Data
+    public let request: ReceiptValidationRequest
     
     public var onCompletion: Completion?
     
     fileprivate let session = URLSession(configuration: .default)
     fileprivate let sharedSecret: String
     
-    public init(receiptData: Data, sharedSecret: String) {
-        self.receiptData = receiptData
+    public init(request: ReceiptValidationRequest, sharedSecret: String) {
+        self.request = request
         self.sharedSecret = sharedSecret
     }
     
@@ -41,7 +41,7 @@ extension ServerReceiptValidator {
     fileprivate func sendServerRequest(for environment: StoreEnvironment) {
         let urlRequest: URLRequest = {
             let requestDictionary: [String : Any] = [
-                "receipt-data": self.receiptData.base64EncodedString(),
+                "receipt-data": self.request.data.base64EncodedString(),
                 "password": self.sharedSecret
             ]
             
