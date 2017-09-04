@@ -8,6 +8,7 @@ internal protocol StoreKitTransactionObserverDelegate : class {
     func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFailToPurchaseWith error: Error, forProductWith identifier: String)
 }
 
+/// Observes the payment queue for changes and notifies the delegate of significant updates.
 internal final class StoreKitTransactionObserver : NSObject, SKPaymentTransactionObserver {
     public weak var delegate: StoreKitTransactionObserverDelegate?
     

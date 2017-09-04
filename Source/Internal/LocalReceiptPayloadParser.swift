@@ -1,5 +1,6 @@
 import Foundation
 
+/// Parse a payload from a local App Store receipt file.
 internal struct LocalReceiptPayloadParser {
     func receipt(from payload: Data) throws -> Receipt {
         var entries = [ReceiptEntry]()

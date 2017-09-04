@@ -1,5 +1,6 @@
 import SystemConfiguration
 
+/// Observe notifications to network availability.
 internal final class NetworkAvailabilityCenter {
     public var onConnectivityChanged: (() -> Void)?
     
