@@ -84,10 +84,6 @@ extension ASN1ReceiptAttributeSet {
         }
         
         mutating func next() -> Attribute? {
-            guard self.cursor < self.endIndex else {
-                return nil
-            }
-            
             while true {
                 do {
                     let (rawAttribute, next) = try ASN1Format.parseRawAttribute(startingAt: self.cursor, in: self.data)
@@ -99,9 +95,7 @@ extension ASN1ReceiptAttributeSet {
                         
                         return attribute
                     }
-                } catch let error {
-                    print(error)
-                    
+                } catch _ {
                     return nil
                 }
             }

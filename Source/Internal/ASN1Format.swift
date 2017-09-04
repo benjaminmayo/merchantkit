@@ -2,6 +2,7 @@ internal enum ASN1Format {
     enum ParseError : Swift.Error {
         case malformed
         case invalidLength
+        case reachedEOF
     }
     
     struct RawAttribute {
@@ -22,6 +23,10 @@ internal enum ASN1Format {
     typealias ParseResult<T> = (value: T, after: Data.Index)
     
     static func parseRawAttribute(startingAt index: Data.Index, in data: Data) throws -> ParseResult<RawAttribute> {
+        guard index != data.endIndex else {
+            throw ParseError.reachedEOF
+        }
+        
         let kind = data[index]
         
         guard kind == BufferKind.sequence.rawValue else { throw ParseError.malformed }
@@ -50,14 +55,17 @@ internal enum ASN1Format {
             let kind = data[index]
             
             guard kind == component.kind.rawValue else { throw ParseError.malformed }
-            index = data.index(after: index)
             
-            let (byteCount, next) = try ASN1Format.parseLength(startingAt: index, in: data)
+            guard let next = data.index(index, offsetBy: 1, limitedBy: data.endIndex) else { throw ParseError.invalidLength } // code defensively in case of input error
             index = next
             
-            let (result, next2) = try component.conversion(index, byteCount)
-            
+            let (byteCount, next2) = try ASN1Format.parseLength(startingAt: index, in: data)
             index = next2
+            
+            guard data.index(next, offsetBy: byteCount, limitedBy: data.endIndex) != nil else { throw ParseError.invalidLength } // code defensively in case of input error
+            
+            let (result, next3) = try component.conversion(index, byteCount)
+            index = next3
             
             return result
         }
@@ -70,6 +78,10 @@ internal enum ASN1Format {
     }
     
     static func parseLength(startingAt index: Data.Index, in data: Data) throws -> ParseResult<Int> {
+        guard index != data.endIndex else {
+            throw ParseError.reachedEOF
+        }
+        
         let byte = data[index]
         
         if ((byte & 0x80) == 0x00) {
@@ -91,6 +103,10 @@ internal enum ASN1Format {
     }
     
     static func parseInteger(startingAt index: Data.Index, in data: Data, byteCount: Int) throws -> ParseResult<Int> {
+        guard index != data.endIndex else {
+            throw ParseError.reachedEOF
+        }
+        
         var result: UInt64 = 0
         
         let bytes = data[index..<data.index(index, offsetBy: byteCount)]
@@ -103,6 +119,10 @@ internal enum ASN1Format {
     }
     
     static func parseOctetString(startingAt index: Data.Index, in data: Data, byteCount: Int) throws -> ParseResult<Data> {
+        guard index != data.endIndex else {
+            throw ParseError.reachedEOF
+        }
+        
         let slice = data[index..<data.index(index, offsetBy: byteCount)]
         
         return (slice, slice.endIndex)
