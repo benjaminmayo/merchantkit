@@ -9,8 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <StoreKit/StoreKit.h>
 
-//#import <openssl/asn1.h>
-
 //! Project version number for MerchantKit.
 FOUNDATION_EXPORT double MerchantKitVersionNumber;
 
