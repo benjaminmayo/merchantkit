@@ -74,8 +74,8 @@ func merchant(_ merchant: Merchant, didChangeStateFor products: Set<Product>) {
     }
  }
     
-func merchant(_ merchant: Merchant, validate receiptData: Data, completion: @escaping (Result<Receipt>) -> Void) {
-    let validator = ServerReceiptValidator(receiptData: receiptData, sharedSecret: "iTunesStoreSharedSecretGoesHere")
+func merchant(_ merchant: Merchant, validate request: ReceiptValidationRequest, completion: @escaping (Result<Receipt>) -> Void) {
+    let validator = ServerReceiptValidator(request: request, sharedSecret: "iTunesStoreSharedSecretGoesHere")
     validator.onCompletion = { result in
         completion(result)
     }
