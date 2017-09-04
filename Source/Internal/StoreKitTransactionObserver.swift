@@ -36,6 +36,10 @@ internal final class StoreKitTransactionObserver : NSObject, SKPaymentTransactio
         self.delegate?.storeKitTransactionObserverDidUpdatePurchases(self)
     }
     
+    func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {
+        return true
+    }
+    
     private func completePurchase(for transaction: SKPaymentTransaction) {        
         self.delegate?.storeKitTransactionObserver(self, didPurchaseProductWith: transaction.payment.productIdentifier)
         

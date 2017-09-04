@@ -1,4 +1,4 @@
-enum ASN1Format {
+internal enum ASN1Format {
     enum ParseError : Swift.Error {
         case malformed
         case invalidLength
