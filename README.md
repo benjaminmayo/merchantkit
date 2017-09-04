@@ -50,7 +50,7 @@ public func merchant(_ merchant: Merchant, didChangeStateFor products: Set<Produ
 ## Project Goals
 
 - Straightforward, concise, API to support non-consumable, consumable and subscription In-App Purchases.
-- No external dependencies beyond what Apple ships with iOS. Right now, the project only links Foundation and StoreKit.
+- No external dependencies beyond what Apple ships with iOS. Right now, the project links Foundation and StoreKit. It ships with OpenSSL as a static library.
 - Prioritise developer convenience and accessibility over security. MerchantKit users accept that some level of piracy is inevitable and not worth chasing.
 - Do-whatever-you-want open source license.
 - Compatibility with latest Swift version using idiomatic language constructs.
@@ -103,7 +103,6 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 ## To Be Completed (in no particular order)
 
 - Add tests to the bare test suite. MerchantKit components can be tested separately, including the validators and `PurchaseStorage` types.
-- Add a validator for In-App Purchase data that does not depend on network requests. This requires parsing the ASN resource from the local bundle. The tricky part is implementing this without relying on external dependencies. Help would be appreciated in this area.
 - Implement consumable purchases. This will likely involve a special delegate callback to tell the application to update its quantities.
 - Enhance the API of `PriceFormatter` to be a comprehensive formatter for product prices. This includes adding ways to express subscription periods (eg: '£3.99 per month').
 - Extended documentation with example usage projects.
