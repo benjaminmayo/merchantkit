@@ -1,0 +1,5 @@
+module LibOpenSSL [system] {
+    header "include/openssl/openssl.h"
+
+    export *
+}

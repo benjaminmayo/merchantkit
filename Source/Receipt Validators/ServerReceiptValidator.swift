@@ -1,4 +1,4 @@
-/// Sends a validation request to the iTunes server. 
+/// Sends a request to the iTunes server for validation.
 /// Attempts to make a validated receipt from the response and calls `onCompletion` when finished.
 public final class ServerReceiptValidator {
     public typealias Completion = (Result<Receipt>) -> Void

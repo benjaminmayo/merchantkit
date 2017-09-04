@@ -4,4 +4,26 @@ extension Date {
     internal init(millisecondsSince1970 milliseconds: Int) {
         self.init(timeIntervalSince1970: Double(milliseconds / 1000))
     }
+    
+    internal init?(fromISO8601 string: String) {
+        if let date = Date.iso8601Formatter.date(from: string) {
+            self = date
+        } else {
+            return nil
+        }
+    }
+}
+
+extension Date {
+    private static let iso8601Formatter: ISO8601DateFormatter = {
+//        let formatter = DateFormatter()
+//        formatter.calendar = Calendar(identifier: .iso8601)
+//        formatter.locale = Locale(identifier: "en_US_POSIX")
+        //formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        //formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
+        
+        let dateFormatter = ISO8601DateFormatter()
+        return dateFormatter
+        //return formatter
+    }()
 }
