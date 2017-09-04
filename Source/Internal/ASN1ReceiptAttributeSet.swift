@@ -72,6 +72,10 @@ extension ASN1ReceiptAttributeSet {
             self.cursor = data.startIndex
             self.endIndex = data.endIndex
             
+            guard self.cursor < self.endIndex else {
+                throw ASN1Format.ParseError.invalidLength
+            }
+            
             let kind = self.data[self.cursor]
             
             guard kind == ASN1Format.BufferKind.set.rawValue else { throw ASN1Format.ParseError.malformed }
