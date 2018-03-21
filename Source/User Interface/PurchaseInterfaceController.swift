@@ -111,7 +111,7 @@ public final class PurchaseInterfaceController {
                             error = .networkError(networkError)
                             shouldDisplayError = true
                         default:
-                            error = .genericProblem
+                            error = .genericProblem(baseError)
                             shouldDisplayError = true
                 }
                 
@@ -173,7 +173,7 @@ extension PurchaseInterfaceController {
             case purchaseNotAvailable
             case paymentNotAllowed
             case paymentInvalid
-            case genericProblem
+            case genericProblem(Swift.Error)
         }
     }
     
@@ -184,6 +184,7 @@ extension PurchaseInterfaceController {
     
     public enum FetchError : Swift.Error {
         case networkError(URLError)
+        case storeKitError(SKError)
         case genericProblem
     }
 }
@@ -228,10 +229,12 @@ extension PurchaseInterfaceController {
                     let underlyingError = (error as NSError).userInfo[NSUnderlyingErrorKey] as? Error
                     
                     switch (error, underlyingError) {
-                    case (let networkError as URLError, _), (_, let networkError as URLError):
-                        resultError = .networkError(networkError)
-                    default:
-                        resultError = .genericProblem
+                        case (let networkError as URLError, _), (_, let networkError as URLError):
+                            resultError = .networkError(networkError)
+                        case (let error as SKError, _):
+                            resultError = .storeKitError(error)
+                        default:
+                            resultError = .genericProblem
                     }
                     
                     loadResult = .failed(resultError)
