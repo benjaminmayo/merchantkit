@@ -22,32 +22,30 @@ class LocalReceiptPayloadParserTests : XCTestCase {
         XCTAssertThrowsError(try parser.receipt(from: randomData))
     }
     
-    func testSampleResources() {
-        let singleExpectation = ReceiptExpectation(productIdentifiers: ["codeSharingUnlockable"], resourceName: "testSingleInAppPurchaseReceipt")
+    func testSubscriptionSampleResources() {
+        let expectation = ReceiptExpectation(productIdentifiers: ["testsubscription"], resource: (name: "testSubscriptionReceiptResponse", extension: "json"))
+        let expectations = [expectation]
         
-        let expectations = [singleExpectation]
-        
+        let bundle = Bundle(for: type(of: self))
+
         for expectation in expectations {
-            let bundle = Bundle(for: type(of: self))
+            guard let url = bundle.url(forResource: expectation.resource.name, withExtension: expectation.resource.extension), let data = try? Data(contentsOf: url) else {
+                XCTFail("sample resource \(expectation.resource.name) not exists")
+                continue
+            }
             
-            guard
-                let url = bundle.url(forResource: expectation.resourceName, withExtension: "data"),
-                let base64String = try? String(contentsOf: url),
-                let data = Data(base64Encoded: base64String)
-            else { continue }
-            
-            let parser = LocalReceiptPayloadParser()
-            
+            let parser = ServerReceiptResponseParser()
             var receipt: Receipt!
-            XCTAssertNoThrow(receipt = try parser.receipt(from: data))
             
+            XCTAssertNoThrow(receipt = try parser.receipt(from: data))
+    
             XCTAssertEqual(receipt.productIdentifiers, expectation.productIdentifiers)
         }
     }
     
     struct ReceiptExpectation {
         let productIdentifiers: Set<String>
-        let resourceName: String
+        let resource: (name: String, `extension`: String)
     }
 }
 

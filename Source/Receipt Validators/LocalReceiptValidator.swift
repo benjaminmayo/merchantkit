@@ -1,4 +1,4 @@
-import LibOpenSSL
+import OpenSSL
 
 /// Attempts to generate a validated receipt from the request and calls `onCompletion` when finished.
 public final class LocalReceiptValidator {
@@ -42,7 +42,7 @@ extension LocalReceiptValidator {
         
         return try receiptData.withUnsafeBytes({ (bytes: UnsafePointer<UInt8>) -> PKCS7 in
             let data = UnsafeRawPointer(bytes)
-
+            
             BIO_write(bio, data, Int32(receiptData.count))
 
             guard let container = d2i_PKCS7_bio(bio, nil) else {

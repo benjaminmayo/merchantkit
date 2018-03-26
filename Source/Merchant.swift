@@ -23,6 +23,8 @@ public final class Merchant {
     public init(storage: PurchaseStorage, delegate: MerchantDelegate) {
         self.delegate = delegate
         self.storage = storage
+        
+        
     }
     
     /// Products must be registered before their states are consistently valid. Products should be registered as early as possible.

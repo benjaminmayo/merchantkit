@@ -1,0 +1,9 @@
+module OpenSSL [system] {
+    header "openssl/pkcs7.h"
+    header "openssl/objects.h"
+    
+    link "ssl"
+    link "crypto"
+    
+    export *
+}
