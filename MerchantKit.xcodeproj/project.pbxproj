@@ -49,15 +49,13 @@
 		436CE1611EB0EF4100AB41CD /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436CE1601EB0EF4100AB41CD /* StoreKit.framework */; };
 		436EA3BD1ED5B336005F3B3B /* LocalReceiptValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436EA3BC1ED5B336005F3B3B /* LocalReceiptValidator.swift */; };
 		436EA3BF1ED5B3E4005F3B3B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436EA3BE1ED5B3E4005F3B3B /* Security.framework */; };
-		438BEF372062A01E0059143A /* OpenSSL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438BEF362062A01E0059143A /* OpenSSL.framework */; };
-		438BEF3A2062A0260059143A /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 438BEF382062A0260059143A /* libcrypto.a */; };
-		438BEF3B2062A0260059143A /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 438BEF392062A0260059143A /* libssl.a */; };
 		438C9DA81F548E7A00C5F0E0 /* ReceiptValidationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438C9DA71F548E7A00C5F0E0 /* ReceiptValidationRequest.swift */; };
 		43B0F3491F5C6CF300D4039A /* LocalReceiptPayloadParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0F3481F5C6CF300D4039A /* LocalReceiptPayloadParser.swift */; };
 		43DBC1091F26283700DB4B25 /* PurchaseInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */; };
 		43DBC10B1F26288500DB4B25 /* NetworkAvailabilityCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */; };
 		43F1E7581F5DAB5F00A112D4 /* ASN1ReceiptAttributeSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1E7571F5DAB5F00A112D4 /* ASN1ReceiptAttributeSet.swift */; };
 		43F1E75A1F5DABC300A112D4 /* ASN1Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1E7591F5DABC300A112D4 /* ASN1Format.swift */; };
+		9FE1E9D75647FC7808BA61BA /* Pods_MerchantKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C0FD12F8A07A7BC203FE0D9 /* Pods_MerchantKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +82,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3C0FD12F8A07A7BC203FE0D9 /* Pods_MerchantKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MerchantKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreKitTransactionObserver.swift; sourceTree = "<group>"; };
 		43128DCF1EC38A3000DBA2EE /* PurchaseSetTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseSetTests.swift; sourceTree = "<group>"; };
 		431C1FF31F5E07D9009E2CD7 /* LocalReceiptPayloadParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalReceiptPayloadParserTests.swift; sourceTree = "<group>"; };
@@ -129,16 +128,14 @@
 		436CE1601EB0EF4100AB41CD /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		436EA3BC1ED5B336005F3B3B /* LocalReceiptValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalReceiptValidator.swift; sourceTree = "<group>"; };
 		436EA3BE1ED5B3E4005F3B3B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		438BEF2820629D5D0059143A /* OpenSSL.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = OpenSSL.modulemap; sourceTree = "<group>"; };
-		438BEF362062A01E0059143A /* OpenSSL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenSSL.framework; sourceTree = "<group>"; };
-		438BEF382062A0260059143A /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
-		438BEF392062A0260059143A /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
 		438C9DA71F548E7A00C5F0E0 /* ReceiptValidationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptValidationRequest.swift; sourceTree = "<group>"; };
 		43B0F3481F5C6CF300D4039A /* LocalReceiptPayloadParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalReceiptPayloadParser.swift; sourceTree = "<group>"; };
 		43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseInterfaceController.swift; sourceTree = "<group>"; };
 		43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAvailabilityCenter.swift; sourceTree = "<group>"; };
 		43F1E7571F5DAB5F00A112D4 /* ASN1ReceiptAttributeSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASN1ReceiptAttributeSet.swift; sourceTree = "<group>"; };
 		43F1E7591F5DABC300A112D4 /* ASN1Format.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASN1Format.swift; sourceTree = "<group>"; };
+		9CB0635911681B7364231F3C /* Pods-MerchantKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MerchantKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MerchantKit/Pods-MerchantKit.debug.xcconfig"; sourceTree = "<group>"; };
+		F7982F4DDEEF2FCB88749E19 /* Pods-MerchantKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MerchantKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-MerchantKit/Pods-MerchantKit.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,12 +143,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				438BEF3B2062A0260059143A /* libssl.a in Frameworks */,
 				436EA3BF1ED5B3E4005F3B3B /* Security.framework in Frameworks */,
 				436CE1611EB0EF4100AB41CD /* StoreKit.framework in Frameworks */,
-				438BEF372062A01E0059143A /* OpenSSL.framework in Frameworks */,
 				436CE15F1EB0EF3D00AB41CD /* Foundation.framework in Frameworks */,
-				438BEF3A2062A0260059143A /* libcrypto.a in Frameworks */,
+				9FE1E9D75647FC7808BA61BA /* Pods_MerchantKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,15 +172,13 @@
 		434202531EAE08F80012983A = {
 			isa = PBXGroup;
 			children = (
-				438BEF382062A0260059143A /* libcrypto.a */,
-				438BEF392062A0260059143A /* libssl.a */,
-				438BEF362062A01E0059143A /* OpenSSL.framework */,
 				4342025F1EAE08F80012983A /* Source */,
 				431C84461EC1E3490098516E /* Info.plist */,
 				431C84471EC1E3490098516E /* MerchantKit.h */,
 				4342026A1EAE08F80012983A /* Tests */,
 				4342025E1EAE08F80012983A /* Products */,
 				436CE15D1EB0EF3D00AB41CD /* Frameworks */,
+				CCCBA570C5CDB141D3D47EC6 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -201,7 +194,6 @@
 		4342025F1EAE08F80012983A /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				438BEF2720629D480059143A /* OpenSSL */,
 				434202771EAE09100012983A /* Merchant.swift */,
 				436CE15B1EB0E0C200AB41CD /* MerchantDelegate.swift */,
 				436CE13B1EAF42E600AB41CD /* Model */,
@@ -319,16 +311,18 @@
 				436EA3BE1ED5B3E4005F3B3B /* Security.framework */,
 				436CE1601EB0EF4100AB41CD /* StoreKit.framework */,
 				436CE15E1EB0EF3D00AB41CD /* Foundation.framework */,
+				3C0FD12F8A07A7BC203FE0D9 /* Pods_MerchantKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		438BEF2720629D480059143A /* OpenSSL */ = {
+		CCCBA570C5CDB141D3D47EC6 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				438BEF2820629D5D0059143A /* OpenSSL.modulemap */,
+				9CB0635911681B7364231F3C /* Pods-MerchantKit.debug.xcconfig */,
+				F7982F4DDEEF2FCB88749E19 /* Pods-MerchantKit.release.xcconfig */,
 			);
-			path = OpenSSL;
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -349,11 +343,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 434202711EAE08F80012983A /* Build configuration list for PBXNativeTarget "MerchantKit" */;
 			buildPhases = (
+				785C747B8495592C784BC6D5 /* [CP] Check Pods Manifest.lock */,
 				434202581EAE08F80012983A /* Sources */,
 				434202591EAE08F80012983A /* Frameworks */,
 				4342025A1EAE08F80012983A /* Headers */,
 				4342025B1EAE08F80012983A /* Resources */,
 				43B0F2891F5C5A1C00D4039A /* Copy Files */,
+				3AD1D0BD5C2F0018F7F32F0B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -441,6 +437,42 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3AD1D0BD5C2F0018F7F32F0B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MerchantKit/Pods-MerchantKit-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		785C747B8495592C784BC6D5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MerchantKit-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		434202581EAE08F80012983A /* Sources */ = {
@@ -625,6 +657,7 @@
 		};
 		434202721EAE08F80012983A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9CB0635911681B7364231F3C /* Pods-MerchantKit.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
@@ -649,7 +682,6 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				MODULEMAP_FILE = "";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"$(inherited)",
@@ -668,6 +700,7 @@
 		};
 		434202731EAE08F80012983A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F7982F4DDEEF2FCB88749E19 /* Pods-MerchantKit.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
@@ -692,7 +725,6 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				MODULEMAP_FILE = "";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"$(inherited)",

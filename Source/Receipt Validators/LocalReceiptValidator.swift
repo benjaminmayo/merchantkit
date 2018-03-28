@@ -1,6 +1,6 @@
-import OpenSSL
+import openssl
 
-/// Attempts to generate a validated receipt from the request and calls `onCompletion` when finished.
+/// Atempts to generate a validated receipt from the request and calls `onCompletion` when finished.
 public final class LocalReceiptValidator {
     public typealias Completion = (Result<Receipt>) -> Void
     public let request: ReceiptValidationRequest

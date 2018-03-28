@@ -16,9 +16,9 @@ Pod::Spec.new do |spec|
     spec.source = { :git => "https://github.com/benjaminmayo/merchantkit.git", :tag => "#{spec.version}"}
 
     spec.frameworks = "CoreFoundation", "StoreKit"
+    spec.dependency "GRKOpenSSLFramework"
 
     spec.source_files = "Source/**/*.{h,swift}"
-    spec.vendored_frameworks = "OpenSSL.framework"
 
     spec.test_spec "Tests" do |test_spec|
         test_spec.source_files = "Tests/**/*.{h,swift}"
