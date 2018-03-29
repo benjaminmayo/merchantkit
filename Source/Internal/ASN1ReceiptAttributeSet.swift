@@ -61,6 +61,18 @@ extension ASN1ReceiptAttributeSet {
     }
 }
 
+extension ASN1ReceiptAttributeSet : CustomStringConvertible {
+    public var description: String {
+        var description = "ASN1ReceiptAttributeSet\n"
+        
+        for attribute in self {
+            description += "\(attribute)\n"
+        }
+        
+        return description
+    }
+}
+
 extension ASN1ReceiptAttributeSet {
     internal struct Iterator : Sequence, IteratorProtocol {
         private let data: Data

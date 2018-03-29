@@ -24,7 +24,6 @@
 		4337A89B1EB1FAAD00EAF633 /* BucketsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4337A89A1EB1FAAD00EAF633 /* BucketsTests.swift */; };
 		4337A89D1EB1FE3300EAF633 /* PurchaseRecordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4337A89C1EB1FE3300EAF633 /* PurchaseRecordTests.swift */; };
 		4337A8A31EB2433A00EAF633 /* EphemeralPurchaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4337A8A21EB2433A00EAF633 /* EphemeralPurchaseStorage.swift */; };
-		434202671EAE08F80012983A /* MerchantKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4342025D1EAE08F80012983A /* MerchantKit.framework */; };
 		434202801EAE09100012983A /* Merchant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434202771EAE09100012983A /* Merchant.swift */; };
 		434202811EAE09100012983A /* PurchaseRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434202781EAE09100012983A /* PurchaseRecord.swift */; };
 		434202821EAE09100012983A /* PurchaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434202791EAE09100012983A /* PurchaseStorage.swift */; };
@@ -53,6 +52,7 @@
 		43B0F3491F5C6CF300D4039A /* LocalReceiptPayloadParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0F3481F5C6CF300D4039A /* LocalReceiptPayloadParser.swift */; };
 		43DBC1091F26283700DB4B25 /* PurchaseInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */; };
 		43DBC10B1F26288500DB4B25 /* NetworkAvailabilityCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */; };
+		43E85F1B206CF3AC0072401D /* Pods_MerchantKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E85F1A206CF3AC0072401D /* Pods_MerchantKit.framework */; };
 		43F1E7581F5DAB5F00A112D4 /* ASN1ReceiptAttributeSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1E7571F5DAB5F00A112D4 /* ASN1ReceiptAttributeSet.swift */; };
 		43F1E75A1F5DABC300A112D4 /* ASN1Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1E7591F5DABC300A112D4 /* ASN1Format.swift */; };
 		9FE1E9D75647FC7808BA61BA /* Pods_MerchantKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C0FD12F8A07A7BC203FE0D9 /* Pods_MerchantKit.framework */; };
@@ -132,6 +132,7 @@
 		43B0F3481F5C6CF300D4039A /* LocalReceiptPayloadParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalReceiptPayloadParser.swift; sourceTree = "<group>"; };
 		43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseInterfaceController.swift; sourceTree = "<group>"; };
 		43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAvailabilityCenter.swift; sourceTree = "<group>"; };
+		43E85F1A206CF3AC0072401D /* Pods_MerchantKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MerchantKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43F1E7571F5DAB5F00A112D4 /* ASN1ReceiptAttributeSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASN1ReceiptAttributeSet.swift; sourceTree = "<group>"; };
 		43F1E7591F5DABC300A112D4 /* ASN1Format.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASN1Format.swift; sourceTree = "<group>"; };
 		9CB0635911681B7364231F3C /* Pods-MerchantKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MerchantKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MerchantKit/Pods-MerchantKit.debug.xcconfig"; sourceTree = "<group>"; };
@@ -154,7 +155,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				434202671EAE08F80012983A /* MerchantKit.framework in Frameworks */,
+				43E85F1B206CF3AC0072401D /* Pods_MerchantKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,6 +309,7 @@
 		436CE15D1EB0EF3D00AB41CD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				43E85F1A206CF3AC0072401D /* Pods_MerchantKit.framework */,
 				436EA3BE1ED5B3E4005F3B3B /* Security.framework */,
 				436CE1601EB0EF4100AB41CD /* StoreKit.framework */,
 				436CE15E1EB0EF3D00AB41CD /* Foundation.framework */,

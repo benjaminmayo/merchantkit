@@ -37,7 +37,7 @@ public final class KeychainPurchaseStorage : PurchaseStorage {
             self.purchaseRecordCache.removeValue(forKey: record.productIdentifier)
 
             return .didChangeRecords
-        } catch {
+        } catch {            
             return .noChanges
         }
     }
@@ -124,7 +124,7 @@ public final class KeychainPurchaseStorage : PurchaseStorage {
     }
     
     private func removeDictFromKeychain(forKey key: String) throws {
-        let query = self.keychainFindQuery(forKey: key)
+        let query = self.keychainQuery(forKey: key)
         
         let status = SecItemDelete(query as CFDictionary)
         
