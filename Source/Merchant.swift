@@ -39,8 +39,8 @@ public final class Merchant {
     public func setup() {
         self.beginObservingTransactions()
         
-        self.checkReceipt(updateProducts: .all, policy: .onlyFetch, reason: .initialization, completion: { _, _ in
-        
+        self.checkReceipt(updateProducts: .all, policy: .onlyFetch, reason: .initialization, completion: { [weak self] _, _ in
+            self?.updateSubscriptions()
         })
     }
     
@@ -176,7 +176,7 @@ extension Merchant {
 // MARK: Subscription utilities
 extension Merchant {
     fileprivate func isSubscriptionActive(forExpiryDate expiryDate: Date) -> Bool {
-        return expiryDate < self.nowDate
+        return expiryDate > self.nowDate
     }
     
     fileprivate func updateNowDate() {
@@ -202,7 +202,7 @@ extension Merchant {
             }
         }
         
-        if updatedProducts.isEmpty {
+        if !updatedProducts.isEmpty {
             self.didChangeState(for: updatedProducts)
         }
     }
