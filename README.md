@@ -59,14 +59,16 @@ The codebase is in flux right now. MerchantKit is by no means finished and there
 
 ## Getting Started
 
-1. Compile the MerchantKit framework and embed it in your application. In your app delegate, import `MerchantKit` create a `Merchant` instance in `application(_:, didFinishLaunchingWithOptions:)`. Supply a storage object (recommended: `KeychainPurchaseStorage`) and a delegate.
+1. Compile the MerchantKit framework and embed it in your application. There is currently one dependency on a `openssl` framework. Therefore, the easiest way to get up and running is to use Cocoapods; the spec includes an OpenSSL dependency for ease of use. Add `MerchantKit` to your project's Podfile and build.
+
+2. In your app delegate, import `MerchantKit` create a `Merchant` instance in `application(_:, didFinishLaunchingWithOptions:)`. Supply a storage object (recommended: `KeychainPurchaseStorage`) and a delegate.
 ```swift
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     self.merchant = Merchant(storage: KeychainPurchaseStorage(serviceName: "AppName"), delegate: self)    
 }
 ```
 
-2. Implement the two required methods in `MerchantDelegate` to validate receipt data and receive notifications when the `PurchasedState` changes for registered products.
+3. Implement the two required methods in `MerchantDelegate` to validate receipt data and receive notifications when the `PurchasedState` changes for registered products.
 ```swift
 func merchant(_ merchant: Merchant, didChangeStateFor products: Set<Product>) {
     for product in products {
@@ -83,13 +85,13 @@ func merchant(_ merchant: Merchant, validate request: ReceiptValidationRequest, 
     validator.start()
 }
 ```
-3. Register products as soon as possible (typically within `application(_:, didFinishLaunchingWithOptions:)`). You may want to load these products from a resource file. The included `LocalConfiguration` object provides a mechanism for this.
+4. Register products as soon as possible (typically within `application(_:, didFinishLaunchingWithOptions:)`). You may want to load these products from a resource file. The included `LocalConfiguration` object provides a mechanism for this.
 ```swift
 let config = try! MerchantKit.LocalConfiguration(fromResourceNamed: "MerchantConfig", extension: "plist")
 self.merchant.register(config.products)
 
 ```
-4. Call `setup()` on the merchant instance before escaping the `application(_:, didFinishLaunchingWithOptions:)` method. This tells the merchant to start observing the payment queue.
+5. Call `setup()` on the merchant instance before escaping the `application(_:, didFinishLaunchingWithOptions:)` method. This tells the merchant to start observing the payment queue.
 ```swift
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     self.merchant = Merchant(storage: KeychainPurchaseStorage(serviceName: "AppName"), delegate: self)    
@@ -98,7 +100,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
     self.merchant.setup()
 }
 ```
-5. Profit! Or something.
+6. Profit! Or something.
 
 ## To Be Completed (in no particular order)
 
