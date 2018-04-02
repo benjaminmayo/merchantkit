@@ -52,10 +52,9 @@
 		43B0F3491F5C6CF300D4039A /* LocalReceiptPayloadParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0F3481F5C6CF300D4039A /* LocalReceiptPayloadParser.swift */; };
 		43DBC1091F26283700DB4B25 /* PurchaseInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */; };
 		43DBC10B1F26288500DB4B25 /* NetworkAvailabilityCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */; };
-		43E85F1B206CF3AC0072401D /* Pods_MerchantKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E85F1A206CF3AC0072401D /* Pods_MerchantKit.framework */; };
+		43EB5CB020723C33007D1F94 /* PKCS7Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EB5CAF20723C33007D1F94 /* PKCS7Container.swift */; };
 		43F1E7581F5DAB5F00A112D4 /* ASN1ReceiptAttributeSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1E7571F5DAB5F00A112D4 /* ASN1ReceiptAttributeSet.swift */; };
 		43F1E75A1F5DABC300A112D4 /* ASN1Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1E7591F5DABC300A112D4 /* ASN1Format.swift */; };
-		9FE1E9D75647FC7808BA61BA /* Pods_MerchantKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C0FD12F8A07A7BC203FE0D9 /* Pods_MerchantKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,7 +81,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		3C0FD12F8A07A7BC203FE0D9 /* Pods_MerchantKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MerchantKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreKitTransactionObserver.swift; sourceTree = "<group>"; };
 		43128DCF1EC38A3000DBA2EE /* PurchaseSetTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseSetTests.swift; sourceTree = "<group>"; };
 		431C1FF31F5E07D9009E2CD7 /* LocalReceiptPayloadParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalReceiptPayloadParserTests.swift; sourceTree = "<group>"; };
@@ -132,11 +130,9 @@
 		43B0F3481F5C6CF300D4039A /* LocalReceiptPayloadParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalReceiptPayloadParser.swift; sourceTree = "<group>"; };
 		43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseInterfaceController.swift; sourceTree = "<group>"; };
 		43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAvailabilityCenter.swift; sourceTree = "<group>"; };
-		43E85F1A206CF3AC0072401D /* Pods_MerchantKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MerchantKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43EB5CAF20723C33007D1F94 /* PKCS7Container.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKCS7Container.swift; sourceTree = "<group>"; };
 		43F1E7571F5DAB5F00A112D4 /* ASN1ReceiptAttributeSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASN1ReceiptAttributeSet.swift; sourceTree = "<group>"; };
 		43F1E7591F5DABC300A112D4 /* ASN1Format.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASN1Format.swift; sourceTree = "<group>"; };
-		9CB0635911681B7364231F3C /* Pods-MerchantKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MerchantKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MerchantKit/Pods-MerchantKit.debug.xcconfig"; sourceTree = "<group>"; };
-		F7982F4DDEEF2FCB88749E19 /* Pods-MerchantKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MerchantKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-MerchantKit/Pods-MerchantKit.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,7 +143,6 @@
 				436EA3BF1ED5B3E4005F3B3B /* Security.framework in Frameworks */,
 				436CE1611EB0EF4100AB41CD /* StoreKit.framework in Frameworks */,
 				436CE15F1EB0EF3D00AB41CD /* Foundation.framework in Frameworks */,
-				9FE1E9D75647FC7808BA61BA /* Pods_MerchantKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,7 +150,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43E85F1B206CF3AC0072401D /* Pods_MerchantKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,7 +173,6 @@
 				4342026A1EAE08F80012983A /* Tests */,
 				4342025E1EAE08F80012983A /* Products */,
 				436CE15D1EB0EF3D00AB41CD /* Frameworks */,
-				CCCBA570C5CDB141D3D47EC6 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -302,6 +295,7 @@
 				43F1E7591F5DABC300A112D4 /* ASN1Format.swift */,
 				4329BE491EB8A43400052D3E /* MerchantTaskUtilities.swift */,
 				43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */,
+				43EB5CAF20723C33007D1F94 /* PKCS7Container.swift */,
 			);
 			path = Internal;
 			sourceTree = "<group>";
@@ -309,22 +303,11 @@
 		436CE15D1EB0EF3D00AB41CD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				43E85F1A206CF3AC0072401D /* Pods_MerchantKit.framework */,
 				436EA3BE1ED5B3E4005F3B3B /* Security.framework */,
 				436CE1601EB0EF4100AB41CD /* StoreKit.framework */,
 				436CE15E1EB0EF3D00AB41CD /* Foundation.framework */,
-				3C0FD12F8A07A7BC203FE0D9 /* Pods_MerchantKit.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		CCCBA570C5CDB141D3D47EC6 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				9CB0635911681B7364231F3C /* Pods-MerchantKit.debug.xcconfig */,
-				F7982F4DDEEF2FCB88749E19 /* Pods-MerchantKit.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -345,13 +328,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 434202711EAE08F80012983A /* Build configuration list for PBXNativeTarget "MerchantKit" */;
 			buildPhases = (
-				785C747B8495592C784BC6D5 /* [CP] Check Pods Manifest.lock */,
 				434202581EAE08F80012983A /* Sources */,
 				434202591EAE08F80012983A /* Frameworks */,
 				4342025A1EAE08F80012983A /* Headers */,
 				4342025B1EAE08F80012983A /* Resources */,
 				43B0F2891F5C5A1C00D4039A /* Copy Files */,
-				3AD1D0BD5C2F0018F7F32F0B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -387,7 +368,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = Benjamin;
 				TargetAttributes = {
 					4342025C1EAE08F80012983A = {
@@ -440,48 +421,13 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		3AD1D0BD5C2F0018F7F32F0B /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MerchantKit/Pods-MerchantKit-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		785C747B8495592C784BC6D5 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MerchantKit-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		434202581EAE08F80012983A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				438C9DA81F548E7A00C5F0E0 /* ReceiptValidationRequest.swift in Sources */,
+				43EB5CB020723C33007D1F94 /* PKCS7Container.swift in Sources */,
 				436CE1501EB0A5B900AB41CD /* ConstructedReceipt.swift in Sources */,
 				4350D4761EB3931300DA47C5 /* RestorePurchasesTask.swift in Sources */,
 				434202801EAE09100012983A /* Merchant.swift in Sources */,
@@ -558,6 +504,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -565,6 +512,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -618,6 +566,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -625,6 +574,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -659,7 +609,6 @@
 		};
 		434202721EAE08F80012983A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9CB0635911681B7364231F3C /* Pods-MerchantKit.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
@@ -702,7 +651,6 @@
 		};
 		434202731EAE08F80012983A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F7982F4DDEEF2FCB88749E19 /* Pods-MerchantKit.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;

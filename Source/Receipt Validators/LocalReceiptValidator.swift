@@ -1,4 +1,3 @@
-import openssl
 
 /// Atempts to generate a validated receipt from the request and calls `onCompletion` when finished.
 public final class LocalReceiptValidator {
@@ -14,9 +13,7 @@ public final class LocalReceiptValidator {
     public func start() {
         DispatchQueue.global(qos: .background).async {
             do {
-                let container = try self.pkcs7Container(from: self.request.data)
-                
-                let receipt = try self.receipt(from: container)
+                let receipt = try self.receipt(from: self.request.data)
                 
                 self.onCompletion?(.succeeded(receipt))
             } catch let error {
@@ -25,7 +22,8 @@ public final class LocalReceiptValidator {
         }
     }
     
-    enum Error : Swift.Error {
+    public enum Error : Swift.Error {
+        case requiresOpenSSL // you could argue that this condition should trap as it is a precondition, but — in this particular case — I prefer throwing an `Error` to enable better logging and debugging
         case missingContainer
         case malformedReceiptData
         case unexpectedReceiptASNObject
@@ -33,36 +31,21 @@ public final class LocalReceiptValidator {
 }
 
 extension LocalReceiptValidator {
-    private func pkcs7Container(from receiptData: Data) throws -> PKCS7 {
-        let bio = BIO_new(BIO_s_mem())!
-        
-        defer {
-            BIO_free(bio)
-        }
-        
-        return try receiptData.withUnsafeBytes({ (bytes: UnsafePointer<UInt8>) -> PKCS7 in
-            let data = UnsafeRawPointer(bytes)
+    private func receipt(from receiptData: Data) throws -> Receipt {
+        do {
+            let container = try PKCS7Container(from: receiptData)
             
-            BIO_write(bio, data, Int32(receiptData.count))
-
-            guard let container = d2i_PKCS7_bio(bio, nil) else {
-                throw Error.missingContainer
-            }
-    
-            return container.pointee
-        })
-    }
-    
-    private func receipt(from container: PKCS7) throws -> Receipt {
-        guard let contents = container.d.sign.pointee.contents, let octets = contents.pointee.d.data?.pointee else {
-            throw Error.malformedReceiptData
+            guard let content = container.content else { throw Error.malformedReceiptData }
+            
+            let parser = LocalReceiptPayloadParser()
+            
+            return try parser.receipt(from: content)
+        } catch PKCS7Container.Error.missingOpenSSLDependency {
+            throw Error.requiresOpenSSL
+        } catch PKCS7Container.Error.malformedInputData {
+            throw Error.missingContainer
+        } catch is ASN1Format.ParseError {
+            throw Error.unexpectedReceiptASNObject
         }
-
-        let parser = LocalReceiptPayloadParser()
-        let pointer = UnsafeRawPointer(octets.data)!
-
-        let data = Data(bytes: pointer, count: Int(octets.length))
-
-        return try parser.receipt(from: data)
     }
 }

@@ -312,7 +312,7 @@ extension Merchant {
             let result: StorageUpdateResult
             
             if hasEntry {
-                let expiryDate = entries.flatMap { $0.expiryDate }.max()
+                let expiryDate = entries.compactMap { $0.expiryDate }.max()
                 
                 if let expiryDate = expiryDate, !self.isSubscriptionActive(forExpiryDate: expiryDate) {
                     result = self.storage.removeRecord(forProductIdentifier: identifier)
