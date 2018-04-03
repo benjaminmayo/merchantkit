@@ -1,12 +1,12 @@
 Pod::Spec.new do |spec|
     spec.platform = :ios
-    spec.ios.deployment_target = '10.0'
-    spec.swift_version = '4.1'
+    spec.ios.deployment_target = "10.0"
+    spec.swift_version = "4.1"
     spec.name = "MerchantKit"
     spec.summary = "A modern In-App Purchases management framework for iOS developers."
     spec.requires_arc = true
 
-    spec.version = "0.3"
+    spec.version = "0.3.0"
 
     spec.license = { :type => "MIT", :file => "LICENSE" }
 
