@@ -3,11 +3,11 @@ import StoreKit
 internal class StoreKitReceiptDataFetcher : NSObject {
     typealias Completion = ((Result<Data>) -> Void)
     
+    internal let policy: FetchPolicy
+
     private var completionHandlers = [Completion]()
     
-    fileprivate var request: SKReceiptRefreshRequest?
-    
-    let policy: FetchPolicy
+    private var request: SKReceiptRefreshRequest?
     
     private(set) var isFinished: Bool = false
     
@@ -43,14 +43,14 @@ internal class StoreKitReceiptDataFetcher : NSObject {
         self.isFinished = true
     }
     
-    fileprivate func startRefreshRequest() {
+    private func startRefreshRequest() {
         self.request = SKReceiptRefreshRequest()
         self.request?.delegate = self
         
         self.request?.start()
     }
     
-    fileprivate func attemptFinishTaskFetchingLocalData(onFailure: () -> Void) {
+    private func attemptFinishTaskFetchingLocalData(onFailure: () -> Void) {
         if let url = Bundle.main.appStoreReceiptURL, let data = try? Data(contentsOf: url) {
             self.finish(with: .succeeded(data))
         } else {
@@ -58,7 +58,7 @@ internal class StoreKitReceiptDataFetcher : NSObject {
         }
     }
     
-    fileprivate func finish(with result: Result<Data>) {
+    private func finish(with result: Result<Data>) {
         for completion in self.completionHandlers {
             completion(result)
         }

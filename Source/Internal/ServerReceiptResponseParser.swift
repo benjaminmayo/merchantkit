@@ -1,35 +1,46 @@
 /// Parse the server response from an iTunes Store network request.
-internal struct ServerReceiptResponseParser {
+internal struct ServerReceiptVerificationResponseParser {
     init() {
         
     }
     
-    func receipt(from data: Data) throws -> Receipt {
-        guard let json = try? JSONSerialization.jsonObject(with: data, options: []), let object = json as? [String : Any] else { throw ResponseDataError.malformed }
+    func response(from responseData: Data) throws -> Response {
+        guard let json = try? JSONSerialization.jsonObject(with: responseData, options: []), let object = json as? [String : Any] else { throw ResponseDataError.malformed }
         
-        guard let status = object["status"] as? Int else { throw ResponseDataError.missingOrInvalidKey("Status") }
+        guard let status = object["status"] as? Int else { throw ResponseDataError.missingOrInvalidKey("status") }
         
         if status != 0 {
-            throw ReceiptStatusError(rawValue: status) ?? .other
-        }
-        
-        guard let receiptObject = object["receipt"] as? [String : Any] else { throw ResponseDataError.missingOrInvalidKey("receipt") }
-        
-        guard let inAppPurchaseInfos = receiptObject["in_app"] as? [[String : Any]] else { throw ResponseDataError.missingOrInvalidKey("in_app") }
-        
-        let allInfos: [[String : Any]]
-        
-        if let latestPurchaseInfos = receiptObject["latest_receipt_info"] as? [[String : Any]] {
-            allInfos = inAppPurchaseInfos + latestPurchaseInfos
+            let error = ReceiptStatusError(rawValue: status) ?? .other
+            
+            return Response.verificationFailure(error)
         } else {
-            allInfos = inAppPurchaseInfos
+            guard let receiptJSON = object["receipt"] as? [String : Any] else { throw ResponseDataError.missingOrInvalidKey("receipt") }
+            
+            return Response.receiptJSON(receiptJSON)
         }
-            
-        let entries = try allInfos.map(self.receiptEntry(fromJSONObject:))
-            
-        let receipt = ConstructedReceipt(from: entries)
-            
-        return receipt
+    }
+    
+    func receipt(from response: Response) throws -> Receipt {
+        switch response {
+            case .receiptJSON(let receiptJSON):
+                guard let inAppPurchaseInfos = receiptJSON["in_app"] as? [[String : Any]] else { throw ResponseDataError.missingOrInvalidKey("in_app") }
+                
+                let allInfos: [[String : Any]]
+                
+                if let latestPurchaseInfos = receiptJSON["latest_receipt_info"] as? [[String : Any]] {
+                    allInfos = inAppPurchaseInfos + latestPurchaseInfos
+                } else {
+                    allInfos = inAppPurchaseInfos
+                }
+                
+                let entries = try allInfos.map(self.receiptEntry(fromJSONObject:))
+                
+                let receipt = ConstructedReceipt(from: entries)
+                
+                return receipt
+            case .verificationFailure(let statusError):
+                throw statusError
+        }
     }
     
     private func receiptEntry(fromJSONObject object: [String : Any]) throws -> ReceiptEntry {
@@ -61,4 +72,8 @@ internal struct ServerReceiptResponseParser {
         case other = -1 // other receipt errors
     }
     
+    enum Response {
+        case receiptJSON([String : Any])
+        case verificationFailure(ReceiptStatusError)
+    }
 }

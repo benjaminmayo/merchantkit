@@ -38,7 +38,7 @@ public final class AvailablePurchasesTask : NSObject, MerchantTask {
         self.merchant.resignActiveTask(self)
     }
     
-    fileprivate func finish(with result: Result<Purchases>) {
+    private func finish(with result: Result<Purchases>) {
         self.onCompletion(result)
         
         self.merchant.resignActiveTask(self)

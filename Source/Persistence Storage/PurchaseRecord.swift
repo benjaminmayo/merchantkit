@@ -18,8 +18,8 @@ public struct PurchaseRecord : Equatable, CustomStringConvertible {
         return lhs.productIdentifier == rhs.productIdentifier && lhs.expiryDate == rhs.expiryDate
     }
     
-    fileprivate let productIdentifierKey: String = "productIdentifier"
-    fileprivate let expiryDateKey: String = "expiryDate"
+    private let productIdentifierKey: String = "productIdentifier"
+    private let expiryDateKey: String = "expiryDate"
 }
 
 extension PurchaseRecord {

@@ -6,8 +6,9 @@ public final class ServerReceiptValidator {
     
     public var onCompletion: Completion?
     
-    fileprivate let session = URLSession(configuration: .default)
     fileprivate let sharedSecret: String
+    
+    private var dataFetcher: ServerReceiptVerificationResponseDataFetcher!
     
     public init(request: ReceiptValidationRequest, sharedSecret: String) {
         self.request = request
@@ -15,7 +16,8 @@ public final class ServerReceiptValidator {
     }
     
     public func start() {
-        self.sendServerRequest(for: .production)
+        self.dataFetcher = self.makeFetcher(for: .production)
+        self.dataFetcher.start()
     }
 }
 
@@ -24,57 +26,32 @@ extension ServerReceiptValidator {
         self.onCompletion?(result)
     }
     
-    fileprivate enum StoreEnvironment {
-        case sandbox
-        case production
-    }
-    
-    private func urlForValidation(in environment: StoreEnvironment) -> URL {
-        switch environment {
-            case .sandbox:
-                return URL(string: "https://sandbox.itunes.apple.com/verifyReceipt")!
-            case .production:
-                return URL(string: "https://buy.itunes.apple.com/verifyReceipt")!
+    private func makeFetcher(for environment: ServerReceiptVerificationResponseDataFetcher.StoreEnvironment) -> ServerReceiptVerificationResponseDataFetcher {
+        let fetcher = ServerReceiptVerificationResponseDataFetcher(verificationData: self.request.data, environment: environment, sharedSecret: self.sharedSecret)
+        fetcher.onCompletion = { [weak self] result in
+            self?.didFetchVerificationData(with: result)
         }
-    }
-
-    fileprivate func sendServerRequest(for environment: StoreEnvironment) {
-        let urlRequest: URLRequest = {
-            let requestDictionary: [String : Any] = [
-                "receipt-data": self.request.data.base64EncodedString(),
-                "password": self.sharedSecret
-            ]
-            
-            let requestData = try! JSONSerialization.data(withJSONObject: requestDictionary, options: [])
-            
-            var request = URLRequest(url: self.urlForValidation(in: environment))
-            request.httpMethod = "POST"
-            request.httpBody = requestData
-            
-            return request
-        }()
         
-        let task = self.session.dataTask(with: urlRequest, completionHandler: { (data, response, error) in
-            self.didReceiveServerResponse(data: data, error: error)
-        })
-        
-        task.resume()
+        return fetcher
     }
     
-    private func didReceiveServerResponse(data: Data?, error: Error?) {
-        do {
-            if let error = error {
-                throw error
-            } else if let data = data {
-                let parser = ServerReceiptResponseParser() // this object handles the actual parsing of the data
-                let validatedReceipt = try parser.receipt(from: data)
-                
-                self.complete(with: .succeeded(validatedReceipt))
-            }
-        } catch ServerReceiptResponseParser.ReceiptStatusError.receiptIncompatibleWithProductionEnvironment {
-            self.sendServerRequest(for: .sandbox)
-        } catch let error {            
-            self.complete(with: .failed(error))
+    private func didFetchVerificationData(with result: Result<Data>) {
+        switch result {
+            case .succeeded(let data):
+                do {
+                    let parser = ServerReceiptVerificationResponseParser() // this object handles the actual parsing of the data
+                    let response = try parser.response(from: data)
+                    let validatedReceipt = try parser.receipt(from: response)
+                    
+                    self.complete(with: .succeeded(validatedReceipt))
+                } catch ServerReceiptVerificationResponseParser.ReceiptStatusError.receiptIncompatibleWithProductionEnvironment {
+                    self.dataFetcher = self.makeFetcher(for: .sandbox)
+                    self.dataFetcher.start()
+                } catch let error {
+                    self.complete(with: .failed(error))
+                }
+            case .failed(let error):
+                self.complete(with: .failed(error))
         }
     }
 }

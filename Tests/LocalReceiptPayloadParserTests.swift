@@ -34,10 +34,13 @@ class LocalReceiptPayloadParserTests : XCTestCase {
                 continue
             }
             
-            let parser = ServerReceiptResponseParser()
-            var receipt: Receipt!
+            let parser = ServerReceiptVerificationResponseParser()
             
-            XCTAssertNoThrow(receipt = try parser.receipt(from: data))
+            var response: ServerReceiptVerificationResponseParser.Response!
+            XCTAssertNoThrow(response = try parser.response(from: data))
+            
+            var receipt: Receipt!
+            XCTAssertNoThrow(receipt = try parser.receipt(from: response))
     
             XCTAssertEqual(receipt.productIdentifiers, expectation.productIdentifiers)
         }

@@ -1,6 +1,6 @@
 /// A collection of unique `Purchase` objects. This set is vended by an `AvailablePurchasesTask`.
 public struct PurchaseSet {
-    fileprivate let storage: [String : Purchase]
+    private let storage: [String : Purchase]
     
     internal init<Purchases : Sequence>(from purchases: Purchases) where Purchases.Iterator.Element == Purchase {
         var storage = [String : Purchase]()

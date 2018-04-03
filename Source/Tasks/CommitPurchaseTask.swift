@@ -5,7 +5,7 @@ public final class CommitPurchaseTask : MerchantTask {
     public var onCompletion: TaskCompletion<Void>!
     public private(set) var isStarted: Bool = false
     
-    fileprivate unowned let merchant: Merchant
+    private unowned let merchant: Merchant
     
     // Create a task by using the `Merchant.commitPurchaseTask(for:)` API.
     internal init(for purchase: Purchase, with merchant: Merchant) {
@@ -34,7 +34,7 @@ public final class CommitPurchaseTask : MerchantTask {
 }
 
 extension CommitPurchaseTask {
-    fileprivate func finish(with result: Result<Void>) {
+    private func finish(with result: Result<Void>) {
         self.onCompletion(result)
         
         self.merchant.removePurchaseObserver(self, forProductIdentifier: self.purchase.productIdentifier)

@@ -4,20 +4,20 @@ import StoreKit
 public final class Merchant {
     public let delegate: MerchantDelegate
     
-    fileprivate let storage: PurchaseStorage
-    fileprivate let transactionObserver = StoreKitTransactionObserver()
+    private let storage: PurchaseStorage
+    private let transactionObserver = StoreKitTransactionObserver()
     
-    fileprivate var _registeredProducts = [String : Product]() // TODO: Consider alternative data structure
-    fileprivate var activeTasks = [MerchantTask]()
+    private var _registeredProducts = [String : Product]() // TODO: Consider alternative data structure
+    private var activeTasks = [MerchantTask]()
     
-    fileprivate var purchaseObservers = Buckets<String, MerchantPurchaseObserver>()
+    private var purchaseObservers = Buckets<String, MerchantPurchaseObserver>()
     
-    fileprivate var receiptFetchers: [StoreKitReceiptDataFetcher.FetchPolicy : StoreKitReceiptDataFetcher] = [:]
-    fileprivate var identifiersForPendingObservedPurchases = Set<String>()
+    private var receiptFetchers: [StoreKitReceiptDataFetcher.FetchPolicy : StoreKitReceiptDataFetcher] = [:]
+    private var identifiersForPendingObservedPurchases = Set<String>()
     
-    public fileprivate(set) var isLoading: Bool = false
+    public private(set) var isLoading: Bool = false
     
-    fileprivate var nowDate = Date()
+    private var nowDate = Date()
     
     /// Create a `Merchant`, at application launch. Assign a consistent `storage` and a `delegate` to receive callbacks.
     public init(storage: PurchaseStorage, delegate: MerchantDelegate) {
@@ -92,6 +92,14 @@ public final class Merchant {
         })
     }
     
+    public func debuggingStateTask(withStoreKitSharedSecret sharedSecret: String) -> DebuggingStateTask {
+        return self.makeTask(initializing: {
+            let task = DebuggingStateTask(with: self, sharedSecret: sharedSecret)
+            
+            return task
+        })
+    }
+    
     /// Checks if active subscriptions have become invalid. The product states may be changed after this method returns.
     /// Suggested usage: Call this method periodically to update expiring subscriptions whilst the app is running. It is called implicitly at app launch.
     public func updateSubscriptions() {
@@ -125,7 +133,7 @@ extension Merchant {
 
 // MARK: Task management
 extension Merchant {
-    fileprivate func makeTask<Task : MerchantTask>(initializing creator: () -> Task) -> Task {
+    private func makeTask<Task : MerchantTask>(initializing creator: () -> Task) -> Task {
         let task = creator()
         
         self.addActiveTask(task)
@@ -159,7 +167,7 @@ extension Merchant {
     }
     
     /// Call on main thread only.
-    fileprivate func updateLoadingStateIfNecessary() {
+    private func updateLoadingStateIfNecessary() {
         let isLoading = self.isLoading
         let updatedIsLoading = self._isLoading
         
@@ -173,15 +181,15 @@ extension Merchant {
 
 // MARK: Subscription utilities
 extension Merchant {
-    fileprivate func isSubscriptionActive(forExpiryDate expiryDate: Date) -> Bool {
+    private func isSubscriptionActive(forExpiryDate expiryDate: Date) -> Bool {
         return expiryDate > self.nowDate
     }
     
-    fileprivate func updateNowDate() {
+    private func updateNowDate() {
         self.nowDate = Date()
     }
     
-    fileprivate func updateActiveSubscriptions() {
+    private func updateActiveSubscriptions() {
         var updatedProducts = Set<Product>()
         
         for (identifier, product) in self._registeredProducts {
@@ -208,13 +216,13 @@ extension Merchant {
 
 // MARK: Payment queue related behaviour
 extension Merchant {
-    fileprivate func beginObservingTransactions() {
+    private func beginObservingTransactions() {
         self.transactionObserver.delegate = self
         
         SKPaymentQueue.default().add(self.transactionObserver)
     }
     
-    fileprivate func stopObservingTransactions() {
+    private func stopObservingTransactions() {
         SKPaymentQueue.default().remove(self.transactionObserver)
     }
     
@@ -226,9 +234,9 @@ extension Merchant {
 
 // MARK: Receipt fetch and validation
 extension Merchant {
-    typealias CheckReceiptCompletion = (_ updatedProducts: Set<Product>, Error?) -> Void
+    internal typealias CheckReceiptCompletion = (_ updatedProducts: Set<Product>, Error?) -> Void
     
-    fileprivate func checkReceipt(updateProducts updateType: ReceiptUpdateType, policy: StoreKitReceiptDataFetcher.FetchPolicy, reason: ReceiptValidationRequest.Reason, completion: @escaping CheckReceiptCompletion) {
+    private func checkReceipt(updateProducts updateType: ReceiptUpdateType, policy: StoreKitReceiptDataFetcher.FetchPolicy, reason: ReceiptValidationRequest.Reason, completion: @escaping CheckReceiptCompletion) {
         let fetcher: StoreKitReceiptDataFetcher
         let isStarted: Bool
         
@@ -343,7 +351,7 @@ extension Merchant {
         return updatedProducts
     }
     
-    fileprivate enum ReceiptUpdateType {
+    private enum ReceiptUpdateType {
         case all
         case specific(productIdentifiers: Set<String>)
     }
@@ -352,14 +360,14 @@ extension Merchant {
 // MARK: Product state changes
 extension Merchant {
     /// Call on main thread only.
-    fileprivate func didChangeState(for products: Set<Product>) {
-        self.delegate.merchant(self, didChangeStateFor: products)
+    private func didChangeState(for products: Set<Product>) {
+        self.delegate.merchant(self, didChangeStatesFor: products)
     }
 }
 
 // MARK: `StoreKitTransactionObserverDelegate` Conformance
 extension Merchant : StoreKitTransactionObserverDelegate {
-    func storeKitTransactionObserverWillUpdatePurchases(_ observer: StoreKitTransactionObserver) {
+    internal func storeKitTransactionObserverWillUpdatePurchases(_ observer: StoreKitTransactionObserver) {
         
     }
     
@@ -382,13 +390,13 @@ extension Merchant : StoreKitTransactionObserverDelegate {
         }
     }
     
-    func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFailToPurchaseWith error: Error, forProductWith identifier: String) {
+    internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFailToPurchaseWith error: Error, forProductWith identifier: String) {
         for observer in self.purchaseObservers[identifier] {
             observer.merchant(self, didFailPurchaseWith: error, forProductWith: identifier)
         }
     }
     
-    func storeKitTransactionObserverDidUpdatePurchases(_ observer: StoreKitTransactionObserver) {
+    internal func storeKitTransactionObserverDidUpdatePurchases(_ observer: StoreKitTransactionObserver) {
         if !self.identifiersForPendingObservedPurchases.isEmpty {
             self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedPurchases), policy: .onlyFetch, reason: .completePurchase, completion: { _, _ in })
         }
