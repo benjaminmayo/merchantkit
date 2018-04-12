@@ -6,22 +6,30 @@ public protocol PurchaseInterfaceControllerDelegate : class {
     func purchaseInterfaceController(_ controller: PurchaseInterfaceController, didRestorePurchasesWith result: PurchaseInterfaceController.RestorePurchasesResult)
 }
 
+/// This controller is actively being worked on and the API surface is considered volatile.
+
 /// This controller manages the purchased state of the supplied `products`. This controller is a convenience wrapper around several `Merchant` tasks and is intended to be used to display a user interface, like a storefront.
 ///
 /// Create a controller and call `fetchDataIfNecessary()` when the user interface is presented. Update UI in response to state changes, via the `delegate`.
 ///
 /// If the user decides to purchase a displayed product, use the `commit(_:)` method to begin a purchase flow. Alternatively, call `restorePurchases()` if the user wants to restore an earlier transaction.
+
 public final class PurchaseInterfaceController {
     public let products: Set<Product>
 
     public weak var delegate: PurchaseInterfaceControllerDelegate?
     
-    public var isFetching: Bool {
-        return self.availablePurchasesTask != nil
-    }
-    
-    public var fetchError: FetchError? {
-        return self.availablePurchases?.error
+    public var fetchingState: FetchingState {
+        if self.availablePurchasesTask != nil {
+            return .loading
+        }
+        
+        switch self.availablePurchasesFetchResult {
+            case .failed(let reason)?:
+                return .failed(reason)
+            default:
+                return .dormant
+        }
     }
     
     public var automaticallyRefetchIfNetworkAvailabilityChanges: Bool = false {
@@ -38,7 +46,7 @@ public final class PurchaseInterfaceController {
     private var commitPurchaseTask: CommitPurchaseTask?
     private var restorePurchasesTask: RestorePurchasesTask?
     
-    private var availablePurchases: FetchResult?
+    private var availablePurchasesFetchResult: FetchResult<PurchaseSet>?
     
     private var stateForProductIdentifier = [String : ProductState]()
     
@@ -62,10 +70,10 @@ public final class PurchaseInterfaceController {
     }
     
     public func fetchDataIfNecessary() {
-        guard self.availablePurchases == nil else { return }
+        guard self.availablePurchasesFetchResult == nil else { return }
         
         self.fetchPurchases(onFetchingStateChanged: self.didChangeFetchingState, onCompletion: { result in
-            self.availablePurchases = result
+            self.availablePurchasesFetchResult = result
             
             self.didChangeState(for: self.products)
         })
@@ -155,12 +163,28 @@ public final class PurchaseInterfaceController {
 }
 
 extension PurchaseInterfaceController {
-    public enum ProductState {
-        case unknown
-        case purchased
-        case purchasable(Purchase)
-        case purchasing(Purchase)
-        case purchaseUnavailable
+    public enum ProductState : Equatable {
+        case unknown // consider loading/failure cases of fetchingState
+        case purchased(PurchaseInfo?) // product is owned, `PurchaseInfo` represents the current price (etc) for the represented product - this info may not be available
+        case purchasable(Purchase) // product can be purchased, refer to `Purchase`
+        case purchasing(Purchase) // product is currently being purchased, probably show a loading UI for that particular product
+        case purchaseUnavailable // purchase cannot be made, show some kind of warning in the UI
+        
+        public struct PurchaseInfo : Equatable {
+            public let price: Price
+        }
+    }
+    
+    public enum FetchingState {
+        case dormant
+        case loading
+        case failed(FailureReason)
+        
+        public enum FailureReason {
+            case networkFailure(URLError)
+            case storeKitFailure(SKError)
+            case genericProblem
+        }
     }
     
     public enum CommitPurchaseResult {
@@ -181,63 +205,38 @@ extension PurchaseInterfaceController {
         case succeeded(Set<Product>)
         case failed(Error)
     }
-    
-    public enum FetchError : Swift.Error {
-        case networkError(URLError)
-        case storeKitError(SKError)
-        case genericProblem
-    }
-}
-
-extension PurchaseInterfaceController.ProductState : Equatable {
-    public static func ==(lhs: PurchaseInterfaceController.ProductState, rhs: PurchaseInterfaceController.ProductState) -> Bool {
-        switch (lhs, rhs) {
-            case (.unknown, .unknown): return true
-            case (.purchased, .purchased): return true
-            case (.purchasable(let a), .purchasable(let b)): return a == b
-            case (.purchasing(let a), .purchasing(let b)): return a == b
-            case (.purchaseUnavailable, .purchaseUnavailable): return true
-            default: return false
-        }
-    }
 }
 
 extension PurchaseInterfaceController {
-    private enum FetchResult {
-        case succeeded(PurchaseSet)
-        case failed(FetchError)
-        
-        public var error: FetchError? {
-            switch self {
-                case .failed(let error): return error
-                default: return nil
-            }
-        }
+    private enum FetchResult<T> {
+        case succeeded(T)
+        case failed(FetchingState.FailureReason)
     }
     
-    private func fetchPurchases(onFetchingStateChanged fetchingStateChanged: @escaping () -> Void, onCompletion completion: @escaping (FetchResult) -> Void) {
+    private func fetchPurchases(onFetchingStateChanged fetchingStateChanged: @escaping () -> Void, onCompletion completion: @escaping (FetchResult<PurchaseSet>) -> Void) {
         let task = self.merchant.availablePurchasesTask(for: self.products)
+        task.ignoresPurchasedProducts = false
         task.onCompletion = { result in
             self.availablePurchasesTask = nil
             fetchingStateChanged()
             
-            let loadResult: FetchResult
+            let loadResult: FetchResult<PurchaseSet>
             
             switch result {
                 case .failed(let error):
-                    let resultError: FetchError
+                    let failureReason: FetchingState.FailureReason
                     let underlyingError = (error as NSError).userInfo[NSUnderlyingErrorKey] as? Error
                     
                     switch (error, underlyingError) {
                         case (let networkError as URLError, _), (_, let networkError as URLError):
-                            resultError = .networkError(networkError)
+                            failureReason = .networkFailure(networkError)
                         case (let error as SKError, _):
-                            resultError = .storeKitError(error)
+                            failureReason = .storeKitFailure(error)
                         default:
-                            resultError = .genericProblem
+                            failureReason = .genericProblem
                     }
                     
-                    loadResult = .failed(resultError)
+                    loadResult = .failed(failureReason)
                 case .succeeded(let purchases):
                     loadResult = .succeeded(purchases)
             }
@@ -255,18 +254,18 @@ extension PurchaseInterfaceController {
         self.fetchPurchases(onFetchingStateChanged: {}, onCompletion: { result in
             let didChange: Bool
             
-            switch (self.availablePurchases, result) {
-            case (.failed(_)?, .succeeded(_)):
-                self.availablePurchases = result
-                didChange = true
-            case (.succeeded(_)?, .succeeded(_)):
-                self.availablePurchases = result
-                didChange = true
-            case (nil, _):
-                self.availablePurchases = result
-                didChange = true
-            case (_, .failed(_)):
-                didChange = false
+            switch (self.availablePurchasesFetchResult, result) {
+                case (.failed(_)?, .succeeded(_)):
+                    self.availablePurchasesFetchResult = result
+                    didChange = true
+                case (.succeeded(_)?, .succeeded(_)):
+                    self.availablePurchasesFetchResult = result
+                    didChange = true
+                case (nil, _):
+                    self.availablePurchasesFetchResult = result
+                    didChange = true
+                case (_, .failed(_)):
+                    didChange = false
             }
             
             if didChange {
@@ -279,19 +278,32 @@ extension PurchaseInterfaceController {
         let state: ProductState
         
         if self.merchant.state(for: product).isPurchased {
-            state = .purchased
+            let purchaseInfo: ProductState.PurchaseInfo? = {
+                switch self.availablePurchasesFetchResult {
+                    case .succeeded(let purchases)?:
+                        if let purchase = purchases.purchase(for: product) {
+                            return ProductState.PurchaseInfo(price: purchase.price)
+                        }
+                    default:
+                        break
+                }
+                
+                return nil
+            }()
+            
+            state = .purchased(purchaseInfo)
         } else if let commitPurchaseTask = self.commitPurchaseTask, commitPurchaseTask.purchase.productIdentifier == product.identifier {
             state = .purchasing(commitPurchaseTask.purchase)
-        } else if let purchaseResult = self.availablePurchases {
-            switch purchaseResult {
-            case .succeeded(let purchases):
-                if let purchase = purchases.purchase(for: product) {
-                    state = .purchasable(purchase)
-                } else {
-                    state = .purchaseUnavailable
-                }
-            case .failed(_):
-                state = .unknown
+        } else if let availablePurchasesResult = self.availablePurchasesFetchResult {
+            switch availablePurchasesResult {
+                case .succeeded(let purchases):
+                    if let purchase = purchases.purchase(for: product) {
+                        state = .purchasable(purchase)
+                    } else {
+                        state = .purchaseUnavailable
+                    }
+                case .failed(_):
+                    state = .unknown
             }
         } else {
             state = .unknown
@@ -335,10 +347,13 @@ extension PurchaseInterfaceController {
     
     private func didChangeNetworkConnectivity() {
         guard self.networkAvailabilityCenter.isConnectedToNetwork else { return }
-        guard case .networkError(_)? = self.fetchError else { return }
+        
+        if case .failed(.networkFailure(_))? = self.availablePurchasesFetchResult {
+            return
+        }
         
         self.fetchPurchases(onFetchingStateChanged: {}, onCompletion: { result in
-            self.availablePurchases = result
+            self.availablePurchasesFetchResult = result
             
             self.didChangeState(for: self.products)
         })
