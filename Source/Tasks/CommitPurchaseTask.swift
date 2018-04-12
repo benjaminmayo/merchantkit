@@ -7,7 +7,7 @@ public final class CommitPurchaseTask : MerchantTask {
     
     private unowned let merchant: Merchant
     
-    // Create a task by using the `Merchant.commitPurchaseTask(for:)` API.
+    /// Create a task by using the `Merchant.commitPurchaseTask(for:)` API.
     internal init(for purchase: Purchase, with merchant: Merchant) {
         self.purchase = purchase
         self.merchant = merchant
@@ -38,7 +38,10 @@ extension CommitPurchaseTask {
         self.onCompletion(result)
         
         self.merchant.removePurchaseObserver(self, forProductIdentifier: self.purchase.productIdentifier)
-        self.merchant.resignActiveTask(self)
+        
+        DispatchQueue.main.async {
+            self.merchant.resignActiveTask(self)
+        }
     }
 }
 

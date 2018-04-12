@@ -18,14 +18,4 @@ public enum PurchasedState : Equatable {
                 return true
         }
     }
-    
-    public static func ==(lhs: PurchasedState, rhs: PurchasedState) -> Bool {
-        switch (lhs, rhs) {
-            case (.unknown, .unknown): return true
-            case (.notPurchased, .notPurchased): return true
-            case (.isSold, .isSold): return true
-            case (.isSubscribed(let a), .isSubscribed(let b)): return a == b
-            default: return false
-        }
-    }
 }

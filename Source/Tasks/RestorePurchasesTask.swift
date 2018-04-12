@@ -8,7 +8,7 @@ public final class RestorePurchasesTask : MerchantTask {
     
     private unowned let merchant: Merchant
     
-    // Create a task using the `Merchant.restorePurchasesTask()` API.
+    /// Create a task using the `Merchant.restorePurchasesTask()` API.
     internal init(with merchant: Merchant) {
         self.merchant = merchant
     }

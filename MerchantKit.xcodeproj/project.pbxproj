@@ -52,6 +52,7 @@
 		43B0F3491F5C6CF300D4039A /* LocalReceiptPayloadParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0F3481F5C6CF300D4039A /* LocalReceiptPayloadParser.swift */; };
 		43D0AD7820724EF400F25597 /* DebuggingStateTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0AD7720724EF400F25597 /* DebuggingStateTask.swift */; };
 		43D0AD7A2072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0AD792072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift */; };
+		43D4FE6F207F7E8700AEA92F /* SubscriptionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D4FE6E207F7E8700AEA92F /* SubscriptionInfo.swift */; };
 		43DBC1091F26283700DB4B25 /* PurchaseInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */; };
 		43DBC10B1F26288500DB4B25 /* NetworkAvailabilityCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */; };
 		43EB5CB020723C33007D1F94 /* PKCS7Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EB5CAF20723C33007D1F94 /* PKCS7Container.swift */; };
@@ -132,6 +133,7 @@
 		43B0F3481F5C6CF300D4039A /* LocalReceiptPayloadParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalReceiptPayloadParser.swift; sourceTree = "<group>"; };
 		43D0AD7720724EF400F25597 /* DebuggingStateTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebuggingStateTask.swift; sourceTree = "<group>"; };
 		43D0AD792072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerReceiptVerificationDataFetcher.swift; sourceTree = "<group>"; };
+		43D4FE6E207F7E8700AEA92F /* SubscriptionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionInfo.swift; sourceTree = "<group>"; };
 		43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseInterfaceController.swift; sourceTree = "<group>"; };
 		43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAvailabilityCenter.swift; sourceTree = "<group>"; };
 		43EB5CAF20723C33007D1F94 /* PKCS7Container.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKCS7Container.swift; sourceTree = "<group>"; };
@@ -280,6 +282,7 @@
 				438C9DA71F548E7A00C5F0E0 /* ReceiptValidationRequest.swift */,
 				4342027E1EAE09100012983A /* Receipt.swift */,
 				432133BD1EAE3DFB0096919B /* Result.swift */,
+				43D4FE6E207F7E8700AEA92F /* SubscriptionInfo.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -436,6 +439,7 @@
 				43EB5CB020723C33007D1F94 /* PKCS7Container.swift in Sources */,
 				436CE1501EB0A5B900AB41CD /* ConstructedReceipt.swift in Sources */,
 				4350D4761EB3931300DA47C5 /* RestorePurchasesTask.swift in Sources */,
+				43D4FE6F207F7E8700AEA92F /* SubscriptionInfo.swift in Sources */,
 				434202801EAE09100012983A /* Merchant.swift in Sources */,
 				4337A8A31EB2433A00EAF633 /* EphemeralPurchaseStorage.swift in Sources */,
 				43DBC1091F26283700DB4B25 /* PurchaseInterfaceController.swift in Sources */,

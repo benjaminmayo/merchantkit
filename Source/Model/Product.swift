@@ -25,14 +25,5 @@ public struct Product : Hashable, CustomStringConvertible {
         case consumable
         case nonConsumable
         case subscription(automaticallyRenews: Bool)
-        
-        public static func ==(lhs: Kind, rhs: Kind) -> Bool {
-            switch (lhs, rhs) {
-                case (.consumable, .consumable): return true
-                case (.nonConsumable, .nonConsumable): return true
-                case (.subscription(let a), .subscription(let b)): return a == b
-                default: return false
-            }
-        }
     }
 }

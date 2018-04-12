@@ -22,6 +22,49 @@ public struct Purchase : Hashable, CustomStringConvertible {
         return self.productIdentifier.hashValue
     }
     
+    @available(iOS 11.2, *)
+    public var subscriptionInfo: SubscriptionInfo? {
+        func subscriptionPeriod(from skSubscriptionPeriod: SKProductSubscriptionPeriod) -> SubscriptionInfo.Period {
+            let unitCount = skSubscriptionPeriod.numberOfUnits
+            
+            switch skSubscriptionPeriod.unit {
+                case .day:
+                    return .days(unitCount: unitCount)
+                case .week:
+                    return .weeks(unitCount: unitCount)
+                case .month:
+                    return .months(unitCount: unitCount)
+                case .year:
+                    return .years(unitCount: unitCount)
+            }
+        }
+        
+        guard let skSubscriptionPeriod = self.skProduct.subscriptionPeriod else {
+            return nil
+        }
+        
+        let period: SubscriptionInfo.Period = subscriptionPeriod(from: skSubscriptionPeriod)
+        let introductoryOffer: SubscriptionInfo.IntroductoryOffer? = {
+            if let skDiscount = self.skProduct.introductoryPrice {
+                let price = Price(from: skDiscount.price, in: skDiscount.priceLocale)
+                let period = subscriptionPeriod(from: skDiscount.subscriptionPeriod)
+                
+                switch skDiscount.paymentMode {
+                    case .payAsYouGo:
+                        return .recurringDiscount(price: price, period: period)
+                    case .payUpFront:
+                        return .upfrontDiscount(price: price, period: period)
+                    case .freeTrial:
+                        return .freeTrial(period: period)
+                }
+            } else {
+                return nil
+            }
+        }()
+        
+        return SubscriptionInfo(renewalPeriod: period, introductoryOffer: introductoryOffer)
+    }
+    
     public static func ==(lhs: Purchase, rhs: Purchase) -> Bool {
         return lhs.productIdentifier == rhs.productIdentifier && lhs.price == rhs.price 
     }

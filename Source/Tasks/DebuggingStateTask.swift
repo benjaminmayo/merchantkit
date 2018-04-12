@@ -1,4 +1,4 @@
-
+/// This task is tentatively included to assist with some debugging tasks. It may be removed in future releases, so do not rely on it.
 public final class DebuggingStateTask : MerchantTask {
     public var onCompletion: TaskCompletion<DebuggingState>?
     public private(set) var isStarted: Bool = false
@@ -8,7 +8,7 @@ public final class DebuggingStateTask : MerchantTask {
     
     private var fetcher: ServerReceiptVerificationResponseDataFetcher?
     
-    // Create a task using the `Merchant.debuggingReceiptStateTask(withSharedSecret:)` API.
+    /// Create a task using the `Merchant.debuggingReceiptStateTask(withSharedSecret:)` API.
     internal init(with merchant: Merchant, sharedSecret: String) {
         self.merchant = merchant
         self.sharedSecret = sharedSecret
@@ -44,7 +44,10 @@ extension DebuggingStateTask {
     private func finish(with result: Result<DebuggingState>) {
         self.onCompletion?(result)
         
-        self.merchant.resignActiveTask(self)
+        DispatchQueue.main.async {
+            self.merchant.resignActiveTask(self)
+        }
+        
         self.fetcher = nil
     }
     

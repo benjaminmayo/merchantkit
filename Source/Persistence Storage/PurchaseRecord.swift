@@ -14,10 +14,6 @@ public struct PurchaseRecord : Equatable, CustomStringConvertible {
         return self.defaultDescription(withProperties: ("productIdentifier", self.productIdentifier), ("expiryDate", self.expiryDate ?? "nil"))
     }
     
-    public static func ==(lhs: PurchaseRecord, rhs: PurchaseRecord) -> Bool {
-        return lhs.productIdentifier == rhs.productIdentifier && lhs.expiryDate == rhs.expiryDate
-    }
-    
     private let productIdentifierKey: String = "productIdentifier"
     private let expiryDateKey: String = "expiryDate"
 }

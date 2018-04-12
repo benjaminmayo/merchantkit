@@ -25,7 +25,11 @@ public struct PurchaseSet {
             let aPrice = a.price.value.0
             let bPrice = b.price.value.0
             
-            return ascending && aPrice.compare(bPrice) == .orderedAscending || !ascending && aPrice.compare(bPrice) == .orderedDescending
+            if ascending {
+                return aPrice.compare(bPrice) == .orderedAscending
+            } else {
+                return aPrice.compare(bPrice) == .orderedDescending
+            }
         })
     }
 }
