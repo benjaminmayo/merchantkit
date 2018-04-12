@@ -33,7 +33,7 @@ task.start()
 Get notified when a subscription expires:
 
 ```swift
-public func merchant(_ merchant: Merchant, didChangeStateFor products: Set<Product>) {
+public func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Product>) {
     if let subscriptionProduct = products.first(where: { $0.identifier == "subscription.protier" }) {
         let state = merchant.state(for: subscriptionProduct)
         
@@ -41,7 +41,7 @@ public func merchant(_ merchant: Merchant, didChangeStateFor products: Set<Produ
             case .isSubscribed(let expiryDate):
                 print("subscribed, expires \(expiryDate)")
             default:
-                print("subscription expired")
+                print("does not have active subscription")
         }
     }
 }
