@@ -92,6 +92,7 @@ public final class Merchant {
         })
     }
     
+    /// Development on this task is WIP and may be removed in future releases.
     public func debuggingStateTask(withStoreKitSharedSecret sharedSecret: String) -> DebuggingStateTask {
         return self.makeTask(initializing: {
             let task = DebuggingStateTask(with: self, sharedSecret: sharedSecret)
