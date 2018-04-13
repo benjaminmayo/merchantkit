@@ -172,6 +172,15 @@ extension PurchaseInterfaceController {
         
         public struct PurchaseInfo : Equatable {
             public let price: Price
+            @available(iOS 11.2, *)
+            public var subscriptionTerms: SubscriptionTerms? { return self._subscriptionTerms }
+            
+            private let _subscriptionTerms: SubscriptionTerms?
+            
+            internal init(price: Price, subscriptionTerms: SubscriptionTerms?) {
+                self.price = price
+                self._subscriptionTerms = subscriptionTerms
+            }
         }
     }
     
@@ -282,7 +291,15 @@ extension PurchaseInterfaceController {
                 switch self.availablePurchasesFetchResult {
                     case .succeeded(let purchases)?:
                         if let purchase = purchases.purchase(for: product) {
-                            return ProductState.PurchaseInfo(price: purchase.price)
+                            let subscriptionTerms: SubscriptionTerms?
+                            
+                            if #available(iOS 11.2, *) {
+                                subscriptionTerms = purchase.subscriptionTerms
+                            } else {
+                                subscriptionTerms = nil
+                            }
+                            
+                            return ProductState.PurchaseInfo(price: purchase.price, subscriptionTerms: subscriptionTerms)
                         }
                     default:
                         break

@@ -22,31 +22,37 @@ public struct Purchase : Hashable, CustomStringConvertible {
         return self.productIdentifier.hashValue
     }
     
+    /// Describes the terms of the subscription purchase, such as renewal period and any introductory offers. Returns nil for non-subscription purchases.
     @available(iOS 11.2, *)
-    public var subscriptionInfo: SubscriptionInfo? {
-        func subscriptionPeriod(from skSubscriptionPeriod: SKProductSubscriptionPeriod) -> SubscriptionInfo.Period {
+    public var subscriptionTerms: SubscriptionTerms? {
+        func subscriptionPeriod(from skSubscriptionPeriod: SKProductSubscriptionPeriod) -> SubscriptionPeriod {
             let unitCount = skSubscriptionPeriod.numberOfUnits
+            let unit: SubscriptionPeriod.Unit
             
             switch skSubscriptionPeriod.unit {
                 case .day:
-                    return .days(unitCount: unitCount)
+                    unit = .day
                 case .week:
-                    return .weeks(unitCount: unitCount)
+                    unit = .week
                 case .month:
-                    return .months(unitCount: unitCount)
+                    unit = .month
                 case .year:
-                    return .years(unitCount: unitCount)
+                    unit = .year
             }
+            
+            return SubscriptionPeriod(unit: unit, unitCount: unitCount)
         }
         
         guard let skSubscriptionPeriod = self.skProduct.subscriptionPeriod else {
             return nil
         }
         
-        let period: SubscriptionInfo.Period = subscriptionPeriod(from: skSubscriptionPeriod)
-        let introductoryOffer: SubscriptionInfo.IntroductoryOffer? = {
+        let period: SubscriptionPeriod = subscriptionPeriod(from: skSubscriptionPeriod)
+        let introductoryOffer: SubscriptionTerms.IntroductoryOffer? = {
             if let skDiscount = self.skProduct.introductoryPrice {
-                let price = Price(from: skDiscount.price, in: skDiscount.priceLocale)
+                let locale = priceLocaleFromProductDiscount(skDiscount) ?? Locale.current
+                
+                let price = Price(from: skDiscount.price, in: locale)
                 let period = subscriptionPeriod(from: skDiscount.subscriptionPeriod)
                 
                 switch skDiscount.paymentMode {
@@ -62,7 +68,7 @@ public struct Purchase : Hashable, CustomStringConvertible {
             }
         }()
         
-        return SubscriptionInfo(renewalPeriod: period, introductoryOffer: introductoryOffer)
+        return SubscriptionTerms(renewalPeriod: period, introductoryOffer: introductoryOffer)
     }
     
     public static func ==(lhs: Purchase, rhs: Purchase) -> Bool {

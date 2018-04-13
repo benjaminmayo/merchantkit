@@ -2,9 +2,12 @@ import Foundation
 
 /// Formats `Price` values into user-facing strings.
 public final class PriceFormatter {
-    public var prefix: String = "" /// Prefix to prepend before the numeric value in the formatted string. Defaults to empty string.
-    public var suffix: String = "" /// Prefix to append after the numeric value in the formatted string. Defaults to empty string.
-    public var freeText: String = "" /// Replacement text if the price is free. If used, `prefix` and `suffix` are ignored. Defaults to empty string.
+    /// Text to prepend before the numeric value in the formatted string. Defaults to empty string.
+    public var prefix: String = ""
+    /// Text to append after the numeric value in the formatted string. Defaults to empty string.
+    public var suffix: String = ""
+    /// Replacement text if the price is free. If used, `prefix` and `suffix` are ignored. Defaults to empty string.
+    public var freeText: String = ""
     
     private let numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()

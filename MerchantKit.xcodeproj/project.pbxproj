@@ -34,6 +34,7 @@
 		434202871EAE09100012983A /* Receipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4342027E1EAE09100012983A /* Receipt.swift */; };
 		434202881EAE09100012983A /* LocalConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4342027F1EAE09100012983A /* LocalConfiguration.swift */; };
 		4350D4761EB3931300DA47C5 /* RestorePurchasesTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4350D4751EB3931300DA47C5 /* RestorePurchasesTask.swift */; };
+		435418E92080DEA300FB3833 /* SubscriptionPeriod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435418E82080DEA300FB3833 /* SubscriptionPeriod.swift */; };
 		436CE12E1EAE4B5B00AB41CD /* DescriptionUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */; };
 		436CE1301EAE7B6400AB41CD /* PriceFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */; };
 		436CE1321EAEA55D00AB41CD /* DateUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436CE1311EAEA55D00AB41CD /* DateUtilities.swift */; };
@@ -48,11 +49,12 @@
 		436CE1611EB0EF4100AB41CD /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436CE1601EB0EF4100AB41CD /* StoreKit.framework */; };
 		436EA3BD1ED5B336005F3B3B /* LocalReceiptValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436EA3BC1ED5B336005F3B3B /* LocalReceiptValidator.swift */; };
 		436EA3BF1ED5B3E4005F3B3B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436EA3BE1ED5B3E4005F3B3B /* Security.framework */; };
+		438C5D2F2080BD5400D303C8 /* SubscriptionPeriodFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438C5D2E2080BD5400D303C8 /* SubscriptionPeriodFormatter.swift */; };
 		438C9DA81F548E7A00C5F0E0 /* ReceiptValidationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438C9DA71F548E7A00C5F0E0 /* ReceiptValidationRequest.swift */; };
 		43B0F3491F5C6CF300D4039A /* LocalReceiptPayloadParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0F3481F5C6CF300D4039A /* LocalReceiptPayloadParser.swift */; };
 		43D0AD7820724EF400F25597 /* DebuggingStateTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0AD7720724EF400F25597 /* DebuggingStateTask.swift */; };
 		43D0AD7A2072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0AD792072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift */; };
-		43D4FE6F207F7E8700AEA92F /* SubscriptionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D4FE6E207F7E8700AEA92F /* SubscriptionInfo.swift */; };
+		43D4FE6F207F7E8700AEA92F /* SubscriptionTerms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D4FE6E207F7E8700AEA92F /* SubscriptionTerms.swift */; };
 		43DBC1091F26283700DB4B25 /* PurchaseInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */; };
 		43DBC10B1F26288500DB4B25 /* NetworkAvailabilityCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */; };
 		43EB5CB020723C33007D1F94 /* PKCS7Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EB5CAF20723C33007D1F94 /* PKCS7Container.swift */; };
@@ -115,6 +117,7 @@
 		4342027E1EAE09100012983A /* Receipt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Receipt.swift; sourceTree = "<group>"; };
 		4342027F1EAE09100012983A /* LocalConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalConfiguration.swift; sourceTree = "<group>"; };
 		4350D4751EB3931300DA47C5 /* RestorePurchasesTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestorePurchasesTask.swift; sourceTree = "<group>"; };
+		435418E82080DEA300FB3833 /* SubscriptionPeriod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionPeriod.swift; sourceTree = "<group>"; };
 		436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DescriptionUtilities.swift; sourceTree = "<group>"; };
 		436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceFormatter.swift; sourceTree = "<group>"; };
 		436CE1311EAEA55D00AB41CD /* DateUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateUtilities.swift; sourceTree = "<group>"; };
@@ -129,11 +132,12 @@
 		436CE1601EB0EF4100AB41CD /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		436EA3BC1ED5B336005F3B3B /* LocalReceiptValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalReceiptValidator.swift; sourceTree = "<group>"; };
 		436EA3BE1ED5B3E4005F3B3B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		438C5D2E2080BD5400D303C8 /* SubscriptionPeriodFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionPeriodFormatter.swift; sourceTree = "<group>"; };
 		438C9DA71F548E7A00C5F0E0 /* ReceiptValidationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptValidationRequest.swift; sourceTree = "<group>"; };
 		43B0F3481F5C6CF300D4039A /* LocalReceiptPayloadParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalReceiptPayloadParser.swift; sourceTree = "<group>"; };
 		43D0AD7720724EF400F25597 /* DebuggingStateTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebuggingStateTask.swift; sourceTree = "<group>"; };
 		43D0AD792072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerReceiptVerificationDataFetcher.swift; sourceTree = "<group>"; };
-		43D4FE6E207F7E8700AEA92F /* SubscriptionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionInfo.swift; sourceTree = "<group>"; };
+		43D4FE6E207F7E8700AEA92F /* SubscriptionTerms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionTerms.swift; sourceTree = "<group>"; };
 		43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseInterfaceController.swift; sourceTree = "<group>"; };
 		43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAvailabilityCenter.swift; sourceTree = "<group>"; };
 		43EB5CAF20723C33007D1F94 /* PKCS7Container.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKCS7Container.swift; sourceTree = "<group>"; };
@@ -254,6 +258,7 @@
 			isa = PBXGroup;
 			children = (
 				436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */,
+				438C5D2E2080BD5400D303C8 /* SubscriptionPeriodFormatter.swift */,
 				43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */,
 			);
 			path = "User Interface";
@@ -282,7 +287,8 @@
 				438C9DA71F548E7A00C5F0E0 /* ReceiptValidationRequest.swift */,
 				4342027E1EAE09100012983A /* Receipt.swift */,
 				432133BD1EAE3DFB0096919B /* Result.swift */,
-				43D4FE6E207F7E8700AEA92F /* SubscriptionInfo.swift */,
+				43D4FE6E207F7E8700AEA92F /* SubscriptionTerms.swift */,
+				435418E82080DEA300FB3833 /* SubscriptionPeriod.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -383,7 +389,7 @@
 					4342025C1EAE08F80012983A = {
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = 2ZTW4G3PG5;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 0940;
 						ProvisioningStyle = Automatic;
 					};
 					434202651EAE08F80012983A = {
@@ -436,10 +442,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				438C9DA81F548E7A00C5F0E0 /* ReceiptValidationRequest.swift in Sources */,
+				438C5D2F2080BD5400D303C8 /* SubscriptionPeriodFormatter.swift in Sources */,
 				43EB5CB020723C33007D1F94 /* PKCS7Container.swift in Sources */,
 				436CE1501EB0A5B900AB41CD /* ConstructedReceipt.swift in Sources */,
+				435418E92080DEA300FB3833 /* SubscriptionPeriod.swift in Sources */,
 				4350D4761EB3931300DA47C5 /* RestorePurchasesTask.swift in Sources */,
-				43D4FE6F207F7E8700AEA92F /* SubscriptionInfo.swift in Sources */,
+				43D4FE6F207F7E8700AEA92F /* SubscriptionTerms.swift in Sources */,
 				434202801EAE09100012983A /* Merchant.swift in Sources */,
 				4337A8A31EB2433A00EAF633 /* EphemeralPurchaseStorage.swift in Sources */,
 				43DBC1091F26283700DB4B25 /* PurchaseInterfaceController.swift in Sources */,
