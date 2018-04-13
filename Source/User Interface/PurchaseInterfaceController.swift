@@ -224,7 +224,6 @@ extension PurchaseInterfaceController {
     
     private func fetchPurchases(onFetchingStateChanged fetchingStateChanged: @escaping () -> Void, onCompletion completion: @escaping (FetchResult<PurchaseSet>) -> Void) {
         let task = self.merchant.availablePurchasesTask(for: self.products)
-        task.ignoresPurchasedProducts = false
         task.onCompletion = { result in
             self.availablePurchasesTask = nil
             fetchingStateChanged()
