@@ -1,12 +1,10 @@
-/// This task fetches possible purchases the user may wish to execute, and automatically excludes purchases the user has already purchased.
+/// This task fetches possible purchases the user may wish to execute.
+/// The fetched purchases can represent products that the user has already purchased. These should be filtered out by the client, if desired. If you are implementing a storefront UI in your app, you may want to use `PurchaseInterfaceController` rather than dealing with the lower-level tasks.
 public final class AvailablePurchasesTask : NSObject, MerchantTask {
     public typealias Purchases = PurchaseSet
     
     public var onCompletion: TaskCompletion<Purchases>!
     public private(set) var isStarted: Bool = false
-    
-    /// If `true`, the task will only return purchases for products that are not already considered purchased by the `Merchant`. Defaults to `true`.
-    public var ignoresPurchasedProducts: Bool = true
     
     private unowned let merchant: Merchant
     private let products: Set<Product>
@@ -24,14 +22,8 @@ public final class AvailablePurchasesTask : NSObject, MerchantTask {
         self.isStarted = true
         self.merchant.updateActiveTask(self)
         
-        let productIdentifiers: [String]
-            
-        if self.ignoresPurchasedProducts {
-            productIdentifiers = self.products.filter {
-                !self.merchant.state(for: $0).isPurchased
-            }.map { $0.identifier }
-        } else {
-            productIdentifiers = self.products.map { $0.identifier }
+        let productIdentifiers: [String] = self.products.map {
+            $0.identifier
         }
         
         self.skRequest = SKProductsRequest(productIdentifiers: Set(productIdentifiers))
