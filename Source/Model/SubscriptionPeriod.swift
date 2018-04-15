@@ -1,5 +1,5 @@
 /// Describes a duration of a subscription in an abstract form. This type currently cannot be instantiated outside of the framework, this may change in a future release.
-public struct SubscriptionPeriod : Equatable {
+public struct SubscriptionPeriod : Hashable {
     public let unit: Unit
     public let unitCount: Int
     

@@ -4,8 +4,8 @@ public struct LocalConfiguration {
     public let products: Set<Product>
     public let userInfo: [String : Any]
     
-    public init(fromResourceNamed resourceName: String, extension: String) throws {
-        guard let url = Bundle.main.url(forResource: resourceName, withExtension: `extension`) else {
+    public init(fromResourceNamed resourceName: String, extension: String, in bundle: Bundle = .main) throws {
+        guard let url = bundle.url(forResource: resourceName, withExtension: `extension`) else {
             throw ResourceError.notFound
         }
     

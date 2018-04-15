@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Products</key>
+	<array>
+		<dict>
+			<key>Identifier</key>
+			<string>nonConsumableIdentifier</string>
+			<key>Kind</key>
+			<string>NonConsumable</string>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>consumableIdentifier</string>
+			<key>Kind</key>
+			<string>Consumable</string>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>subscriptionIdentifier</string>
+			<key>Kind</key>
+			<string>Subscription</string>
+			<key>Automatically Renews</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>automaticallyRenewingSubscriptionIdentifier</string>
+			<key>Kind</key>
+			<string>Subscription</string>
+			<key>Automatically Renews</key>
+			<true/>
+		</dict>
+	</array>
+</dict>
+</plist>

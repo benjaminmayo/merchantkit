@@ -21,30 +21,30 @@ class LocalReceiptPayloadParserTests : XCTestCase {
         
         XCTAssertThrowsError(try parser.receipt(from: randomData))
     }
-    
-    func testSubscriptionSampleResources() {
-        let expectation = ReceiptExpectation(productIdentifiers: ["testsubscription"], resource: (name: "testSubscriptionReceiptResponse", extension: "json"))
-        let expectations = [expectation]
-        
-        let bundle = Bundle(for: type(of: self))
-
-        for expectation in expectations {
-            guard let url = bundle.url(forResource: expectation.resource.name, withExtension: expectation.resource.extension), let data = try? Data(contentsOf: url) else {
-                XCTFail("sample resource \(expectation.resource.name) not exists")
-                continue
-            }
-            
-            let parser = ServerReceiptVerificationResponseParser()
-            
-            var response: ServerReceiptVerificationResponseParser.Response!
-            XCTAssertNoThrow(response = try parser.response(from: data))
-            
-            var receipt: Receipt!
-            XCTAssertNoThrow(receipt = try parser.receipt(from: response))
-    
-            XCTAssertEqual(receipt.productIdentifiers, expectation.productIdentifiers)
-        }
-    }
+//    
+//    func testSubscriptionSampleResources() {
+//        let expectation = ReceiptExpectation(productIdentifiers: ["testsubscription"], resource: (name: "testSubscriptionReceiptResponse", extension: "json"))
+//        let expectations = [expectation]
+//        
+//        let bundle = Bundle(for: type(of: self))
+//
+//        for expectation in expectations {
+//            guard let url = bundle.url(forResource: expectation.resource.name, withExtension: expectation.resource.extension), let data = try? Data(contentsOf: url) else {
+//                XCTFail("sample resource \(expectation.resource.name) not exists")
+//                continue
+//            }
+//            
+//            let parser = ServerReceiptVerificationResponseParser()
+//            
+//            var response: ServerReceiptVerificationResponseParser.Response!
+//            XCTAssertNoThrow(response = try parser.response(from: data))
+//            
+//            var receipt: Receipt!
+//            XCTAssertNoThrow(receipt = try parser.receipt(from: response))
+//    
+//            XCTAssertEqual(receipt.productIdentifiers, expectation.productIdentifiers)
+//        }
+//    }
     
     struct ReceiptExpectation {
         let productIdentifiers: Set<String>

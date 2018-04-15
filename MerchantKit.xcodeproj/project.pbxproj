@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,6 +14,10 @@
 		4314B2622082C6A300ECC35C /* LocalizedResourcesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4314B2602082C67C00ECC35C /* LocalizedResourcesTests.swift */; };
 		4314B2652082CF5600ECC35C /* SubscriptionPeriodFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4314B2632082CEC800ECC35C /* SubscriptionPeriodFormatterTests.swift */; };
 		4314B2672082D17E00ECC35C /* StringUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4314B2662082D17E00ECC35C /* StringUtilities.swift */; };
+		4314B2732083298100ECC35C /* testLocalConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4314B271208328D200ECC35C /* testLocalConfiguration.plist */; };
+		4314B276208329BB00ECC35C /* LocalConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4314B2742083298D00ECC35C /* LocalConfigurationTests.swift */; };
+		4314B2792083763800ECC35C /* PriceFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4314B277208375F900ECC35C /* PriceFormatterTests.swift */; };
+		4314B27B208377B300ECC35C /* PurchasedStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4314B27A208377B300ECC35C /* PurchasedStateTests.swift */; };
 		431C1FF51F5E0815009E2CD7 /* LocalReceiptPayloadParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431C1FF31F5E07D9009E2CD7 /* LocalReceiptPayloadParserTests.swift */; };
 		431C84451EC1D2C50098516E /* PurchaseSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431C84441EC1D2C50098516E /* PurchaseSet.swift */; };
 		431C84491EC1E3490098516E /* MerchantKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 431C84471EC1E3490098516E /* MerchantKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -98,6 +102,12 @@
 		4314B2602082C67C00ECC35C /* LocalizedResourcesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedResourcesTests.swift; sourceTree = "<group>"; };
 		4314B2632082CEC800ECC35C /* SubscriptionPeriodFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionPeriodFormatterTests.swift; sourceTree = "<group>"; };
 		4314B2662082D17E00ECC35C /* StringUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringUtilities.swift; sourceTree = "<group>"; };
+		4314B26D20831AEF00ECC35C /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = fr; path = fr.lproj/LocalizedPeriodUnits.stringsdict; sourceTree = "<group>"; };
+		4314B26E20831CA800ECC35C /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = es; path = es.lproj/LocalizedPeriodUnits.stringsdict; sourceTree = "<group>"; };
+		4314B271208328D200ECC35C /* testLocalConfiguration.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = testLocalConfiguration.plist; sourceTree = "<group>"; };
+		4314B2742083298D00ECC35C /* LocalConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalConfigurationTests.swift; sourceTree = "<group>"; };
+		4314B277208375F900ECC35C /* PriceFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceFormatterTests.swift; sourceTree = "<group>"; };
+		4314B27A208377B300ECC35C /* PurchasedStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasedStateTests.swift; sourceTree = "<group>"; };
 		431C1FF31F5E07D9009E2CD7 /* LocalReceiptPayloadParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalReceiptPayloadParserTests.swift; sourceTree = "<group>"; };
 		431C84441EC1D2C50098516E /* PurchaseSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseSet.swift; sourceTree = "<group>"; };
 		431C84461EC1E3490098516E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Source/Info.plist; sourceTree = "<group>"; };
@@ -188,6 +198,7 @@
 			isa = PBXGroup;
 			children = (
 				4337A8981EB1F1EB00EAF633 /* testSubscriptionReceiptResponse.json */,
+				4314B271208328D200ECC35C /* testLocalConfiguration.plist */,
 			);
 			path = "Sample Resources";
 			sourceTree = "<group>";
@@ -232,6 +243,7 @@
 		4342026A1EAE08F80012983A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				4314B27A208377B300ECC35C /* PurchasedStateTests.swift */,
 				4337A8961EB1F1CA00EAF633 /* ServerReceiptResponseParserTests.swift */,
 				431C1FF31F5E07D9009E2CD7 /* LocalReceiptPayloadParserTests.swift */,
 				4337A89A1EB1FAAD00EAF633 /* BucketsTests.swift */,
@@ -239,6 +251,8 @@
 				43128DCF1EC38A3000DBA2EE /* PurchaseSetTests.swift */,
 				4314B2602082C67C00ECC35C /* LocalizedResourcesTests.swift */,
 				4314B2632082CEC800ECC35C /* SubscriptionPeriodFormatterTests.swift */,
+				4314B277208375F900ECC35C /* PriceFormatterTests.swift */,
+				4314B2742083298D00ECC35C /* LocalConfigurationTests.swift */,
 				4337A89E1EB1FE3900EAF633 /* Sample Resources */,
 				4342026D1EAE08F80012983A /* Info.plist */,
 			);
@@ -407,7 +421,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
 				LastUpgradeCheck = 0930;
-				ORGANIZATIONNAME = Benjamin;
+				ORGANIZATIONNAME = "Benjamin Mayo";
 				TargetAttributes = {
 					4342025C1EAE08F80012983A = {
 						CreatedOnToolsVersion = 8.3.2;
@@ -424,11 +438,13 @@
 				};
 			};
 			buildConfigurationList = 434202571EAE08F80012983A /* Build configuration list for PBXProject "MerchantKit" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				fr,
+				es,
 			);
 			mainGroup = 434202531EAE08F80012983A;
 			productRefGroup = 4342025E1EAE08F80012983A /* Products */;
@@ -455,6 +471,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4337A8991EB1F1EB00EAF633 /* testSubscriptionReceiptResponse.json in Resources */,
+				4314B2732083298100ECC35C /* testLocalConfiguration.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -518,11 +535,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				43128DD11EC38A3600DBA2EE /* PurchaseSetTests.swift in Sources */,
+				4314B2792083763800ECC35C /* PriceFormatterTests.swift in Sources */,
 				4337A89D1EB1FE3300EAF633 /* PurchaseRecordTests.swift in Sources */,
+				4314B27B208377B300ECC35C /* PurchasedStateTests.swift in Sources */,
 				431C1FF51F5E0815009E2CD7 /* LocalReceiptPayloadParserTests.swift in Sources */,
 				4337A89B1EB1FAAD00EAF633 /* BucketsTests.swift in Sources */,
 				4337A8971EB1F1CA00EAF633 /* ServerReceiptResponseParserTests.swift in Sources */,
 				4314B2652082CF5600ECC35C /* SubscriptionPeriodFormatterTests.swift in Sources */,
+				4314B276208329BB00ECC35C /* LocalConfigurationTests.swift in Sources */,
 				4314B2622082C6A300ECC35C /* LocalizedResourcesTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -542,6 +562,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				4314B25C2082C2BF00ECC35C /* en */,
+				4314B26D20831AEF00ECC35C /* fr */,
+				4314B26E20831CA800ECC35C /* es */,
 			);
 			name = LocalizedPeriodUnits.stringsdict;
 			sourceTree = "<group>";
@@ -553,6 +575,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -604,6 +627,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -615,6 +639,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -658,7 +683,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -687,7 +713,11 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -699,6 +729,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.anthonymayo.MerchantKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -729,7 +760,11 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -756,7 +791,11 @@
 				DEVELOPMENT_TEAM = 2ZTW4G3PG5;
 				INFOPLIST_FILE = Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.anthonymayo.MerchantKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
@@ -771,7 +810,11 @@
 				DEVELOPMENT_TEAM = 2ZTW4G3PG5;
 				INFOPLIST_FILE = Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.anthonymayo.MerchantKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;

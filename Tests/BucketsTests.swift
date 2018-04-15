@@ -1,7 +1,7 @@
 import XCTest
 @testable import MerchantKit
 
-class BucketsTests: XCTestCase {
+class BucketsTests : XCTestCase {
     func testEmpty() {
         let buckets = Buckets<Int, String>()
         
