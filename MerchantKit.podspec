@@ -22,7 +22,8 @@ Pod::Spec.new do |spec|
     spec.source_files = "Source/**/*.{h,swift}"
     spec.resource_bundles = {
     	'MerchantKitResources' => ["Source/Internal/Resources/**/*.{stringsdict}"]
-
+    }
+    
     spec.test_spec "Tests" do |test_spec|
         test_spec.source_files = "Tests/**/*.{h,swift}"
         test_spec.resources = "Tests/**/*.{json,data,plist}"
