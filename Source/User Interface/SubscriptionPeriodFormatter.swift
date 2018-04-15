@@ -1,7 +1,7 @@
 import Foundation
 
 /// Formats `SubscriptionPeriod` values into user-facing strings. This can be used to present the duration of a subscription in the interface. It produces strings like `7 days` or `two weeks`.
-/// This type is work in progress and API surface is volatile. Eventually, it should support non-English languages.
+/// This type is work in progress and API surface is volatile.
 public final class SubscriptionPeriodFormatter {
     /// The style of formatting of the unit count. For example, the count could be spelled out in words ('seven days') or represented numerically ('7 days'). Defaults to `numeric`.
     public var unitCountStyle: UnitCountStyle = .numeric {
@@ -21,7 +21,7 @@ public final class SubscriptionPeriodFormatter {
     /// Controls how the words of the formatted string are capitalized. Select from 'lower case', 'Sentence case' or 'Start Case' modes. Numeric formats are naturally unaffected by capitalization.
     public var capitalizationMode: CapitalizationMode = .lowerCase
     
-    /// The locale to use when formatting. `SubscriptionPeriodFormatter` currently assumes an English language.
+    /// The locale to use when formatting.
     public var locale: Locale = .current {
         didSet {
             self.unitCountFormatter.locale = self.locale

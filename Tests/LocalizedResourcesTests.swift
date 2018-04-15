@@ -1,7 +1,7 @@
 import XCTest
 @testable import MerchantKit
 
-class LocalizedResourcesTests: XCTestCase {
+class LocalizedResourcesTests : XCTestCase {
     func testLocalizedPeriodUnitDayNameInEnglish() {
         let locale = Locale(identifier: "en-US")
         
