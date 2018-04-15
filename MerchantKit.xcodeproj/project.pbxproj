@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		4305D7FB1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */; };
 		43128DD11EC38A3600DBA2EE /* PurchaseSetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43128DCF1EC38A3000DBA2EE /* PurchaseSetTests.swift */; };
+		4314B25B2082C2BF00ECC35C /* LocalizedPeriodUnits.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 4314B25D2082C2BF00ECC35C /* LocalizedPeriodUnits.stringsdict */; };
+		4314B25F2082C5B400ECC35C /* LocalizedResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4314B25E2082C5B400ECC35C /* LocalizedResources.swift */; };
+		4314B2622082C6A300ECC35C /* LocalizedResourcesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4314B2602082C67C00ECC35C /* LocalizedResourcesTests.swift */; };
+		4314B2652082CF5600ECC35C /* SubscriptionPeriodFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4314B2632082CEC800ECC35C /* SubscriptionPeriodFormatterTests.swift */; };
+		4314B2672082D17E00ECC35C /* StringUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4314B2662082D17E00ECC35C /* StringUtilities.swift */; };
 		431C1FF51F5E0815009E2CD7 /* LocalReceiptPayloadParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431C1FF31F5E07D9009E2CD7 /* LocalReceiptPayloadParserTests.swift */; };
 		431C84451EC1D2C50098516E /* PurchaseSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431C84441EC1D2C50098516E /* PurchaseSet.swift */; };
 		431C84491EC1E3490098516E /* MerchantKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 431C84471EC1E3490098516E /* MerchantKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -88,6 +93,11 @@
 /* Begin PBXFileReference section */
 		4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreKitTransactionObserver.swift; sourceTree = "<group>"; };
 		43128DCF1EC38A3000DBA2EE /* PurchaseSetTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseSetTests.swift; sourceTree = "<group>"; };
+		4314B25C2082C2BF00ECC35C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/LocalizedPeriodUnits.stringsdict; sourceTree = "<group>"; };
+		4314B25E2082C5B400ECC35C /* LocalizedResources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedResources.swift; sourceTree = "<group>"; };
+		4314B2602082C67C00ECC35C /* LocalizedResourcesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedResourcesTests.swift; sourceTree = "<group>"; };
+		4314B2632082CEC800ECC35C /* SubscriptionPeriodFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionPeriodFormatterTests.swift; sourceTree = "<group>"; };
+		4314B2662082D17E00ECC35C /* StringUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringUtilities.swift; sourceTree = "<group>"; };
 		431C1FF31F5E07D9009E2CD7 /* LocalReceiptPayloadParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalReceiptPayloadParserTests.swift; sourceTree = "<group>"; };
 		431C84441EC1D2C50098516E /* PurchaseSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseSet.swift; sourceTree = "<group>"; };
 		431C84461EC1E3490098516E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Source/Info.plist; sourceTree = "<group>"; };
@@ -166,6 +176,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4314B2562082C0C700ECC35C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4314B25D2082C2BF00ECC35C /* LocalizedPeriodUnits.stringsdict */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		4337A89E1EB1FE3900EAF633 /* Sample Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -219,6 +237,8 @@
 				4337A89A1EB1FAAD00EAF633 /* BucketsTests.swift */,
 				4337A89C1EB1FE3300EAF633 /* PurchaseRecordTests.swift */,
 				43128DCF1EC38A3000DBA2EE /* PurchaseSetTests.swift */,
+				4314B2602082C67C00ECC35C /* LocalizedResourcesTests.swift */,
+				4314B2632082CEC800ECC35C /* SubscriptionPeriodFormatterTests.swift */,
 				4337A89E1EB1FE3900EAF633 /* Sample Resources */,
 				4342026D1EAE08F80012983A /* Info.plist */,
 			);
@@ -306,11 +326,14 @@
 				436CE1511EB0A61200AB41CD /* Buckets.swift */,
 				436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */,
 				436CE1311EAEA55D00AB41CD /* DateUtilities.swift */,
+				4314B2662082D17E00ECC35C /* StringUtilities.swift */,
 				43F1E7571F5DAB5F00A112D4 /* ASN1ReceiptAttributeSet.swift */,
 				43F1E7591F5DABC300A112D4 /* ASN1Format.swift */,
 				4329BE491EB8A43400052D3E /* MerchantTaskUtilities.swift */,
 				43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */,
 				43EB5CAF20723C33007D1F94 /* PKCS7Container.swift */,
+				4314B25E2082C5B400ECC35C /* LocalizedResources.swift */,
+				4314B2562082C0C700ECC35C /* Resources */,
 			);
 			path = Internal;
 			sourceTree = "<group>";
@@ -423,6 +446,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4314B25B2082C2BF00ECC35C /* LocalizedPeriodUnits.stringsdict in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,6 +481,7 @@
 				4305D7FB1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift in Sources */,
 				434202861EAE09100012983A /* ServerReceiptValidator.swift in Sources */,
 				434202831EAE09100012983A /* UserDefaultsPurchaseStorage.swift in Sources */,
+				4314B2672082D17E00ECC35C /* StringUtilities.swift in Sources */,
 				436CE15C1EB0E0C200AB41CD /* MerchantDelegate.swift in Sources */,
 				43D0AD7A2072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift in Sources */,
 				436CE12E1EAE4B5B00AB41CD /* DescriptionUtilities.swift in Sources */,
@@ -475,6 +500,7 @@
 				432133B61EAE2FEA0096919B /* AvailablePurchasesTask.swift in Sources */,
 				432133BE1EAE3DFB0096919B /* Result.swift in Sources */,
 				434202811EAE09100012983A /* PurchaseRecord.swift in Sources */,
+				4314B25F2082C5B400ECC35C /* LocalizedResources.swift in Sources */,
 				436EA3BD1ED5B336005F3B3B /* LocalReceiptValidator.swift in Sources */,
 				434202851EAE09100012983A /* PurchasedState.swift in Sources */,
 				436CE1541EB0B3F600AB41CD /* StoreKitReceiptDataFetcher.swift in Sources */,
@@ -496,6 +522,8 @@
 				431C1FF51F5E0815009E2CD7 /* LocalReceiptPayloadParserTests.swift in Sources */,
 				4337A89B1EB1FAAD00EAF633 /* BucketsTests.swift in Sources */,
 				4337A8971EB1F1CA00EAF633 /* ServerReceiptResponseParserTests.swift in Sources */,
+				4314B2652082CF5600ECC35C /* SubscriptionPeriodFormatterTests.swift in Sources */,
+				4314B2622082C6A300ECC35C /* LocalizedResourcesTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -508,6 +536,17 @@
 			targetProxy = 434202681EAE08F80012983A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4314B25D2082C2BF00ECC35C /* LocalizedPeriodUnits.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4314B25C2082C2BF00ECC35C /* en */,
+			);
+			name = LocalizedPeriodUnits.stringsdict;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		4342026F1EAE08F80012983A /* Debug */ = {

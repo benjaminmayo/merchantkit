@@ -46,18 +46,31 @@ public final class SubscriptionPeriodFormatter {
     public func string(from period: SubscriptionPeriod) -> String {
         let convertedPeriod = self.convertedPeriod(from: period)
         
-        let pluralizationMode = self.pluralizationMode(fromUnitCount: convertedPeriod.unitCount)
-        let formattedUnitCount = self.formattedString(fromUnitCount: convertedPeriod.unitCount)
+        let localizedStringSource = LocalizedStringSource(for: self.locale)
         
-        let formattedUnit = self.formattedString(from: convertedPeriod.unit, pluralizationMode: pluralizationMode)
+        let unitName: String
+        
+        if self.canPluralizeUnits {
+            unitName = localizedStringSource.pluralizedName(for: convertedPeriod.unit, count: convertedPeriod.unitCount)
+        } else {
+            unitName = localizedStringSource.name(for: convertedPeriod.unit)
+        }
+        
+        let formattedUnitCount = self.formattedUnitCount(from: convertedPeriod.unitCount)
         
         switch self.capitalizationMode {
             case .sentenceCase:
-                return "\(formattedUnitCount.capitalized(with: self.locale)) \(formattedUnit)"
+                let phrase = localizedStringSource.joinedPhrase(forUnitName: unitName, formattedUnitCount: formattedUnitCount)
+            
+                return phrase.sentenceCapitalized(with: self.locale)
             case .startCase:
-                return "\(formattedUnitCount.capitalized(with: self.locale)) \(formattedUnit.capitalized(with: self.locale))"
+                let phrase = localizedStringSource.joinedPhrase(forUnitName: unitName.capitalized(with: self.locale), formattedUnitCount: formattedUnitCount.capitalized(with: self.locale))
+            
+                return phrase
             case .lowerCase:
-                return "\(formattedUnitCount) \(formattedUnit)"
+                let phrase = localizedStringSource.joinedPhrase(forUnitName: unitName, formattedUnitCount: formattedUnitCount)
+                
+                return phrase
         }
     }
     
@@ -99,53 +112,10 @@ extension SubscriptionPeriodFormatter {
         return period
     }
     
-    private func formattedString(fromUnitCount unitCount: Int) -> String {
+    private func formattedUnitCount(from unitCount: Int) -> String {
         let formattedString = self.unitCountFormatter.string(from: unitCount as NSNumber)!
         
         return formattedString
     }
-    
-    // this is rudimentary
-    private func formattedString(from unit: SubscriptionPeriod.Unit, pluralizationMode: PluralizationMode) -> String {
-        switch (unit, pluralizationMode) {
-            case (.day, .singular):
-                return "day"
-            case (.day, .plural(_)):
-                return "days"
-            case (.week, .singular):
-                return "week"
-            case (.week, .plural(_)):
-                return "weeks"
-            case (.month, .singular):
-                return "month"
-            case (.month, .plural(_)):
-                return "months"
-            case (.year, .singular):
-                return "year"
-            case (.year, .plural(_)):
-                return "years"
-        }
-    }
-    
-    private func pluralizationMode(fromUnitCount unitCount: Int) -> PluralizationMode {
-        guard self.canPluralizeUnits else { return .singular }
-        
-        switch unitCount {
-            case 1:
-                return .singular
-            default:
-                return .plural(.other)
-        }
-    }
-    
-    private enum PluralizationMode {
-        case singular
-        case plural(PluralModifier)
-        
-        enum PluralModifier {
-            case other
-            case few
-            case many
-        }
-    }
 }
+
