@@ -2,7 +2,7 @@ import XCTest
 import StoreKit
 @testable import MerchantKit
 
-class PurchaseSetTests: XCTestCase {
+class PurchaseSetTests : XCTestCase {
     func testEmpty() {
         let set = PurchaseSet(from: [])
         

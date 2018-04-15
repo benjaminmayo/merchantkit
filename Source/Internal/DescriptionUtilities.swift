@@ -1,8 +1,8 @@
 extension CustomStringConvertible {
     internal func defaultDescription(withProperties properties: (String, Any)...) -> String {
-        let formattedProperties = properties.map { (arg) in
+        let formattedProperties = properties.map { property in
+            let (name, value) = property
             
-            let (name, value) = arg
             if name.isEmpty {
                 return "\(value)"
             } else {

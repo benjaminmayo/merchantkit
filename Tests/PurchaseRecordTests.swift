@@ -1,7 +1,7 @@
 import XCTest
 @testable import MerchantKit
 
-class PurchaseRecordTests: XCTestCase {
+class PurchaseRecordTests : XCTestCase {
     func testConversionToDictNoExpiryDate() {
         let record = PurchaseRecord(productIdentifier: "productIdentifier", expiryDate: nil)
         
