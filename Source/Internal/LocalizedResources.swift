@@ -41,23 +41,36 @@ internal struct LocalizedStringSource {
 }
 
 extension LocalizedStringSource {
-    private func localizedString(for key: Key) -> String {
-        let mainBundle = Bundle(for: Merchant.self)
+    private lazy var bundle: Bundle {
+        let rootBundle: Bundle
+        
+        let frameworkBundle = Bundle(for: Merchant.self)
+        
+        // account for possible cocoapods usage
+        if let url = frameworkBundle.url(forResource: "MerchantKitResources", ofType: "bundle"), let bundle = Bundle(url: url) {
+            rootBundle = bundle
+        } else {
+            rootBundle = frameworkBundle
+        }
         
         // shockingly, this is the best way to specify a language for the localizedString(forKey:value:table:) Foundation API
-        let bundleForLocalePath = self.locale.languageCode.flatMap { mainBundle.path(forResource: $0, ofType: "lproj") }
+        let bundleForLocalePath = self.locale.languageCode.flatMap { rootBundle.path(forResource: $0, ofType: "lproj") }
         
         let appropriateBundle: Bundle
         
         if let bundleForLocalePath = bundleForLocalePath, let bundleForLocale = Bundle(path: bundleForLocalePath) {
             appropriateBundle = bundleForLocale
         } else {
-            appropriateBundle = mainBundle
+            appropriateBundle = rootBundle
         }
         
+        return appropriateBundle
+    }
+    
+    private func localizedString(for key: Key) -> String {
         // thanks to some Foundation framework magic, this returns a special kind of String. It is a dynamic subclass that can respond to String(format:locale:arguments:) by selecting the appropriate pluralisation as defined in the table.
         // if the 'string' is passed to other methods, it decays into a normal localized string lookup.
-        return appropriateBundle.localizedString(forKey: key.stringValue, value: "", table: key.tableName)
+        return self.bundle.localizedString(forKey: key.stringValue, value: "", table: key.tableName)
     }
     
     private enum Key {
