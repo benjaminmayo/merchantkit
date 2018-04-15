@@ -72,8 +72,12 @@ internal class StoreKitReceiptDataFetcher : NSObject {
         case onlyFetch
     }
     
-    enum Error : Swift.Error {
+    enum Error : Swift.Error, LocalizedError {
         case receiptUnavailableWithoutUserInteraction
+        
+        var localizedDescription: String {
+            return "Receipt unavailable without user interaction."
+        }
     }
 }
 

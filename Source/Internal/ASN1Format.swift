@@ -1,8 +1,19 @@
 internal enum ASN1Format {
-    enum ParseError : Swift.Error {
+    enum ParseError : Swift.Error, LocalizedError {
         case malformed
         case invalidLength
         case reachedEOF
+        
+        var localizedDescription: String {
+            switch self {
+                case .malformed:
+                    return "Malformed ASN1 value."
+                case .invalidLength:
+                    return "Invalid length of ASN1 value."
+                case .reachedEOF:
+                    return "Reached the end of the file while parsing ASN1 data."
+            }
+        }
     }
     
     struct RawAttribute {
@@ -11,13 +22,24 @@ internal enum ASN1Format {
         let data: Data
     }
     
-    enum BufferKind: UInt8 {
+    enum BufferKind: UInt8, CustomStringConvertible {
         case integer = 0x02
         case octetString = 0x04
         case utf8String = 0x0c
         case ia5String = 0x16
         case sequence = 0x30
         case set = 0x31
+        
+        var description: String {
+            switch self {
+                case .integer: return "integer"
+                case .octetString: return "octetString"
+                case .utf8String: return "utf8String"
+                case .ia5String: return "ia5String"
+                case .sequence: return "sequence"
+                case .set: return "set"
+            }
+        }
     }
     
     typealias ParseResult<T> = (value: T, after: Data.Index)

@@ -90,7 +90,13 @@ extension ASN1ReceiptAttributeSet {
             
             let kind = self.data[self.cursor]
             
-            guard kind == ASN1Format.BufferKind.set.rawValue else { throw ASN1Format.ParseError.malformed }
+            print(kind)
+            
+            guard kind == ASN1Format.BufferKind.set.rawValue else {
+                print("expected set, found \(ASN1Format.BufferKind(rawValue: kind)!)")
+                
+                throw ASN1Format.ParseError.malformed
+            }
             
             self.cursor = self.data.index(after: self.cursor)
             

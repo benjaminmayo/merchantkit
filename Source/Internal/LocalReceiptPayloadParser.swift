@@ -10,6 +10,7 @@ internal struct LocalReceiptPayloadParser {
         var entries = [ReceiptEntry]()
         
         let attributes = try ASN1ReceiptAttributeSet(in: payload, of: ReceiptAttributeType.self)
+        print(attributes)
         
         for attribute in attributes {
             switch attribute.type {
@@ -32,6 +33,8 @@ internal struct LocalReceiptPayloadParser {
                     
                     let entry = ReceiptEntry(productIdentifier: productIdentifier!, expiryDate: expiryDate)
                     entries.append(entry)
+                
+                    print(entry)
                 default:
                     break
             }

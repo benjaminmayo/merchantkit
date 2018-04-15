@@ -22,11 +22,37 @@ public final class LocalReceiptValidator {
         }
     }
     
-    public enum Error : Swift.Error {
+    public enum Error : Swift.Error, CustomNSError {
         case requiresOpenSSL // you could argue that this condition should trap as it is a precondition, but — in this particular case — I prefer throwing an `Error` to enable better logging and debugging
         case missingContainer
         case malformedReceiptData
         case unexpectedReceiptASNObject
+        
+        public var errorCode: Int {
+            switch self {
+                case .requiresOpenSSL:
+                    return 1
+                case .missingContainer:
+                    return 2
+                case .malformedReceiptData:
+                    return 3
+                case .unexpectedReceiptASNObject:
+                    return 4
+            }
+        }
+        
+        public var localizedDescription: String {
+            switch self {
+                case .requiresOpenSSL:
+                    return "OpenSSL is required to use this MerchantKit feature."
+                case .missingContainer:
+                    return "The receipt container is missing."
+                case .malformedReceiptData:
+                    return "The receipt data is malformed."
+                case .unexpectedReceiptASNObject:
+                    return "The receipt data content contained an unrecognized object."
+            }
+        }
     }
 }
 
