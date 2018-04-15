@@ -1,7 +1,8 @@
 import Foundation
 
-internal struct LocalizedStringSource {
+internal class LocalizedStringSource {
     let locale: Locale
+    private var _bundle: Bundle?
     
     init(for locale: Locale) {
         self.locale = locale
@@ -41,13 +42,17 @@ internal struct LocalizedStringSource {
 }
 
 extension LocalizedStringSource {
-    private lazy var bundle: Bundle {
+    private var bundle: Bundle {
+        if let bundle = self._bundle {
+            return bundle
+        }
+        
         let rootBundle: Bundle
         
         let frameworkBundle = Bundle(for: Merchant.self)
         
         // account for possible cocoapods usage
-        if let url = frameworkBundle.url(forResource: "MerchantKitResources", ofType: "bundle"), let bundle = Bundle(url: url) {
+        if let url = frameworkBundle.url(forResource: "MerchantKitResources", withExtension: "bundle"), let bundle = Bundle(url: url) {
             rootBundle = bundle
         } else {
             rootBundle = frameworkBundle
@@ -63,6 +68,8 @@ extension LocalizedStringSource {
         } else {
             appropriateBundle = rootBundle
         }
+        
+        self._bundle = appropriateBundle
         
         return appropriateBundle
     }
