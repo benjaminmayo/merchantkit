@@ -1,62 +1,82 @@
 import Foundation
 
 /// Parse a payload from a local App Store receipt file.
-internal struct LocalReceiptPayloadParser {
+internal class LocalReceiptPayloadParser {
+    private var parser: ASN1.Parser!
+    private var payloadProcessor: ReceiptAttributeASN1SetProcessor!
+    private var inAppPurchaseSetProcessor: ReceiptAttributeASN1SetProcessor!
+    
+    private var foundInAppPurchaseAttributes = [(InAppPurchaseReceiptAttributeType, ReceiptAttributeASN1SetProcessor.ReceiptAttribute)]()
+    
+    private var receiptEntries = [ReceiptEntry]()
+    
     init() {
         
     }
     
     func receipt(from payload: Data) throws -> Receipt {
-        var entries = [ReceiptEntry]()
+        self.payloadProcessor = ReceiptAttributeASN1SetProcessor(data: payload)
+        self.payloadProcessor.delegate = self
         
-        let attributes = try ASN1ReceiptAttributeSet(in: payload, of: ReceiptAttributeType.self)
-        print(attributes)
+        try self.payloadProcessor.start()
         
-        for attribute in attributes {
-            switch attribute.type {
-                case .inAppPurchases:
-                    var productIdentifier: String?
-                    var expiryDate: Date?
-                
-                    let purchaseAttributes = try ASN1ReceiptAttributeSet(in: attribute.byteValue, of: InAppPurchaseAttributeType.self)
-                
-                    for attribute in purchaseAttributes {
-                        switch attribute.type {
-                            case .productIdentifier:
-                                productIdentifier = attribute.stringValue
-                            case .subscriptionExpirationDate:
-                                expiryDate = attribute.dateValue
-                            default:
-                                break
-                        }
-                    }
-                    
-                    let entry = ReceiptEntry(productIdentifier: productIdentifier!, expiryDate: expiryDate)
-                    entries.append(entry)
-                
-                    print(entry)
-                default:
-                    break
-            }
-        }
+        // self.receiptEntries is populated in the processor delegate
         
-        return ConstructedReceipt(from: entries)
+        return ConstructedReceipt(from: self.receiptEntries)
+        
+//        var entries = [ReceiptEntry]()
+//
+//        let attributes = try ASN1ReceiptAttributeSet(in: payload, of: PayloadReceiptAttributeType.self)
+//        // want to replace receiptAttributeSet with payload processor result
+//
+//        for attribute in attributes {
+//            switch attribute.type {
+//                case .inAppPurchase:
+//                    var productIdentifier: String?
+//                    var expiryDate: Date?
+//
+//                    let purchaseAttributes = try ASN1ReceiptAttributeSet(in: attribute.byteValue, of: InAppPurchaseReceiptAttributeType.self)
+//
+//                    for attribute in purchaseAttributes {
+//                        switch attribute.type {
+//                            case .productIdentifier:
+//                                productIdentifier = attribute.stringValue
+//                            case .subscriptionExpirationDate:
+//                                expiryDate = attribute.dateValue
+//                            default:
+//                                break
+//                        }
+//                    }
+//
+//                    let entry = ReceiptEntry(productIdentifier: productIdentifier!, expiryDate: expiryDate)
+//                    entries.append(entry)
+//                default:
+//                    break
+//            }
+//        }
+//
+//        let isEqual = entries.elementsEqual(self.receiptEntries, by: { (a, b) in
+//            a.productIdentifier == b.productIdentifier && a.expiryDate == b.expiryDate
+//        })
+//
+//        assert(isEqual)
+        
     }
 }
 
 extension LocalReceiptPayloadParser {
-    private enum ReceiptAttributeType : Int {
+    private enum PayloadReceiptAttributeType : Int {
         case bundleIdentifier = 2
         case applicationVersion = 3
         case opaqueValue = 4
         case sha1Hash = 5
-        case inAppPurchases = 17
+        case inAppPurchase = 17
         case originalApplicationVersion = 19
         case creationDate = 12
         case expirationDate = 21
     }
     
-    private enum InAppPurchaseAttributeType : Int {
+    private enum InAppPurchaseReceiptAttributeType : Int {
         case quantity = 1701
         case productIdentifier = 1702
         case transactionIdentifier = 1703
@@ -66,5 +86,68 @@ extension LocalReceiptPayloadParser {
         case subscriptionExpirationDate = 1708
         case cancellationDate = 1712
         case webOrderLineItemIdentifier = 1711
+    }
+    
+    private func processInAppPurchaseSet(_ data: Data) {
+        self.foundInAppPurchaseAttributes.removeAll()
+        
+        self.inAppPurchaseSetProcessor = ReceiptAttributeASN1SetProcessor(data: data)
+        self.inAppPurchaseSetProcessor.delegate = self
+    
+        do {
+            try self.inAppPurchaseSetProcessor.start()
+            
+            var expiryDate: Date?
+            var productIdentifier: String?
+            
+            for (type, attribute) in self.foundInAppPurchaseAttributes {
+                switch type {
+                    case .productIdentifier:
+                        productIdentifier = attribute.stringValue
+                    case .subscriptionExpirationDate:
+                        expiryDate = attribute.stringValue.flatMap {
+                            Date(fromISO8601: $0)
+                        }
+                    default:
+                        break
+                }
+            }
+            
+            if let productIdentifier = productIdentifier {
+                let entry = ReceiptEntry(productIdentifier: productIdentifier, expiryDate: expiryDate)
+                self.receiptEntries.append(entry)
+            }
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    private func didFindPayloadReceiptAttribute(of attributeType: PayloadReceiptAttributeType, attribute: ReceiptAttributeASN1SetProcessor.ReceiptAttribute) {
+        switch attributeType {
+            case .inAppPurchase:
+                self.processInAppPurchaseSet(attribute.rawBuffer)
+            default:
+                break
+        }
+    }
+    
+    private func didFindInAppPurchaseReceiptAttribute(of attributeType: InAppPurchaseReceiptAttributeType, attribute: ReceiptAttributeASN1SetProcessor.ReceiptAttribute) {
+        self.foundInAppPurchaseAttributes.append((attributeType, attribute))
+    }
+}
+
+extension LocalReceiptPayloadParser : ReceiptAttributeASN1SetProcessorDelegate {
+    func receiptAttributeASN1SetProcessor(_ processor: ReceiptAttributeASN1SetProcessor, didFind attribute: ReceiptAttributeASN1SetProcessor.ReceiptAttribute) {
+        switch processor {
+            case self.payloadProcessor:
+                if let attributeType = PayloadReceiptAttributeType(rawValue: attribute.type) {
+                    self.didFindPayloadReceiptAttribute(of: attributeType, attribute: attribute)
+                }
+            case self.inAppPurchaseSetProcessor:
+                if let attributeType = InAppPurchaseReceiptAttributeType(rawValue: attribute.type) {
+                    self.didFindInAppPurchaseReceiptAttribute(of: attributeType, attribute: attribute)
+                }
+            default: fatalError("undetected processor")
+        }
     }
 }

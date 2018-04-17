@@ -22,9 +22,44 @@ class LocalReceiptPayloadParserTests : XCTestCase {
         XCTAssertThrowsError(try parser.receipt(from: randomData))
     }
     
-    struct ReceiptExpectation {
-        let productIdentifiers: Set<String>
-        let resource: (name: String, `extension`: String)
+    struct SampleResource {
+        let name: String
+        let expectedProductIdentifiers: Set<String>
+    }
+    
+    func testSampleResources() {
+        let twoNonconsumabkesResource = SampleResource(name: "testSampleReceiptTwoNonconsumblesPurchased", expectedProductIdentifiers: ["codeSharingUnlockable", "saveScannedCodeUnlockable"])
+        let subscriptionResource = SampleResource(name: "testSampleReceiptOneSubscriptionPurchased", expectedProductIdentifiers: ["premiumsubscription"])
+        
+        let resources = [twoNonconsumabkesResource, subscriptionResource]
+        
+        for resource in resources {
+            let resourceURL = self.urlForSampleResource(withName: resource.name, extension: "data")
+            
+            guard let data = try? Data(contentsOf: resourceURL) else {
+                XCTFail("no data at \(resourceURL)");
+                continue
+            }
+            
+            let expectation = self.expectation(description: resource.name)
+            
+            let validator = LocalReceiptValidator(request: .init(data: data, reason: .initialization))
+            validator.onCompletion = { result in
+                switch result {
+                    case .succeeded(let receipt):
+                        debugPrint(receipt)
+                        XCTAssertEqual(receipt.productIdentifiers, resource.expectedProductIdentifiers)
+                    case .failed(let error):
+                        XCTFail(String(describing: error))
+                }
+                
+                expectation.fulfill()
+            }
+            
+            validator.start()
+            
+            self.wait(for: [expectation], timeout: 5)
+        }
     }
 }
 

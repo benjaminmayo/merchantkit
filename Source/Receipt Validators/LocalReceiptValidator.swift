@@ -59,19 +59,12 @@ public final class LocalReceiptValidator {
 extension LocalReceiptValidator {
     private func receipt(from receiptData: Data) throws -> Receipt {
         do {
-            let container = try PKCS7Container(from: receiptData)
-            
-            guard let content = container.content else { throw Error.malformedReceiptData }
-            
+            let container = PKCS7ReceiptDataContainer(receiptData: receiptData)
+            let content = try container.content()
+
             let parser = LocalReceiptPayloadParser()
             
             return try parser.receipt(from: content)
-        } catch PKCS7Container.Error.missingOpenSSLDependency {
-            throw Error.requiresOpenSSL
-        } catch PKCS7Container.Error.malformedInputData {
-            throw Error.missingContainer
-        } catch is ASN1Format.ParseError {
-            throw Error.unexpectedReceiptASNObject
         }
     }
 }
