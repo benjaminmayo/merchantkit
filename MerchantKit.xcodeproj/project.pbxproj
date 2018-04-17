@@ -73,6 +73,9 @@
 		4395468F2085FE9200B9D2C6 /* testSampleReceiptOneSubscriptionPurchased.data in Resources */ = {isa = PBXBuildFile; fileRef = 4395468E2085FE9200B9D2C6 /* testSampleReceiptOneSubscriptionPurchased.data */; };
 		439546912086009700B9D2C6 /* PKCS7ReceiptDataContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439546902086009700B9D2C6 /* PKCS7ReceiptDataContainerTests.swift */; };
 		439546932086010C00B9D2C6 /* TestsUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439546922086010C00B9D2C6 /* TestsUtilities.swift */; };
+		439DD22820865F4000B0F0C4 /* SubscriptionPriceFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439DD22720865F4000B0F0C4 /* SubscriptionPriceFormatter.swift */; };
+		439DD22B2086805B00B0F0C4 /* LocalizedSubscriptionPricePhrases.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 439DD22D2086805B00B0F0C4 /* LocalizedSubscriptionPricePhrases.stringsdict */; };
+		439DD22F2086840300B0F0C4 /* SubscriptionPriceFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439DD22E2086840300B0F0C4 /* SubscriptionPriceFormatterTests.swift */; };
 		43B0F3491F5C6CF300D4039A /* LocalReceiptPayloadParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0F3481F5C6CF300D4039A /* LocalReceiptPayloadParser.swift */; };
 		43D0AD7820724EF400F25597 /* DebuggingStateTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0AD7720724EF400F25597 /* DebuggingStateTask.swift */; };
 		43D0AD7A2072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0AD792072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift */; };
@@ -177,6 +180,9 @@
 		4395468E2085FE9200B9D2C6 /* testSampleReceiptOneSubscriptionPurchased.data */ = {isa = PBXFileReference; lastKnownFileType = file; path = testSampleReceiptOneSubscriptionPurchased.data; sourceTree = "<group>"; };
 		439546902086009700B9D2C6 /* PKCS7ReceiptDataContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKCS7ReceiptDataContainerTests.swift; sourceTree = "<group>"; };
 		439546922086010C00B9D2C6 /* TestsUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsUtilities.swift; sourceTree = "<group>"; };
+		439DD22720865F4000B0F0C4 /* SubscriptionPriceFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionPriceFormatter.swift; sourceTree = "<group>"; };
+		439DD22C2086805B00B0F0C4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/LocalizedSubscriptionPricePhrases.stringsdict; sourceTree = "<group>"; };
+		439DD22E2086840300B0F0C4 /* SubscriptionPriceFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionPriceFormatterTests.swift; sourceTree = "<group>"; };
 		43B0F3481F5C6CF300D4039A /* LocalReceiptPayloadParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalReceiptPayloadParser.swift; sourceTree = "<group>"; };
 		43D0AD7720724EF400F25597 /* DebuggingStateTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebuggingStateTask.swift; sourceTree = "<group>"; };
 		43D0AD792072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerReceiptVerificationDataFetcher.swift; sourceTree = "<group>"; };
@@ -223,6 +229,7 @@
 			isa = PBXGroup;
 			children = (
 				4314B25D2082C2BF00ECC35C /* LocalizedPeriodUnits.stringsdict */,
+				439DD22D2086805B00B0F0C4 /* LocalizedSubscriptionPricePhrases.stringsdict */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -290,6 +297,7 @@
 				4314B2742083298D00ECC35C /* LocalConfigurationTests.swift */,
 				43703A4520855198003AA087 /* ASN1Tests.swift */,
 				439546902086009700B9D2C6 /* PKCS7ReceiptDataContainerTests.swift */,
+				439DD22E2086840300B0F0C4 /* SubscriptionPriceFormatterTests.swift */,
 				439546922086010C00B9D2C6 /* TestsUtilities.swift */,
 				4337A89E1EB1FE3900EAF633 /* Sample Resources */,
 				4342026D1EAE08F80012983A /* Info.plist */,
@@ -330,6 +338,7 @@
 			isa = PBXGroup;
 			children = (
 				436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */,
+				439DD22720865F4000B0F0C4 /* SubscriptionPriceFormatter.swift */,
 				438C5D2E2080BD5400D303C8 /* SubscriptionPeriodFormatter.swift */,
 				43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */,
 			);
@@ -500,6 +509,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				439DD22B2086805B00B0F0C4 /* LocalizedSubscriptionPricePhrases.stringsdict in Resources */,
 				4314B25B2082C2BF00ECC35C /* LocalizedPeriodUnits.stringsdict in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -532,6 +542,7 @@
 				43D4FE6F207F7E8700AEA92F /* SubscriptionTerms.swift in Sources */,
 				434202801EAE09100012983A /* Merchant.swift in Sources */,
 				4337A8A31EB2433A00EAF633 /* EphemeralPurchaseStorage.swift in Sources */,
+				439DD22820865F4000B0F0C4 /* SubscriptionPriceFormatter.swift in Sources */,
 				43703A4A208563EA003AA087 /* PKCS7ReceiptDataContainer.swift in Sources */,
 				43703A402085470F003AA087 /* ASN1PayloadValueConversion.swift in Sources */,
 				43703A3E208546BA003AA087 /* ASN1BufferValue.swift in Sources */,
@@ -580,6 +591,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43128DD11EC38A3600DBA2EE /* PurchaseSetTests.swift in Sources */,
+				439DD22F2086840300B0F0C4 /* SubscriptionPriceFormatterTests.swift in Sources */,
 				4314B2792083763800ECC35C /* PriceFormatterTests.swift in Sources */,
 				4337A89D1EB1FE3300EAF633 /* PurchaseRecordTests.swift in Sources */,
 				439546912086009700B9D2C6 /* PKCS7ReceiptDataContainerTests.swift in Sources */,
@@ -614,6 +626,14 @@
 				4314B26E20831CA800ECC35C /* es */,
 			);
 			name = LocalizedPeriodUnits.stringsdict;
+			sourceTree = "<group>";
+		};
+		439DD22D2086805B00B0F0C4 /* LocalizedSubscriptionPricePhrases.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				439DD22C2086805B00B0F0C4 /* en */,
+			);
+			name = LocalizedSubscriptionPricePhrases.stringsdict;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

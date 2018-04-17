@@ -39,6 +39,19 @@ internal class LocalizedStringSource {
         
         return result
     }
+    
+    func subscriptionPricePhrase(with configuration: SubscriptionPricePhraseConfiguration, formattedPrice: String, formattedUnitCount: String) -> String {
+        let format = self.localizedString(for: .subscriptionPricePhrases(configuration))
+        let result = String(format: format, locale: self.locale, arguments: [configuration.period.unitCount, formattedPrice, formattedUnitCount])
+        
+        return result
+    }
+    
+    internal struct SubscriptionPricePhraseConfiguration {
+        let period: SubscriptionPeriod
+        let isFormal: Bool
+        let isFixedDuration: Bool
+    }
 }
 
 extension LocalizedStringSource {
@@ -82,6 +95,7 @@ extension LocalizedStringSource {
     
     private enum Key {
         case periodUnits(StringIdentifier)
+        case subscriptionPricePhrases(SubscriptionPricePhraseConfiguration)
         
         enum StringIdentifier : String {
             case unitCountJoiner = "UnitCountJoiner"
@@ -96,6 +110,22 @@ extension LocalizedStringSource {
             switch self {
                 case .periodUnits(let identifier):
                     return identifier.rawValue
+                case .subscriptionPricePhrases(let configuration):
+                    let unitIdentifier: String
+                    
+                    switch configuration.period.unit {
+                        case .day: unitIdentifier = "Day"
+                        case .week: unitIdentifier = "Week"
+                        case .month: unitIdentifier = "Month"
+                        case .year: unitIdentifier = "Year"
+                    }
+                    
+                    let formalIdentifier = configuration.isFormal ? "Formal" : "Informal"
+                    let fixedDurationIdentifier = configuration.isFixedDuration ? "FixedDuration" : "NotFixedDuration"
+                    
+                    let value = "\(unitIdentifier)\(formalIdentifier)\(fixedDurationIdentifier)"
+                
+                    return value
             }
         }
         
@@ -103,6 +133,8 @@ extension LocalizedStringSource {
             switch self {
                 case .periodUnits(_):
                     return "LocalizedPeriodUnits"
+                case .subscriptionPricePhrases(_):
+                    return "LocalizedSubscriptionPricePhrases"
             }
         }
     }

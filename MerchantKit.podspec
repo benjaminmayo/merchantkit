@@ -6,7 +6,7 @@ Pod::Spec.new do |spec|
     spec.summary = "A modern In-App Purchases management framework for iOS developers."
     spec.requires_arc = true
 
-    spec.version = "0.4.0"
+    spec.version = "0.5.0"
 
     spec.license = { :type => "MIT", :file => "LICENSE" }
 
@@ -17,7 +17,6 @@ Pod::Spec.new do |spec|
     spec.source = { :git => "https://github.com/benjaminmayo/merchantkit.git", :tag => "#{spec.version}"}
 
     spec.frameworks = "CoreFoundation", "StoreKit"
-    spec.dependency "GRKOpenSSLFramework"
 
     spec.source_files = "Source/**/*.{h,swift}"
     spec.resource_bundles = {
