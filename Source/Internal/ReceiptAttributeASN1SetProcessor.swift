@@ -4,8 +4,10 @@ internal protocol ReceiptAttributeASN1SetProcessorDelegate : AnyObject {
     func receiptAttributeASN1SetProcessor(_ processor: ReceiptAttributeASN1SetProcessor, didFind attribute: ReceiptAttributeASN1SetProcessor.ReceiptAttribute)
 }
 
-/// This class specifically processes an ASN1 set of sequences as defined by the Apple In-App Purchase receipt specification. `data` should start at the first byte of the set, including the payload descriptor.
+/// This class processes an ASN1 set of sequences as defined by the Apple In-App Purchase receipt specification. `data` should start at the first byte of the set, including the payload descriptor.
 internal class ReceiptAttributeASN1SetProcessor : Equatable {
+    // Long term, would consider refactoring into a `Sequence` of `Token`s. This would likely require re-engineering the underlying event parser.
+    
     weak var delegate: ReceiptAttributeASN1SetProcessorDelegate?
     
     private let parser: ASN1.Parser

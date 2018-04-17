@@ -6,6 +6,7 @@ protocol ASN1ParserDelegate : AnyObject {
 
 extension ASN1 {
     /// Parses any ASN1 data in an event-driven manner. Data is relayed as a stream of tokens to the delegate.
+    /// The aim of the parser is to never fatally trap. All errors should be funneled through the API. This aim is not yet fully implemented.
     class Parser {
         weak var delegate: ASN1ParserDelegate?
         
@@ -39,7 +40,7 @@ extension ASN1 {
             }
         }
         
-        // You can call this partway through parsing, but it is not guaranteed to stop token events to the delegate.
+        // You can call this partway through parsing, but it is not guaranteed to stop token events to the delegate. The parse() method will bubble up an `Error.abort` at termination.
         func abortParsing() {
             self.didAbort = true
         }

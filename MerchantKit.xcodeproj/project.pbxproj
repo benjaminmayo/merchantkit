@@ -79,9 +79,6 @@
 		43D4FE6F207F7E8700AEA92F /* SubscriptionTerms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D4FE6E207F7E8700AEA92F /* SubscriptionTerms.swift */; };
 		43DBC1091F26283700DB4B25 /* PurchaseInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */; };
 		43DBC10B1F26288500DB4B25 /* NetworkAvailabilityCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */; };
-		43EB5CB020723C33007D1F94 /* PKCS7Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EB5CAF20723C33007D1F94 /* PKCS7Container.swift */; };
-		43F1E7581F5DAB5F00A112D4 /* ASN1ReceiptAttributeSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1E7571F5DAB5F00A112D4 /* ASN1ReceiptAttributeSet.swift */; };
-		43F1E75A1F5DABC300A112D4 /* ASN1Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1E7591F5DABC300A112D4 /* ASN1Format.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -186,9 +183,6 @@
 		43D4FE6E207F7E8700AEA92F /* SubscriptionTerms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionTerms.swift; sourceTree = "<group>"; };
 		43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseInterfaceController.swift; sourceTree = "<group>"; };
 		43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAvailabilityCenter.swift; sourceTree = "<group>"; };
-		43EB5CAF20723C33007D1F94 /* PKCS7Container.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKCS7Container.swift; sourceTree = "<group>"; };
-		43F1E7571F5DAB5F00A112D4 /* ASN1ReceiptAttributeSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASN1ReceiptAttributeSet.swift; sourceTree = "<group>"; };
-		43F1E7591F5DABC300A112D4 /* ASN1Format.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASN1Format.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -385,12 +379,9 @@
 				436CE12D1EAE4B5B00AB41CD /* DescriptionUtilities.swift */,
 				436CE1311EAEA55D00AB41CD /* DateUtilities.swift */,
 				4314B2662082D17E00ECC35C /* StringUtilities.swift */,
-				43F1E7571F5DAB5F00A112D4 /* ASN1ReceiptAttributeSet.swift */,
-				43F1E7591F5DABC300A112D4 /* ASN1Format.swift */,
 				43703A502085EB38003AA087 /* ReceiptAttributeASN1SetProcessor.swift */,
 				4329BE491EB8A43400052D3E /* MerchantTaskUtilities.swift */,
 				43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */,
-				43EB5CAF20723C33007D1F94 /* PKCS7Container.swift */,
 				43703A49208563EA003AA087 /* PKCS7ReceiptDataContainer.swift */,
 				4314B25E2082C5B400ECC35C /* LocalizedResources.swift */,
 				430B637A2084D53400292FFE /* ASN1 */,
@@ -533,7 +524,6 @@
 			files = (
 				438C9DA81F548E7A00C5F0E0 /* ReceiptValidationRequest.swift in Sources */,
 				438C5D2F2080BD5400D303C8 /* SubscriptionPeriodFormatter.swift in Sources */,
-				43EB5CB020723C33007D1F94 /* PKCS7Container.swift in Sources */,
 				430B637C2084D55500292FFE /* ASN1Parser.swift in Sources */,
 				436CE1501EB0A5B900AB41CD /* ConstructedReceipt.swift in Sources */,
 				43703A3C20854673003AA087 /* ASN1BufferType.swift in Sources */,
@@ -580,10 +570,8 @@
 				436CE1541EB0B3F600AB41CD /* StoreKitReceiptDataFetcher.swift in Sources */,
 				432133BA1EAE36170096919B /* Purchase.swift in Sources */,
 				431C84451EC1D2C50098516E /* PurchaseSet.swift in Sources */,
-				43F1E75A1F5DABC300A112D4 /* ASN1Format.swift in Sources */,
 				434202881EAE09100012983A /* LocalConfiguration.swift in Sources */,
 				436CE1521EB0A61200AB41CD /* Buckets.swift in Sources */,
-				43F1E7581F5DAB5F00A112D4 /* ASN1ReceiptAttributeSet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
