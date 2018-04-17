@@ -52,7 +52,22 @@ extension AvailablePurchasesTask : SKProductsRequestDelegate {
     public func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         let skProducts = response.products
         
-        let purchases: [Purchase] = skProducts.map(Purchase.init(from:))
+        let purchases: [Purchase] = skProducts.map { skProduct in
+            var characteristics = Purchase.Characteristics()
+            
+            if let product = self.products.first(where: { product in
+                product.identifier == skProduct.productIdentifier
+            }) {
+                switch product.kind {
+                    case .subscription(automaticallyRenews: true):
+                        characteristics.insert(.isAutorenewing)
+                    default:
+                        break
+                }
+            }
+            
+            return Purchase(from: skProduct, characteristics: characteristics)
+        }
         
         self.finish(with: .succeeded(PurchaseSet(from: purchases)))
     }

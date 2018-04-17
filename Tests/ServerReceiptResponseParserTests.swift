@@ -1,22 +1,22 @@
 import XCTest
 @testable import MerchantKit
 
-class ServerReceiptResponseParserTests: XCTestCase {
-    private func dataForResource(withName name: String, extension: String) -> Data {
-        let bundle = Bundle(for: type(of: self))
-        let url = bundle.url(forResource: name, withExtension: `extension`)!
+class ServerReceiptResponseParserTests : XCTestCase {
+    private var dataForTestSubscriptionResponse: Data? {
+        let url = self.urlForSampleResource(withName: "testSubscriptionReceiptResponse", extension: "json")
         
-        return try! Data(contentsOf: url)
-    }
-    
-    private var testSubscriptionResponseData: Data {
-        return self.dataForResource(withName: "testSubscriptionReceiptResponse", extension: "json")
+        guard let data = try? Data(contentsOf: url) else {
+            XCTFail("no data at \(url)")
+            return nil 
+        }
+        
+        return data
     }
     
     private let testProductIdentifier = "testsubscription"
     
     func testParseValidDataSuccessful() {
-        let receiptData = self.testSubscriptionResponseData
+        guard let receiptData = self.dataForTestSubscriptionResponse else { return }
 
         let parser = ServerReceiptVerificationResponseParser()
         
@@ -27,7 +27,7 @@ class ServerReceiptResponseParserTests: XCTestCase {
     }
     
     func testReceiptContainsOneProduct() {
-        let receiptData = self.testSubscriptionResponseData
+        guard let receiptData = self.dataForTestSubscriptionResponse else { return }
         
         let parser = ServerReceiptVerificationResponseParser()
         
@@ -48,7 +48,7 @@ class ServerReceiptResponseParserTests: XCTestCase {
     }
     
     func testReceiptContainsAtLeastOneEntry() {
-        let receiptData = self.testSubscriptionResponseData
+        guard let receiptData = self.dataForTestSubscriptionResponse else { return }
         
         let parser = ServerReceiptVerificationResponseParser()
         
@@ -62,7 +62,7 @@ class ServerReceiptResponseParserTests: XCTestCase {
     }
     
     func testReceiptContainsEntriesWithMatchingProductIdentifier() {
-        let receiptData = self.testSubscriptionResponseData
+        guard let receiptData = self.dataForTestSubscriptionResponse else { return }
         
         let parser = ServerReceiptVerificationResponseParser()
         

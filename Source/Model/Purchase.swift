@@ -7,11 +7,14 @@ public struct Purchase : Hashable, CustomStringConvertible {
     public let price: Price
     
     internal let skProduct: SKProduct
+    internal let characteristics: Characteristics
     
-    internal init(from skProduct: SKProduct) {
+    internal init(from skProduct: SKProduct, characteristics: Characteristics) {
         self.productIdentifier = skProduct.productIdentifier
         self.price = Price(from: skProduct.price, in: skProduct.priceLocale)
+        
         self.skProduct = skProduct
+        self.characteristics = characteristics
     }
     
     public var description: String {
@@ -68,10 +71,20 @@ public struct Purchase : Hashable, CustomStringConvertible {
             }
         }()
         
-        return SubscriptionTerms(renewalPeriod: period, introductoryOffer: introductoryOffer)
+        return SubscriptionTerms(renewalPeriod: period, isAutomaticallyRenewing: self.characteristics.contains(.isAutorenewing), introductoryOffer: introductoryOffer)
     }
     
     public static func ==(lhs: Purchase, rhs: Purchase) -> Bool {
-        return lhs.productIdentifier == rhs.productIdentifier && lhs.price == rhs.price 
+        return lhs.productIdentifier == rhs.productIdentifier && lhs.price == rhs.price && lhs.characteristics == rhs.characteristics
+    }
+    
+    struct Characteristics : OptionSet {
+        let rawValue: UInt
+        
+        init(rawValue: UInt) {
+            self.rawValue = rawValue
+        }
+        
+        public static let isAutorenewing: Characteristics = Characteristics(rawValue: 1 << 1)
     }
 }

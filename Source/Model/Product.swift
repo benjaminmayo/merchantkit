@@ -16,8 +16,12 @@ public struct Product : Hashable, CustomStringConvertible {
         return self.identifier.hashValue
     }
     
+    public static func ==(lhs: Product, rhs: Product) -> Bool {
+        return lhs.identifier == rhs.identifier
+    }
+    
     /// Represents the possible In-App Purchases types.
-    public enum Kind : Equatable {
+    public enum Kind : Hashable {
         case consumable
         case nonConsumable
         case subscription(automaticallyRenews: Bool)
