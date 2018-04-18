@@ -168,13 +168,13 @@ extension ASN1.Parser {
             if let type = descriptor.tag.type {
                 self.delegate?.asn1Parser(self, didParse: .containerStart(type: type))
             }
-            if !subdata.isEmpty {
+            if !buffer.isEmpty {
                 do {
                     var buffer = buffer
                     
-                    repeat {
+                    while !buffer.isEmpty && !self.didAbort {
                         buffer = try self._parse(subdata: buffer)
-                    } while !buffer.isEmpty
+                    }
                 } catch let error {
                     shouldStopParsing = true
                     stopParsingError = error
