@@ -64,13 +64,14 @@ The codebase is in flux right now. MerchantKit is by no means finished and there
 2. In your app delegate, import `MerchantKit` create a `Merchant` instance in `application(_:, didFinishLaunchingWithOptions:)`. Supply a storage object (recommended: `KeychainPurchaseStorage`) and a delegate.
 ```swift
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-    self.merchant = Merchant(storage: KeychainPurchaseStorage(serviceName: "AppName"), delegate: self)    
+    self.merchant = Merchant(storage: KeychainPurchaseStorage(serviceName: "AppName"), delegate: self)
+    return true
 }
 ```
 
 3. Implement the two required methods in `MerchantDelegate` to validate receipt data and receive notifications when the `PurchasedState` changes for registered products.
 ```swift
-func merchant(_ merchant: Merchant, didChangeStateFor products: Set<Product>) {
+func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Product>) {
     for product in products {
         print("updated \(product)")
     }
