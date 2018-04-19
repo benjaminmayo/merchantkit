@@ -253,6 +253,7 @@
 			isa = PBXGroup;
 			children = (
 				43C5AE0920889D3E00F804CE /* README.md */,
+				431C84471EC1E3490098516E /* MerchantKit.h */,
 				4342025F1EAE08F80012983A /* Source */,
 				4342026A1EAE08F80012983A /* Tests */,
 				4342025E1EAE08F80012983A /* Products */,
@@ -273,7 +274,6 @@
 			isa = PBXGroup;
 			children = (
 				431C84461EC1E3490098516E /* Info.plist */,
-				431C84471EC1E3490098516E /* MerchantKit.h */,
 				434202771EAE09100012983A /* Merchant.swift */,
 				436CE15B1EB0E0C200AB41CD /* MerchantDelegate.swift */,
 				436CE13B1EAF42E600AB41CD /* Model */,
@@ -865,7 +865,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = 2ZTW4G3PG5;
-				INFOPLIST_FILE = Tests/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -884,7 +884,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = 2ZTW4G3PG5;
-				INFOPLIST_FILE = Tests/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
