@@ -250,6 +250,7 @@
 			isa = PBXGroup;
 			children = (
 				43C5AE0920889D3E00F804CE /* README.md */,
+				431C84471EC1E3490098516E /* MerchantKit.h */,
 				431C84461EC1E3490098516E /* Info.plist */,
 				4342025F1EAE08F80012983A /* Source */,
 				4342026A1EAE08F80012983A /* Tests */,
@@ -270,7 +271,6 @@
 		4342025F1EAE08F80012983A /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				431C84471EC1E3490098516E /* MerchantKit.h */,
 				434202771EAE09100012983A /* Merchant.swift */,
 				436CE15B1EB0E0C200AB41CD /* MerchantDelegate.swift */,
 				436CE13B1EAF42E600AB41CD /* Model */,
