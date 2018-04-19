@@ -1,3 +1,5 @@
+import Foundation
+
 /// Formats `Price` values into user-facing strings, incorporating the given `SubscriptionPeriod` into the phrase. This can be used to present the duration of a subscription in the interface. It produces strings like `7 days` or `two weeks`.
 /// This is typically used to display subscription products, but may have other use cases.
 /// - Note: This formatter is currently localized into English only.
