@@ -1,6 +1,6 @@
 import StoreKit
 
-internal protocol StoreKitTransactionObserverDelegate : class {
+internal protocol StoreKitTransactionObserverDelegate : AnyObject {
     func storeKitTransactionObserverWillUpdatePurchases(_ observer: StoreKitTransactionObserver)
     func storeKitTransactionObserverDidUpdatePurchases(_ observer: StoreKitTransactionObserver)
     

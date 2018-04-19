@@ -1,4 +1,4 @@
-public protocol PurchaseStorage : class {
+public protocol PurchaseStorage : AnyObject {
     func record(forProductIdentifier productIdentifier: String) -> PurchaseRecord?
     func save(_ record: PurchaseRecord) -> StorageUpdateResult
     func removeRecord(forProductIdentifier productIdentifier: String) -> StorageUpdateResult

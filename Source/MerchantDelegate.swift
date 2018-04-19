@@ -1,5 +1,5 @@
 /// The delegate for a `Merchant`. All delegate methods are called on the main thread.
-public protocol MerchantDelegate : class {
+public protocol MerchantDelegate : AnyObject {
     /// Called when the state of a registered product changes. Update your application state as appropriate.
     func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Product>)
     

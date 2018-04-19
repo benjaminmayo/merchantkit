@@ -1,4 +1,4 @@
-public protocol PurchaseInterfaceControllerDelegate : class {
+public protocol PurchaseInterfaceControllerDelegate : AnyObject {
     func purchaseInterfaceControllerDidChangeFetchingState(_ controller: PurchaseInterfaceController)
     
     func purchaseInterfaceController(_ controller: PurchaseInterfaceController, didChangeStatesFor products: Set<Product>)
@@ -7,7 +7,6 @@ public protocol PurchaseInterfaceControllerDelegate : class {
 }
 
 /// This controller is actively being worked on and the API surface is considered volatile.
-
 /// This controller manages the purchased state of the supplied `products`. This controller is a convenience wrapper around several `Merchant` tasks and is intended to be used to display a user interface, like a storefront.
 ///
 /// Create a controller and call `fetchDataIfNecessary()` when the user interface is presented. Update UI in response to state changes, via the `delegate`.
