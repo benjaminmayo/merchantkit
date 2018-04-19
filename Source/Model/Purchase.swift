@@ -1,3 +1,4 @@
+import Foundation 
 import StoreKit
 
 /// A `Purchase` represents a possible transaction between the application and the user. 

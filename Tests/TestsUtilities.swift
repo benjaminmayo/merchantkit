@@ -1,4 +1,5 @@
 import XCTest
+import Foundation
 
 extension XCTest {
     func urlForSampleResource(withName name: String, `extension`: String) -> URL {

@@ -1,3 +1,6 @@
+import Foundation 
+import StoreKit
+
 /// This task starts the purchase flow for a purchase discovered by a previous `AvailablePurchasesTask` callback.
 public final class CommitPurchaseTask : MerchantTask {
     public let purchase: Purchase

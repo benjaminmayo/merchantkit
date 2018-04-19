@@ -1,3 +1,4 @@
+import Foundation 
 import StoreKit
 
 internal class StoreKitReceiptDataFetcher : NSObject {

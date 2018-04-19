@@ -1,4 +1,5 @@
 import XCTest
+import Foundation
 @testable import MerchantKit
 
 class SubscriptionPriceFormatterTests : XCTestCase {

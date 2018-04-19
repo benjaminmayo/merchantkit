@@ -1,3 +1,6 @@
+import Foundation 
+import StoreKit
+
 public protocol PurchaseInterfaceControllerDelegate : AnyObject {
     func purchaseInterfaceControllerDidChangeFetchingState(_ controller: PurchaseInterfaceController)
     

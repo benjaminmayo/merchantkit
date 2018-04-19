@@ -58,7 +58,6 @@
 		436CE15F1EB0EF3D00AB41CD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436CE15E1EB0EF3D00AB41CD /* Foundation.framework */; };
 		436CE1611EB0EF4100AB41CD /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436CE1601EB0EF4100AB41CD /* StoreKit.framework */; };
 		436EA3BD1ED5B336005F3B3B /* LocalReceiptValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436EA3BC1ED5B336005F3B3B /* LocalReceiptValidator.swift */; };
-		436EA3BF1ED5B3E4005F3B3B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436EA3BE1ED5B3E4005F3B3B /* Security.framework */; };
 		43703A3C20854673003AA087 /* ASN1BufferType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43703A3B20854673003AA087 /* ASN1BufferType.swift */; };
 		43703A3E208546BA003AA087 /* ASN1BufferValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43703A3D208546BA003AA087 /* ASN1BufferValue.swift */; };
 		43703A402085470F003AA087 /* ASN1PayloadValueConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43703A3F2085470F003AA087 /* ASN1PayloadValueConversion.swift */; };
@@ -77,7 +76,6 @@
 		439DD22B2086805B00B0F0C4 /* LocalizedSubscriptionPricePhrases.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 439DD22D2086805B00B0F0C4 /* LocalizedSubscriptionPricePhrases.stringsdict */; };
 		439DD22F2086840300B0F0C4 /* SubscriptionPriceFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439DD22E2086840300B0F0C4 /* SubscriptionPriceFormatterTests.swift */; };
 		43B0F3491F5C6CF300D4039A /* LocalReceiptPayloadParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0F3481F5C6CF300D4039A /* LocalReceiptPayloadParser.swift */; };
-		43C5AE0A20889D3E00F804CE /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 43C5AE0920889D3E00F804CE /* README.md */; };
 		43C5AE0C2088AB7200F804CE /* SubscriptionDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5AE0B2088AB7200F804CE /* SubscriptionDuration.swift */; };
 		43D0AD7820724EF400F25597 /* DebuggingStateTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0AD7720724EF400F25597 /* DebuggingStateTask.swift */; };
 		43D0AD7A2072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0AD792072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift */; };
@@ -200,7 +198,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				436EA3BF1ED5B3E4005F3B3B /* Security.framework in Frameworks */,
 				436CE1611EB0EF4100AB41CD /* StoreKit.framework in Frameworks */,
 				436CE15F1EB0EF3D00AB41CD /* Foundation.framework in Frameworks */,
 			);
@@ -253,7 +250,7 @@
 			isa = PBXGroup;
 			children = (
 				43C5AE0920889D3E00F804CE /* README.md */,
-				431C84471EC1E3490098516E /* MerchantKit.h */,
+				431C84461EC1E3490098516E /* Info.plist */,
 				4342025F1EAE08F80012983A /* Source */,
 				4342026A1EAE08F80012983A /* Tests */,
 				4342025E1EAE08F80012983A /* Products */,
@@ -273,7 +270,7 @@
 		4342025F1EAE08F80012983A /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				431C84461EC1E3490098516E /* Info.plist */,
+				431C84471EC1E3490098516E /* MerchantKit.h */,
 				434202771EAE09100012983A /* Merchant.swift */,
 				436CE15B1EB0E0C200AB41CD /* MerchantDelegate.swift */,
 				436CE13B1EAF42E600AB41CD /* Model */,
@@ -515,7 +512,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43C5AE0A20889D3E00F804CE /* README.md in Resources */,
 				439DD22B2086805B00B0F0C4 /* LocalizedSubscriptionPricePhrases.stringsdict in Resources */,
 				4314B25B2082C2BF00ECC35C /* LocalizedPeriodUnits.stringsdict in Resources */,
 			);
@@ -786,7 +782,7 @@
 					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -833,7 +829,7 @@
 					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (

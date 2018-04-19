@@ -23,44 +23,6 @@ internal class LocalReceiptPayloadParser {
         // self.receiptEntries is populated in the processor delegate
         
         return ConstructedReceipt(from: self.receiptEntries)
-        
-//        var entries = [ReceiptEntry]()
-//
-//        let attributes = try ASN1ReceiptAttributeSet(in: payload, of: PayloadReceiptAttributeType.self)
-//        // want to replace receiptAttributeSet with payload processor result
-//
-//        for attribute in attributes {
-//            switch attribute.type {
-//                case .inAppPurchase:
-//                    var productIdentifier: String?
-//                    var expiryDate: Date?
-//
-//                    let purchaseAttributes = try ASN1ReceiptAttributeSet(in: attribute.byteValue, of: InAppPurchaseReceiptAttributeType.self)
-//
-//                    for attribute in purchaseAttributes {
-//                        switch attribute.type {
-//                            case .productIdentifier:
-//                                productIdentifier = attribute.stringValue
-//                            case .subscriptionExpirationDate:
-//                                expiryDate = attribute.dateValue
-//                            default:
-//                                break
-//                        }
-//                    }
-//
-//                    let entry = ReceiptEntry(productIdentifier: productIdentifier!, expiryDate: expiryDate)
-//                    entries.append(entry)
-//                default:
-//                    break
-//            }
-//        }
-//
-//        let isEqual = entries.elementsEqual(self.receiptEntries, by: { (a, b) in
-//            a.productIdentifier == b.productIdentifier && a.expiryDate == b.expiryDate
-//        })
-//
-//        assert(isEqual)
-        
     }
 }
 
