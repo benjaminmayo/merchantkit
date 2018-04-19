@@ -18,7 +18,7 @@ Pod::Spec.new do |spec|
 
     spec.frameworks = "CoreFoundation", "StoreKit"
 
-    spec.source_files = "Source/**/*.{h,swift}"
+    spec.source_files = ["MerchantKit.h", "Source/**/*.{h,swift}"]
     spec.resource_bundles = {
     	'MerchantKitResources' => ["Source/Internal/Resources/**/*.{stringsdict}"]
     }
