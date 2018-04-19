@@ -25,6 +25,6 @@ Pod::Spec.new do |spec|
     
     spec.test_spec "Tests" do |test_spec|
         test_spec.source_files = "Tests/**/*.{h,swift}"
-        test_spec.resources = "Tests/**/*.{json,data,plist}"
+        test_spec.resources = "Tests/Sample Resources/*.{json,data,plist}"
     end
 end
