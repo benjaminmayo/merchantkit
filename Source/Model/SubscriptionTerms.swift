@@ -1,6 +1,7 @@
-public struct SubscriptionTerms : Equatable {
+public struct SubscriptionTerms : Equatable {    
     public let renewalPeriod: SubscriptionPeriod
-    public let isAutomaticallyRenewing: Bool 
+    public let isAutomaticallyRenewing: Bool
+    
     public let introductoryOffer: IntroductoryOffer?
     
     public enum IntroductoryOffer : Equatable {

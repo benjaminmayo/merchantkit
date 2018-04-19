@@ -57,7 +57,7 @@ public final class PurchaseInterfaceController {
         self.merchant = merchant
         
         for product in products {
-            self.stateForProductIdentifier[product.identifier] = self.determineState(for: product)
+            self.stateForProductIdentifier[product.identifier] = self._determineCurrentState(for: product)
         }
         
         self.networkAvailabilityCenter.onConnectivityChanged = { [weak self] in
@@ -72,10 +72,12 @@ public final class PurchaseInterfaceController {
     public func fetchDataIfNecessary() {
         guard self.availablePurchasesFetchResult == nil else { return }
         
-        self.fetchPurchases(onFetchingStateChanged: self.didChangeFetchingState, onCompletion: { result in
-            self.availablePurchasesFetchResult = result
+        self.fetchPurchases(onFetchingStateChanged: { [weak self] in self?.didChangeFetchingState() }, onCompletion: { [weak self] result in
+            guard let strongSelf = self else { return }
             
-            self.didChangeState(for: self.products)
+            strongSelf.availablePurchasesFetchResult = result
+            
+            strongSelf.didChangeState(for: strongSelf.products)
         })
     }
     
@@ -136,16 +138,20 @@ public final class PurchaseInterfaceController {
     }
     
     public func restorePurchases() {
+        guard self.restorePurchasesTask == nil else { return }
+        
         let task = self.merchant.restorePurchasesTask()
-        task.onCompletion = { result in
-            self.restorePurchasesTask = nil
+        task.onCompletion = { [weak self] result in
+            guard let strongSelf = self else { return }
+            
+            strongSelf.restorePurchasesTask = nil
             
             let restoreResult: RestorePurchasesResult
             
             switch result {
                 case .succeeded(let restoredProducts):
-                    let updatedProducts = self.products.intersection(restoredProducts)
-                    self.didChangeState(for: updatedProducts)
+                    let updatedProducts = strongSelf.products.intersection(restoredProducts)
+                    strongSelf.didChangeState(for: updatedProducts)
                 
                     restoreResult = .succeeded(updatedProducts)
                 case .failed(let error):
@@ -153,7 +159,7 @@ public final class PurchaseInterfaceController {
             }
             
             DispatchQueue.main.async {
-                self.delegate?.purchaseInterfaceController(self, didRestorePurchasesWith: restoreResult)
+                strongSelf.delegate?.purchaseInterfaceController(strongSelf, didRestorePurchasesWith: restoreResult)
             }
         }
             
@@ -172,6 +178,7 @@ extension PurchaseInterfaceController {
         
         public struct PurchaseInfo : Equatable {
             public let price: Price
+            
             @available(iOS 11.2, *)
             public var subscriptionTerms: SubscriptionTerms? { return self._subscriptionTerms }
             
@@ -224,8 +231,10 @@ extension PurchaseInterfaceController {
     
     private func fetchPurchases(onFetchingStateChanged fetchingStateChanged: @escaping () -> Void, onCompletion completion: @escaping (FetchResult<PurchaseSet>) -> Void) {
         let task = self.merchant.availablePurchasesTask(for: self.products)
-        task.onCompletion = { result in
-            self.availablePurchasesTask = nil
+        task.onCompletion = { [weak self] result in
+            guard let strongSelf = self else { return }
+            
+            strongSelf.availablePurchasesTask = nil
             fetchingStateChanged()
             
             let loadResult: FetchResult<PurchaseSet>
@@ -259,30 +268,32 @@ extension PurchaseInterfaceController {
     }
     
     private func refetchAvailablePurchases() {
-        self.fetchPurchases(onFetchingStateChanged: {}, onCompletion: { result in
+        self.fetchPurchases(onFetchingStateChanged: {}, onCompletion: { [weak self] result in
+            guard let strongSelf = self else { return }
+            
             let didChange: Bool
             
-            switch (self.availablePurchasesFetchResult, result) {
+            switch (strongSelf.availablePurchasesFetchResult, result) {
                 case (.failed(_)?, .succeeded(_)):
-                    self.availablePurchasesFetchResult = result
+                    strongSelf.availablePurchasesFetchResult = result
                     didChange = true
                 case (.succeeded(_)?, .succeeded(_)):
-                    self.availablePurchasesFetchResult = result
+                    strongSelf.availablePurchasesFetchResult = result
                     didChange = true
                 case (nil, _):
-                    self.availablePurchasesFetchResult = result
+                    strongSelf.availablePurchasesFetchResult = result
                     didChange = true
                 case (_, .failed(_)):
                     didChange = false
             }
             
             if didChange {
-                self.didChangeState(for: self.products)
+                strongSelf.didChangeState(for: strongSelf.products)
             }
         })
     }
     
-    private func determineState(for product: Product) -> ProductState {
+    private func _determineCurrentState(for product: Product) -> ProductState {
         let state: ProductState
         
         if self.merchant.state(for: product).isPurchased {
@@ -339,7 +350,7 @@ extension PurchaseInterfaceController {
         
         for product in products {
             let currentState = self.state(for: product)
-            let newState = self.determineState(for: product)
+            let newState = self._determineCurrentState(for: product)
             
             if currentState != newState {
                 self.stateForProductIdentifier[product.identifier] = newState
@@ -348,8 +359,10 @@ extension PurchaseInterfaceController {
             }
         }
         
-        DispatchQueue.main.async {
-            self.delegate?.purchaseInterfaceController(self, didChangeStatesFor: changedProducts)
+        if !changedProducts.isEmpty {
+            DispatchQueue.main.async {
+                self.delegate?.purchaseInterfaceController(self, didChangeStatesFor: changedProducts)
+            }
         }
     }
     
@@ -368,10 +381,12 @@ extension PurchaseInterfaceController {
             return
         }
         
-        self.fetchPurchases(onFetchingStateChanged: {}, onCompletion: { result in
-            self.availablePurchasesFetchResult = result
+        self.fetchPurchases(onFetchingStateChanged: {}, onCompletion: { [weak self] result in
+            guard let strongSelf = self else { return }
             
-            self.didChangeState(for: self.products)
+            strongSelf.availablePurchasesFetchResult = result
+            
+            strongSelf.didChangeState(for: strongSelf.products)
         })
     }
 }
