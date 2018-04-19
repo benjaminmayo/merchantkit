@@ -1,6 +1,7 @@
 import Foundation
 
 /// Formats `Price` values into user-facing strings, incorporating the given `SubscriptionPeriod` into the phrase. This can be used to present the duration of a subscription in the interface. It produces strings like `7 days` or `two weeks`.
+/// The formatter is aware of two generic `PhrasingStyle` options; `formal` ('£3.99 per month') and `informal` ('£3.99 a month'). If you want something more custom, consider composing a formatter out of `PriceFormatter` and `SubscriptionPeriodFormatter` objects.
 /// This is typically used to display subscription products, but may have other use cases.
 /// - Note: This formatter is currently localized into English only.
 public final class SubscriptionPriceFormatter {
