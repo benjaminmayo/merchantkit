@@ -1,5 +1,6 @@
 import Foundation
 
+/// Use `LocalConfiguration` to load `Product` models and other metadata from a file resource. Find `testLocationConfiguration.plist` for an example format. I promise I'll add formal documentation eventually.
 public struct LocalConfiguration {
     public let products: Set<Product>
     public let userInfo: [String : Any]

@@ -1,6 +1,6 @@
 import Foundation
 
-final class PKCS7ReceiptDataContainer {
+internal final class PKCS7ReceiptDataContainer {
     private let parser: ASN1.Parser
     
     private var isStartingContentDataSection: Bool = false

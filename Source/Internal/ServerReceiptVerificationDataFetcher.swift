@@ -1,3 +1,4 @@
+import Foundation
 
 internal final class ServerReceiptVerificationResponseDataFetcher {
     public typealias Completion = (Result<Data>) -> Void

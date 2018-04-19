@@ -1,3 +1,5 @@
+import Foundation
+
 /// Parse the server response from an iTunes Store network request.
 internal struct ServerReceiptVerificationResponseParser {
     init() {
