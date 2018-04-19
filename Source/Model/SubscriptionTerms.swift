@@ -1,6 +1,5 @@
 public struct SubscriptionTerms : Equatable {    
-    public let renewalPeriod: SubscriptionPeriod
-    public let isAutomaticallyRenewing: Bool
+    public let duration: SubscriptionDuration
     
     public let introductoryOffer: IntroductoryOffer?
     

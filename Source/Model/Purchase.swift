@@ -71,20 +71,25 @@ public struct Purchase : Hashable, CustomStringConvertible {
             }
         }()
         
-        return SubscriptionTerms(renewalPeriod: period, isAutomaticallyRenewing: self.characteristics.contains(.isAutorenewing), introductoryOffer: introductoryOffer)
+        let duration = SubscriptionDuration(period: period, isRecurring: self.characteristics.contains(.isAutorenewingSubscription))
+        
+        return SubscriptionTerms(duration: duration, introductoryOffer: introductoryOffer)
     }
     
     public static func ==(lhs: Purchase, rhs: Purchase) -> Bool {
         return lhs.productIdentifier == rhs.productIdentifier && lhs.price == rhs.price && lhs.characteristics == rhs.characteristics
     }
-    
-    struct Characteristics : OptionSet {
+}
+
+extension Purchase {
+    /// This type is not intended to ever be publicly exposed. It carries internal metadata.
+    internal struct Characteristics : OptionSet {
         let rawValue: UInt
         
         init(rawValue: UInt) {
             self.rawValue = rawValue
         }
         
-        public static let isAutorenewing: Characteristics = Characteristics(rawValue: 1 << 1)
+        public static let isAutorenewingSubscription: Characteristics = Characteristics(rawValue: 1 << 1)
     }
 }

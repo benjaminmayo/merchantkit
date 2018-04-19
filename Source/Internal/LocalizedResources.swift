@@ -42,15 +42,14 @@ internal class LocalizedStringSource {
     
     func subscriptionPricePhrase(with configuration: SubscriptionPricePhraseConfiguration, formattedPrice: String, formattedUnitCount: String) -> String {
         let format = self.localizedString(for: .subscriptionPricePhrases(configuration))
-        let result = String(format: format, locale: self.locale, arguments: [configuration.period.unitCount, formattedPrice, formattedUnitCount])
+        let result = String(format: format, locale: self.locale, arguments: [configuration.duration.period.unitCount, formattedPrice, formattedUnitCount])
         
         return result
     }
     
     internal struct SubscriptionPricePhraseConfiguration {
-        let period: SubscriptionPeriod
+        let duration: SubscriptionDuration
         let isFormal: Bool
-        let isFixedDuration: Bool
     }
 }
 
@@ -113,7 +112,7 @@ extension LocalizedStringSource {
                 case .subscriptionPricePhrases(let configuration):
                     let unitIdentifier: String
                     
-                    switch configuration.period.unit {
+                    switch configuration.duration.period.unit {
                         case .day: unitIdentifier = "Day"
                         case .week: unitIdentifier = "Week"
                         case .month: unitIdentifier = "Month"
@@ -121,7 +120,7 @@ extension LocalizedStringSource {
                     }
                     
                     let formalIdentifier = configuration.isFormal ? "Formal" : "Informal"
-                    let fixedDurationIdentifier = configuration.isFixedDuration ? "FixedDuration" : "NotFixedDuration"
+                    let fixedDurationIdentifier = configuration.duration.isRecurring ? "NotFixedDuration" : "FixedDuration"
                     
                     let value = "\(unitIdentifier)\(formalIdentifier)\(fixedDurationIdentifier)"
                 

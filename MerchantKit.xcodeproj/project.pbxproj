@@ -78,6 +78,7 @@
 		439DD22F2086840300B0F0C4 /* SubscriptionPriceFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439DD22E2086840300B0F0C4 /* SubscriptionPriceFormatterTests.swift */; };
 		43B0F3491F5C6CF300D4039A /* LocalReceiptPayloadParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0F3481F5C6CF300D4039A /* LocalReceiptPayloadParser.swift */; };
 		43C5AE0A20889D3E00F804CE /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 43C5AE0920889D3E00F804CE /* README.md */; };
+		43C5AE0C2088AB7200F804CE /* SubscriptionDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5AE0B2088AB7200F804CE /* SubscriptionDuration.swift */; };
 		43D0AD7820724EF400F25597 /* DebuggingStateTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0AD7720724EF400F25597 /* DebuggingStateTask.swift */; };
 		43D0AD7A2072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0AD792072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift */; };
 		43D4FE6F207F7E8700AEA92F /* SubscriptionTerms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D4FE6E207F7E8700AEA92F /* SubscriptionTerms.swift */; };
@@ -186,6 +187,7 @@
 		439DD22E2086840300B0F0C4 /* SubscriptionPriceFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionPriceFormatterTests.swift; sourceTree = "<group>"; };
 		43B0F3481F5C6CF300D4039A /* LocalReceiptPayloadParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalReceiptPayloadParser.swift; sourceTree = "<group>"; };
 		43C5AE0920889D3E00F804CE /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		43C5AE0B2088AB7200F804CE /* SubscriptionDuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionDuration.swift; sourceTree = "<group>"; };
 		43D0AD7720724EF400F25597 /* DebuggingStateTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebuggingStateTask.swift; sourceTree = "<group>"; };
 		43D0AD792072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerReceiptVerificationDataFetcher.swift; sourceTree = "<group>"; };
 		43D4FE6E207F7E8700AEA92F /* SubscriptionTerms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionTerms.swift; sourceTree = "<group>"; };
@@ -373,6 +375,7 @@
 				432133BD1EAE3DFB0096919B /* Result.swift */,
 				43D4FE6E207F7E8700AEA92F /* SubscriptionTerms.swift */,
 				435418E82080DEA300FB3833 /* SubscriptionPeriod.swift */,
+				43C5AE0B2088AB7200F804CE /* SubscriptionDuration.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -552,6 +555,7 @@
 				43703A3E208546BA003AA087 /* ASN1BufferValue.swift in Sources */,
 				43DBC1091F26283700DB4B25 /* PurchaseInterfaceController.swift in Sources */,
 				432133BC1EAE39640096919B /* Price.swift in Sources */,
+				43C5AE0C2088AB7200F804CE /* SubscriptionDuration.swift in Sources */,
 				43B0F3491F5C6CF300D4039A /* LocalReceiptPayloadParser.swift in Sources */,
 				4337A8951EB1EC2B00EAF633 /* ServerReceiptResponseParser.swift in Sources */,
 				4305D7FB1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift in Sources */,

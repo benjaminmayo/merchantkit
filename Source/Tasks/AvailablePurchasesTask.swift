@@ -60,7 +60,7 @@ extension AvailablePurchasesTask : SKProductsRequestDelegate {
             }) {
                 switch product.kind {
                     case .subscription(automaticallyRenews: true):
-                        characteristics.insert(.isAutorenewing)
+                        characteristics.insert(.isAutorenewingSubscription)
                     default:
                         break
                 }
