@@ -17,6 +17,18 @@ public final class SubscriptionPriceFormatter {
         }
     }
     
+    /// Replacement text if the price is free. If used by the formatter, the replacement text will be used instead of the normall formatted price. Defaults to empty string (which means it is ignored and a '0.00' numeric value will be used instead).
+    public var freePriceReplacementText: String {
+        get {
+            return self.priceFormatter.freeReplacementText
+        }
+        
+        set {
+            self.priceFormatter.freeReplacementText = newValue
+        }
+    }
+    
+    /// The preferred locale to use when formatting.
     public var locale: Locale = .current {
         didSet {
             self.unitCountFormatter.locale = self.locale

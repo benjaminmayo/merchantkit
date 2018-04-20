@@ -36,7 +36,7 @@ class PriceFormatterTests : XCTestCase {
     
     func testFreePrice() {
         let formatter = PriceFormatter()
-        formatter.freeText = "FREE"
+        formatter.freeReplacementText = "FREE"
         
         let freePrice = Price(from: NSDecimalNumber(string: "0"), in: Locale(identifier: "en-US"))
         
