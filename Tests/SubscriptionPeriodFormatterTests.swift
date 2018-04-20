@@ -102,15 +102,12 @@ class SubscriptionPeriodFormatterTests : XCTestCase {
         formatter.locale = Locale(identifier: "en-US")
         
         formatter.unitCountStyle = .numeric
-        
         XCTAssertEqual(formatter.string(from: period), "2 years")
-        
+
         formatter.unitCountStyle = .spellOut
-        
         XCTAssertEqual(formatter.string(from: period), "two years")
         
         formatter.unitCountStyle = .numeric
-        
         XCTAssertEqual(formatter.string(from: period), "2 years")
     }
 }

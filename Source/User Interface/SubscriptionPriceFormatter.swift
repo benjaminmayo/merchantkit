@@ -5,9 +5,10 @@ import Foundation
 /// This is typically used to display subscription products, but may have other use cases.
 /// - Note: This formatter is currently localized into English only.
 public final class SubscriptionPriceFormatter {
-    public var phrasingStyle: PhrasingStyle = .informal
+    /// The preferred phrasing style for the formatted string. If a phrasing style is unavailable for the given combination of price, duration and locale, the formatter will fall back to `formal`. Defaults to `formal`.
+    public var phrasingStyle: PhrasingStyle = .formal
     
-    /// The style of formatting of the unit count. For example, the count could be spelled out in words ('seven days') or represented numerically ('7 days'). Defaults to `numeric`.
+    /// The style of formatting of the provided subscription duration period's unit count. For example, the count could be spelled out in words ('seven days') or represented numerically ('7 days'). Defaults to `numeric`.
     public var unitCountStyle: UnitCountStyle = .numeric {
         didSet {
             guard self.unitCountStyle != oldValue else { return }

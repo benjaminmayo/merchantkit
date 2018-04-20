@@ -3,6 +3,32 @@ import Foundation
 @testable import MerchantKit
 
 class SubscriptionPriceFormatterTests : XCTestCase {
+    func testDefaultsInEnglish() {
+        let expectations: [SubscriptionDuration : String] = [
+            .init(period: .days(7), isRecurring: true) : "$5.99 every 7 days",
+            .init(period: .days(14), isRecurring: false) : "$5.99 for 14 days",
+            .init(period: .weeks(1), isRecurring: true) : "$5.99 per week",
+            .init(period: .weeks(14), isRecurring: false) : "$5.99 for 14 weeks",
+            .init(period: .months(1), isRecurring: true) : "$5.99 per month",
+            .init(period: .months(14), isRecurring: false) : "$5.99 for 14 months",
+            .init(period: .years(1), isRecurring: true) : "$5.99 per year",
+            .init(period: .years(14), isRecurring: false) : "$5.99 for 14 years"
+        ]
+        
+        let locale = Locale(identifier: "en-US")
+        
+        let formatter = SubscriptionPriceFormatter()
+        formatter.locale = locale
+        
+        let price = Price(from: NSDecimalNumber(string: "5.99"), in: locale)
+
+        for (duration, result) in expectations {
+            let formattedString = formatter.string(from: price, duration: duration)
+            
+            XCTAssertEqual(formattedString, result)
+        }
+    }
+    
     private func englishResult(forPrice priceString: String, duration: SubscriptionDuration, phrasingStyle: SubscriptionPriceFormatter.PhrasingStyle) -> String {
         let locale = Locale(identifier: "en-US")
         let price = Price(from: NSDecimalNumber(string: priceString), in: locale)
@@ -124,5 +150,24 @@ class SubscriptionPriceFormatterTests : XCTestCase {
         let result = formatter.string(from: price, duration: .init(period: .months(6), isRecurring: true))
         
         XCTAssertEqual(result, "$1.99 every six months")
+    }
+    
+    func testChangingUnitCountStyle() {
+        let locale = Locale(identifier: "en-GB")
+
+        let duration: SubscriptionDuration = .init(period: .years(2), isRecurring: true)
+        let price = Price(from: NSDecimalNumber(string: "9.99"), in: locale)
+
+        let formatter = SubscriptionPriceFormatter()
+        formatter.locale = locale
+        
+        formatter.unitCountStyle = .numeric
+        XCTAssertEqual(formatter.string(from: price, duration: duration), "£9.99 every 2 years")
+        
+        formatter.unitCountStyle = .spellOut
+        XCTAssertEqual(formatter.string(from: price, duration: duration), "£9.99 every two years")
+        
+        formatter.unitCountStyle = .numeric
+        XCTAssertEqual(formatter.string(from: price, duration: duration), "£9.99 every 2 years")
     }
 }
