@@ -110,11 +110,40 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 ```
 6. Profit! Or something.
 
+## Straightforward Product Interfaces
+The tasks vended by a `Merchant` give developers access to the core operations to fetch and purchase products with interfaces that reflect Swift idioms better than the current `StoreKit` offerings. `PurchaseInterfaceController` is a higher-level API and may eliminate the need to create tasks manually altogether.
+
+The `PurchaseInterfaceController` class encompasses common behaviours needed to present In-App Purchase for sale. However, it remains abstract enough to support many use cases. 
+
+Developers simply provide the list of products to display and tells the controller to fetch data. The `delegate` notifies the app when to update its custom UI. It handles loading data, intermittent network connectivity and in-flight changes to the availability and state of products.  
+
+## Formatters 
+`MerchantKit` includes several formatters to help developers display the cost of In-App Purchases to users. 
+
+`PriceFormatter` is the simplest. Just give it a `Price` and it returns formatted strings like '£3.99' or '$5.99' in accordance with the store's regional locale. You can specify a custom string if the price is free.
+`SubscriptionPriceFormatter` takes a `Price` and a `SubscriptionDuration`. Relevant `Purchase` objects exposes these values so you can simply pass them along the formatter. It generates strings like '$0.99 per month', '£9.99 every 2 weeks' and '$4.99 for 1 month' depending on the period and whether the subscription will automatically renew. 
+
+In addition to the renewal duration, subscriptions can include free trials and other introductory offers. You can use a `SubscriptionPeriodFormatter` to format a text label in your application. If you change the free trial offer in iTunes Connect, the label will dynamically update to reflect the changed terms without requiring a new App Store binary. For example:
+```swift
+func subscriptionDetailsForDisplay() -> String? {
+    guard let terms = purchase.subscriptionTerms else { return nil }
+    
+    let formatter = SubscriptionPeriodFormatter()
+    
+    switch terms {
+        case .freeTrial(let price, let period): return "\(formatter.string(from: period)) Free Trial" /// something like '7 Day Free Trial'
+        default: ...
+    }
+}
+```
+
+`PriceFormatter` works in every locale supported by the App Store. `SubscriptionPriceFormatter` and `SubscriptionPeriodFormatter` are currently offered in a small subset of languages. Voluntary translations are welcomed.
+
 ## To Be Completed (in no particular order)
 
 - Add tests to the bare test suite. Components can be tested separately, including the validators and `PurchaseStorage` types.
 - Implement consumable purchases. This will likely involve a special delegate callback to tell the application to update its quantities.
-- Enhance the API of `PriceFormatter` to be a comprehensive formatter for product prices. This includes adding ways to express subscription periods (eg: '£3.99 per month').
+- Increase the number of localizations for `SubscriptionPriceFormatter` and `SubscriptionPeriodFormatter`.
 - Extended documentation with example usage projects.
 - Document how to use `PurchaseInterfaceController`.
 - Extend failure cases with richer error feedback when things go wrong. 
