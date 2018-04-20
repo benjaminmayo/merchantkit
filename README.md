@@ -60,7 +60,7 @@ The codebase is in flux right now and the project does not guarantee API stabili
 
 ## Getting Started
 
-1. Compile the `MerchantKit` framework and embed it in your application. The easiest way to get up and running right now is to use Cocoapods; add `MerchantKit` to your app's Podfile and build. You can also just download the source code from Github and install it manually, although you'll have to upgrade to the latest releases manually.
+1. Compile the `MerchantKit` framework and embed it in your application. The easiest way to get up and running right now is to use Cocoapods; add `MerchantKit` to your app's Podfile and build. You can also just download the source code from Github and embed the Xcode project into your app, although you'll have to upgrade to the latest releases manually.
 
 2. In your app delegate, import `MerchantKit` create a `Merchant` instance in `application(_:, didFinishLaunchingWithOptions:)`. Supply a storage object (recommended: `KeychainPurchaseStorage`) and a delegate.
 ```swift
@@ -110,14 +110,16 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 ```
 6. Profit! Or something.
 
-## Straightforward Product Interfaces
-The tasks vended by a `Merchant` give developers access to the core operations to fetch and purchase products with interfaces that reflect Swift idioms better than the current `StoreKit` offerings. `PurchaseInterfaceController` is a higher-level API and may eliminate the need to create tasks manually altogether.
+## Product Interface Controller
 
-The `PurchaseInterfaceController` class encompasses common behaviours needed to present In-App Purchase for sale. However, it remains abstract enough to support many use cases. 
+The tasks vended by a `Merchant` give developers access to the core operations to fetch and purchase products with interfaces that reflect Swift idioms better than the current `StoreKit` offerings. Many apps will not need to directly instantiate tasks. `ProductInterfaceController` is the higher-level API offered by `MerchantKit` that covers the use case of many projects. In an iOS app, a view controller displaying an upgrade screen would be backed by a single `ProductInterfaceController` which encapsulated all necessary product and purchasing logic.  
+
+The `ProductInterfaceController` class encompasses common behaviours needed to present In-App Purchase for sale. However, it remains abstract enough not be tied down to one specific user interface appearance or layout. 
 
 Developers simply provide the list of products to display and tells the controller to fetch data. The `delegate` notifies the app when to update its custom UI. It handles loading data, intermittent network connectivity and in-flight changes to the availability and state of products.  
 
 ## Formatters 
+
 `MerchantKit` includes several formatters to help developers display the cost of In-App Purchases to users. 
 
 `PriceFormatter` is the simplest. Just give it a `Price` and it returns formatted strings like '£3.99' or '$5.99' in accordance with the store's regional locale. You can specify a custom string if the price is free.
@@ -145,7 +147,7 @@ func subscriptionDetailsForDisplay() -> String? {
 - Implement consumable purchases. This will likely involve a special delegate callback to tell the application to update its quantities.
 - Increase the number of localizations for `SubscriptionPriceFormatter` and `SubscriptionPeriodFormatter`.
 - Extended documentation with example usage projects.
-- Document how to use `PurchaseInterfaceController`.
+- Extensively document how to use `ProductInterfaceController`.
 - Extend failure cases with richer error feedback when things go wrong. 
 - Support downloadable content In-App Purchases.
 - Probably a lot more stuff I haven't thought of yet.

@@ -80,7 +80,7 @@
 		43D0AD7820724EF400F25597 /* DebuggingStateTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0AD7720724EF400F25597 /* DebuggingStateTask.swift */; };
 		43D0AD7A2072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0AD792072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift */; };
 		43D4FE6F207F7E8700AEA92F /* SubscriptionTerms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D4FE6E207F7E8700AEA92F /* SubscriptionTerms.swift */; };
-		43DBC1091F26283700DB4B25 /* PurchaseInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */; };
+		43DBC1091F26283700DB4B25 /* ProductInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC1081F26283700DB4B25 /* ProductInterfaceController.swift */; };
 		43DBC10B1F26288500DB4B25 /* NetworkAvailabilityCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */; };
 /* End PBXBuildFile section */
 
@@ -189,7 +189,7 @@
 		43D0AD7720724EF400F25597 /* DebuggingStateTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebuggingStateTask.swift; sourceTree = "<group>"; };
 		43D0AD792072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerReceiptVerificationDataFetcher.swift; sourceTree = "<group>"; };
 		43D4FE6E207F7E8700AEA92F /* SubscriptionTerms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionTerms.swift; sourceTree = "<group>"; };
-		43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseInterfaceController.swift; sourceTree = "<group>"; };
+		43DBC1081F26283700DB4B25 /* ProductInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductInterfaceController.swift; sourceTree = "<group>"; };
 		43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAvailabilityCenter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -342,7 +342,7 @@
 				436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */,
 				439DD22720865F4000B0F0C4 /* SubscriptionPriceFormatter.swift */,
 				438C5D2E2080BD5400D303C8 /* SubscriptionPeriodFormatter.swift */,
-				43DBC1081F26283700DB4B25 /* PurchaseInterfaceController.swift */,
+				43DBC1081F26283700DB4B25 /* ProductInterfaceController.swift */,
 			);
 			path = "User Interface";
 			sourceTree = "<group>";
@@ -549,7 +549,7 @@
 				43703A4A208563EA003AA087 /* PKCS7ReceiptDataContainer.swift in Sources */,
 				43703A402085470F003AA087 /* ASN1PayloadValueConversion.swift in Sources */,
 				43703A3E208546BA003AA087 /* ASN1BufferValue.swift in Sources */,
-				43DBC1091F26283700DB4B25 /* PurchaseInterfaceController.swift in Sources */,
+				43DBC1091F26283700DB4B25 /* ProductInterfaceController.swift in Sources */,
 				432133BC1EAE39640096919B /* Price.swift in Sources */,
 				43C5AE0C2088AB7200F804CE /* SubscriptionDuration.swift in Sources */,
 				43B0F3491F5C6CF300D4039A /* LocalReceiptPayloadParser.swift in Sources */,

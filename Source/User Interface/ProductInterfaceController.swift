@@ -1,12 +1,12 @@
 import Foundation 
 import StoreKit
 
-public protocol PurchaseInterfaceControllerDelegate : AnyObject {
-    func purchaseInterfaceControllerDidChangeFetchingState(_ controller: PurchaseInterfaceController)
+public protocol ProductInterfaceControllerDelegate : AnyObject {
+    func productInterfaceControllerDidChangeFetchingState(_ controller: ProductInterfaceController)
     
-    func purchaseInterfaceController(_ controller: PurchaseInterfaceController, didChangeStatesFor products: Set<Product>)
-    func purchaseInterfaceController(_ controller: PurchaseInterfaceController, didCommit purchase: Purchase, with result: PurchaseInterfaceController.CommitPurchaseResult)
-    func purchaseInterfaceController(_ controller: PurchaseInterfaceController, didRestorePurchasesWith result: PurchaseInterfaceController.RestorePurchasesResult)
+    func productInterfaceController(_ controller: ProductInterfaceController, didChangeStatesFor products: Set<Product>)
+    func productInterfaceController(_ controller: ProductInterfaceController, didCommit purchase: Purchase, with result: ProductInterfaceController.CommitPurchaseResult)
+    func productInterfaceController(_ controller: ProductInterfaceController, didRestorePurchasesWith result: ProductInterfaceController.RestorePurchasesResult)
 }
 
 /// This controller is actively being worked on and the API surface is considered volatile.
@@ -16,10 +16,10 @@ public protocol PurchaseInterfaceControllerDelegate : AnyObject {
 ///
 /// If the user decides to purchase a displayed product, use the `commit(_:)` method to begin a purchase flow. Alternatively, call `restorePurchases()` if the user wants to restore an earlier transaction.
 
-public final class PurchaseInterfaceController {
+public final class ProductInterfaceController {
     public let products: Set<Product>
 
-    public weak var delegate: PurchaseInterfaceControllerDelegate?
+    public weak var delegate: ProductInterfaceControllerDelegate?
     
     public var fetchingState: FetchingState {
         if self.availablePurchasesTask != nil {
@@ -54,7 +54,7 @@ public final class PurchaseInterfaceController {
     
     private let networkAvailabilityCenter = NetworkAvailabilityCenter()
     
-    public init(displaying products: Set<Product>, with merchant: Merchant) {
+    public init(products: Set<Product>, with merchant: Merchant) {
         self.products = products
         self.merchant = merchant
         
@@ -98,7 +98,7 @@ public final class PurchaseInterfaceController {
             switch result {
                 case .succeeded(_):
                     DispatchQueue.main.async {
-                        self.delegate?.purchaseInterfaceController(self, didCommit: purchase, with: .succeeded)
+                        self.delegate?.productInterfaceController(self, didCommit: purchase, with: .succeeded)
                     }
                 case .failed(let baseError):
                     let error: CommitPurchaseResult.Error
@@ -128,7 +128,7 @@ public final class PurchaseInterfaceController {
                 }
                 
                 DispatchQueue.main.async {
-                    self.delegate?.purchaseInterfaceController(self, didCommit: purchase, with: .failed(error, shouldDisplayError: shouldDisplayError))
+                    self.delegate?.productInterfaceController(self, didCommit: purchase, with: .failed(error, shouldDisplayError: shouldDisplayError))
                 }
             }
         }
@@ -161,7 +161,7 @@ public final class PurchaseInterfaceController {
             }
             
             DispatchQueue.main.async {
-                strongSelf.delegate?.purchaseInterfaceController(strongSelf, didRestorePurchasesWith: restoreResult)
+                strongSelf.delegate?.productInterfaceController(strongSelf, didRestorePurchasesWith: restoreResult)
             }
         }
             
@@ -170,7 +170,7 @@ public final class PurchaseInterfaceController {
     }
 }
 
-extension PurchaseInterfaceController {
+extension ProductInterfaceController {
     public enum ProductState : Equatable {
         case unknown // consider loading/failure cases of fetchingState
         case purchased(PurchaseInfo?) // product is owned, `PurchaseInfo` represents the current price (etc) for the represented product - this info may not be available
@@ -225,7 +225,7 @@ extension PurchaseInterfaceController {
     }
 }
 
-extension PurchaseInterfaceController {
+extension ProductInterfaceController {
     private enum FetchResult<T> {
         case succeeded(T)
         case failed(FetchingState.FailureReason)
@@ -343,7 +343,7 @@ extension PurchaseInterfaceController {
     
     private func didChangeFetchingState() {
         DispatchQueue.main.async {
-            self.delegate?.purchaseInterfaceControllerDidChangeFetchingState(self)
+            self.delegate?.productInterfaceControllerDidChangeFetchingState(self)
         }
     }
     
@@ -363,7 +363,7 @@ extension PurchaseInterfaceController {
         
         if !changedProducts.isEmpty {
             DispatchQueue.main.async {
-                self.delegate?.purchaseInterfaceController(self, didChangeStatesFor: changedProducts)
+                self.delegate?.productInterfaceController(self, didChangeStatesFor: changedProducts)
             }
         }
     }
