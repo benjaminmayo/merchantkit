@@ -1,10 +1,10 @@
 import Foundation 
 import StoreKit
 
-internal class StoreKitReceiptDataFetcher : NSObject {
+internal final class StoreKitReceiptDataFetcher : NSObject, ReceiptDataFetcher {
     typealias Completion = ((Result<Data>) -> Void)
     
-    internal let policy: FetchPolicy
+    internal let policy: ReceiptFetchPolicy
 
     private var completionHandlers = [Completion]()
     
@@ -12,7 +12,7 @@ internal class StoreKitReceiptDataFetcher : NSObject {
     
     private(set) var isFinished: Bool = false
     
-    init(policy: FetchPolicy) {
+    init(policy: ReceiptFetchPolicy) {
         self.policy = policy
         
         super.init()
@@ -44,6 +44,16 @@ internal class StoreKitReceiptDataFetcher : NSObject {
         self.isFinished = true
     }
     
+    enum Error : Swift.Error, LocalizedError {
+        case receiptUnavailableWithoutUserInteraction
+        
+        var localizedDescription: String {
+            return "Receipt unavailable without user interaction."
+        }
+    }
+}
+
+extension StoreKitReceiptDataFetcher {
     private func startRefreshRequest() {
         self.request = SKReceiptRefreshRequest()
         self.request?.delegate = self
@@ -65,20 +75,6 @@ internal class StoreKitReceiptDataFetcher : NSObject {
         }
         
         self.isFinished = true
-    }
-    
-    enum FetchPolicy {
-        case alwaysRefresh
-        case fetchElseRefresh
-        case onlyFetch
-    }
-    
-    enum Error : Swift.Error, LocalizedError {
-        case receiptUnavailableWithoutUserInteraction
-        
-        var localizedDescription: String {
-            return "Receipt unavailable without user interaction."
-        }
     }
 }
 

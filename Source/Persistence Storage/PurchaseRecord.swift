@@ -19,7 +19,15 @@ public struct PurchaseRecord : Equatable, CustomStringConvertible {
 }
 
 extension PurchaseRecord {
-    var dictionaryRepresentation: [String : Any] {
+    internal init?(from dictionaryRepresentation: [String : Any]) {
+        guard let productIdentifier = dictionaryRepresentation[self.productIdentifierKey] as? String else { return nil }
+        let expiryDate = dictionaryRepresentation[self.expiryDateKey] as? NSDate
+        
+        self.productIdentifier = productIdentifier
+        self.expiryDate = expiryDate as Date?
+    }
+    
+    internal var dictionaryRepresentation: [String : Any] {
         var dict: [String : Any] = [
             self.productIdentifierKey: self.productIdentifier,
         ]
@@ -29,13 +37,5 @@ extension PurchaseRecord {
         }
         
         return dict
-    }
-    
-    init?(from dictionaryRepresentation: [String : Any]) {
-        guard let productIdentifier = dictionaryRepresentation[self.productIdentifierKey] as? String else { return nil }
-        let expiryDate = dictionaryRepresentation[self.expiryDateKey] as? NSDate
-        
-        self.productIdentifier = productIdentifier
-        self.expiryDate = expiryDate as Date?
     }
 }

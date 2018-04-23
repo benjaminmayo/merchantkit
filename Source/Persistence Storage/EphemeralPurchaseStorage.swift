@@ -10,7 +10,7 @@ public final class EphemeralPurchaseStorage : PurchaseStorage {
         return self.records[productIdentifier]
     }
     
-    public func save(_ record: PurchaseRecord) -> StorageUpdateResult {
+    public func save(_ record: PurchaseRecord) -> PurchaseStorageUpdateResult {
         let old = self.records[record.productIdentifier]
         
         if old != record {
@@ -22,7 +22,7 @@ public final class EphemeralPurchaseStorage : PurchaseStorage {
         }
     }
     
-    public func removeRecord(forProductIdentifier productIdentifier: String) -> StorageUpdateResult {
+    public func removeRecord(forProductIdentifier productIdentifier: String) -> PurchaseStorageUpdateResult {
         if let index = self.records.index(forKey: productIdentifier) {
             self.records.remove(at: index)
             
