@@ -22,34 +22,6 @@ public final class LocalReceiptValidator {
             }
         }
     }
-    
-    public enum Error : Swift.Error, CustomNSError {
-        case missingContainer
-        case malformedReceiptData
-        case unexpectedReceiptASNObject
-        
-        public var errorCode: Int {
-            switch self {
-                case .missingContainer:
-                    return 1
-                case .malformedReceiptData:
-                    return 2
-                case .unexpectedReceiptASNObject:
-                    return 3
-            }
-        }
-        
-        public var localizedDescription: String {
-            switch self {
-                case .missingContainer:
-                    return "The receipt container is missing."
-                case .malformedReceiptData:
-                    return "The receipt data is malformed."
-                case .unexpectedReceiptASNObject:
-                    return "The receipt data content contained an unrecognized object."
-            }
-        }
-    }
 }
 
 extension LocalReceiptValidator {
