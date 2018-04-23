@@ -12,12 +12,14 @@ public final class Merchant {
     
     private var purchaseObservers = Buckets<String, MerchantPurchaseObserver>()
     
-    private var receiptFetchers: [StoreKitReceiptDataFetcher.FetchPolicy : StoreKitReceiptDataFetcher] = [:]
+    private var receiptFetchers: [ReceiptFetchPolicy : ReceiptDataFetcher] = [:]
+    private var receiptDataFetcherCustomInitializer: ReceiptDataFetcherInitializer!
     private var identifiersForPendingObservedPurchases = Set<String>()
     
     public private(set) var isLoading: Bool = false
     
-    private var nowDate = Date()
+    private let nowDate = Date()
+    private var latestFetchedReceipt: Receipt?
     
     /// Create a `Merchant`, at application launch. Assign a consistent `storage` and a `delegate` to receive callbacks.
     public init(storage: PurchaseStorage, delegate: MerchantDelegate) {
@@ -37,9 +39,7 @@ public final class Merchant {
     public func setup() {
         self.beginObservingTransactions()
         
-        self.checkReceipt(updateProducts: .all, policy: .onlyFetch, reason: .initialization, completion: { [weak self] _, _ in
-            self?.updateSubscriptions()
-        })
+        self.checkReceipt(updateProducts: .all, policy: .onlyFetch, reason: .initialization)
     }
     
     /// Returns a registered product for a given `productIdentifier`, or `nil` if not found.
@@ -56,20 +56,11 @@ public final class Merchant {
         switch product.kind {
             case .consumable:
                 fatalError("consumable support not yet implemented")
-            case .nonConsumable:
-                return .isSold
-            case .subscription(_):
-                return .isSubscribed(expiryDate: record.expiryDate)
-        }
-    }
-    
-    /// Restore the user's purchases. Calling this method may present modal UI.
-    public func restorePurchasesTask() -> RestorePurchasesTask {
-        return self.makeTask(initializing: {
-            let task = RestorePurchasesTask(with: self)
+            case .nonConsumable, .subscription(automaticallyRenews: _):
+                let info = PurchasedProductInfo(expiryDate: record.expiryDate)
             
-            return task
-        })
+                return .isPurchased(info)
+        }
     }
     
     /// Find possible purchases for the given products. If `products` is empty, then the merchant looks up all purchases for all registered products.
@@ -92,20 +83,23 @@ public final class Merchant {
         })
     }
     
-    /// Development on this task is WIP and may be removed in future releases.
-    public func debuggingStateTask(withStoreKitSharedSecret sharedSecret: String) -> DebuggingStateTask {
+    /// Restore the user's purchases. Calling this method may present modal UI.
+    public func restorePurchasesTask() -> RestorePurchasesTask {
         return self.makeTask(initializing: {
-            let task = DebuggingStateTask(with: self, sharedSecret: sharedSecret)
+            let task = RestorePurchasesTask(with: self)
             
             return task
         })
     }
+}
+
+// MARK: Testing hooks
+extension Merchant {
+    typealias ReceiptDataFetcherInitializer = (ReceiptFetchPolicy) -> ReceiptDataFetcher
     
-    /// Checks if active subscriptions have become invalid. The product states may be changed after this method returns.
-    /// Suggested usage: Call this method periodically to update expiring subscriptions whilst the app is running. It is called implicitly at app launch.
-    public func updateSubscriptions() {
-        self.updateNowDate()
-        self.updateActiveSubscriptions()
+    /// Allows tests in the test suite to change the receipt data fetcher that is created.
+    internal func setCustomReceiptDataFetcherInitializer(_ initializer: @escaping ReceiptDataFetcherInitializer) {
+        self.receiptDataFetcherCustomInitializer = initializer
     }
 }
 
@@ -185,34 +179,6 @@ extension Merchant {
     private func isSubscriptionActive(forExpiryDate expiryDate: Date) -> Bool {
         return expiryDate > self.nowDate
     }
-    
-    private func updateNowDate() {
-        self.nowDate = Date()
-    }
-    
-    private func updateActiveSubscriptions() {
-        var updatedProducts = Set<Product>()
-        
-        for (identifier, product) in self._registeredProducts {
-            guard
-                case .subscription(_) = product.kind,
-                let record = self.storage.record(forProductIdentifier: identifier),
-                let expiryDate = record.expiryDate
-            else { continue }
-            
-            if !self.isSubscriptionActive(forExpiryDate: expiryDate) {
-                let result = self.storage.removeRecord(forProductIdentifier: identifier)
-                
-                if result == .didChangeRecords {
-                    updatedProducts.insert(product)
-                }
-            }
-        }
-        
-        if !updatedProducts.isEmpty {
-            self.didChangeState(for: updatedProducts)
-        }
-    }
 }
 
 // MARK: Payment queue related behaviour
@@ -237,15 +203,15 @@ extension Merchant {
 extension Merchant {
     internal typealias CheckReceiptCompletion = (_ updatedProducts: Set<Product>, Error?) -> Void
     
-    private func checkReceipt(updateProducts updateType: ReceiptUpdateType, policy: StoreKitReceiptDataFetcher.FetchPolicy, reason: ReceiptValidationRequest.Reason, completion: @escaping CheckReceiptCompletion) {
-        let fetcher: StoreKitReceiptDataFetcher
+    private func checkReceipt(updateProducts updateType: ReceiptUpdateType, policy: ReceiptFetchPolicy, reason: ReceiptValidationRequest.Reason, completion: @escaping CheckReceiptCompletion = { _,_ in }) {
+        let fetcher: ReceiptDataFetcher
         let isStarted: Bool
         
         if let activeFetcher = self.receiptFetchers[policy] { // the same fetcher may be pooled and used multiple times, this is because `enqueueCompletion` can add blocks even after the fetcher has been started
             fetcher = activeFetcher
             isStarted = true
         } else {
-            fetcher = StoreKitReceiptDataFetcher(policy: policy)
+            fetcher = self.makeFetcher(for: policy)
             isStarted = false
             
             self.receiptFetchers[policy] = fetcher
@@ -256,9 +222,13 @@ extension Merchant {
             
             switch dataResult {
                 case .succeeded(let receiptData):
-                    strongSelf.validateReceipt(with: receiptData, reason: reason, completion: { validateResult in
+                    strongSelf.validateReceipt(with: receiptData, reason: reason, completion: { [weak self] validateResult in
+                        guard let strongSelf = self else { return }
+
                         switch validateResult {
                             case .succeeded(let receipt):
+                                strongSelf.latestFetchedReceipt = receipt
+                                
                                 let updatedProducts = strongSelf.updateStorageWithValidatedReceipt(receipt, updateProducts: updateType)
                             
                                 if !updatedProducts.isEmpty {
@@ -268,6 +238,8 @@ extension Merchant {
                                 }
                                 
                                 completion(updatedProducts, nil)
+                            
+                            
                             case .failed(let error):
                                 completion([], error)
                         }
@@ -294,6 +266,14 @@ extension Merchant {
         }
     }
     
+    private func makeFetcher(for policy: ReceiptFetchPolicy) -> ReceiptDataFetcher {
+        if let initializer = self.receiptDataFetcherCustomInitializer {
+            return initializer(policy)
+        }
+        
+        return StoreKitReceiptDataFetcher(policy: policy)
+    }
+    
     private func validateReceipt(with data: Data, reason: ReceiptValidationRequest.Reason, completion: @escaping (Result<Receipt>) -> Void) {
         DispatchQueue.main.async {
             let request = ReceiptValidationRequest(data: data, reason: reason)
@@ -318,7 +298,7 @@ extension Merchant {
             
             let hasEntry = !entries.isEmpty
             
-            let result: StorageUpdateResult
+            let result: PurchaseStorageUpdateResult
             
             if hasEntry {
                 let expiryDate = entries.compactMap { $0.expiryDate }.max()

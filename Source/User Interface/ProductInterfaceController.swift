@@ -173,12 +173,12 @@ public final class ProductInterfaceController {
 extension ProductInterfaceController {
     public enum ProductState : Equatable {
         case unknown // consider loading/failure cases of fetchingState
-        case purchased(PurchaseInfo?) // product is owned, `PurchaseInfo` represents the current price (etc) for the represented product - this info may not be available
+        case purchased(PurchasedProductInfo, PurchaseMetadata?) // product is owned, `PurchaseMetadata` represents the current price and other information about the purchase, if it was available to buy. This metadata may not always be available.
         case purchasable(Purchase) // product can be purchased, refer to `Purchase`
         case purchasing(Purchase) // product is currently being purchased, probably show a loading UI for that particular product
         case purchaseUnavailable // purchase cannot be made, show some kind of warning in the UI
         
-        public struct PurchaseInfo : Equatable {
+        public struct PurchaseMetadata : Equatable {
             public let price: Price
             
             @available(iOS 11.2, *)
@@ -297,9 +297,10 @@ extension ProductInterfaceController {
     
     private func _determineCurrentState(for product: Product) -> ProductState {
         let state: ProductState
+        let purchasedState = self.merchant.state(for: product)
         
-        if self.merchant.state(for: product).isPurchased {
-            let purchaseInfo: ProductState.PurchaseInfo? = {
+        if case .isPurchased(let productInfo) = purchasedState {
+            let purchaseMetadata: ProductState.PurchaseMetadata? = {
                 switch self.availablePurchasesFetchResult {
                     case .succeeded(let purchases)?:
                         if let purchase = purchases.purchase(for: product) {
@@ -311,7 +312,7 @@ extension ProductInterfaceController {
                                 subscriptionTerms = nil
                             }
                             
-                            return ProductState.PurchaseInfo(price: purchase.price, subscriptionTerms: subscriptionTerms)
+                            return ProductState.PurchaseMetadata(price: purchase.price, subscriptionTerms: subscriptionTerms)
                         }
                     default:
                         break
@@ -320,7 +321,7 @@ extension ProductInterfaceController {
                 return nil
             }()
             
-            state = .purchased(purchaseInfo)
+            state = .purchased(productInfo, purchaseMetadata)
         } else if let commitPurchaseTask = self.commitPurchaseTask, commitPurchaseTask.purchase.productIdentifier == product.identifier {
             state = .purchasing(commitPurchaseTask.purchase)
         } else if let availablePurchasesResult = self.availablePurchasesFetchResult {
