@@ -11,7 +11,7 @@ Find out if a product has been purchased:
 
 ```swift
 let product = merchant.product(withIdentifier: "iap.productidentifier")
-print("isPurchased", merchant.state(for: product).isPurchased)
+print("isPurchased: \(merchant.state(for: product).isPurchased))"
 ```
 
 Buy a product:
@@ -38,8 +38,8 @@ public func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Prod
         let state = merchant.state(for: subscriptionProduct)
         
         switch state {
-            case .isSubscribed(let expiryDate):
-                print("subscribed, expires \(expiryDate)")
+            case .isPurchased(let info):
+                print("subscribed, expires \(info.expiryDate)")
             default:
                 print("does not have active subscription")
         }
@@ -128,12 +128,12 @@ Developers simply provide the list of products to display and tells the controll
 In addition to the renewal duration, subscriptions can include free trials and other introductory offers. You can use a `SubscriptionPeriodFormatter` to format a text label in your application. If you change the free trial offer in iTunes Connect, the label will dynamically update to reflect the changed terms without requiring a new App Store binary. For example:
 ```swift
 func subscriptionDetailsForDisplay() -> String? {
-    guard let terms = purchase.subscriptionTerms else { return nil }
+    guard let terms = purchase.subscriptionTerms, let introductoryOffer = terms.introductoryOffer else { return nil }
     
     let formatter = SubscriptionPeriodFormatter()
     
-    switch terms {
-        case .freeTrial(let price, let period): return "\(formatter.string(from: period)) Free Trial" /// something like '7 Day Free Trial'
+    switch introductoryOffer {
+        case .freeTrial(let period): return "\(formatter.string(from: period)) Free Trial" // something like '7 Day Free Trial'
         default: ...
     }
 }
