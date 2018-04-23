@@ -4,8 +4,9 @@ import Foundation
 
 class PurchasedStateTests : XCTestCase {
     func testIsPurchased() {
-        XCTAssertTrue(PurchasedState.isSold.isPurchased)
-        XCTAssertTrue(PurchasedState.isSubscribed(expiryDate: nil).isPurchased)
+        let dummyProductInfo = PurchasedProductInfo(expiryDate: nil)
+        
+        XCTAssertTrue(PurchasedState.isPurchased(dummyProductInfo).isPurchased)
         
         XCTAssertFalse(PurchasedState.notPurchased.isPurchased)
         XCTAssertFalse(PurchasedState.unknown.isPurchased)

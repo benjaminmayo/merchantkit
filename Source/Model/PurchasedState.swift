@@ -1,21 +1,19 @@
-/// The purchased state of a product as deemed by the `Merchant`.
+/// The `PurchasedState` represents the known state of a product as deemed by a `Merchant`.
 public enum PurchasedState : Equatable {
-    case unknown // User may or may not have purchased the product. The application should decide to be lenient or strict regarding whether the user can access the product.
-    case notPurchased // User has not purchased the product. The application should not allow the user to access the product.
-    case isSold // User has bought the non-consumable product.
-    case isSubscribed(expiryDate: Date?) // User has subscribed to the subscription product. An expiry date may not be available for display at all times.
+    /// In the `unknown` state, the `Merchant` cannot definitively know whether a product should be considered purchased. The application should decide whether to be lenient or strict in allowing access to the product. This state is rare.
+    case unknown
+    /// The user has not purchased the product. The application should not allow the user to access the product, and may want to advertise the purchase of the product to the user.
+    case notPurchased
+    /// The user has purchased the product. The application should provide access to the product. `PurchasedProductInfo` contains additional metadata and information.
+    case isPurchased(PurchasedProductInfo)
     
-    /// If you do not want to distinguish by product kind, check the `isPurchased` property to see if the associated product should be accessible to the user.
+    /// Convenience accessor to determine if the product has been purchased. If `true`, the application should unambiguously provide access to the product.
     public var isPurchased: Bool {
         switch self {
-            case .unknown:
-                return false
-            case .notPurchased:
-                return false
-            case .isSold:
+            case .isPurchased(_):
                 return true
-            case .isSubscribed(_):
-                return true
+            default:
+                return false
         }
     }
 }
