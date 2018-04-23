@@ -1,3 +1,4 @@
+import Foundation
 
 /// Atempts to generate a validated receipt from the request and calls `onCompletion` when finished.
 public final class LocalReceiptValidator {
