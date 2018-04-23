@@ -29,7 +29,7 @@ public struct Purchase : Hashable, CustomStringConvertible {
     /// Describes the terms of the subscription purchase, such as renewal period and any introductory offers. Returns nil for non-subscription purchases.
     @available(iOS 11.2, *)
     public var subscriptionTerms: SubscriptionTerms? {
-        func subscriptionPeriod(from skSubscriptionPeriod: SKProductSubscriptionPeriod) -> SubscriptionPeriod {
+        func subscriptionPeriod(from skSubscriptionPeriod: SKProductSubscriptionPeriod, numberOfTimes: Int = 1) -> SubscriptionPeriod {
             let unitCount = skSubscriptionPeriod.numberOfUnits
             let unit: SubscriptionPeriod.Unit
             
@@ -44,7 +44,7 @@ public struct Purchase : Hashable, CustomStringConvertible {
                     unit = .year
             }
             
-            return SubscriptionPeriod(unit: unit, unitCount: unitCount)
+            return SubscriptionPeriod(unit: unit, unitCount: unitCount * numberOfTimes)
         }
         
         guard let skSubscriptionPeriod = self.skProduct.subscriptionPeriod else {
@@ -52,12 +52,13 @@ public struct Purchase : Hashable, CustomStringConvertible {
         }
         
         let period: SubscriptionPeriod = subscriptionPeriod(from: skSubscriptionPeriod)
+        
         let introductoryOffer: SubscriptionTerms.IntroductoryOffer? = {
             if let skDiscount = self.skProduct.introductoryPrice {
                 let locale = priceLocaleFromProductDiscount(skDiscount) ?? Locale.current
                 
                 let price = Price(from: skDiscount.price, in: locale)
-                let period = subscriptionPeriod(from: skDiscount.subscriptionPeriod)
+                let period = subscriptionPeriod(from: skDiscount.subscriptionPeriod, numberOfTimes: skDiscount.numberOfPeriods)
                 
                 switch skDiscount.paymentMode {
                     case .payAsYouGo:
