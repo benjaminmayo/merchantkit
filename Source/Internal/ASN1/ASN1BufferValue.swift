@@ -1,5 +1,5 @@
 extension ASN1 {
-    enum BufferValue : CustomStringConvertible {
+    enum BufferValue : Equatable, CustomStringConvertible {
         case null
         case boolean(Bool)
         case integer(Int)

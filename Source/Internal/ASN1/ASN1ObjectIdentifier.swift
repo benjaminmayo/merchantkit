@@ -1,7 +1,7 @@
 import Foundation
 
 extension ASN1 {
-    struct ObjectIdentifier : CustomStringConvertible {
+    struct ObjectIdentifier : Equatable, CustomStringConvertible {
         private let bytes: Data
         
         init(bytes: Data) {

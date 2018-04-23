@@ -110,4 +110,14 @@ class SubscriptionPeriodFormatterTests : XCTestCase {
         formatter.unitCountStyle = .numeric
         XCTAssertEqual(formatter.string(from: period), "2 years")
     }
+
+    func testUnsupportedLocale() {
+        let period: SubscriptionPeriod = .years(2)
+        
+        let formatter = SubscriptionPeriodFormatter()
+        formatter.locale = Locale(identifier: "ja-JP")
+        
+        formatter.unitCountStyle = .numeric
+        XCTAssertEqual(formatter.string(from: period), "2 years")
+    }
 }

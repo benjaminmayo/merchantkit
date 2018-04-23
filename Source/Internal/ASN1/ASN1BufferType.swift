@@ -26,7 +26,7 @@ extension ASN1 {
         case graphicString = 0x19
         case visibleString = 0x1a
         case generalString = 0x1b
-        case unviersalString = 0x1c
+        case universalString = 0x1c
         case bitmapString = 0x1e
         case usesLongForm = 0x1f
     }

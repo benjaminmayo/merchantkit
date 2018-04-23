@@ -33,6 +33,8 @@
 		432BFFD3208E0CC400257585 /* MerchantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432BFFD2208E0CC400257585 /* MerchantTests.swift */; };
 		432BFFD6208E10A400257585 /* ReceiptDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432BFFD4208E108900257585 /* ReceiptDataFetcher.swift */; };
 		432BFFD8208E1DB100257585 /* EphemeralPurchaseStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432BFFD7208E1DB100257585 /* EphemeralPurchaseStorageTests.swift */; };
+		432BFFDA208E2F9700257585 /* DescriptionUtilitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432BFFD9208E2F9700257585 /* DescriptionUtilitiesTests.swift */; };
+		432BFFDC208E65F600257585 /* PurchaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432BFFDB208E65F600257585 /* PurchaseTests.swift */; };
 		4337A8951EB1EC2B00EAF633 /* ServerReceiptResponseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4337A8941EB1EC2B00EAF633 /* ServerReceiptResponseParser.swift */; };
 		4337A8971EB1F1CA00EAF633 /* ServerReceiptResponseParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4337A8961EB1F1CA00EAF633 /* ServerReceiptResponseParserTests.swift */; };
 		4337A8991EB1F1EB00EAF633 /* testSubscriptionReceiptResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 4337A8981EB1F1EB00EAF633 /* testSubscriptionReceiptResponse.json */; };
@@ -141,6 +143,8 @@
 		432BFFD2208E0CC400257585 /* MerchantTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantTests.swift; sourceTree = "<group>"; };
 		432BFFD4208E108900257585 /* ReceiptDataFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptDataFetcher.swift; sourceTree = "<group>"; };
 		432BFFD7208E1DB100257585 /* EphemeralPurchaseStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EphemeralPurchaseStorageTests.swift; sourceTree = "<group>"; };
+		432BFFD9208E2F9700257585 /* DescriptionUtilitiesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionUtilitiesTests.swift; sourceTree = "<group>"; };
+		432BFFDB208E65F600257585 /* PurchaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseTests.swift; sourceTree = "<group>"; };
 		4337A8941EB1EC2B00EAF633 /* ServerReceiptResponseParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerReceiptResponseParser.swift; sourceTree = "<group>"; };
 		4337A8961EB1F1CA00EAF633 /* ServerReceiptResponseParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerReceiptResponseParserTests.swift; sourceTree = "<group>"; };
 		4337A8981EB1F1EB00EAF633 /* testSubscriptionReceiptResponse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testSubscriptionReceiptResponse.json; sourceTree = "<group>"; };
@@ -304,6 +308,7 @@
 				432BFFD7208E1DB100257585 /* EphemeralPurchaseStorageTests.swift */,
 				4337A89C1EB1FE3300EAF633 /* PurchaseRecordTests.swift */,
 				43128DCF1EC38A3000DBA2EE /* PurchaseSetTests.swift */,
+				432BFFDB208E65F600257585 /* PurchaseTests.swift */,
 				4314B2602082C67C00ECC35C /* LocalizedResourcesTests.swift */,
 				4314B2632082CEC800ECC35C /* SubscriptionPeriodFormatterTests.swift */,
 				4314B277208375F900ECC35C /* PriceFormatterTests.swift */,
@@ -311,6 +316,7 @@
 				43703A4520855198003AA087 /* ASN1Tests.swift */,
 				439546902086009700B9D2C6 /* PKCS7ReceiptDataContainerTests.swift */,
 				439DD22E2086840300B0F0C4 /* SubscriptionPriceFormatterTests.swift */,
+				432BFFD9208E2F9700257585 /* DescriptionUtilitiesTests.swift */,
 				439546922086010C00B9D2C6 /* TestsUtilities.swift */,
 				4337A89E1EB1FE3900EAF633 /* Sample Resources */,
 				4342026D1EAE08F80012983A /* Info.plist */,
@@ -616,10 +622,12 @@
 				4314B27B208377B300ECC35C /* PurchasedStateTests.swift in Sources */,
 				43703A4620855198003AA087 /* ASN1Tests.swift in Sources */,
 				431C1FF51F5E0815009E2CD7 /* LocalReceiptPayloadParserTests.swift in Sources */,
+				432BFFDC208E65F600257585 /* PurchaseTests.swift in Sources */,
 				4337A89B1EB1FAAD00EAF633 /* BucketsTests.swift in Sources */,
 				4337A8971EB1F1CA00EAF633 /* ServerReceiptResponseParserTests.swift in Sources */,
 				4314B2652082CF5600ECC35C /* SubscriptionPeriodFormatterTests.swift in Sources */,
 				4314B276208329BB00ECC35C /* LocalConfigurationTests.swift in Sources */,
+				432BFFDA208E2F9700257585 /* DescriptionUtilitiesTests.swift in Sources */,
 				439546932086010C00B9D2C6 /* TestsUtilities.swift in Sources */,
 				4314B2622082C6A300ECC35C /* LocalizedResourcesTests.swift in Sources */,
 				432BFFD8208E1DB100257585 /* EphemeralPurchaseStorageTests.swift in Sources */,
@@ -878,7 +886,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = 2ZTW4G3PG5;
 				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -897,7 +905,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = 2ZTW4G3PG5;
 				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

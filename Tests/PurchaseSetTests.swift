@@ -116,7 +116,7 @@ class PurchaseSetTests : XCTestCase {
     }
 }
 
-class MockSKProduct : SKProduct {
+private class MockSKProduct : SKProduct {
     private let _productIdentifier: String
     private let _price: NSDecimalNumber
     private let _priceLocale: Locale

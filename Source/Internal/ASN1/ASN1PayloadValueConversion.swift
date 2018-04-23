@@ -83,7 +83,7 @@ extension ASN1 {
                 let objectIdentifier = ASN1.ObjectIdentifier(bytes: buffer)
                 return .objectIdentifier(objectIdentifier)
             case .teletexString, .graphicString, .printableString, .utf8String, .ia5String:
-                guard let string = String(data: buffer, encoding: .utf8) else { throw PayloadValueConversionError.unsupportedEncoding(payloadType: bufferType) }
+                guard let string = String(data: buffer, encoding: .utf8) else { throw PayloadValueConversionError.unsupportedBuffer(payloadType: bufferType) }
                 
                 return .string(string)
             case .utcTime, .generalizedTime:
