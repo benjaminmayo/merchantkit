@@ -141,9 +141,9 @@ func subscriptionDetailsForDisplay() -> String? {
 
 `PriceFormatter` works in every locale supported by the App Store. `SubscriptionPriceFormatter` and `SubscriptionPeriodFormatter` are currently offered in a small subset of languages. Voluntary translations are welcomed.
 
-## Consumable Purchases
+## Consumable Products
 
-`Merchant` tracks the purchased state of non-consumable and subscription products. Consumable products are considered transitory purchases and not recorded beyond the initial time of purchase. Because of their special nature, there is a special method in the `MerchantDelegate` for consumable purchases. This method is required to be implemented by applications that manage consumable products.
+`Merchant` tracks the purchased state of non-consumable and subscription products. Consumable products are considered transitory purchases and not recorded beyond the initial time of purchase. Because of their special nature, there is a special method in the `MerchantDelegate` for consumable products. This method is required to be implemented by applications that manage consumable products.
 
 ```swift
 func merchant(_ merchant: Merchant, didConsume product: Product) {

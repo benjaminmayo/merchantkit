@@ -47,7 +47,7 @@ public final class Merchant {
         return self._registeredProducts[productIdentifier]
     }
     
-    /// Returns the state for a `product`. Consumable purchases always report that they are `notPurchased`.
+    /// Returns the state for a `product`. Consumable products always report that they are `notPurchased`.
     public func state(for product: Product) -> PurchasedState {
         guard let record = self.storage.record(forProductIdentifier: product.identifier) else {
             return .notPurchased
