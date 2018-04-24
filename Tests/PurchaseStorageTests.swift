@@ -5,10 +5,13 @@ import Foundation
 class PurchaseStorageTests : XCTestCase {
     private var testablePurchaseStorageTypes: [PurchaseStorage] {
         let ephemeralPurchaseStorage = EphemeralPurchaseStorage()
-        //let userDefaultsPurchaseStorage = UserDefaultsPurchaseStorage()
-        //let keychainPurchaseStorage = KeychainPurchaseStorage(serviceName: "MerchantKitTests")
         
-        return [ephemeralPurchaseStorage]
+        UserDefaults.standard.removePersistentDomain(forName: "PurchaseStorageTests")
+        let defaults = UserDefaults(suiteName: "PurchaseStorageTests")!
+        
+        let userDefaultsPurchaseStorage = UserDefaultsPurchaseStorage(defaults: defaults)
+        
+        return [ephemeralPurchaseStorage, userDefaultsPurchaseStorage]
     }
     
     func testSaveRecord() {

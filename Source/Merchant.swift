@@ -13,7 +13,7 @@ public final class Merchant {
     private var purchaseObservers = Buckets<String, MerchantPurchaseObserver>()
     
     private var receiptFetchers: [ReceiptFetchPolicy : ReceiptDataFetcher] = [:]
-    private var receiptDataFetcherCustomInitializer: ReceiptDataFetcherInitializer!
+    private var receiptDataFetcherCustomInitializer: ReceiptDataFetcherInitializer?
     private var identifiersForPendingObservedPurchases = Set<String>()
     
     public private(set) var isLoading: Bool = false
@@ -47,7 +47,7 @@ public final class Merchant {
         return self._registeredProducts[productIdentifier]
     }
     
-    /// Returns the state for a `product`.
+    /// Returns the state for a `product`. Consumable purchases always report that they are `notPurchased`.
     public func state(for product: Product) -> PurchasedState {
         guard let record = self.storage.record(forProductIdentifier: product.identifier) else {
             return .notPurchased
@@ -55,7 +55,7 @@ public final class Merchant {
         
         switch product.kind {
             case .consumable:
-                fatalError("consumable support not yet implemented")
+                return .notPurchased
             case .nonConsumable, .subscription(automaticallyRenews: _):
                 let info = PurchasedProductInfo(expiryDate: record.expiryDate)
             
@@ -353,19 +353,23 @@ extension Merchant : StoreKitTransactionObserverDelegate {
     }
     
     internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didPurchaseProductWith identifier: String) {
-        let record = PurchaseRecord(productIdentifier: identifier, expiryDate: nil)
-        let result = self.storage.save(record)
-        
         if let product = self.product(withIdentifier: identifier) {
-            if result == .didChangeRecords {
-                self.didChangeState(for: [product])
-            }
+            if product.kind == .consumable { // consumable product purchases are not recorded
+                self.delegate.merchant(self, didConsume: product)
+            } else { // non-consumable and subscription products are recorded
+                let record = PurchaseRecord(productIdentifier: identifier, expiryDate: nil)
+                let result = self.storage.save(record)
             
-            if case .subscription(_) = product.kind {
-                self.identifiersForPendingObservedPurchases.insert(product.identifier) // we need to get the receipt to find the expiry date
+                if result == .didChangeRecords {
+                    self.didChangeState(for: [product])
+                }
+                
+                if case .subscription(_) = product.kind {
+                    self.identifiersForPendingObservedPurchases.insert(product.identifier) // we need to get the receipt to find the expiry date, the `PurchaseRecord` will be updated when that information is available
+                }
             }
         }
-
+        
         for observer in self.purchaseObservers[identifier] {
             observer.merchant(self, didCompletePurchaseForProductWith: identifier)
         }
