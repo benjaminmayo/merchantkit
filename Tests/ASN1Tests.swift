@@ -9,6 +9,7 @@ class ASN1Tests : XCTestCase {
         let identifier = ASN1.ObjectIdentifier(bytes: data)
         
         XCTAssertEqual(identifier.stringValue, "1.2.840.113549.1.7.2")
+        XCTAssertEqual(identifier.description, "[ASN1.ObjectIdentifier stringValue: 1.2.840.113549.1.7.2]")
     }
     
     func testParseEmptyData() {

@@ -170,4 +170,22 @@ class SubscriptionPriceFormatterTests : XCTestCase {
         formatter.unitCountStyle = .numeric
         XCTAssertEqual(formatter.string(from: price, duration: duration), "£9.99 every 2 years")
     }
+    
+    func testFreeReplacementText() {
+        let locale = Locale(identifier: "en-GB")
+        
+        let duration: SubscriptionDuration = .init(period: .years(1), isRecurring: false)
+        let price = Price(from: NSDecimalNumber(string: "0.00"), in: locale)
+        
+        let formatter = SubscriptionPriceFormatter()
+        formatter.locale = locale
+        formatter.unitCountStyle = .numeric
+        formatter.freePriceReplacementText = "FREE"
+        
+        // formatter remembered the replacement text
+        XCTAssertEqual(formatter.freePriceReplacementText, "FREE")
+        
+        let result = formatter.string(from: price, duration: duration)
+        XCTAssertEqual(result, "FREE for 1 year")
+    }
 }

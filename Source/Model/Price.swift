@@ -13,11 +13,11 @@ public struct Price : Hashable, CustomStringConvertible {
         
         return self.defaultDescription(withProperties: ("", formatter.string(from: self.value.0)!))
     }
-    
+
     public var hashValue: Int {
         return self.value.0.hashValue
     }
-    
+
     public static func ==(lhs: Price, rhs: Price) -> Bool {
         return lhs.value == rhs.value
     }

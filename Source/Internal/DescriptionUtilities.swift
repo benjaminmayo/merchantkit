@@ -1,5 +1,5 @@
 extension CustomStringConvertible {
-    internal func defaultDescription(withProperties properties: (String, Any)...) -> String {
+    internal func defaultDescription(typeName: String = "", withProperties properties: (String, Any)...) -> String {
         let formattedProperties = properties.map { property in
             let (name, value) = property
             
@@ -10,7 +10,8 @@ extension CustomStringConvertible {
             }
         }.joined(separator: ", ")
         
-        let description = "[\(type(of: self)) \(formattedProperties)]"
+        let typeName = typeName.isEmpty ? "\(type(of: self))" : typeName
+        let description = "[\(typeName) \(formattedProperties)]"
         
         return description
     }

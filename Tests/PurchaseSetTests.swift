@@ -54,6 +54,9 @@ class PurchaseSetTests : XCTestCase {
         
         let purchaseSet = PurchaseSet(from: [testPurchase, differentTestPurchase])
         
+        // set reports `underestimatedCount` of Sequence as if it was a `count` of product identifiers
+        XCTAssertEqual(purchaseSet.underestimatedCount, 2)
+        
         let iterator = purchaseSet.makeIterator()
         let firstPurchase = iterator.next()
         let secondPurchase = iterator.next()

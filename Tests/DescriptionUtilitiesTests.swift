@@ -11,6 +11,14 @@ class DescriptionUtilitiesTest : XCTestCase {
         XCTAssertEqual(description, "[TestItem a: 1, b: 2, string: test]")
     }
     
+    func testSimplePropertiesWithCustomTypeName() {
+        let item = TestItemWithCustomTypeName(a: 1, b: 2, string: "test")
+        
+        let description = item.description
+        
+        XCTAssertEqual(description, "[AlternateNamedItem a: 1, b: 2, string: test]")
+    }
+    
     func testPropertiesWithNoName() {
         let item = TestItemWithUnnamedProperty(a: 1, b: 2, string: "test")
         
@@ -27,6 +35,16 @@ struct TestItem : CustomStringConvertible {
     
     var description: String {
         return self.defaultDescription(withProperties: ("a", self.a), ("b", self.b), ("string", self.string))
+    }
+}
+
+struct TestItemWithCustomTypeName : CustomStringConvertible {
+    let a: Int
+    let b: Int
+    let string: String
+    
+    var description: String {
+        return self.defaultDescription(typeName: "AlternateNamedItem", withProperties: ("a", self.a), ("b", self.b), ("string", self.string))
     }
 }
 

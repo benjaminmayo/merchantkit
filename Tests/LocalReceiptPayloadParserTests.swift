@@ -28,10 +28,10 @@ class LocalReceiptPayloadParserTests : XCTestCase {
     }
     
     func testSampleResources() {
-        let twoNonconsumabkesResource = SampleResource(name: "testSampleReceiptTwoNonconsumblesPurchased", expectedProductIdentifiers: ["codeSharingUnlockable", "saveScannedCodeUnlockable"])
+        let twoNonconsumablesResource = SampleResource(name: "testSampleReceiptTwoNonconsumblesPurchased", expectedProductIdentifiers: ["codeSharingUnlockable", "saveScannedCodeUnlockable"])
         let subscriptionResource = SampleResource(name: "testSampleReceiptOneSubscriptionPurchased", expectedProductIdentifiers: ["premiumsubscription"])
         
-        let resources = [twoNonconsumabkesResource, subscriptionResource]
+        let resources = [twoNonconsumablesResource, subscriptionResource]
         
         for resource in resources {
             let resourceURL = self.urlForSampleResource(withName: resource.name, extension: "data")

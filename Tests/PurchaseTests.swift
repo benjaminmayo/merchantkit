@@ -64,6 +64,17 @@ class PurchaseTests : XCTestCase {
         
         XCTAssertNil(purchase.subscriptionTerms)
     }
+    
+    func testCustomizedHashableConformance() {
+        let locale = Locale(identifier: "en-US")
+        let number = NSDecimalNumber(string: "9.99")
+        
+        let price = Price(from: number, in: locale)
+        let equivalentPrice = Price(from: number, in: locale)
+        
+        XCTAssertEqual(price, equivalentPrice)
+        XCTAssertEqual(price.hashValue, equivalentPrice.hashValue)
+    }
 }
 
 private class MockSKProduct : SKProduct {

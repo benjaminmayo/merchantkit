@@ -9,7 +9,7 @@ extension ASN1 {
         }
         
         var description: String {
-            return self.stringValue ?? "ASN1.ObjectIdentifier"
+            return self.defaultDescription(typeName: "ASN1.ObjectIdentifier", withProperties: ("stringValue", self.stringValue ?? "nil"))
         }
         
         var stringValue: String? {
