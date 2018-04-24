@@ -1,10 +1,10 @@
 import Foundation
 
 public final class UserDefaultsPurchaseStorage : PurchaseStorage {
-    private let defaults = UserDefaults.standard
+    private let defaults: UserDefaults
     
-    public init() {
-        
+    public init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
     }
     
     private let storageKeyPrefix: String = "purchaseStorage"
@@ -34,9 +34,13 @@ public final class UserDefaultsPurchaseStorage : PurchaseStorage {
     public func removeRecord(forProductIdentifier productIdentifier: String) -> PurchaseStorageUpdateResult {
         let key = self.storageKey(forProductIdentifier: productIdentifier)
         
-        self.defaults.removeObject(forKey: key)
+        if self.defaults.object(forKey: key) != nil {
+            self.defaults.removeObject(forKey: key)
+            
+            return .didChangeRecords
+        }
         
-        return .didChangeRecords
+        return .noChanges
     }
     
     private func storageKey(forProductIdentifier productIdentifier: String) -> String {
