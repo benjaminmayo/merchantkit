@@ -155,11 +155,9 @@ The `Merchant` will always report a consumable product's state as `PurchasedStat
 
 ## To Be Completed (in no particular order)
 
-- Add tests to the bare test suite. Components can be tested separately, including the validators and `PurchaseStorage` types.
 - Increase the number of localizations for `SubscriptionPriceFormatter` and `SubscriptionPeriodFormatter`.
-- Extended documentation with example usage projects.
-- Extensively document how to use `ProductInterfaceController`.
-- Extend failure cases with richer error feedback when things go wrong. 
+- Add extensive documentation with example usage projects, including usage of `ProductInterfaceController`.
+- Improve handling of failure cases with richer error messages and feedback for when things go wrong. 
 - Support downloadable content In-App Purchases.
 - Probably a lot more stuff I haven't thought of yet.
 
