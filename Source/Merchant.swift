@@ -294,6 +294,9 @@ extension Merchant {
         }
         
         for identifier in productIdentifiers {
+            guard let product = self.product(withIdentifier: identifier) else { continue }
+            guard product.kind != .consumable else { continue } // consumables are special-cased as they are not recorded, but may temporarily appear in receipts
+            
             let entries = receipt.entries(forProductIdentifier: identifier)
             
             let hasEntry = !entries.isEmpty
@@ -314,17 +317,20 @@ extension Merchant {
                 result = self.storage.removeRecord(forProductIdentifier: identifier)
             }
             
-            if result == .didChangeRecords, let product = self.product(withIdentifier: identifier) {
+            if result == .didChangeRecords {
                 updatedProducts.insert(product)
             }
         }
         
-        if case .all = updateType {
-            for (identifier, product) in self._registeredProducts {
-                if !receipt.productIdentifiers.contains(identifier) {
-                    if self.storage.removeRecord(forProductIdentifier: identifier) == .didChangeRecords {
-                        updatedProducts.insert(product)
-                    }
+        if updateType == .all { // clean out from storage if registered products are not in the receipt
+            let registeredProductIdentifiers = Set(self._registeredProducts.map { $0.key })
+            let identifiersForProductsNotInReceipt = registeredProductIdentifiers.subtracting(receipt.productIdentifiers)
+            
+            for productIdentifier in identifiersForProductsNotInReceipt {
+                let result = self.storage.removeRecord(forProductIdentifier: productIdentifier)
+                
+                if result == .didChangeRecords {
+                    updatedProducts.insert(self._registeredProducts[productIdentifier]!)
                 }
             }
         }
@@ -332,7 +338,7 @@ extension Merchant {
         return updatedProducts
     }
     
-    private enum ReceiptUpdateType {
+    private enum ReceiptUpdateType : Equatable {
         case all
         case specific(productIdentifiers: Set<String>)
     }
