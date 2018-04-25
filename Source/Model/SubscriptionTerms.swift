@@ -5,7 +5,7 @@ public struct SubscriptionTerms : Equatable {
     
     public enum IntroductoryOffer : Equatable {
         case freeTrial(period: SubscriptionPeriod)
-        case upfrontDiscount(price: Price, period: SubscriptionPeriod)
-        case recurringDiscount(price: Price, period: SubscriptionPeriod)
+        case upfrontDiscount(discountedPrice: Price, period: SubscriptionPeriod)
+        case recurringDiscount(discountedPrice: Price, recurringPeriod: SubscriptionPeriod, discountedPeriodCount: Int)
     }
 }
