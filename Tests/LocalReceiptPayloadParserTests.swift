@@ -28,37 +28,29 @@ class LocalReceiptPayloadParserTests : XCTestCase {
     }
     
     func testSampleResources() {
-        let twoNonconsumablesResource = SampleResource(name: "testSampleReceiptTwoNonconsumblesPurchased", expectedProductIdentifiers: ["codeSharingUnlockable", "saveScannedCodeUnlockable"])
+        // TODO: Replace these resources with actual payload data resources; essentially the calls to `PKCS7ReceiptDataContainer` should not be part of this method.
+        let twoNonconsumablesResource = SampleResource(name: "testSampleReceiptTwoNonConsumablesPurchased", expectedProductIdentifiers: ["codeSharingUnlockable", "saveScannedCodeUnlockable"])
         let subscriptionResource = SampleResource(name: "testSampleReceiptOneSubscriptionPurchased", expectedProductIdentifiers: ["premiumsubscription"])
         
         let resources = [twoNonconsumablesResource, subscriptionResource]
         
         for resource in resources {
-            let resourceURL = self.urlForSampleResource(withName: resource.name, extension: "data")
-            
-            guard let data = try? Data(contentsOf: resourceURL) else {
-                XCTFail("no data at \(resourceURL)");
+            guard let receiptData = self.dataForSampleResource(withName: resource.name, extension: "data") else {
+                XCTFail("sample resource not found");
                 continue
             }
             
-            let expectation = self.expectation(description: resource.name)
+            let container = PKCS7ReceiptDataContainer(receiptData: receiptData)
+            var payloadData: Data!
             
-            let validator = LocalReceiptValidator(request: .init(data: data, reason: .initialization))
-            validator.onCompletion = { result in
-                switch result {
-                    case .succeeded(let receipt):
-                        debugPrint(receipt)
-                        XCTAssertEqual(receipt.productIdentifiers, resource.expectedProductIdentifiers)
-                    case .failed(let error):
-                        XCTFail(String(describing: error))
-                }
+            XCTAssertNoThrow(payloadData = try container.content())
+
+            let parser = LocalReceiptPayloadParser()
+            var receipt: Receipt!
                 
-                expectation.fulfill()
-            }
+            XCTAssertNoThrow(receipt = try parser.receipt(from: payloadData))
             
-            validator.start()
-            
-            self.wait(for: [expectation], timeout: 5)
+            XCTAssertEqual(receipt.productIdentifiers, resource.expectedProductIdentifiers)
         }
     }
 }

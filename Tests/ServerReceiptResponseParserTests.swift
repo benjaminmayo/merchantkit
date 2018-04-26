@@ -4,10 +4,9 @@ import Foundation
 
 class ServerReceiptResponseParserTests : XCTestCase {
     private var dataForTestSubscriptionResponse: Data? {
-        let url = self.urlForSampleResource(withName: "testSubscriptionReceiptResponse", extension: "json")
-        
-        guard let data = try? Data(contentsOf: url) else {
-            XCTFail("no data at \(url)")
+        guard let data = self.dataForSampleResource(withName: "testSubscriptionReceiptResponse", extension: "json") else {
+            XCTFail("sample resource unavailable")
+            
             return nil 
         }
         

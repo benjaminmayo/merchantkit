@@ -57,8 +57,8 @@ extension ServerReceiptVerificationResponseDataFetcher {
             return request
         }()
         
-        let task = self.session.dataTask(with: urlRequest, completionHandler: { [weak self] (data, response, error) in
-            self?.didReceiveServerResponse(data: data, error: error)
+        let task = self.session.dataTask(with: urlRequest, completionHandler: { (data, response, error) in
+            self.didReceiveServerResponse(data: data, error: error)
         })
         
         task.resume()

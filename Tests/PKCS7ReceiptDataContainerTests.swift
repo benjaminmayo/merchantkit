@@ -10,10 +10,8 @@ class PKCS7ReceiptDataContainerTests : XCTestCase {
     }
     
     func testValidData() {
-        let url = self.urlForSampleResource(withName: "testSampleReceiptTwoNonconsumblesPurchased", extension: "data")
-        
-        guard let data = try? Data(contentsOf: url) else {
-            XCTFail("no data at \(url)")
+        guard let data = self.dataForSampleResource(withName: "testSampleReceiptTwoNonConsumablesPurchased", extension: "data") else {
+            XCTFail("sample resource not found")
             return
         }
         
