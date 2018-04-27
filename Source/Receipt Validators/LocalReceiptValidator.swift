@@ -7,6 +7,8 @@ public final class LocalReceiptValidator {
     
     public var onCompletion: Completion?
     
+    /// Create a new validator for the `request`. This validator uses client-side processing to extract the relevant fields from opaque receipt data.
+    /// - Parameter request: The validation request vended by the `Merchant` in the `merchant(_:validate:completion:)` delegate callback.
     public init(request: ReceiptValidationRequest) {
         self.request = request
     }
