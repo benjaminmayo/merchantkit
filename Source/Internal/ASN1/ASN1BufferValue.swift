@@ -9,22 +9,26 @@ extension ASN1 {
         case objectIdentifier(ObjectIdentifier)
         
         var description: String {
+            let formattedValue: String
+            
             switch self {
                 case .null:
-                    return "null"
+                    formattedValue = "null"
                 case .boolean(let boolean):
-                    return "\(boolean)"
+                    formattedValue = "\(boolean)"
                 case .integer(let integer):
-                    return "\(integer)"
+                    formattedValue = "\(integer)"
                 case .string(let string):
-                    return string
+                    formattedValue = "'\(string)'"
                 case .data(let data):
-                    return "\(data)"
+                    formattedValue = "\(data)"
                 case .date(let dateString):
-                    return dateString
+                    formattedValue = "'\(dateString)'"
                 case .objectIdentifier(let identifier):
-                    return identifier.stringValue ?? "ASN1.ObjectIdentifier"
+                    formattedValue = "\(identifier)"
             }
+            
+            return self.defaultDescription(typeName: "ASN1.BufferValue", withProperties: ("value", formattedValue))
         }
     }
 }

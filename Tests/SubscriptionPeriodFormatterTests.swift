@@ -4,15 +4,15 @@ import Foundation
 
 class SubscriptionPeriodFormatterTests : XCTestCase {
     func testDefaultsInEnglish() {
-        let expectations: [SubscriptionPeriod : String] = [
-            .days(7) : "7 days",
-            .days(14) : "14 days",
-            .weeks(1) : "7 days",
-            .weeks(14) : "14 weeks",
-            .months(1) : "1 month",
-            .months(14) : "14 months",
-            .years(1) : "1 year",
-            .years(14) : "14 years"
+        let expectations: [(SubscriptionPeriod, String)] = [
+            (.days(7), "7 days"),
+            (.days(14), "14 days"),
+            (.weeks(1), "7 days"),
+            (.weeks(14), "14 weeks"),
+            (.months(1), "1 month"),
+            (.months(14), "14 months"),
+            (.years(1), "1 year"),
+            (.years(14), "14 years")
         ]
         
         let formatter = SubscriptionPeriodFormatter()

@@ -4,15 +4,15 @@ import Foundation
 
 class SubscriptionPriceFormatterTests : XCTestCase {
     func testDefaultsInEnglish() {
-        let expectations: [SubscriptionDuration : String] = [
-            .init(period: .days(7), isRecurring: true) : "$5.99 every 7 days",
-            .init(period: .days(14), isRecurring: false) : "$5.99 for 14 days",
-            .init(period: .weeks(1), isRecurring: true) : "$5.99 per week",
-            .init(period: .weeks(14), isRecurring: false) : "$5.99 for 14 weeks",
-            .init(period: .months(1), isRecurring: true) : "$5.99 per month",
-            .init(period: .months(14), isRecurring: false) : "$5.99 for 14 months",
-            .init(period: .years(1), isRecurring: true) : "$5.99 per year",
-            .init(period: .years(14), isRecurring: false) : "$5.99 for 14 years"
+        let expectations: [(SubscriptionDuration, String)] = [
+            (.init(period: .days(7), isRecurring: true), "$5.99 every 7 days"),
+            (.init(period: .days(14), isRecurring: false), "$5.99 for 14 days"),
+            (.init(period: .weeks(1), isRecurring: true), "$5.99 per week"),
+            (.init(period: .weeks(14), isRecurring: false), "$5.99 for 14 weeks"),
+            (.init(period: .months(1), isRecurring: true), "$5.99 per month"),
+            (.init(period: .months(14), isRecurring: false), "$5.99 for 14 months"),
+            (.init(period: .years(1), isRecurring: true), "$5.99 per year"),
+            (.init(period: .years(14), isRecurring: false), "$5.99 for 14 years")
         ]
         
         let locale = Locale(identifier: "en-US")

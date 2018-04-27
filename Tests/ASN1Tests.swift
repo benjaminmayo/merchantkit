@@ -84,4 +84,22 @@ class ASN1Tests : XCTestCase {
             }
         }
     }
+    
+    func testBufferValueDescription() {
+        let expectations: [(ASN1.BufferValue, String)] = [
+            (.null, "null"),
+            (.boolean(true), "true"),
+            (.integer(123), "123"),
+            (.string("test"), "'test'"),
+            (.data(Data()), "0 bytes"),
+            (.date("01-02-2000"), "'01-02-2000'"),
+            (.objectIdentifier(ASN1.ObjectIdentifier(bytes: Data(bytes: [0xFF, 0x4, 0x8, 0x16]))), "[ASN1.ObjectIdentifier stringValue: 6.15.4.8.22]")
+        ]
+        
+        for (value, formattedDescriptionComponent) in expectations {
+            let expectedDescription = "[ASN1.BufferValue value: \(formattedDescriptionComponent)]"
+            
+            XCTAssertEqual(String(describing: value), expectedDescription)
+        }
+    }
 }
