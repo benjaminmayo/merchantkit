@@ -23,6 +23,7 @@
 		4319AC6720936D9F000ACC04 /* ReceiptEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4319AC6620936D9F000ACC04 /* ReceiptEntry.swift */; };
 		4319AC6820936DC4000ACC04 /* ReceiptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4319AC6420936D95000ACC04 /* ReceiptTests.swift */; };
 		4319AC6A2093BCA3000ACC04 /* MerchantKitFatalError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4319AC692093BCA3000ACC04 /* MerchantKitFatalError.swift */; };
+		4319AC6D2093CD03000ACC04 /* MerchantTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4319AC6B2093CCF6000ACC04 /* MerchantTaskTests.swift */; };
 		431C1FF51F5E0815009E2CD7 /* LocalReceiptPayloadParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431C1FF31F5E07D9009E2CD7 /* LocalReceiptPayloadParserTests.swift */; };
 		431C84451EC1D2C50098516E /* PurchaseSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431C84441EC1D2C50098516E /* PurchaseSet.swift */; };
 		431C84491EC1E3490098516E /* MerchantKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 431C84471EC1E3490098516E /* MerchantKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -136,6 +137,7 @@
 		4319AC6420936D95000ACC04 /* ReceiptTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptTests.swift; sourceTree = "<group>"; };
 		4319AC6620936D9F000ACC04 /* ReceiptEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptEntry.swift; sourceTree = "<group>"; };
 		4319AC692093BCA3000ACC04 /* MerchantKitFatalError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantKitFatalError.swift; sourceTree = "<group>"; };
+		4319AC6B2093CCF6000ACC04 /* MerchantTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantTaskTests.swift; sourceTree = "<group>"; };
 		431C1FF31F5E07D9009E2CD7 /* LocalReceiptPayloadParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalReceiptPayloadParserTests.swift; sourceTree = "<group>"; };
 		431C84441EC1D2C50098516E /* PurchaseSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseSet.swift; sourceTree = "<group>"; };
 		431C84461EC1E3490098516E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -319,6 +321,7 @@
 				43128DCF1EC38A3000DBA2EE /* PurchaseSetTests.swift */,
 				432BFFDB208E65F600257585 /* PurchaseTests.swift */,
 				4319AC6420936D95000ACC04 /* ReceiptTests.swift */,
+				4319AC6B2093CCF6000ACC04 /* MerchantTaskTests.swift */,
 				4314B2602082C67C00ECC35C /* LocalizedResourcesTests.swift */,
 				4314B2632082CEC800ECC35C /* SubscriptionPeriodFormatterTests.swift */,
 				4314B277208375F900ECC35C /* PriceFormatterTests.swift */,
@@ -633,6 +636,7 @@
 				432BFFD3208E0CC400257585 /* MerchantTests.swift in Sources */,
 				4337A89D1EB1FE3300EAF633 /* PurchaseRecordTests.swift in Sources */,
 				439546912086009700B9D2C6 /* PKCS7ReceiptDataContainerTests.swift in Sources */,
+				4319AC6D2093CD03000ACC04 /* MerchantTaskTests.swift in Sources */,
 				4314B27B208377B300ECC35C /* PurchasedStateTests.swift in Sources */,
 				43703A4620855198003AA087 /* ASN1Tests.swift in Sources */,
 				431C1FF51F5E0815009E2CD7 /* LocalReceiptPayloadParserTests.swift in Sources */,
