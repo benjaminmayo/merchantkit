@@ -9,6 +9,25 @@ class MerchantDelegateTests : XCTestCase {
         
         self.merchantDidChangeLoadingState(merchant) // this no-op is provided by the `MerchantDelegate` default implementation
     }
+    
+    func testConsumeProductTrappingDefaultImplementation() {
+        let expectation = self.expectation(description: "fatalError thrown")
+        
+        MerchantKitFatalError.customHandler = {
+            expectation.fulfill()
+        }
+        
+        let consumableProduct = Product(identifier: "testProduct", kind: .consumable)
+        
+        let testingQueue = DispatchQueue(label: "testing queue") // testing MerchantKitFatalError requires dispatch to a non-main thread
+        
+        testingQueue.async {
+            let merchant = Merchant(storage: EphemeralPurchaseStorage(), delegate: self)
+            self.merchant(merchant, didConsume: consumableProduct)
+        }
+        
+        self.wait(for: [expectation], timeout: 1)
+    }
 }
 
 extension MerchantDelegateTests : MerchantDelegate {

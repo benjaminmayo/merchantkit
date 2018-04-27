@@ -1,17 +1,17 @@
 extension CustomStringConvertible {
     internal func defaultDescription(typeName: String = "", withProperties properties: (String, Any)...) -> String {
-        let formattedProperties = properties.map { property in
+        let formattedProperties: [String] = properties.map { property in
             let (name, value) = property
             
-            if name.isEmpty {
+            guard !name.isEmpty else {
                 return "\(value)"
-            } else {
-                return "\(name): \(value)"
             }
-        }.joined(separator: ", ")
+            
+            return "\(name): \(value)"
+        }
         
         let typeName = typeName.isEmpty ? "\(type(of: self))" : typeName
-        let description = "[\(typeName) \(formattedProperties)]"
+        let description = "[\(typeName) \(formattedProperties.joined(separator: ", "))]"
         
         return description
     }

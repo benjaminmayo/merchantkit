@@ -87,7 +87,7 @@ public final class ProductInterfaceController {
     public func commit(_ purchase: Purchase) {
         guard let product = self.products.first(where: { product in
             product.identifier == purchase.productIdentifier
-        }) else { fatalError("committing incompatible purchase") }
+        }) else { MerchantKitFatalError.raise("committing incompatible purchase") }
         
         let task = self.merchant.commitPurchaseTask(for: purchase)
         task.onCompletion = { result in

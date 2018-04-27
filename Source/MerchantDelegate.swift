@@ -16,7 +16,7 @@ public protocol MerchantDelegate : AnyObject {
 extension MerchantDelegate {
     /// Default trapping implementation of `MerchantDelegate.merchant(_:, didConsume:)`. This delegate method must be implemented by an application that allows users to purchase consumable products. It can be ignored if the application only handles non-consumable, or subscription products.
     public func merchant(_ merchant: Merchant, didConsume product: Product) {
-        fatalError("Implement `MerchantDelegate.merchant(_:, didConsume:)` to respond to purchases of consumable products. It is a programming error not to explicitly implement the delegate method if the application allows users to purchase consumable products.")
+        MerchantKitFatalError.raise("Implement `MerchantDelegate.merchant(_:, didConsume:)` to respond to purchases of consumable products. It is a programming error not to explicitly implement the delegate method if the application allows users to purchase consumable products.")
     }
     
     /// Default no-op implementation of `MerchantDelegate.merchantDidChangeLoadingState(_:)`.

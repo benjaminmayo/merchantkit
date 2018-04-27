@@ -109,7 +109,8 @@ extension LocalReceiptPayloadParser : ReceiptAttributeASN1SetProcessorDelegate {
                 if let attributeType = InAppPurchaseReceiptAttributeType(rawValue: attribute.type) {
                     self.didFindInAppPurchaseReceiptAttribute(of: attributeType, attribute: attribute)
                 }
-            default: fatalError("undetected processor")
+            default:
+                MerchantKitFatalError.raise("undetected processor")
         }
     }
 }

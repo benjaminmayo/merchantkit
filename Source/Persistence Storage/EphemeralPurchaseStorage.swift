@@ -13,22 +13,22 @@ public final class EphemeralPurchaseStorage : PurchaseStorage {
     public func save(_ record: PurchaseRecord) -> PurchaseStorageUpdateResult {
         let old = self.records[record.productIdentifier]
         
-        if old != record {
-            self.records[record.productIdentifier] = record
-            
-            return .didChangeRecords
-        } else {
+        guard old != record else {
             return .noChanges
         }
+        
+        self.records[record.productIdentifier] = record
+            
+        return .didChangeRecords
     }
     
     public func removeRecord(forProductIdentifier productIdentifier: String) -> PurchaseStorageUpdateResult {
-        if let index = self.records.index(forKey: productIdentifier) {
-            self.records.remove(at: index)
-            
-            return .didChangeRecords
-        } else {
+        guard let index = self.records.index(forKey: productIdentifier) else {
             return .noChanges
         }
+        
+        self.records.remove(at: index)
+            
+        return .didChangeRecords
     }
 }
