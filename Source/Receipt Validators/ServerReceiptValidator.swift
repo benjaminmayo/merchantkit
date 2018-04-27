@@ -6,11 +6,15 @@ public final class ServerReceiptValidator {
     
     public var onCompletion: Completion?
     
-    fileprivate let sharedSecret: String
+    fileprivate let sharedSecret: String?
     
     private var dataFetcher: ServerReceiptVerificationResponseDataFetcher!
     
-    public init(request: ReceiptValidationRequest, sharedSecret: String) {
+    /// Create a new server-based validator for the `request`, with optional `sharedSecret`. This validator uses a network request to get a response from the iTunes receipt verification server.
+    /// - Parameter request: The validation request vended by the `Merchant` in the `merchant(_:validate:completion:)` delegate callback.
+    /// - Parameter sharedSecret: The shared secret is only used by the iTunes Store validation server for receipts that contain auto-renewable subscriptions. Therefore, this value is technically optional. However, attempts to validate receipts containing auto-renewing subscriptions will fail if this value is not provided.
+    /// - Note: `sharedSecret` cannot be `nil` if the `Merchant` is managing auto-renewing subscription products.
+    public init(request: ReceiptValidationRequest, sharedSecret: String?) {
         self.request = request
         self.sharedSecret = sharedSecret
     }
@@ -28,8 +32,8 @@ extension ServerReceiptValidator {
     
     private func makeFetcher(for environment: ServerReceiptVerificationResponseDataFetcher.StoreEnvironment) -> ServerReceiptVerificationResponseDataFetcher {
         let fetcher = ServerReceiptVerificationResponseDataFetcher(verificationData: self.request.data, environment: environment, sharedSecret: self.sharedSecret)
-        fetcher.onCompletion = { [weak self] result in
-            self?.didFetchVerificationData(with: result)
+        fetcher.onCompletion = { result in
+            self.didFetchVerificationData(with: result)
         }
         
         return fetcher

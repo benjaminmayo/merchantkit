@@ -9,9 +9,9 @@ internal final class ServerReceiptVerificationResponseDataFetcher {
     
     let verificationData: Data
     let environment: StoreEnvironment
-    let sharedSecret: String
+    let sharedSecret: String?
     
-    internal init(verificationData: Data, environment: StoreEnvironment, sharedSecret: String) {
+    internal init(verificationData: Data, environment: StoreEnvironment, sharedSecret: String?) {
         self.verificationData = verificationData
         self.environment = environment
         self.sharedSecret = sharedSecret
@@ -45,7 +45,7 @@ extension ServerReceiptVerificationResponseDataFetcher {
         let urlRequest: URLRequest = {
             let requestDictionary: [String : Any] = [
                 "receipt-data": self.verificationData.base64EncodedString(),
-                "password": self.sharedSecret
+                "password": self.sharedSecret ?? ""
             ]
             
             let requestData = try! JSONSerialization.data(withJSONObject: requestDictionary, options: [])
