@@ -17,29 +17,6 @@ internal struct ConstructedReceipt : Receipt, CustomStringConvertible, CustomDeb
         self.entries = entriesForProductIdentifier
     }
     
-    var description: String {
-        return self.defaultDescription(withProperties: ("productIdentifiers", self.productIdentifiers))
-    }
-    
-    var debugDescription: String {
-        var description = "ConstructedReceipt\n"
-        
-        for productIdentifier in self.entries.keys {
-            description += "\n"
-            description += "- \(productIdentifier) "
-            
-            let entries = self.entries[productIdentifier]
-            
-            description += "(\(entries.count) entries)\n"
-            
-            for entry in entries {
-                description += "\t- \(entry)\n"
-            }
-        }
-        
-        return description
-    }
-    
     func entries(forProductIdentifier productIdentifier: String) -> [ReceiptEntry] {
         return self.entries[productIdentifier]
     }

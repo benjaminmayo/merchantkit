@@ -7,19 +7,41 @@ public protocol Receipt : CustomStringConvertible, CustomDebugStringConvertible 
     func entries(forProductIdentifier productIdentifier: String) -> [ReceiptEntry]
 }
 
-/// A `ReceiptEntry` represents the pertinent information for a product contained within a `StoreKit` receipt.
-public struct ReceiptEntry : CustomStringConvertible { // Ideally, this would be Receipt.Entry
-    /// The product identifier for a purchase.
-    public let productIdentifier: String
-    /// The expiry date for a subscription purchase, if available.
-    public let expiryDate: Date?
-    
-    public init(productIdentifier: String, expiryDate: Date?) {
-        self.productIdentifier = productIdentifier
-        self.expiryDate = expiryDate
+// MARK: Default `description` and `debugDescription` implementations for `Receipt` instances
+extension Receipt {
+    var description: String {
+        return self.defaultDescription(withProperties: ("productIdentifiers", self.productIdentifiers))
     }
     
-    public var description: String {
-        return self.defaultDescription(withProperties: ("productIdentifier", self.productIdentifier), ("expiryDate", self.expiryDate ?? "nil"))
+    public var debugDescription: String {
+        var description = "\(type(of: self))\n"
+        
+        let sortedProductIdentifiers = self.productIdentifiers.sorted()
+        
+        let lastProductIdentifierIndex = sortedProductIdentifiers.count - 1
+        
+        for (index, productIdentifier) in sortedProductIdentifiers.enumerated() {
+            description += "\n"
+            description += "\t- \(productIdentifier) "
+            
+            let entries = self.entries(forProductIdentifier: productIdentifier)
+            let lastEntryIndex = entries.count - 1
+            
+            description += "(\(entries.count) entries)\n"
+            
+            for (index, entry) in entries.enumerated() {
+                description += "\t\t- \(entry)"
+                
+                if index < lastEntryIndex {
+                    description += "\n"
+                }
+            }
+            
+            if index < lastProductIdentifierIndex {
+                description += "\n"
+            }
+        }
+        
+        return description
     }
 }
