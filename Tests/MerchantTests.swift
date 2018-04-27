@@ -82,7 +82,7 @@ class MerchantTests : XCTestCase {
         })
     }
     
-    func testFailureWithServerReceiptValidationFailure() {
+    func testConsumableProductWithServerReceiptValidation() {
         guard let receiptData = self.dataForSampleResource(withName: "testSampleReceiptTwoNonConsumablesPurchased", extension: "data") else {
             XCTFail("sample resource not found")
             return
@@ -93,11 +93,31 @@ class MerchantTests : XCTestCase {
             Product(identifier: "saveScannedCodeUnlockable", kind: .nonConsumable)
         ]
         let expectedOutcomes = testProducts.map { product in
-            ProductTestExpectedOutcome(for: product, finalState: .notPurchased, shouldChangeState: false)
+            ProductTestExpectedOutcome(for: product, finalState: .isPurchased(PurchasedProductInfo(expiryDate: nil)))
         }
         
         self.runTest(with: expectedOutcomes, withReceiptDataFetchResult: .succeeded(receiptData), validationRequestHandler: { (request, completion) in
-            let validator = ServerReceiptValidator(request: request, sharedSecret: "thisisnotarealsharedsecret")
+            let validator = ServerReceiptValidator(request: request, sharedSecret: nil)
+            validator.onCompletion = { result in
+                completion(result)
+            }
+            
+            validator.start()
+        })
+    }
+    
+    func testSubscriptionProductWithFailingServerReceiptValidation() {
+        guard let receiptData = self.dataForSampleResource(withName: "testSampleReceiptOneSubscriptionPurchased", extension: "data") else {
+            XCTFail("sample resource not found")
+            return
+        }
+        
+        let product = Product(identifier: "premiumsubscription", kind: .subscription(automaticallyRenews: true))
+        
+        let expectedOutcome = ProductTestExpectedOutcome(for: product, finalState: .notPurchased, shouldChangeState: false)
+        
+        self.runTest(with: [expectedOutcome], withReceiptDataFetchResult: .succeeded(receiptData), validationRequestHandler: { (request, completion) in
+            let validator = ServerReceiptValidator(request: request, sharedSecret: nil)
             validator.onCompletion = { result in
                 completion(result)
             }
@@ -134,8 +154,18 @@ extension MerchantTests {
         
         var merchant: Merchant!
         
+        let validateRequestCompletionExpectation = self.expectation(description: "validation request completion handler called")
+        
         let mockDelegate = MockValidationMerchantDelegate()
-        mockDelegate.validateRequest = validationRequestHandler
+        mockDelegate.validateRequest = { request, completion in
+            let interceptedCompletion: (Result<Receipt>) -> Void = { result in
+                validateRequestCompletionExpectation.fulfill()
+                
+                completion(result)
+            }
+            
+            validationRequestHandler(request, interceptedCompletion)
+        }
         
         mockDelegate.didChangeStates = { products in
             for product in products {
