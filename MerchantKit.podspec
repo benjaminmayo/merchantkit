@@ -6,7 +6,7 @@ Pod::Spec.new do |spec|
     spec.summary = "A modern In-App Purchases management framework for iOS developers."
     spec.requires_arc = true
 
-    spec.version = "0.5.0"
+    spec.version = "0.6.0"
 
     spec.license = { :type => "MIT", :file => "LICENSE" }
 
@@ -18,13 +18,11 @@ Pod::Spec.new do |spec|
 
     spec.frameworks = "CoreFoundation", "StoreKit"
 
-    spec.source_files = ["MerchantKit.h", "Source/**/*.{h,swift}"]
-    spec.resource_bundles = {
-    	'MerchantKitResources' => ["Source/Internal/Resources/**/*.{stringsdict}"]
-    }
+    spec.source_files = ["Source/**/*.{h,swift}"]
+    spec.resources = ["Source/Internal/Resources/**/*.{stringsdict}"]
     
     spec.test_spec "Tests" do |test_spec|
         test_spec.source_files = "Tests/**/*.{h,swift}"
-        test_spec.resources = "Tests/Sample Resources/*.{json,data,plist}"
+        test_spec.resources = ["Tests/Sample Resources/*.{json,data,plist}"]
     end
 end
