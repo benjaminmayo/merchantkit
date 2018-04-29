@@ -33,5 +33,10 @@
 			<true/>
 		</dict>
 	</array>
+	<key>User Info</key>
+	<dict>
+		<key>Any Key</key>
+		<string>Any Value</string>
+	</dict>
 </dict>
 </plist>
