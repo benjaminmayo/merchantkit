@@ -22,7 +22,27 @@ class LocalReceiptPayloadParserTests : XCTestCase {
         XCTAssertThrowsError(try parser.receipt(from: randomData))
     }
     
-    struct SampleResource {
+    func testUnrecognisedReceiptAttributeProcessorDelegateCallback() {
+        let processor = ReceiptAttributeASN1SetProcessor(data: Data())
+        let attribute = ReceiptAttributeASN1SetProcessor.ReceiptAttribute(type: 0, version: 0, data: Data())
+        
+        let expectation = self.expectation(description: "fatalError thrown")
+
+        MerchantKitFatalError.customHandler = {
+            expectation.fulfill()
+        }
+        
+        let testingQueue = DispatchQueue(label: "testing queue") // testing MerchantKitFatalError requires dispatch to a non-main thread
+
+        testingQueue.async {
+            let parser = LocalReceiptPayloadParser()
+            parser.receiptAttributeASN1SetProcessor(processor, didFind: attribute)
+        }
+        
+        self.wait(for: [expectation], timeout: 1)
+    }
+    
+    private struct SampleResource {
         let name: String
         let expectedProductIdentifiers: Set<String>
     }

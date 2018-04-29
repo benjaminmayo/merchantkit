@@ -46,6 +46,12 @@ internal class ReceiptAttributeASN1SetProcessor : Equatable {
             self.data = data
         }
         
+        internal init(type: Int, version: Int, data: Data) {
+            self.type = type
+            self.version = version
+            self.data = data
+        }
+        
         var rawBuffer: Data {
             return self.data
         }
