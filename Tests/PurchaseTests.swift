@@ -11,8 +11,9 @@ class PurchaseTests : XCTestCase {
         XCTAssertEqual(purchase.hashValue, mockProduct.productIdentifier.hashValue)
     }
     
-    @available(iOS 11.2, *)
     func testMatchingSubscriptionPeriod() {
+        guard #available(iOS 11.2, *) else { return }
+        
         let expectations: [(SKProduct.PeriodUnit, SubscriptionPeriod.Unit)] = [
             (.day, .day),
             (.week, .week),
@@ -35,8 +36,8 @@ class PurchaseTests : XCTestCase {
         }
     }
     
-    @available(iOS 11.2, *)
     func testMatchingSubscriptionIntroductoryOffer() {
+        guard #available(iOS 11.2, *) else { return }
         let mockSubscriptionPeriod = MockSKProductSubscriptionPeriod(unit: .month, numberOfUnits: 1)
         
         let expectations: [(SKProductDiscount, SubscriptionTerms.IntroductoryOffer)] = [
@@ -60,8 +61,9 @@ class PurchaseTests : XCTestCase {
         }
     }
     
-    @available(iOS 11.2, *)
     func testNoSubscriptionPeriod() {
+        guard #available(iOS 11.2, *) else { return }
+
         let mockProduct = MockSKProductWithSubscription(productIdentifier: "testProduct", price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: nil, introductoryOffer: nil)
         let purchase = Purchase(from: mockProduct, characteristics: [])
         
