@@ -19,6 +19,7 @@
 		4314B276208329BB00ECC35C /* LocalConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4314B2742083298D00ECC35C /* LocalConfigurationTests.swift */; };
 		4314B2792083763800ECC35C /* PriceFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4314B277208375F900ECC35C /* PriceFormatterTests.swift */; };
 		4314B27B208377B300ECC35C /* PurchasedStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4314B27A208377B300ECC35C /* PurchasedStateTests.swift */; };
+		43195FA020987BE300C906F5 /* StoreParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43195F9F20987BE300C906F5 /* StoreParameters.swift */; };
 		4319AC6320927AFB000ACC04 /* LocalReceiptValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4319AC612092797C000ACC04 /* LocalReceiptValidatorTests.swift */; };
 		4319AC6720936D9F000ACC04 /* ReceiptEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4319AC6620936D9F000ACC04 /* ReceiptEntry.swift */; };
 		4319AC6820936DC4000ACC04 /* ReceiptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4319AC6420936D95000ACC04 /* ReceiptTests.swift */; };
@@ -134,6 +135,7 @@
 		4314B2742083298D00ECC35C /* LocalConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalConfigurationTests.swift; sourceTree = "<group>"; };
 		4314B277208375F900ECC35C /* PriceFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceFormatterTests.swift; sourceTree = "<group>"; };
 		4314B27A208377B300ECC35C /* PurchasedStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasedStateTests.swift; sourceTree = "<group>"; };
+		43195F9F20987BE300C906F5 /* StoreParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreParameters.swift; sourceTree = "<group>"; };
 		4319AC612092797C000ACC04 /* LocalReceiptValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalReceiptValidatorTests.swift; sourceTree = "<group>"; };
 		4319AC6420936D95000ACC04 /* ReceiptTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptTests.swift; sourceTree = "<group>"; };
 		4319AC6620936D9F000ACC04 /* ReceiptEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptEntry.swift; sourceTree = "<group>"; };
@@ -407,6 +409,7 @@
 				43D4FE6E207F7E8700AEA92F /* SubscriptionTerms.swift */,
 				435418E82080DEA300FB3833 /* SubscriptionPeriod.swift */,
 				43C5AE0B2088AB7200F804CE /* SubscriptionDuration.swift */,
+				43195F9F20987BE300C906F5 /* StoreParameters.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -621,6 +624,7 @@
 				434202811EAE09100012983A /* PurchaseRecord.swift in Sources */,
 				4314B25F2082C5B400ECC35C /* LocalizedResources.swift in Sources */,
 				436EA3BD1ED5B336005F3B3B /* LocalReceiptValidator.swift in Sources */,
+				43195FA020987BE300C906F5 /* StoreParameters.swift in Sources */,
 				434202851EAE09100012983A /* PurchasedState.swift in Sources */,
 				436CE1541EB0B3F600AB41CD /* StoreKitReceiptDataFetcher.swift in Sources */,
 				432133BA1EAE36170096919B /* Purchase.swift in Sources */,

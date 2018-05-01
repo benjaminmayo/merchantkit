@@ -1,27 +1,33 @@
 import Foundation
 import StoreKit
 
+/// The `Merchant` manages a set of registered products. The `Merchant` creates tasks to perform various operations, and tracks the `PurchasedState` of products.
+/// There will typically be only one `Merchant` instantiated in an application.
 public final class Merchant {
+    /// The `delegate` will be called to respond to various events.
     public let delegate: MerchantDelegate
     
+    /// The parameters to forward onto the underlying `StoreKit` framework. These parameters apply to all transactions handled by the `Merchant`.
+    public var storeParameters: StoreParameters = StoreParameters()
+    
     private let storage: PurchaseStorage
-    private let transactionObserver = StoreKitTransactionObserver()
+    private let transactionObserver: StoreKitTransactionObserver = StoreKitTransactionObserver()
     
-    private var _registeredProducts = [String : Product]() // TODO: Consider alternative data structure
-    private var activeTasks = [MerchantTask]()
+    private var _registeredProducts: [String : Product] = [:]
+    private var activeTasks: [MerchantTask] = []
     
-    private var purchaseObservers = Buckets<String, MerchantPurchaseObserver>()
+    private var purchaseObservers: Buckets<String, MerchantPurchaseObserver> = Buckets()
     
     private var receiptFetchers: [ReceiptFetchPolicy : ReceiptDataFetcher] = [:]
     private var receiptDataFetcherCustomInitializer: ReceiptDataFetcherInitializer?
-    private var identifiersForPendingObservedPurchases = Set<String>()
+    private var identifiersForPendingObservedPurchases: Set<String> = []
     
     public private(set) var isLoading: Bool = false
     
-    private let nowDate = Date()
+    private let nowDate: Date = Date()
     private var latestFetchedReceipt: Receipt?
     
-    /// Create a `Merchant`, at application launch. Assign a consistent `storage` and a `delegate` to receive callbacks.
+    /// Create a `Merchant`, probably at application launch. Assign a consistent `storage` and a `delegate` to receive callbacks.
     public init(storage: PurchaseStorage, delegate: MerchantDelegate) {
         self.delegate = delegate
         self.storage = storage

@@ -24,7 +24,9 @@ public final class CommitPurchaseTask : MerchantTask {
         
         self.merchant.addPurchaseObserver(self, forProductIdentifier: self.purchase.productIdentifier)
         
-        let payment = SKPayment(product: self.purchase.skProduct)
+        let payment = SKMutablePayment(product: self.purchase.skProduct)
+        payment.applicationUsername = self.merchant.storeParameters.applicationUsername
+        
         SKPaymentQueue.default().add(payment)
     }
     
