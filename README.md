@@ -51,7 +51,7 @@ public func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Prod
 
 - Straightforward, concise, API to support non-consumable, consumable and subscription In-App Purchases.
 - Simplify the development of In-App Purchase interfaces in apps, including localized formatters to dynamically create strings like "£2.99 per month" or "Seven Day Free Trial".
-- No external dependencies beyond what Apple ships with iOS. The project links Foundation and StoreKit. 
+- No external dependencies beyond what Apple ships with iOS. The project links `Foundation`, `StoreKit`, `SystemConfiguration` and `os` for logging purposes. 
 - Prioritise developer convenience and accessibility over security. `MerchantKit` users accept that some level of piracy is inevitable and not worth chasing.
 - Permissive open source license.
 - Compatibility with latest Swift version using idiomatic language constructs.

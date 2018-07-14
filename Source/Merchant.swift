@@ -24,6 +24,8 @@ public final class Merchant {
     
     public private(set) var isLoading: Bool = false
     
+    internal let logger = Logger()
+    
     private let nowDate: Date = Date()
     private var latestFetchedReceipt: Receipt?
     
@@ -216,11 +218,14 @@ extension Merchant {
         if let activeFetcher = self.receiptFetchers[policy] { // the same fetcher may be pooled and used multiple times, this is because `enqueueCompletion` can add blocks even after the fetcher has been started
             fetcher = activeFetcher
             isStarted = true
+            
+            self.logger.log(message: "Reused receipt fetcher for \(policy)", category: .receipt)
         } else {
             fetcher = self.makeFetcher(for: policy)
             isStarted = false
             
             self.receiptFetchers[policy] = fetcher
+            self.logger.log(message: "Created receipt fetcher for \(policy)", category: .receipt)
         }
         
         fetcher.enqueueCompletion { [weak self] dataResult in
@@ -228,11 +233,15 @@ extension Merchant {
             
             switch dataResult {
                 case .succeeded(let receiptData):
+                    strongSelf.logger.log(message: "Receipt fetch succeeded: found \(receiptData.count) bytes", category: .receipt)
+                    
                     strongSelf.validateReceipt(with: receiptData, reason: reason, completion: { [weak self] validateResult in
                         guard let strongSelf = self else { return }
-
+                        
                         switch validateResult {
                             case .succeeded(let receipt):
+                                strongSelf.logger.log(message: "Receipt validation succeeded: \(receipt)", category: .receipt)
+                                
                                 strongSelf.latestFetchedReceipt = receipt
                                 
                                 let updatedProducts = strongSelf.updateStorageWithValidatedReceipt(receipt, updateProducts: updateType)
@@ -244,13 +253,15 @@ extension Merchant {
                                 }
                                 
                                 completion(updatedProducts, nil)
-                            
-                            
                             case .failed(let error):
+                                strongSelf.logger.log(message: "Receipt validation failed: \(error)", category: .receipt)
+
                                 completion([], error)
                         }
                     })
                 case .failed(let error):
+                    strongSelf.logger.log(message: "Receipt fetch failed: \(error)", category: .receipt)
+
                     completion([], error)
             }
             
@@ -299,11 +310,11 @@ extension Merchant {
                 productIdentifiers = identifiers
         }
         
-        for identifier in productIdentifiers {
-            guard let product = self.product(withIdentifier: identifier) else { continue }
+        for productIdentifier in productIdentifiers {
+            guard let product = self.product(withIdentifier: productIdentifier) else { continue }
             guard product.kind != .consumable else { continue } // consumables are special-cased as they are not recorded, but may temporarily appear in receipts
             
-            let entries = receipt.entries(forProductIdentifier: identifier)
+            let entries = receipt.entries(forProductIdentifier: productIdentifier)
             
             let hasEntry = !entries.isEmpty
             
@@ -313,14 +324,20 @@ extension Merchant {
                 let expiryDate = entries.compactMap { $0.expiryDate }.max()
                 
                 if let expiryDate = expiryDate, !self.isSubscriptionActive(forExpiryDate: expiryDate) {
-                    result = self.storage.removeRecord(forProductIdentifier: identifier)
+                    result = self.storage.removeRecord(forProductIdentifier: productIdentifier)
+                    
+                    self.logger.log(message: "Removed record for \(productIdentifier), given expiry date \(expiryDate)", category: .purchaseStorage)
                 } else {
-                    let record = PurchaseRecord(productIdentifier: identifier, expiryDate: expiryDate)
+                    let record = PurchaseRecord(productIdentifier: productIdentifier, expiryDate: expiryDate)
                 
                     result = self.storage.save(record)
+                    
+                    self.logger.log(message: "Saved record: \(record)", category: .purchaseStorage)
                 }
             } else {
-                result = self.storage.removeRecord(forProductIdentifier: identifier)
+                result = self.storage.removeRecord(forProductIdentifier: productIdentifier)
+                
+                self.logger.log(message: "Removed record for \(productIdentifier)", category: .purchaseStorage)
             }
             
             if result == .didChangeRecords {
@@ -334,7 +351,8 @@ extension Merchant {
             
             for productIdentifier in identifiersForProductsNotInReceipt {
                 let result = self.storage.removeRecord(forProductIdentifier: productIdentifier)
-                
+                self.logger.log(message: "Removed record for \(productIdentifier): product not in receipt", category: .purchaseStorage)
+
                 if result == .didChangeRecords {
                     updatedProducts.insert(self._registeredProducts[productIdentifier]!)
                 }
@@ -395,6 +413,8 @@ extension Merchant : StoreKitTransactionObserverDelegate {
     
     internal func storeKitTransactionObserverDidUpdatePurchases(_ observer: StoreKitTransactionObserver) {
         if !self.identifiersForPendingObservedPurchases.isEmpty {
+            self.logger.log(message: "Invoked receipt update for purchases \(self.identifiersForPendingObservedPurchases)", category: .receipt)
+
             self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedPurchases), policy: .onlyFetch, reason: .completePurchase, completion: { _, _ in })
         }
         
