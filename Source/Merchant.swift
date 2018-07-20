@@ -10,6 +10,21 @@ public final class Merchant {
     /// The parameters to forward onto the underlying `StoreKit` framework. These parameters apply to all transactions handled by the `Merchant`.
     public var storeParameters: StoreParameters = StoreParameters()
     
+    /// The application may want to display some (non-blocking) UI when the `Merchant` is loading. This property represents activity from the `Merchant` and derived tasks. The `delegate` is notified when this property changes.
+    public private(set) var isLoading: Bool = false
+    
+    /// `Merchant` will optionally record various logging events using the system `os_log`. These events can be filtered in the Console application, but are unfortunately hard to ignore inside Xcode itself. Defaults to `false`.
+    public var canGenerateLogs: Bool {
+        get {
+            return self.logger.isActive
+        }
+        set {
+            self.logger.isActive = newValue
+        }
+    }
+    
+    internal let logger = Logger()
+    
     private let storage: PurchaseStorage
     private let transactionObserver: StoreKitTransactionObserver = StoreKitTransactionObserver()
     
@@ -21,10 +36,6 @@ public final class Merchant {
     private var receiptFetchers: [ReceiptFetchPolicy : ReceiptDataFetcher] = [:]
     private var receiptDataFetcherCustomInitializer: ReceiptDataFetcherInitializer?
     private var identifiersForPendingObservedPurchases: Set<String> = []
-    
-    public private(set) var isLoading: Bool = false
-    
-    internal let logger = Logger()
     
     private let nowDate: Date = Date()
     private var latestFetchedReceipt: Receipt?
@@ -185,7 +196,9 @@ extension Merchant {
 // MARK: Subscription utilities
 extension Merchant {
     private func isSubscriptionActive(forExpiryDate expiryDate: Date) -> Bool {
-        return expiryDate > self.nowDate
+        let leeway: TimeInterval = 60 // 60 * 60 * 24
+        
+        return expiryDate.addingTimeInterval(leeway) > self.nowDate
     }
 }
 

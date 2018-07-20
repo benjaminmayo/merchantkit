@@ -1,6 +1,8 @@
 import os.log
 
 internal class Logger {
+    internal var isActive: Bool = false
+    
     fileprivate let loggingSubsystem: String = {
         let subsystem: String
         
@@ -16,10 +18,12 @@ internal class Logger {
     }
     
     internal func log(message: @autoclosure() -> String, category: Category, type: OSLogType = .debug) {
+        guard self.isActive else { return }
+        
         let storage = self.logStorage(for: category)
         guard storage.isEnabled(type: type) else { return }
         
-        os_log("%@", log: storage, type: type, message())
+        os_log("%{public}@", log: storage, type: type, message())
     }
     
     internal enum Category {
