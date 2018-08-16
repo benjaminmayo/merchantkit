@@ -31,7 +31,10 @@ public final class SubscriptionPriceFormatter {
     /// The preferred locale to use when formatting.
     public var locale: Locale = .current {
         didSet {
+            guard self.locale != oldValue else { return }
+            
             self.unitCountFormatter.locale = self.locale
+            self.localizedStringSource = LocalizedStringSource(for: self.locale)
         }
     }
     
@@ -44,22 +47,22 @@ public final class SubscriptionPriceFormatter {
         return formatter
     }()
     
+    private var localizedStringSource: LocalizedStringSource
+    
     public init() {
-        
+        self.localizedStringSource = LocalizedStringSource(for: self.locale)
     }
     
     public func string(from price: Price, duration: SubscriptionDuration) -> String {
         let formattedPrice = self.priceFormatter.string(from: price)
         let formattedUnitCount = self.formattedUnitCount(from: duration.period.unitCount)
         
-        let localizedStringSource = LocalizedStringSource(for: self.locale)
-        
         let configuration = LocalizedStringSource.SubscriptionPricePhraseConfiguration(
             duration: duration,
             isFormal: self.phrasingStyle == .formal
         )
         
-        let phrase = localizedStringSource.subscriptionPricePhrase(with: configuration, formattedPrice: formattedPrice, formattedUnitCount: formattedUnitCount)
+        let phrase = self.localizedStringSource.subscriptionPricePhrase(with: configuration, formattedPrice: formattedPrice, formattedUnitCount: formattedUnitCount)
         
         return phrase
     }

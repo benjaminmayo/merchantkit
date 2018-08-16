@@ -25,7 +25,10 @@ public final class SubscriptionPeriodFormatter {
     /// The preferred locale to use when formatting.
     public var locale: Locale = .current {
         didSet {
+            guard self.locale != oldValue else { return }
+            
             self.unitCountFormatter.locale = self.locale
+            self.localizedStringSource = LocalizedStringSource(for: self.locale)
         }
     }
     
@@ -40,36 +43,38 @@ public final class SubscriptionPeriodFormatter {
         return formatter
     }()
     
+    private var localizedStringSource: LocalizedStringSource
+    
     public init() {
         self.singleUnitPeriodConversions = [.week : .days(7)]
+        
+        self.localizedStringSource = LocalizedStringSource(for: self.locale)
     }
     
     public func string(from period: SubscriptionPeriod) -> String {
         let convertedPeriod = self.convertedPeriod(from: period)
         
-        let localizedStringSource = LocalizedStringSource(for: self.locale)
-        
         let unitName: String
         
         if self.canPluralizeUnits {
-            unitName = localizedStringSource.pluralizedName(for: convertedPeriod.unit, count: convertedPeriod.unitCount)
+            unitName = self.localizedStringSource.pluralizedName(for: convertedPeriod.unit, count: convertedPeriod.unitCount)
         } else {
-            unitName = localizedStringSource.name(for: convertedPeriod.unit)
+            unitName = self.localizedStringSource.name(for: convertedPeriod.unit)
         }
         
         let formattedUnitCount = self.formattedUnitCount(from: convertedPeriod.unitCount)
         
         switch self.capitalizationMode {
             case .sentenceCase:
-                let phrase = localizedStringSource.joinedPhrase(forUnitName: unitName, formattedUnitCount: formattedUnitCount)
+                let phrase = self.localizedStringSource.joinedPhrase(forUnitName: unitName, formattedUnitCount: formattedUnitCount)
             
                 return phrase.sentenceCapitalized(with: self.locale)
             case .startCase:
-                let phrase = localizedStringSource.joinedPhrase(forUnitName: unitName.capitalized(with: self.locale), formattedUnitCount: formattedUnitCount.capitalized(with: self.locale))
+                let phrase = self.localizedStringSource.joinedPhrase(forUnitName: unitName.capitalized(with: self.locale), formattedUnitCount: formattedUnitCount.capitalized(with: self.locale))
             
                 return phrase
             case .lowerCase:
-                let phrase = localizedStringSource.joinedPhrase(forUnitName: unitName, formattedUnitCount: formattedUnitCount)
+                let phrase = self.localizedStringSource.joinedPhrase(forUnitName: unitName, formattedUnitCount: formattedUnitCount)
                 
                 return phrase
         }
