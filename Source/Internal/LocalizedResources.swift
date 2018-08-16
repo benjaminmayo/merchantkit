@@ -6,7 +6,7 @@ internal class LocalizedStringSource {
     private var _cachedResourceDicts = [String : [String : Any]]()
     
     init(for locale: Locale) {
-        self.provider = InternalLocalizedStringProvider(locale: locale, bundle: self.bundle(for: locale))
+        self.provider = FoundationLocalizedStringProvider(locale: locale, bundle: self.bundle(for: locale))
     }
     
     func name(for unit: SubscriptionPeriod.Unit) -> String {
@@ -244,7 +244,8 @@ fileprivate final class FoundationLocalizedStringProvider : LocalizedStringProvi
     }
 
     func localizedString(for key: LocalizedStringSource.Key, formatting arguments: [CVarArg]) -> String {
-        let format = self.localizedString(for: key, formatting: arguments)
+        let format = self.bundle.localizedString(forKey: key.stringValue, value: "", table: "MerchantKitResources\(key.tableName)")
+
         let result = String(format: format, locale: self.locale, arguments: arguments)
         
         return result
