@@ -6,6 +6,8 @@ import StoreKit
 public struct Purchase : Hashable, CustomStringConvertible {
     public let productIdentifier: String
     public let price: Price
+    public let localizedTitle: String
+    public let localizedDescription: String
     
     internal let skProduct: SKProduct
     internal let characteristics: Characteristics
@@ -13,6 +15,8 @@ public struct Purchase : Hashable, CustomStringConvertible {
     internal init(from skProduct: SKProduct, characteristics: Characteristics) {
         self.productIdentifier = skProduct.productIdentifier
         self.price = Price(from: skProduct.price, in: skProduct.priceLocale)
+        self.localizedTitle = skProduct.localizedTitle
+        self.localizedDescription = skProduct.localizedDescription
         
         self.skProduct = skProduct
         self.characteristics = characteristics
