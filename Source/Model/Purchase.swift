@@ -6,17 +6,13 @@ import StoreKit
 public struct Purchase : Hashable, CustomStringConvertible {
     public let productIdentifier: String
     public let price: Price
-    public let localizedTitle: String
-    public let localizedDescription: String
-    
+
     internal let skProduct: SKProduct
     internal let characteristics: Characteristics
     
     internal init(from skProduct: SKProduct, characteristics: Characteristics) {
         self.productIdentifier = skProduct.productIdentifier
         self.price = Price(from: skProduct.price, in: skProduct.priceLocale)
-        self.localizedTitle = skProduct.localizedTitle
-        self.localizedDescription = skProduct.localizedDescription
         
         self.skProduct = skProduct
         self.characteristics = characteristics
@@ -28,6 +24,14 @@ public struct Purchase : Hashable, CustomStringConvertible {
     
     public var hashValue: Int {
         return self.productIdentifier.hashValue
+    }
+    
+    public var localizedTitle: String {
+        return self.skProduct.localizedTitle
+    }
+    
+    public var localizedDescription: String {
+        return self.skProduct.localizedDescription
     }
     
     /// Describes the terms of the subscription purchase, such as renewal period and any introductory offers. Returns nil for non-subscription purchases.
