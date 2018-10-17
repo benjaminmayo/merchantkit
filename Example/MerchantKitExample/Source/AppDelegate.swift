@@ -12,7 +12,7 @@ public class AppDelegate: UIResponder, UIApplicationDelegate {
         self.merchant.register(ProductDatabase.allProducts)
         self.merchant.setup()
         
-        let purchaseProductsViewController = PurchaseProductsViewController(merchant: self.merchant)
+        let purchaseProductsViewController = PurchaseProductsViewController(using: self.merchant, presenting: ProductDatabase.allProducts)
         let navigationController = UINavigationController(rootViewController: purchaseProductsViewController)
         
         self.window = {

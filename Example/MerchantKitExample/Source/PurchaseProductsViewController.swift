@@ -13,8 +13,13 @@ public class PurchaseProductsViewController : UIViewController {
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private let actionTintColor = UIColor(red: 0/255.0, green: 122/255.0, blue: 255/255.0, alpha: 1.0)
     
-    public init(merchant: Merchant, displayingProducts products: [Product]) {
+    // Instantiate a view controller that will display the provided `products` using the `Merchant`.
+    // It is generally a good idea to use this kind of dependency injection pattern.
+    public init(presenting products: [Product], using merchant: Merchant) {
+        // Construct a `ProductInterfaceController`. As the controller intentionally stores its products as an unordered set, layout of products in the UI is the responsibility of the app interface.
+        // The design of the `ProductInterfaceController` is flexible enough to support many types of user interfaces, with one or more products at a time. A view controller is the obvious example case.
         self.productInterfaceController = ProductInterfaceController(products: Set(products), with: merchant)
+        // Construct a basic view model for the view controller to display. This is obviously a rudimentary data structure, for the sake of a simplified demo.
         self.tableSections = [
             .introduction(.text("This is a (very ugly) purchase product storefront, demonstrating the usage of ProductInterfaceController to display and buy products. Products. Products. Products.\n\nNote that you will encounter various errors when running this project as StoreKit will expect products to be registered in App Store Connect. Hopefully, the source code sufficiently describes the general flow so it can aid implementation of MerchantKit into real projects.")),
             .products(products.map { .product($0) }),
@@ -38,6 +43,7 @@ public class PurchaseProductsViewController : UIViewController {
         
         self.view.addSubview(self.tableView)
         
+        // Become the `delegate` of the `ProductInterfaceController` to receive updates.
         self.productInterfaceController.delegate = self
     }
     
