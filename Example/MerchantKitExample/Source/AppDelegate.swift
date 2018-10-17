@@ -9,11 +9,11 @@ public class AppDelegate: UIResponder, UIApplicationDelegate {
     
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         self.merchant = Merchant(storage: EphemeralPurchaseStorage(), delegate: self)
+        self.merchant.register(ProductDatabase.allProducts)
+        self.merchant.setup()
         
-        let displayingProducts = [ProductDatabase.one, ProductDatabase.another]
-        
-        let upgradeViewController = PurchaseProductsViewController(merchant: self.merchant, displayingProducts: displayingProducts)
-        let navigationController = UINavigationController(rootViewController: upgradeViewController)
+        let purchaseProductsViewController = PurchaseProductsViewController(merchant: self.merchant)
+        let navigationController = UINavigationController(rootViewController: purchaseProductsViewController)
         
         self.window = {
             let window = UIWindow(frame: UIScreen.main.bounds)
@@ -35,9 +35,7 @@ extension AppDelegate : MerchantDelegate {
     public func merchant(_ merchant: Merchant, validate request: ReceiptValidationRequest, completion: @escaping (Result<Receipt>) -> Void) {
         let validator = LocalReceiptValidator(request: request)
         validator.onCompletion = { result in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-                completion(result)
-            })
+            completion(result)
         }
         
         validator.start()

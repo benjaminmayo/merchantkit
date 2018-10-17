@@ -79,16 +79,6 @@ public class PurchaseProductsViewController : UIViewController {
                     return actions[index]
             }
         }
-        
-//        func index(of row: Row) -> Int? {
-//            for index in 0..<self.rowCount {
-//                if self.row(at: index) == row {
-//                    return index
-//                }
-//            }
-//
-//            return nil
-//        }
     }
     
     private enum Row : Equatable {
@@ -159,6 +149,9 @@ extension PurchaseProductsViewController : UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // A real app would use much nicer UI components than these basic tweaks to default `UITableViewCell` styles.
+        // Cell dequeue is also omitted for simplicity of the demo.
+        
         switch self.row(at: indexPath) {
             case .product(let product):
                 let productState = self.productInterfaceController.state(for: product)
@@ -334,7 +327,7 @@ extension PurchaseProductsViewController {
         self.present(alertController, animated: true)
     }
     
-    // presents a 'global' loading indicator, that is independent from the loading indicator when purchasing a specific product
+    // Presents a 'global' loading indicator for the fetching state, separate from the loading indicators which are specific to a particular product.
     private func updateFetchingIndicator(isVisible: Bool) {
         if isVisible {
             let indicatorView = UIActivityIndicatorView(style: .gray)
