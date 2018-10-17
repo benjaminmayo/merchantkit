@@ -15,7 +15,11 @@ public class PurchaseProductsViewController : UIViewController {
     
     public init(merchant: Merchant, displayingProducts products: [Product]) {
         self.productInterfaceController = ProductInterfaceController(products: Set(products), with: merchant)
-        self.tableSections = [.products(products.map { .product($0) }), .actions([.action(.restorePurchases)])]
+        self.tableSections = [
+            .introduction(.text("This is a (very ugly) purchase product storefront, demonstrating the usage of ProductInterfaceController to display and buy products. Products. Products. Products.\n\nNote that you will encounter various errors when running this project as StoreKit will expect products to be registered in App Store Connect. Hopefully, the source code sufficiently describes the general flow so it can aid implementation of MerchantKit into real projects.")),
+            .products(products.map { .product($0) }),
+            .actions([.action(.restorePurchases)])
+        ]
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -88,6 +92,7 @@ public class PurchaseProductsViewController : UIViewController {
     }
     
     private enum Row : Equatable {
+        case text(String)
         case product(Product)
         case action(Action)
         
@@ -208,6 +213,12 @@ extension PurchaseProductsViewController : UITableViewDataSource {
                 cell.textLabel?.textColor = self.actionTintColor
                 
                 return cell
+            case .text(let text):
+                let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+                cell.textLabel?.text = text
+                cell.textLabel?.numberOfLines = 0
+                
+                return cell
         }
     }
 }
@@ -226,13 +237,15 @@ extension PurchaseProductsViewController : UITableViewDelegate {
                 }
             case .action(.restorePurchases):
                 self.productInterfaceController.restorePurchases()
+            case .text(_):
+                break
         }
     }
     
     public func tableView(_ tableView: UITableView, titleForHeaderInSection sectionIndex: Int) -> String? {
         switch self.section(at: sectionIndex) {
             case .introduction(_):
-                return nil 
+                return nil
             case .products(_):
                 return "Buy Products"
             case .actions(_):
@@ -268,6 +281,8 @@ extension PurchaseProductsViewController : UITableViewDelegate {
                 }
             case .action(_):
                 return true
+            case .text(_):
+                return false
         }
     }
 }

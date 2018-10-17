@@ -1,0 +1,6 @@
+target 'MerchantKitExample' do
+	platform :ios, '12.0'
+	
+	pod 'MerchantKit'
+end
+

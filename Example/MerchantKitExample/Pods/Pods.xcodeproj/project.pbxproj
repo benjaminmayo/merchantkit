@@ -1,0 +1,836 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		03C196EA45367C1AE3F589BD193FB6DD /* CommitPurchaseTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E677589A58AF28FF00C1F2B1B4C2BA07 /* CommitPurchaseTask.swift */; };
+		0685EC29122FB73D1B97ED6393DA04E7 /* MerchantKit-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B61EBE33D83C643D778815217E688824 /* MerchantKit-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		0C99BEFF8258DECBF1A29A73CD363F23 /* PurchasedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D695B58E161C7873BBE971D4F7C4BDC /* PurchasedState.swift */; };
+		15686E49975A715037C21AD9897D58F5 /* PurchaseRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C139037D7D00F4579987AEED0A2E7DF0 /* PurchaseRecord.swift */; };
+		15DAEF152ADABE36C2E25661D4E2FA27 /* ReceiptDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF25826B80E50A6B85C01521DCD45A71 /* ReceiptDataFetcher.swift */; };
+		186AA985A13D57D49C40F5C76F331FC1 /* ASN1BufferType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96123E3AD2F74B7A528899310D5AF0A /* ASN1BufferType.swift */; };
+		1B7ADFBFDAAD8B46D754E3D5140ED236 /* DescriptionUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = B194E3E8FB8A716C267F735B99319093 /* DescriptionUtilities.swift */; };
+		1ECC9A0F5D4DECE0F764CABBF2CE0727 /* ASN1BufferValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73CB41F8A3EDB41F98B3ACF84B97FB0 /* ASN1BufferValue.swift */; };
+		218C6192E877CC269E7B839A847A3B3A /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D904203699FA7D0BCA67B75D61763C9 /* Logger.swift */; };
+		23F945798ECF69B581E3E6F88A40AC25 /* MerchantTaskUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FAD9ACE7F08D7F3A452F6C63EB0E6F /* MerchantTaskUtilities.swift */; };
+		38E0245C45EF61E3879F18D07D23C539 /* ProductInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67DC749486EBC2EC9286F1203DC85E /* ProductInterfaceController.swift */; };
+		3A57E85BE0D85AE120AE93B5F5A3A9F6 /* SubscriptionDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A70810833E2D28DA58F0EAD8361F49 /* SubscriptionDuration.swift */; };
+		3F2A481970C9B92D93A513EE4C13D978 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = E594F88F8E444BA27CF1D5BD8910C3F4 /* Result.swift */; };
+		3F95AF6AFA2612DDB2207C04D01E8FDE /* ReceiptAttributeASN1SetProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46368A8A9D941A0B7E8F36BE4629275 /* ReceiptAttributeASN1SetProcessor.swift */; };
+		467FCFC9A8E2511F560FF1D85FF44809 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F02CD4F45F15F7054506D67439E237 /* Product.swift */; };
+		4A21DA353170A700D272A1CAE272FBD7 /* Purchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0303C0BA9308AA1836BACE908905692B /* Purchase.swift */; };
+		4BEF911C941E5AF8CCFB3C0E2DDB01B6 /* ServerReceiptVerificationDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4910A785BAFC0C588A46274C4C0FFDB6 /* ServerReceiptVerificationDataFetcher.swift */; };
+		55AEC506DD650C4F7DD80FD479AAE495 /* LocalReceiptPayloadParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD099F0D8C4A7B475D5761E31584FCD /* LocalReceiptPayloadParser.swift */; };
+		5A14562C743F855E50DFFDFC281D3E26 /* Pods-MerchantKitExample-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2544A40856A4664EAEB2EF070C978B33 /* Pods-MerchantKitExample-dummy.m */; };
+		5C017C8F43907FEA3F2EEE43A92558FC /* KeychainPurchaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8441E60C252A1934FF81F30A065740AE /* KeychainPurchaseStorage.swift */; };
+		5CF299529E56CCF8A9829A69BC1220B7 /* StoreKitReceiptDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE823CC0B8566EECCF7B072DBE627E0D /* StoreKitReceiptDataFetcher.swift */; };
+		5F228FB6806AF6189F61720541E0C702 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 507EA84ACB76C75BE3DF48C27DC0D42C /* CoreFoundation.framework */; };
+		630F76417B68B935108335CADDA923EE /* Receipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = D94614F1281FD7BDD05A31051D0E20D9 /* Receipt.swift */; };
+		6766089A7599A80B2330A4A0AD6B58AB /* Buckets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C1B165C93A508C173769B0CD9C6121 /* Buckets.swift */; };
+		6CC749980478879165F59DA8A6738A73 /* ReceiptValidationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD64AA20408E5BD399FF1E8A41AC7F6 /* ReceiptValidationRequest.swift */; };
+		7647D06104CEF4C1547A389AC530348F /* PurchaseSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84E7CB292995F8C5E41CC9232FB33A5 /* PurchaseSet.swift */; };
+		77E6699720A40A21DF2F6F3FB1CB9E98 /* LocalReceiptValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611CF54E05276903CD1DAF955EA19A22 /* LocalReceiptValidator.swift */; };
+		78446CAA3C7A7B8BC3962BE90289CB7F /* ASN1PayloadValueConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ED0C55CA90B1878597E4F81ECF8D92 /* ASN1PayloadValueConversion.swift */; };
+		7E52E31ACAB67E925904391F6427D144 /* MerchantProductObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5BF2DECB44418BC2DB0F2264054687 /* MerchantProductObserver.swift */; };
+		7F9E7A359D675227FE0D269433C392D5 /* MerchantKit-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A44BE1A48B49ADBC2DF89E1048BF5BB8 /* MerchantKit-dummy.m */; };
+		8929E83FC99AF4FA5B73EF71C4B307E3 /* ReceiptEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2EDD7DA46AE8C216D0B444BAED00B3 /* ReceiptEntry.swift */; };
+		8DBFE1B218E09A5FBB5D0E5A57CC135D /* StringUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE6325ED724E943249A2E8217CF3DE3E /* StringUtilities.swift */; };
+		8FAA3352E4D1294A67E8CE3C663707C3 /* StoreParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74CEA61B65FFC900CB1F16B5812F093D /* StoreParameters.swift */; };
+		99AFB2C4D9368956D8145544B42398C8 /* EphemeralPurchaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D284116A817B2BE5564989128334E5C /* EphemeralPurchaseStorage.swift */; };
+		9FD45E7D8AB1D6252FAB21E193773913 /* PurchaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7AD5BDF8731E4969DFD89E6FBA7D30 /* PurchaseStorage.swift */; };
+		A17E1801275B1B5D7ABA4612CD357197 /* MerchantDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5336FF1B41FF92A462AEF4BDC29F6A /* MerchantDelegate.swift */; };
+		A2D57DE65B26EAA586B4E2D3C873683E /* PurchasedProductInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B7CB4B853B317446437C0D03105CF8 /* PurchasedProductInfo.swift */; };
+		A5577BF579BDD83CA891793270EEBDEF /* SubscriptionTerms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A2B7793831E3308AEC94827C5F0268 /* SubscriptionTerms.swift */; };
+		A5A1F81363776F81D60C8E606E405DA1 /* LocalizedResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D34BE914403EDF4AFB68A58FD03478 /* LocalizedResources.swift */; };
+		A5A7AFDBF3E0D064191775D0262B6E23 /* MerchantKitFatalError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0996285037D65346B7871D68AB3E628 /* MerchantKitFatalError.swift */; };
+		A66C93E1AE30FD1CDC4083E59C424C31 /* ASN1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E1B89238570F94D50C4412011190C /* ASN1.swift */; };
+		A74A902DD7B5AE77C7F27ECFD8FACF2E /* UserDefaultsPurchaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F2B566FFE229D5491459126F5249EB /* UserDefaultsPurchaseStorage.swift */; };
+		A8E1DFC4ECBDBC77BE115B8169D6F427 /* ASN1Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFADD81169A9060406F25AF975CAE2EF /* ASN1Parser.swift */; };
+		AAE988A10B0028545D87B23412D06EC9 /* LocalConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF42267D85022A0EB85B7B62E3A6A336 /* LocalConfiguration.swift */; };
+		AF56F0A1059DEF73D971854DE9CE51C8 /* SubscriptionPriceFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01579EF46FAA388FE167C63E6EFAB299 /* SubscriptionPriceFormatter.swift */; };
+		B0A7928AC15A554DBAEF8989CBEA3D73 /* Price.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708032087982E45DA8664D2C7378C0A9 /* Price.swift */; };
+		B2C5798A3A48B7480244ABA9FBA5018A /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BDDFFDD1E2BB19FD34D782E27282018 /* StoreKit.framework */; };
+		BA85A1DAAD66F8D66C01189FCBB5F9EE /* AvailablePurchasesTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2232244B566DEC3ECF023019C113920 /* AvailablePurchasesTask.swift */; };
+		C030CDF3CDCCE8DF2E189B13CF085F0F /* ConstructedReceipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EC88D06CD6A6195B561E9E3C6544C4 /* ConstructedReceipt.swift */; };
+		C283D5C22E7DD018A0C45A46F11C8A00 /* Pods-MerchantKitExample-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C804A417BC6B04D80C9A1F46E51FECF /* Pods-MerchantKitExample-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		C5BCC9F1B2DAF1F12CE17C6161B7ECCD /* RestorePurchasesTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730B3C6F6BFB28F9CDD7EB02B9706DD3 /* RestorePurchasesTask.swift */; };
+		C605DA6232CDD2C7D10CCA79A1314C06 /* ASN1ObjectIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E32A2B99EBBE9971C99001A32664D05 /* ASN1ObjectIdentifier.swift */; };
+		C61D9C9E4809A83208E81626FB489379 /* SubscriptionPeriod.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8122C59ABDD1109213E03A8038F134 /* SubscriptionPeriod.swift */; };
+		D33EE8F6797290323635D1F731E2CFBF /* NetworkAvailabilityCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCB383AEA0014B6C7499CB52FF39EE3 /* NetworkAvailabilityCenter.swift */; };
+		D411CFDEC10FB444C8396D9602E0836B /* ServerReceiptValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06735B5247A479B641C31DA73657AD2 /* ServerReceiptValidator.swift */; };
+		DB00F1330B0F7EFDFE65E573D320845E /* DateUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8974CD15800A3232B09E8C60B86BFC /* DateUtilities.swift */; };
+		DB99DCCF42B538D017CFF31BB40538AA /* StoreKitTransactionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7314B74D35DFA1B3108BA1556196BC09 /* StoreKitTransactionObserver.swift */; };
+		E08565C4567BF2BDB910B30A693D2AED /* SubscriptionPeriodFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 937CF38E0B4DD2122F9529105435ADC4 /* SubscriptionPeriodFormatter.swift */; };
+		E330C49A56C403CBAC41F4468ADA6F18 /* Merchant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2BEDBAD6553B053F1AEBF7B65E82E7 /* Merchant.swift */; };
+		E3BE3ACBDA2A8E39985E9C8F6C3DFC29 /* MerchantTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349BADC0A53CFB68931B1E8802948AA3 /* MerchantTask.swift */; };
+		F48830D0E6D540FFFF99361978A6FF09 /* PriceFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F576D96BDF2C16FC346561D46D29E27 /* PriceFormatter.swift */; };
+		F6FB3E8448C835D523B5AFA71729F763 /* PKCS7ReceiptDataContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A592432BCD045EF5564661EE44EBFD92 /* PKCS7ReceiptDataContainer.swift */; };
+		FBD80AEBB77FD655CBACB3E5D4995D6B /* ServerReceiptResponseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEA41884E0E04317AF5539C529FEB48 /* ServerReceiptResponseParser.swift */; };
+		FC86CE044A6562D6B9016E497B1D4FF6 /* MerchantKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 00339F2ABB69FCD297F8BCBA5B0B383B /* MerchantKit.h */; settings = {ATTRIBUTES = (Project, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		900C2274D54EDCF97B55F5B541CBDA2F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8360EF7F6349105FD9AADE6817C6897F;
+			remoteInfo = MerchantKit;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		00339F2ABB69FCD297F8BCBA5B0B383B /* MerchantKit.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MerchantKit.h; path = Source/MerchantKit.h; sourceTree = "<group>"; };
+		00834094226AC131E243BE4B1E715B63 /* libPods-MerchantKitExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libPods-MerchantKitExample.a"; path = "libPods-MerchantKitExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E3295277F41B6CC3960F13296B56AF /* Pods-MerchantKitExample.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-MerchantKitExample.modulemap"; sourceTree = "<group>"; };
+		01579EF46FAA388FE167C63E6EFAB299 /* SubscriptionPriceFormatter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SubscriptionPriceFormatter.swift; path = "Source/User Interface/SubscriptionPriceFormatter.swift"; sourceTree = "<group>"; };
+		0303C0BA9308AA1836BACE908905692B /* Purchase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Purchase.swift; path = Source/Model/Purchase.swift; sourceTree = "<group>"; };
+		0A2EDD7DA46AE8C216D0B444BAED00B3 /* ReceiptEntry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReceiptEntry.swift; path = Source/Model/ReceiptEntry.swift; sourceTree = "<group>"; };
+		0CD64AA20408E5BD399FF1E8A41AC7F6 /* ReceiptValidationRequest.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReceiptValidationRequest.swift; path = Source/Model/ReceiptValidationRequest.swift; sourceTree = "<group>"; };
+		0E32A2B99EBBE9971C99001A32664D05 /* ASN1ObjectIdentifier.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ASN1ObjectIdentifier.swift; path = Source/Internal/ASN1/ASN1ObjectIdentifier.swift; sourceTree = "<group>"; };
+		0EEA41884E0E04317AF5539C529FEB48 /* ServerReceiptResponseParser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ServerReceiptResponseParser.swift; path = Source/Internal/ServerReceiptResponseParser.swift; sourceTree = "<group>"; };
+		115E1B89238570F94D50C4412011190C /* ASN1.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ASN1.swift; path = Source/Internal/ASN1/ASN1.swift; sourceTree = "<group>"; };
+		1634C2D561BCA344BBDC37C34B569530 /* MerchantKit.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; name = MerchantKit.modulemap; path = ../../Headers/Public/MerchantKit/MerchantKit.modulemap; sourceTree = "<group>"; };
+		1BD099F0D8C4A7B475D5761E31584FCD /* LocalReceiptPayloadParser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LocalReceiptPayloadParser.swift; path = Source/Internal/LocalReceiptPayloadParser.swift; sourceTree = "<group>"; };
+		23A70810833E2D28DA58F0EAD8361F49 /* SubscriptionDuration.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SubscriptionDuration.swift; path = Source/Model/SubscriptionDuration.swift; sourceTree = "<group>"; };
+		240924F819E0392D5762C894A166ABFC /* MerchantKitResourcesLocalizedPeriodUnits.stringsdict */ = {isa = PBXFileReference; includeInIndex = 1; name = MerchantKitResourcesLocalizedPeriodUnits.stringsdict; path = es.lproj/MerchantKitResourcesLocalizedPeriodUnits.stringsdict; sourceTree = "<group>"; };
+		24EC88D06CD6A6195B561E9E3C6544C4 /* ConstructedReceipt.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstructedReceipt.swift; path = Source/Internal/ConstructedReceipt.swift; sourceTree = "<group>"; };
+		2544A40856A4664EAEB2EF070C978B33 /* Pods-MerchantKitExample-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-MerchantKitExample-dummy.m"; sourceTree = "<group>"; };
+		2BDDFFDD1E2BB19FD34D782E27282018 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
+		349BADC0A53CFB68931B1E8802948AA3 /* MerchantTask.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MerchantTask.swift; path = Source/Tasks/MerchantTask.swift; sourceTree = "<group>"; };
+		37A2B7793831E3308AEC94827C5F0268 /* SubscriptionTerms.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SubscriptionTerms.swift; path = Source/Model/SubscriptionTerms.swift; sourceTree = "<group>"; };
+		3C2BEDBAD6553B053F1AEBF7B65E82E7 /* Merchant.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Merchant.swift; path = Source/Merchant.swift; sourceTree = "<group>"; };
+		3E67DC749486EBC2EC9286F1203DC85E /* ProductInterfaceController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ProductInterfaceController.swift; path = "Source/User Interface/ProductInterfaceController.swift"; sourceTree = "<group>"; };
+		46FAD9ACE7F08D7F3A452F6C63EB0E6F /* MerchantTaskUtilities.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MerchantTaskUtilities.swift; path = Source/Internal/MerchantTaskUtilities.swift; sourceTree = "<group>"; };
+		4910A785BAFC0C588A46274C4C0FFDB6 /* ServerReceiptVerificationDataFetcher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ServerReceiptVerificationDataFetcher.swift; path = Source/Internal/ServerReceiptVerificationDataFetcher.swift; sourceTree = "<group>"; };
+		507EA84ACB76C75BE3DF48C27DC0D42C /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/CoreFoundation.framework; sourceTree = DEVELOPER_DIR; };
+		51B0D1A1D6739B4021E2FC2A83BEDDFB /* Pods-MerchantKitExample-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-MerchantKitExample-acknowledgements.plist"; sourceTree = "<group>"; };
+		57D34BE914403EDF4AFB68A58FD03478 /* LocalizedResources.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LocalizedResources.swift; path = Source/Internal/LocalizedResources.swift; sourceTree = "<group>"; };
+		5A5336FF1B41FF92A462AEF4BDC29F6A /* MerchantDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MerchantDelegate.swift; path = Source/MerchantDelegate.swift; sourceTree = "<group>"; };
+		5D695B58E161C7873BBE971D4F7C4BDC /* PurchasedState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PurchasedState.swift; path = Source/Model/PurchasedState.swift; sourceTree = "<group>"; };
+		611CF54E05276903CD1DAF955EA19A22 /* LocalReceiptValidator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LocalReceiptValidator.swift; path = "Source/Receipt Validators/LocalReceiptValidator.swift"; sourceTree = "<group>"; };
+		63B51B1D5227E76D92A90E34BB81575C /* Pods-MerchantKitExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MerchantKitExample.release.xcconfig"; sourceTree = "<group>"; };
+		6A8974CD15800A3232B09E8C60B86BFC /* DateUtilities.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DateUtilities.swift; path = Source/Internal/DateUtilities.swift; sourceTree = "<group>"; };
+		6BED2E7BF71101411BBC0D30874564DD /* libMerchantKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libMerchantKit.a; path = libMerchantKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E5BF2DECB44418BC2DB0F2264054687 /* MerchantProductObserver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MerchantProductObserver.swift; path = Source/Internal/MerchantProductObserver.swift; sourceTree = "<group>"; };
+		6F576D96BDF2C16FC346561D46D29E27 /* PriceFormatter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PriceFormatter.swift; path = "Source/User Interface/PriceFormatter.swift"; sourceTree = "<group>"; };
+		708032087982E45DA8664D2C7378C0A9 /* Price.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Price.swift; path = Source/Model/Price.swift; sourceTree = "<group>"; };
+		71F02CD4F45F15F7054506D67439E237 /* Product.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Product.swift; path = Source/Model/Product.swift; sourceTree = "<group>"; };
+		730B3C6F6BFB28F9CDD7EB02B9706DD3 /* RestorePurchasesTask.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RestorePurchasesTask.swift; path = Source/Tasks/RestorePurchasesTask.swift; sourceTree = "<group>"; };
+		7314B74D35DFA1B3108BA1556196BC09 /* StoreKitTransactionObserver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StoreKitTransactionObserver.swift; path = Source/Internal/StoreKitTransactionObserver.swift; sourceTree = "<group>"; };
+		74CEA61B65FFC900CB1F16B5812F093D /* StoreParameters.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StoreParameters.swift; path = Source/Model/StoreParameters.swift; sourceTree = "<group>"; };
+		74ED0C55CA90B1878597E4F81ECF8D92 /* ASN1PayloadValueConversion.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ASN1PayloadValueConversion.swift; path = Source/Internal/ASN1/ASN1PayloadValueConversion.swift; sourceTree = "<group>"; };
+		7C804A417BC6B04D80C9A1F46E51FECF /* Pods-MerchantKitExample-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-MerchantKitExample-umbrella.h"; sourceTree = "<group>"; };
+		8441E60C252A1934FF81F30A065740AE /* KeychainPurchaseStorage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeychainPurchaseStorage.swift; path = "Source/Persistence Storage/KeychainPurchaseStorage.swift"; sourceTree = "<group>"; };
+		87C1B165C93A508C173769B0CD9C6121 /* Buckets.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Buckets.swift; path = Source/Internal/Buckets.swift; sourceTree = "<group>"; };
+		8D284116A817B2BE5564989128334E5C /* EphemeralPurchaseStorage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EphemeralPurchaseStorage.swift; path = "Source/Persistence Storage/EphemeralPurchaseStorage.swift"; sourceTree = "<group>"; };
+		8D904203699FA7D0BCA67B75D61763C9 /* Logger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Logger.swift; path = Source/Internal/Logger.swift; sourceTree = "<group>"; };
+		937CF38E0B4DD2122F9529105435ADC4 /* SubscriptionPeriodFormatter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SubscriptionPeriodFormatter.swift; path = "Source/User Interface/SubscriptionPeriodFormatter.swift"; sourceTree = "<group>"; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		97B7CB4B853B317446437C0D03105CF8 /* PurchasedProductInfo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PurchasedProductInfo.swift; path = Source/Model/PurchasedProductInfo.swift; sourceTree = "<group>"; };
+		97F3B898C9C5C36F091DCFBE876A141F /* Pods-MerchantKitExample-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-MerchantKitExample-acknowledgements.markdown"; sourceTree = "<group>"; };
+		A0996285037D65346B7871D68AB3E628 /* MerchantKitFatalError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MerchantKitFatalError.swift; path = Source/Internal/MerchantKitFatalError.swift; sourceTree = "<group>"; };
+		A44BE1A48B49ADBC2DF89E1048BF5BB8 /* MerchantKit-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "MerchantKit-dummy.m"; sourceTree = "<group>"; };
+		A592432BCD045EF5564661EE44EBFD92 /* PKCS7ReceiptDataContainer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PKCS7ReceiptDataContainer.swift; path = Source/Internal/PKCS7ReceiptDataContainer.swift; sourceTree = "<group>"; };
+		A823BA301B6FBBC7321CC1DE81F610E1 /* MerchantKitResourcesLocalizedSubscriptionPricePhrases.stringsdict */ = {isa = PBXFileReference; includeInIndex = 1; name = MerchantKitResourcesLocalizedSubscriptionPricePhrases.stringsdict; path = en.lproj/MerchantKitResourcesLocalizedSubscriptionPricePhrases.stringsdict; sourceTree = "<group>"; };
+		B194E3E8FB8A716C267F735B99319093 /* DescriptionUtilities.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DescriptionUtilities.swift; path = Source/Internal/DescriptionUtilities.swift; sourceTree = "<group>"; };
+		B61EBE33D83C643D778815217E688824 /* MerchantKit-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "MerchantKit-umbrella.h"; path = "../../Headers/Public/MerchantKit/MerchantKit-umbrella.h"; sourceTree = "<group>"; };
+		B9F2B566FFE229D5491459126F5249EB /* UserDefaultsPurchaseStorage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UserDefaultsPurchaseStorage.swift; path = "Source/Persistence Storage/UserDefaultsPurchaseStorage.swift"; sourceTree = "<group>"; };
+		BF25826B80E50A6B85C01521DCD45A71 /* ReceiptDataFetcher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReceiptDataFetcher.swift; path = Source/Internal/ReceiptDataFetcher.swift; sourceTree = "<group>"; };
+		BF42267D85022A0EB85B7B62E3A6A336 /* LocalConfiguration.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LocalConfiguration.swift; path = Source/Utilities/LocalConfiguration.swift; sourceTree = "<group>"; };
+		BF7AD5BDF8731E4969DFD89E6FBA7D30 /* PurchaseStorage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PurchaseStorage.swift; path = "Source/Persistence Storage/PurchaseStorage.swift"; sourceTree = "<group>"; };
+		BFD3A9C898D11372C6CAD777157FFC75 /* Pods-MerchantKitExample-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-MerchantKitExample-resources.sh"; sourceTree = "<group>"; };
+		C139037D7D00F4579987AEED0A2E7DF0 /* PurchaseRecord.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PurchaseRecord.swift; path = "Source/Persistence Storage/PurchaseRecord.swift"; sourceTree = "<group>"; };
+		C46368A8A9D941A0B7E8F36BE4629275 /* ReceiptAttributeASN1SetProcessor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReceiptAttributeASN1SetProcessor.swift; path = Source/Internal/ReceiptAttributeASN1SetProcessor.swift; sourceTree = "<group>"; };
+		C9AB95064BED86061A9BD52F5690A3BE /* MerchantKit.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MerchantKit.xcconfig; sourceTree = "<group>"; };
+		CDCB383AEA0014B6C7499CB52FF39EE3 /* NetworkAvailabilityCenter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NetworkAvailabilityCenter.swift; path = Source/Internal/NetworkAvailabilityCenter.swift; sourceTree = "<group>"; };
+		D06735B5247A479B641C31DA73657AD2 /* ServerReceiptValidator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ServerReceiptValidator.swift; path = "Source/Receipt Validators/ServerReceiptValidator.swift"; sourceTree = "<group>"; };
+		D94614F1281FD7BDD05A31051D0E20D9 /* Receipt.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Receipt.swift; path = Source/Model/Receipt.swift; sourceTree = "<group>"; };
+		DACCAA923A080D030E86F71E5E9D1387 /* Pods-MerchantKitExample-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-MerchantKitExample-frameworks.sh"; sourceTree = "<group>"; };
+		DD5D6857D655AF117912EE8CA5E0E1D1 /* MerchantKitResourcesLocalizedPeriodUnits.stringsdict */ = {isa = PBXFileReference; includeInIndex = 1; name = MerchantKitResourcesLocalizedPeriodUnits.stringsdict; path = fr.lproj/MerchantKitResourcesLocalizedPeriodUnits.stringsdict; sourceTree = "<group>"; };
+		E36A57E7B6AFA8EB1DADFDABB82981DA /* Pods-MerchantKitExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MerchantKitExample.debug.xcconfig"; sourceTree = "<group>"; };
+		E594F88F8E444BA27CF1D5BD8910C3F4 /* Result.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Result.swift; path = Source/Model/Result.swift; sourceTree = "<group>"; };
+		E677589A58AF28FF00C1F2B1B4C2BA07 /* CommitPurchaseTask.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CommitPurchaseTask.swift; path = Source/Tasks/CommitPurchaseTask.swift; sourceTree = "<group>"; };
+		EBD208DC6D27FDF3BDD77C99DC6A2AD3 /* MerchantKitResourcesLocalizedPeriodUnits.stringsdict */ = {isa = PBXFileReference; includeInIndex = 1; name = MerchantKitResourcesLocalizedPeriodUnits.stringsdict; path = en.lproj/MerchantKitResourcesLocalizedPeriodUnits.stringsdict; sourceTree = "<group>"; };
+		EE6325ED724E943249A2E8217CF3DE3E /* StringUtilities.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StringUtilities.swift; path = Source/Internal/StringUtilities.swift; sourceTree = "<group>"; };
+		F1AE55D927B26A998104061F6138B37F /* MerchantKit-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MerchantKit-prefix.pch"; sourceTree = "<group>"; };
+		F2232244B566DEC3ECF023019C113920 /* AvailablePurchasesTask.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AvailablePurchasesTask.swift; path = Source/Tasks/AvailablePurchasesTask.swift; sourceTree = "<group>"; };
+		F73CB41F8A3EDB41F98B3ACF84B97FB0 /* ASN1BufferValue.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ASN1BufferValue.swift; path = Source/Internal/ASN1/ASN1BufferValue.swift; sourceTree = "<group>"; };
+		F84E7CB292995F8C5E41CC9232FB33A5 /* PurchaseSet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PurchaseSet.swift; path = Source/Model/PurchaseSet.swift; sourceTree = "<group>"; };
+		F96123E3AD2F74B7A528899310D5AF0A /* ASN1BufferType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ASN1BufferType.swift; path = Source/Internal/ASN1/ASN1BufferType.swift; sourceTree = "<group>"; };
+		FA8122C59ABDD1109213E03A8038F134 /* SubscriptionPeriod.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SubscriptionPeriod.swift; path = Source/Model/SubscriptionPeriod.swift; sourceTree = "<group>"; };
+		FE823CC0B8566EECCF7B072DBE627E0D /* StoreKitReceiptDataFetcher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StoreKitReceiptDataFetcher.swift; path = Source/Internal/StoreKitReceiptDataFetcher.swift; sourceTree = "<group>"; };
+		FFADD81169A9060406F25AF975CAE2EF /* ASN1Parser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ASN1Parser.swift; path = Source/Internal/ASN1/ASN1Parser.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3D9AC175F85DCBF7F0752A3F7072FB4D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3F70DE01D51B8B60C7EF3E3875F9260F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5F228FB6806AF6189F61720541E0C702 /* CoreFoundation.framework in Frameworks */,
+				B2C5798A3A48B7480244ABA9FBA5018A /* StoreKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		12CDBCA38687CC53BB0A5943E06DB291 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				F2B445C9AC2A321B4B58EABDEE14ED0E /* Pods-MerchantKitExample */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		167C934C4E0CEF4B5C0A96B330A8D5A8 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				1634C2D561BCA344BBDC37C34B569530 /* MerchantKit.modulemap */,
+				C9AB95064BED86061A9BD52F5690A3BE /* MerchantKit.xcconfig */,
+				A44BE1A48B49ADBC2DF89E1048BF5BB8 /* MerchantKit-dummy.m */,
+				F1AE55D927B26A998104061F6138B37F /* MerchantKit-prefix.pch */,
+				B61EBE33D83C643D778815217E688824 /* MerchantKit-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/MerchantKit";
+			sourceTree = "<group>";
+		};
+		433CD3331B6C3787F473C941B61FC68F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				69E53EFFA2E639697DE7C6CE6E2C0558 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		69E53EFFA2E639697DE7C6CE6E2C0558 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				507EA84ACB76C75BE3DF48C27DC0D42C /* CoreFoundation.framework */,
+				2BDDFFDD1E2BB19FD34D782E27282018 /* StoreKit.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		7DB346D0F39D3F0E887471402A8071AB = {
+			isa = PBXGroup;
+			children = (
+				93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */,
+				433CD3331B6C3787F473C941B61FC68F /* Frameworks */,
+				C883E7B83F3B5017AB08B202D99C6F56 /* Pods */,
+				C11D25413A41BEA5CC1CC75735250B23 /* Products */,
+				12CDBCA38687CC53BB0A5943E06DB291 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		95E63B916ECA9F62164DF94D277D4143 /* MerchantKit */ = {
+			isa = PBXGroup;
+			children = (
+				115E1B89238570F94D50C4412011190C /* ASN1.swift */,
+				F96123E3AD2F74B7A528899310D5AF0A /* ASN1BufferType.swift */,
+				F73CB41F8A3EDB41F98B3ACF84B97FB0 /* ASN1BufferValue.swift */,
+				0E32A2B99EBBE9971C99001A32664D05 /* ASN1ObjectIdentifier.swift */,
+				FFADD81169A9060406F25AF975CAE2EF /* ASN1Parser.swift */,
+				74ED0C55CA90B1878597E4F81ECF8D92 /* ASN1PayloadValueConversion.swift */,
+				F2232244B566DEC3ECF023019C113920 /* AvailablePurchasesTask.swift */,
+				87C1B165C93A508C173769B0CD9C6121 /* Buckets.swift */,
+				E677589A58AF28FF00C1F2B1B4C2BA07 /* CommitPurchaseTask.swift */,
+				24EC88D06CD6A6195B561E9E3C6544C4 /* ConstructedReceipt.swift */,
+				6A8974CD15800A3232B09E8C60B86BFC /* DateUtilities.swift */,
+				B194E3E8FB8A716C267F735B99319093 /* DescriptionUtilities.swift */,
+				8D284116A817B2BE5564989128334E5C /* EphemeralPurchaseStorage.swift */,
+				8441E60C252A1934FF81F30A065740AE /* KeychainPurchaseStorage.swift */,
+				BF42267D85022A0EB85B7B62E3A6A336 /* LocalConfiguration.swift */,
+				57D34BE914403EDF4AFB68A58FD03478 /* LocalizedResources.swift */,
+				1BD099F0D8C4A7B475D5761E31584FCD /* LocalReceiptPayloadParser.swift */,
+				611CF54E05276903CD1DAF955EA19A22 /* LocalReceiptValidator.swift */,
+				8D904203699FA7D0BCA67B75D61763C9 /* Logger.swift */,
+				3C2BEDBAD6553B053F1AEBF7B65E82E7 /* Merchant.swift */,
+				5A5336FF1B41FF92A462AEF4BDC29F6A /* MerchantDelegate.swift */,
+				00339F2ABB69FCD297F8BCBA5B0B383B /* MerchantKit.h */,
+				A0996285037D65346B7871D68AB3E628 /* MerchantKitFatalError.swift */,
+				6E5BF2DECB44418BC2DB0F2264054687 /* MerchantProductObserver.swift */,
+				349BADC0A53CFB68931B1E8802948AA3 /* MerchantTask.swift */,
+				46FAD9ACE7F08D7F3A452F6C63EB0E6F /* MerchantTaskUtilities.swift */,
+				CDCB383AEA0014B6C7499CB52FF39EE3 /* NetworkAvailabilityCenter.swift */,
+				A592432BCD045EF5564661EE44EBFD92 /* PKCS7ReceiptDataContainer.swift */,
+				708032087982E45DA8664D2C7378C0A9 /* Price.swift */,
+				6F576D96BDF2C16FC346561D46D29E27 /* PriceFormatter.swift */,
+				71F02CD4F45F15F7054506D67439E237 /* Product.swift */,
+				3E67DC749486EBC2EC9286F1203DC85E /* ProductInterfaceController.swift */,
+				0303C0BA9308AA1836BACE908905692B /* Purchase.swift */,
+				97B7CB4B853B317446437C0D03105CF8 /* PurchasedProductInfo.swift */,
+				5D695B58E161C7873BBE971D4F7C4BDC /* PurchasedState.swift */,
+				C139037D7D00F4579987AEED0A2E7DF0 /* PurchaseRecord.swift */,
+				F84E7CB292995F8C5E41CC9232FB33A5 /* PurchaseSet.swift */,
+				BF7AD5BDF8731E4969DFD89E6FBA7D30 /* PurchaseStorage.swift */,
+				D94614F1281FD7BDD05A31051D0E20D9 /* Receipt.swift */,
+				C46368A8A9D941A0B7E8F36BE4629275 /* ReceiptAttributeASN1SetProcessor.swift */,
+				BF25826B80E50A6B85C01521DCD45A71 /* ReceiptDataFetcher.swift */,
+				0A2EDD7DA46AE8C216D0B444BAED00B3 /* ReceiptEntry.swift */,
+				0CD64AA20408E5BD399FF1E8A41AC7F6 /* ReceiptValidationRequest.swift */,
+				730B3C6F6BFB28F9CDD7EB02B9706DD3 /* RestorePurchasesTask.swift */,
+				E594F88F8E444BA27CF1D5BD8910C3F4 /* Result.swift */,
+				0EEA41884E0E04317AF5539C529FEB48 /* ServerReceiptResponseParser.swift */,
+				D06735B5247A479B641C31DA73657AD2 /* ServerReceiptValidator.swift */,
+				4910A785BAFC0C588A46274C4C0FFDB6 /* ServerReceiptVerificationDataFetcher.swift */,
+				FE823CC0B8566EECCF7B072DBE627E0D /* StoreKitReceiptDataFetcher.swift */,
+				7314B74D35DFA1B3108BA1556196BC09 /* StoreKitTransactionObserver.swift */,
+				74CEA61B65FFC900CB1F16B5812F093D /* StoreParameters.swift */,
+				EE6325ED724E943249A2E8217CF3DE3E /* StringUtilities.swift */,
+				23A70810833E2D28DA58F0EAD8361F49 /* SubscriptionDuration.swift */,
+				FA8122C59ABDD1109213E03A8038F134 /* SubscriptionPeriod.swift */,
+				937CF38E0B4DD2122F9529105435ADC4 /* SubscriptionPeriodFormatter.swift */,
+				01579EF46FAA388FE167C63E6EFAB299 /* SubscriptionPriceFormatter.swift */,
+				37A2B7793831E3308AEC94827C5F0268 /* SubscriptionTerms.swift */,
+				B9F2B566FFE229D5491459126F5249EB /* UserDefaultsPurchaseStorage.swift */,
+				E4C62BA6405BA47309A4DFCF732EB202 /* Resources */,
+				167C934C4E0CEF4B5C0A96B330A8D5A8 /* Support Files */,
+			);
+			name = MerchantKit;
+			path = MerchantKit;
+			sourceTree = "<group>";
+		};
+		C11D25413A41BEA5CC1CC75735250B23 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6BED2E7BF71101411BBC0D30874564DD /* libMerchantKit.a */,
+				00834094226AC131E243BE4B1E715B63 /* libPods-MerchantKitExample.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C883E7B83F3B5017AB08B202D99C6F56 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				95E63B916ECA9F62164DF94D277D4143 /* MerchantKit */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		E4C62BA6405BA47309A4DFCF732EB202 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B569413BE44E0F817918D00FDBBDF411 /* MerchantKitResourcesLocalizedPeriodUnits.stringsdict */,
+				E36598036307C29385C505BDE47A1AF4 /* MerchantKitResourcesLocalizedSubscriptionPricePhrases.stringsdict */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		F2B445C9AC2A321B4B58EABDEE14ED0E /* Pods-MerchantKitExample */ = {
+			isa = PBXGroup;
+			children = (
+				00E3295277F41B6CC3960F13296B56AF /* Pods-MerchantKitExample.modulemap */,
+				97F3B898C9C5C36F091DCFBE876A141F /* Pods-MerchantKitExample-acknowledgements.markdown */,
+				51B0D1A1D6739B4021E2FC2A83BEDDFB /* Pods-MerchantKitExample-acknowledgements.plist */,
+				2544A40856A4664EAEB2EF070C978B33 /* Pods-MerchantKitExample-dummy.m */,
+				DACCAA923A080D030E86F71E5E9D1387 /* Pods-MerchantKitExample-frameworks.sh */,
+				BFD3A9C898D11372C6CAD777157FFC75 /* Pods-MerchantKitExample-resources.sh */,
+				7C804A417BC6B04D80C9A1F46E51FECF /* Pods-MerchantKitExample-umbrella.h */,
+				E36A57E7B6AFA8EB1DADFDABB82981DA /* Pods-MerchantKitExample.debug.xcconfig */,
+				63B51B1D5227E76D92A90E34BB81575C /* Pods-MerchantKitExample.release.xcconfig */,
+			);
+			name = "Pods-MerchantKitExample";
+			path = "Target Support Files/Pods-MerchantKitExample";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		30FAC40027BBB5AE7CBE2F679C8273A4 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C283D5C22E7DD018A0C45A46F11C8A00 /* Pods-MerchantKitExample-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8227319EB36E00D08C0E0C2F5BD7061A /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0685EC29122FB73D1B97ED6393DA04E7 /* MerchantKit-umbrella.h in Headers */,
+				FC86CE044A6562D6B9016E497B1D4FF6 /* MerchantKit.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8360EF7F6349105FD9AADE6817C6897F /* MerchantKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9DBB12CE961C51666E8E6252FAB71903 /* Build configuration list for PBXNativeTarget "MerchantKit" */;
+			buildPhases = (
+				8227319EB36E00D08C0E0C2F5BD7061A /* Headers */,
+				B879C879F86E7B61F8CC9C1C2AF6D542 /* Sources */,
+				3F70DE01D51B8B60C7EF3E3875F9260F /* Frameworks */,
+				700E16D83F75346EE9894CF14FF567D7 /* Copy generated compatibility header */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MerchantKit;
+			productName = MerchantKit;
+			productReference = 6BED2E7BF71101411BBC0D30874564DD /* libMerchantKit.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		B89912DA2F2864A990C046E6537F2184 /* Pods-MerchantKitExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CD1B03BFE234192DE977BFF0781A59D2 /* Build configuration list for PBXNativeTarget "Pods-MerchantKitExample" */;
+			buildPhases = (
+				30FAC40027BBB5AE7CBE2F679C8273A4 /* Headers */,
+				1BF00B40713122B208E9E0953FEEBCF4 /* Sources */,
+				3D9AC175F85DCBF7F0752A3F7072FB4D /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9DB58D9E52E2A01E2918D162B718BDF0 /* PBXTargetDependency */,
+			);
+			name = "Pods-MerchantKitExample";
+			productName = "Pods-MerchantKitExample";
+			productReference = 00834094226AC131E243BE4B1E715B63 /* libPods-MerchantKitExample.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D41D8CD98F00B204E9800998ECF8427E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0930;
+				LastUpgradeCheck = 0930;
+			};
+			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
+			productRefGroup = C11D25413A41BEA5CC1CC75735250B23 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8360EF7F6349105FD9AADE6817C6897F /* MerchantKit */,
+				B89912DA2F2864A990C046E6537F2184 /* Pods-MerchantKitExample */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		700E16D83F75346EE9894CF14FF567D7 /* Copy generated compatibility header */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h",
+				"${PODS_ROOT}/Headers/Public/MerchantKit/MerchantKit.modulemap",
+				"${PODS_ROOT}/Headers/Public/MerchantKit/MerchantKit-umbrella.h",
+			);
+			name = "Copy generated compatibility header";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap",
+				"${BUILT_PRODUCTS_DIR}/MerchantKit-umbrella.h",
+				"${BUILT_PRODUCTS_DIR}/Swift Compatibility Header/${PRODUCT_MODULE_NAME}-Swift.h",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "COMPATIBILITY_HEADER_PATH=\"${BUILT_PRODUCTS_DIR}/Swift Compatibility Header/${PRODUCT_MODULE_NAME}-Swift.h\"\nMODULE_MAP_PATH=\"${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap\"\n\nditto \"${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h\" \"${COMPATIBILITY_HEADER_PATH}\"\nditto \"${PODS_ROOT}/Headers/Public/MerchantKit/MerchantKit.modulemap\" \"${MODULE_MAP_PATH}\"\nditto \"${PODS_ROOT}/Headers/Public/MerchantKit/MerchantKit-umbrella.h\" \"${BUILT_PRODUCTS_DIR}\"\nprintf \"\\n\\nmodule ${PRODUCT_MODULE_NAME}.Swift {\\n  header \\\"${COMPATIBILITY_HEADER_PATH}\\\"\\n  requires objc\\n}\\n\" >> \"${MODULE_MAP_PATH}\"\n";
+			showEnvVarsInLog = 1;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1BF00B40713122B208E9E0953FEEBCF4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A14562C743F855E50DFFDFC281D3E26 /* Pods-MerchantKitExample-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B879C879F86E7B61F8CC9C1C2AF6D542 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A66C93E1AE30FD1CDC4083E59C424C31 /* ASN1.swift in Sources */,
+				186AA985A13D57D49C40F5C76F331FC1 /* ASN1BufferType.swift in Sources */,
+				1ECC9A0F5D4DECE0F764CABBF2CE0727 /* ASN1BufferValue.swift in Sources */,
+				C605DA6232CDD2C7D10CCA79A1314C06 /* ASN1ObjectIdentifier.swift in Sources */,
+				A8E1DFC4ECBDBC77BE115B8169D6F427 /* ASN1Parser.swift in Sources */,
+				78446CAA3C7A7B8BC3962BE90289CB7F /* ASN1PayloadValueConversion.swift in Sources */,
+				BA85A1DAAD66F8D66C01189FCBB5F9EE /* AvailablePurchasesTask.swift in Sources */,
+				6766089A7599A80B2330A4A0AD6B58AB /* Buckets.swift in Sources */,
+				03C196EA45367C1AE3F589BD193FB6DD /* CommitPurchaseTask.swift in Sources */,
+				C030CDF3CDCCE8DF2E189B13CF085F0F /* ConstructedReceipt.swift in Sources */,
+				DB00F1330B0F7EFDFE65E573D320845E /* DateUtilities.swift in Sources */,
+				1B7ADFBFDAAD8B46D754E3D5140ED236 /* DescriptionUtilities.swift in Sources */,
+				99AFB2C4D9368956D8145544B42398C8 /* EphemeralPurchaseStorage.swift in Sources */,
+				5C017C8F43907FEA3F2EEE43A92558FC /* KeychainPurchaseStorage.swift in Sources */,
+				AAE988A10B0028545D87B23412D06EC9 /* LocalConfiguration.swift in Sources */,
+				A5A1F81363776F81D60C8E606E405DA1 /* LocalizedResources.swift in Sources */,
+				55AEC506DD650C4F7DD80FD479AAE495 /* LocalReceiptPayloadParser.swift in Sources */,
+				77E6699720A40A21DF2F6F3FB1CB9E98 /* LocalReceiptValidator.swift in Sources */,
+				218C6192E877CC269E7B839A847A3B3A /* Logger.swift in Sources */,
+				E330C49A56C403CBAC41F4468ADA6F18 /* Merchant.swift in Sources */,
+				A17E1801275B1B5D7ABA4612CD357197 /* MerchantDelegate.swift in Sources */,
+				7F9E7A359D675227FE0D269433C392D5 /* MerchantKit-dummy.m in Sources */,
+				A5A7AFDBF3E0D064191775D0262B6E23 /* MerchantKitFatalError.swift in Sources */,
+				7E52E31ACAB67E925904391F6427D144 /* MerchantProductObserver.swift in Sources */,
+				E3BE3ACBDA2A8E39985E9C8F6C3DFC29 /* MerchantTask.swift in Sources */,
+				23F945798ECF69B581E3E6F88A40AC25 /* MerchantTaskUtilities.swift in Sources */,
+				D33EE8F6797290323635D1F731E2CFBF /* NetworkAvailabilityCenter.swift in Sources */,
+				F6FB3E8448C835D523B5AFA71729F763 /* PKCS7ReceiptDataContainer.swift in Sources */,
+				B0A7928AC15A554DBAEF8989CBEA3D73 /* Price.swift in Sources */,
+				F48830D0E6D540FFFF99361978A6FF09 /* PriceFormatter.swift in Sources */,
+				467FCFC9A8E2511F560FF1D85FF44809 /* Product.swift in Sources */,
+				38E0245C45EF61E3879F18D07D23C539 /* ProductInterfaceController.swift in Sources */,
+				4A21DA353170A700D272A1CAE272FBD7 /* Purchase.swift in Sources */,
+				A2D57DE65B26EAA586B4E2D3C873683E /* PurchasedProductInfo.swift in Sources */,
+				0C99BEFF8258DECBF1A29A73CD363F23 /* PurchasedState.swift in Sources */,
+				15686E49975A715037C21AD9897D58F5 /* PurchaseRecord.swift in Sources */,
+				7647D06104CEF4C1547A389AC530348F /* PurchaseSet.swift in Sources */,
+				9FD45E7D8AB1D6252FAB21E193773913 /* PurchaseStorage.swift in Sources */,
+				630F76417B68B935108335CADDA923EE /* Receipt.swift in Sources */,
+				3F95AF6AFA2612DDB2207C04D01E8FDE /* ReceiptAttributeASN1SetProcessor.swift in Sources */,
+				15DAEF152ADABE36C2E25661D4E2FA27 /* ReceiptDataFetcher.swift in Sources */,
+				8929E83FC99AF4FA5B73EF71C4B307E3 /* ReceiptEntry.swift in Sources */,
+				6CC749980478879165F59DA8A6738A73 /* ReceiptValidationRequest.swift in Sources */,
+				C5BCC9F1B2DAF1F12CE17C6161B7ECCD /* RestorePurchasesTask.swift in Sources */,
+				3F2A481970C9B92D93A513EE4C13D978 /* Result.swift in Sources */,
+				FBD80AEBB77FD655CBACB3E5D4995D6B /* ServerReceiptResponseParser.swift in Sources */,
+				D411CFDEC10FB444C8396D9602E0836B /* ServerReceiptValidator.swift in Sources */,
+				4BEF911C941E5AF8CCFB3C0E2DDB01B6 /* ServerReceiptVerificationDataFetcher.swift in Sources */,
+				5CF299529E56CCF8A9829A69BC1220B7 /* StoreKitReceiptDataFetcher.swift in Sources */,
+				DB99DCCF42B538D017CFF31BB40538AA /* StoreKitTransactionObserver.swift in Sources */,
+				8FAA3352E4D1294A67E8CE3C663707C3 /* StoreParameters.swift in Sources */,
+				8DBFE1B218E09A5FBB5D0E5A57CC135D /* StringUtilities.swift in Sources */,
+				3A57E85BE0D85AE120AE93B5F5A3A9F6 /* SubscriptionDuration.swift in Sources */,
+				C61D9C9E4809A83208E81626FB489379 /* SubscriptionPeriod.swift in Sources */,
+				E08565C4567BF2BDB910B30A693D2AED /* SubscriptionPeriodFormatter.swift in Sources */,
+				AF56F0A1059DEF73D971854DE9CE51C8 /* SubscriptionPriceFormatter.swift in Sources */,
+				A5577BF579BDD83CA891793270EEBDEF /* SubscriptionTerms.swift in Sources */,
+				A74A902DD7B5AE77C7F27ECFD8FACF2E /* UserDefaultsPurchaseStorage.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9DB58D9E52E2A01E2918D162B718BDF0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = MerchantKit;
+			target = 8360EF7F6349105FD9AADE6817C6897F /* MerchantKit */;
+			targetProxy = 900C2274D54EDCF97B55F5B541CBDA2F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		B569413BE44E0F817918D00FDBBDF411 /* MerchantKitResourcesLocalizedPeriodUnits.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EBD208DC6D27FDF3BDD77C99DC6A2AD3 /* MerchantKitResourcesLocalizedPeriodUnits.stringsdict */,
+				240924F819E0392D5762C894A166ABFC /* MerchantKitResourcesLocalizedPeriodUnits.stringsdict */,
+				DD5D6857D655AF117912EE8CA5E0E1D1 /* MerchantKitResourcesLocalizedPeriodUnits.stringsdict */,
+			);
+			name = MerchantKitResourcesLocalizedPeriodUnits.stringsdict;
+			path = Source/Internal/Resources;
+			sourceTree = "<group>";
+		};
+		E36598036307C29385C505BDE47A1AF4 /* MerchantKitResourcesLocalizedSubscriptionPricePhrases.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A823BA301B6FBBC7321CC1DE81F610E1 /* MerchantKitResourcesLocalizedSubscriptionPricePhrases.stringsdict */,
+			);
+			name = MerchantKitResourcesLocalizedSubscriptionPricePhrases.stringsdict;
+			path = Source/Internal/Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		11BFE2E6170D70749CAA71D0C04753B5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 63B51B1D5227E76D92A90E34BB81575C /* Pods-MerchantKitExample.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-MerchantKitExample/Pods-MerchantKitExample.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3170397F2986445AEF364628781AE381 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C9AB95064BED86061A9BD52F5690A3BE /* MerchantKit.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/MerchantKit/MerchantKit-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MODULEMAP_FILE = Headers/Public/MerchantKit/MerchantKit.modulemap;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = MerchantKit;
+				PRODUCT_NAME = MerchantKit;
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		40B45BB3CF3EE4476259302A7FAAD78F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+		85ED3013A635C27F8B7FAF51362B108C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		AF49ACB2E2AA87FD928D38108A696F07 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C9AB95064BED86061A9BD52F5690A3BE /* MerchantKit.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/MerchantKit/MerchantKit-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MODULEMAP_FILE = Headers/Public/MerchantKit/MerchantKit.modulemap;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = MerchantKit;
+				PRODUCT_NAME = MerchantKit;
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BE4E9463DA4ACE63C19BBB30301EE4F5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E36A57E7B6AFA8EB1DADFDABB82981DA /* Pods-MerchantKitExample.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-MerchantKitExample/Pods-MerchantKitExample.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				85ED3013A635C27F8B7FAF51362B108C /* Debug */,
+				40B45BB3CF3EE4476259302A7FAAD78F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9DBB12CE961C51666E8E6252FAB71903 /* Build configuration list for PBXNativeTarget "MerchantKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3170397F2986445AEF364628781AE381 /* Debug */,
+				AF49ACB2E2AA87FD928D38108A696F07 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CD1B03BFE234192DE977BFF0781A59D2 /* Build configuration list for PBXNativeTarget "Pods-MerchantKitExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BE4E9463DA4ACE63C19BBB30301EE4F5 /* Debug */,
+				11BFE2E6170D70749CAA71D0C04753B5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+}

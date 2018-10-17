@@ -1,0 +1,6 @@
+module Pods_MerchantKitExample {
+  umbrella header "Pods-MerchantKitExample-umbrella.h"
+
+  export *
+  module * { export * }
+}

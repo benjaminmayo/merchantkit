@@ -1,0 +1,16 @@
+PODS:
+  - MerchantKit (0.8.1)
+
+DEPENDENCIES:
+  - MerchantKit
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - MerchantKit
+
+SPEC CHECKSUMS:
+  MerchantKit: 959448040fede1662a16109f3b548441a5269947
+
+PODFILE CHECKSUM: 17f4c79043b5dfbefd4f80bce7dabdea549a4c9c
+
+COCOAPODS: 1.5.3

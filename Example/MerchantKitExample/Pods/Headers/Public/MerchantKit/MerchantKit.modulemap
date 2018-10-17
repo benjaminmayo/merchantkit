@@ -1,0 +1,6 @@
+module MerchantKit {
+  umbrella header "MerchantKit-umbrella.h"
+
+  export *
+  module * { export * }
+}
