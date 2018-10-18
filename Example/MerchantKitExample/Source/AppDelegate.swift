@@ -25,7 +25,7 @@ public class AppDelegate: UIResponder, UIApplicationDelegate {
         // Present the view controller in a navigation controller to make the UI look slightly better.
         let navigationController = UINavigationController(rootViewController: purchaseProductsViewController)
         
-        // Storyboards are for suckers.
+        // Display the window.
         self.window = {
             let window = UIWindow(frame: UIScreen.main.bounds)
             window.rootViewController = navigationController
@@ -39,6 +39,7 @@ public class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
+// Implement the required `MerchantDelegate` methods.
 extension AppDelegate : MerchantDelegate {
     // The delegate is notified when the states of products change.
     // Use this to update app-global model data or perform custom logging, if appropriate.
