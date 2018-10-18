@@ -304,9 +304,10 @@ extension ProductInterfaceController {
                 switch self.availablePurchasesFetchResult {
                     case .succeeded(let purchases)?:
                         if let purchase = purchases.purchase(for: product) {
-                            let subscriptionTerms: SubscriptionTerms?
-                            
-                            return ProductState.PurchaseMetadata(price: purchase.price, subscriptionTerms: purchase.subscriptionTerms)
+                            return ProductState.PurchaseMetadata(
+                                price: purchase.price,
+                                subscriptionTerms: purchase.subscriptionTerms
+                            )
                         }
                     default:
                         break
