@@ -17,7 +17,7 @@ internal class Logger {
         
     }
     
-    internal func log(message: @autoclosure() -> String, category: Category, type: OSLogType = .debug) {
+    internal func log(message: @autoclosure () -> String, category: Category, type: OSLogType = .debug) {
         guard self.isActive else { return }
         
         let storage = self.logStorage(for: category)
@@ -27,11 +27,17 @@ internal class Logger {
     }
     
     internal enum Category {
+        case initialization
+        case tasks
         case receipt
         case purchaseStorage
         
         fileprivate var stringValue: String {
             switch self {
+                case .initialization:
+                    return "Initialization"
+                case .tasks:
+                    return "Tasks"
                 case .receipt:
                     return "Receipt"
                 case .purchaseStorage:

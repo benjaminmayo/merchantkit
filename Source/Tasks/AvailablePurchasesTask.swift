@@ -32,6 +32,8 @@ public final class AvailablePurchasesTask : NSObject, MerchantTask {
         self.skRequest.delegate = self
         
         self.skRequest.start()
+        
+        self.merchant.logger.log(message: "Started available purchases task for products: \(productIdentifiers)", category: .tasks)
     }
     
     /// Cancel the task. Cancellation does not fire the `onCompletion` handler.
@@ -47,6 +49,8 @@ public final class AvailablePurchasesTask : NSObject, MerchantTask {
         DispatchQueue.main.async {
             self.merchant.resignActiveTask(self)
         }
+        
+        self.merchant.logger.log(message: "Finished available purchases task: \(result)", category: .tasks)
     }
 }
 

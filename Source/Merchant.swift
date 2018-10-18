@@ -32,6 +32,7 @@ public final class Merchant {
     private var activeTasks: [MerchantTask] = []
     
     private var purchaseObservers: Buckets<String, MerchantPurchaseObserver> = Buckets()
+    private var hasSetup: Bool = false
     
     private var receiptFetchers: [ReceiptFetchPolicy : ReceiptDataFetcher] = [:]
     private var receiptDataFetcherCustomInitializer: ReceiptDataFetcherInitializer?
@@ -56,9 +57,13 @@ public final class Merchant {
     
     /// Call this method at application launch. It performs necessary initialization routines.
     public func setup() {
+        guard !self.hasSetup else { return }
+        
         self.beginObservingTransactions()
         
         self.checkReceipt(updateProducts: .all, policy: .onlyFetch, reason: .initialization)
+        
+        self.logger.log(message: "Merchant has been setup, with \(self._registeredProducts.count) registered \(self._registeredProducts.count == 1 ? "product" : "products").", category: .initialization)
     }
     
     /// Returns a registered product for a given `productIdentifier`, or `nil` if not found.
@@ -84,6 +89,8 @@ public final class Merchant {
     
     /// Find possible purchases for the given products. If `products` is empty, then the merchant looks up all purchases for all registered products.
     public func availablePurchasesTask(for products: Set<Product> = []) -> AvailablePurchasesTask {
+        self.ensureSetup()
+        
         return self.makeTask(initializing: {
             let products = products.isEmpty ? Set(self._registeredProducts.values) : products
             
@@ -177,7 +184,10 @@ extension Merchant {
 // MARK: Loading state changes
 extension Merchant {
     private var _isLoading: Bool {
-        return !self.activeTasks.filter { $0.isStarted }.isEmpty || !self.receiptFetchers.isEmpty
+        let hasActiveTasks = self.activeTasks.contains(where: { $0.isStarted })
+        let hasActiveReceiptFetchers = !self.receiptFetchers.isEmpty
+        
+        return hasActiveTasks || hasActiveReceiptFetchers
     }
     
     /// Call on main thread only.
@@ -196,7 +206,7 @@ extension Merchant {
 // MARK: Subscription utilities
 extension Merchant {
     private func isSubscriptionActive(forExpiryDate expiryDate: Date) -> Bool {
-        let leeway: TimeInterval = 60 // 60 * 60 * 24
+        let leeway: TimeInterval = 60 // one minute of leeway, could make this a configurable setting in future
         
         return expiryDate.addingTimeInterval(leeway) > self.nowDate
     }
@@ -212,6 +222,14 @@ extension Merchant {
     
     private func stopObservingTransactions() {
         SKPaymentQueue.default().remove(self.transactionObserver)
+    }
+    
+    // Warns users if `Merchant` has not been correctly configured.
+    private func ensureSetup() {
+        guard !self.hasSetup else { return }
+        
+        // Print the warning to the console. As this is a serious usage error, we do not route it through the optional framework logging.
+        print("Merchant is attempting to vend purchases, but the Merchant has not been setup. Remember to call `Merchant.setup()` during application launch.")
     }
     
     // Right now, Merchant relies on refreshing receipts to restore purchases. The implementation may be changed in future.
@@ -242,47 +260,47 @@ extension Merchant {
         }
         
         fetcher.enqueueCompletion { [weak self] dataResult in
-            guard let strongSelf = self else { return }
+            guard let self = self else { return }
             
             switch dataResult {
                 case .succeeded(let receiptData):
-                    strongSelf.logger.log(message: "Receipt fetch succeeded: found \(receiptData.count) bytes", category: .receipt)
+                    self.logger.log(message: "Receipt fetch succeeded: found \(receiptData.count) bytes", category: .receipt)
                     
-                    strongSelf.validateReceipt(with: receiptData, reason: reason, completion: { [weak self] validateResult in
-                        guard let strongSelf = self else { return }
+                    self.validateReceipt(with: receiptData, reason: reason, completion: { [weak self] validateResult in
+                        guard let self = self else { return }
                         
                         switch validateResult {
                             case .succeeded(let receipt):
-                                strongSelf.logger.log(message: "Receipt validation succeeded: \(receipt)", category: .receipt)
+                                self.logger.log(message: "Receipt validation succeeded: \(receipt)", category: .receipt)
                                 
-                                strongSelf.latestFetchedReceipt = receipt
+                                self.latestFetchedReceipt = receipt
                                 
-                                let updatedProducts = strongSelf.updateStorageWithValidatedReceipt(receipt, updateProducts: updateType)
+                                let updatedProducts = self.updateStorageWithValidatedReceipt(receipt, updateProducts: updateType)
                             
                                 if !updatedProducts.isEmpty {
                                     DispatchQueue.main.async {
-                                        strongSelf.didChangeState(for: updatedProducts)
+                                        self.didChangeState(for: updatedProducts)
                                     }
                                 }
                                 
                                 completion(updatedProducts, nil)
                             case .failed(let error):
-                                strongSelf.logger.log(message: "Receipt validation failed: \(error)", category: .receipt)
+                                self.logger.log(message: "Receipt validation failed: \(error)", category: .receipt)
 
                                 completion([], error)
                         }
                     })
                 case .failed(let error):
-                    strongSelf.logger.log(message: "Receipt fetch failed: \(error)", category: .receipt)
+                    self.logger.log(message: "Receipt fetch failed: \(error)", category: .receipt)
 
                     completion([], error)
             }
             
-            strongSelf.receiptFetchers.removeValue(forKey: policy)
+            self.receiptFetchers.removeValue(forKey: policy)
             
-            if strongSelf.receiptFetchers.isEmpty && strongSelf.isLoading {
+            if self.receiptFetchers.isEmpty && self.isLoading {
                 DispatchQueue.main.async {
-                    strongSelf.updateLoadingStateIfNecessary()
+                    self.updateLoadingStateIfNecessary()
                 }
             }
         }

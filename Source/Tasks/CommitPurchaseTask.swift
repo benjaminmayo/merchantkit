@@ -28,6 +28,8 @@ public final class CommitPurchaseTask : MerchantTask {
         payment.applicationUsername = self.merchant.storeParameters.applicationUsername
         
         SKPaymentQueue.default().add(payment)
+        
+        self.merchant.logger.log(message: "Started commit purchase task for product: \(self.purchase.productIdentifier)", category: .tasks)
     }
     
     /// Cancel the task. Cancellation does not fire the `onCompletion` handler.
@@ -47,6 +49,8 @@ extension CommitPurchaseTask {
         DispatchQueue.main.async {
             self.merchant.resignActiveTask(self)
         }
+        
+        self.merchant.logger.log(message: "Finished commit purchase purchase task: \(result)", category: .tasks)
     }
 }
 
