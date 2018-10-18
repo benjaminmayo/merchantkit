@@ -306,13 +306,7 @@ extension ProductInterfaceController {
                         if let purchase = purchases.purchase(for: product) {
                             let subscriptionTerms: SubscriptionTerms?
                             
-                            if #available(iOS 11.2, *) {
-                                subscriptionTerms = purchase.subscriptionTerms
-                            } else {
-                                subscriptionTerms = nil
-                            }
-                            
-                            return ProductState.PurchaseMetadata(price: purchase.price, subscriptionTerms: subscriptionTerms)
+                            return ProductState.PurchaseMetadata(price: purchase.price, subscriptionTerms: purchase.subscriptionTerms)
                         }
                     default:
                         break
