@@ -7,11 +7,10 @@ public class PurchaseProductsViewController : UIViewController {
     private var tableSections = [Section]()
     
     // Formatters
-    private let priceFormatter = PriceFormatter()
+    private let priceFormatter = PriceFormatter() // if presenting subscription purchases, see `SubscriptionPriceFormatter`.
     
     // User Interface
     private let tableView = UITableView(frame: .zero, style: .grouped)
-    private let actionTintColor = UIColor(red: 0/255.0, green: 122/255.0, blue: 255/255.0, alpha: 1.0)
     
     // Instantiate a view controller that will display the provided `products` using the `Merchant`.
     // It is generally a good idea to use this kind of dependency injection pattern.
@@ -33,6 +32,7 @@ public class PurchaseProductsViewController : UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // Setup the view controller.
     public override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -50,20 +50,30 @@ public class PurchaseProductsViewController : UIViewController {
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        // Fetch initial data for the `ProductInterfaceController`. This method can be called repeatedly but will only refresh data when needed, preserving network bandwidth.
+        // Fetching changes are indicated by a loading indicator in the navigation bar for this demo.
+        // Note that we do not need to cover the entire UI with a full-screen loading placeholder view, as we have enough data like the names of products to show something meaningful right away.
+        // Per-product purchase information is gracefully displayed when the fetch completes.
         self.productInterfaceController.fetchDataIfNecessary()
     }
     
+    // Make the `tableView` fill the view controller.
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         self.tableView.frame = self.view.bounds
     }
     
-    private enum Section { // a very feeble data model for this view controller
+    // A very feeble data model structure to represent the content of the table in this view controller.
+    private enum Section {
+        // A simple section that contains a textual description.
         case introduction(Row)
+        // A section that displays one or more products.
         case products([Row])
+        // A section that displays one or more action buttons.
         case actions([Row])
         
+        // The number of rows in the given section.
         var rowCount: Int {
             switch self {
                 case .introduction(_):
@@ -75,6 +85,7 @@ public class PurchaseProductsViewController : UIViewController {
             }
         }
         
+        // The row at the given index in the section.
         func row(at index: Int) -> Row {
             switch self {
                 case .introduction(let row):
@@ -87,6 +98,9 @@ public class PurchaseProductsViewController : UIViewController {
         }
     }
     
+    
+    // For this example, we have simple text, product listing and action button cell types.
+    // In more sophisticated user interfaces, it may make sense to include the `ProductInterfaceController.ProductState` in the view model itself.
     private enum Row : Equatable {
         case text(String)
         case product(Product)
@@ -100,6 +114,9 @@ public class PurchaseProductsViewController : UIViewController {
 
 extension PurchaseProductsViewController : ProductInterfaceControllerDelegate {
     public func productInterfaceControllerDidChangeFetchingState(_ controller: ProductInterfaceController) {
+        // Toggle the presentation of the loading indicator in the navigation bar, responding to changes in `ProductInterfaceController.fetchingState`.
+        // Call `self.tableView.reloadData()` because our table section footer (defined in `UITableViewDataSource.tableView(_:titleForFooterInSection:)`) depends on the `ProductInterfaceController.fetchingState`, and `UITableView` does not offer a way to directly reload the footer.
+
         let isVisible: Bool
         
         switch controller.fetchingState {
@@ -110,14 +127,27 @@ extension PurchaseProductsViewController : ProductInterfaceControllerDelegate {
         }
         
         self.updateFetchingIndicator(isVisible: isVisible)
+        
         self.tableView.reloadData()
     }
     
     public func productInterfaceController(_ controller: ProductInterfaceController, didChangeStatesFor products: Set<Product>) {
-        self.tableView.reloadData()
+        // The table depends on the state of products to render its interface. Therefore, we update the table when we are notified that the state of a product changes.
+        // This implementation could be as simple as `self.tableView.reloadData()`.
+        // For the demo, we reload the corresponding cell for each product, using a fade animation.
+        
+        let changedIndexPaths = products.compactMap { product in
+            self.indexPath(ofRowForProductWithIdentifier: product.identifier)
+        }
+        
+        self.tableView.reloadRows(at: changedIndexPaths, with: .fade)
     }
     
     public func productInterfaceController(_ controller: ProductInterfaceController, didCommit purchase: Purchase, with result: ProductInterfaceController.CommitPurchaseResult) {
+        // This delegate method is invoked as a result of invoking `ProductInterfaceController.commit(_:)`.
+        // As our `tableView(_:didSelectRowAt:)` implementation does not immediately deselect a row when purchasing, we need to do that here.
+        // If there was an error, we want to tell the user the purchase failed. `shouldDisplayUser` indicates if an error is relevant for presentation.
+        
         if let indexPath = self.indexPath(ofRowForProductWithIdentifier: purchase.productIdentifier) {
             self.tableView.deselectRow(at: indexPath, animated: true)
         }
@@ -132,6 +162,10 @@ extension PurchaseProductsViewController : ProductInterfaceControllerDelegate {
     }
     
     public func productInterfaceController(_ controller: ProductInterfaceController, didRestorePurchasesWith result: ProductInterfaceController.RestorePurchasesResult) {
+        // This delegate method is invoked as a result of invoking `ProductInterfaceController.restorePurchases()`.
+        // As our `tableView(_:didSelectRowAt:)` implementation does not immediately deselect a row when the action is pressed, we need to do that here.
+        // If there was an error, we display that to the user.
+        
         if let indexPath = self.indexPath(of: .action(.restorePurchases)) {
             self.tableView.deselectRow(at: indexPath, animated: true)
         }
@@ -147,14 +181,20 @@ extension PurchaseProductsViewController : ProductInterfaceControllerDelegate {
 
 extension PurchaseProductsViewController : UITableViewDataSource {
     public func numberOfSections(in tableView: UITableView) -> Int {
+        // Feed the data source.
+        
         return self.tableSections.count
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection sectionIndex: Int) -> Int {
+        // Feed the data source.
+        
         return self.section(at: sectionIndex).rowCount
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // Display each cell, including product information based on the current state of the product.
+        // We are assuming that this view controller specifies that it only manages products available in the `ProductDatabase`. This requirement could have been relaxed if the view controller was informed about product names in a more general way.
         // A real app would use much nicer UI components than these basic tweaks to default `UITableViewCell` styles.
         // Cell dequeue is also omitted for simplicity of the demo.
         
@@ -194,8 +234,8 @@ extension PurchaseProductsViewController : UITableViewDataSource {
                 }
                 
                 let cell = UITableViewCell(style: .value1, reuseIdentifier: nil)
-                cell.textLabel?.text = title
-                cell.detailTextLabel?.text = detailText
+                cell.textLabel!.text = title
+                cell.detailTextLabel!.text = detailText
                 cell.accessoryView = accessoryView
                 
                 return cell
@@ -208,14 +248,14 @@ extension PurchaseProductsViewController : UITableViewDataSource {
                 }
             
                 let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-                cell.textLabel?.text = actionName
-                cell.textLabel?.textColor = self.actionTintColor
+                cell.textLabel!.text = actionName
+                cell.textLabel!.textColor = self.actionTintColor
                 
                 return cell
             case .text(let text):
                 let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-                cell.textLabel?.text = text
-                cell.textLabel?.numberOfLines = 0
+                cell.textLabel!.text = text
+                cell.textLabel!.numberOfLines = 0
                 
                 return cell
         }
@@ -224,6 +264,11 @@ extension PurchaseProductsViewController : UITableViewDataSource {
 
 extension PurchaseProductsViewController : UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // Determine what action to perform based on the selected cell.
+        // If a product is tapped, we need to extract the `Purchase` from the `ProductState` and pass that to the `ProductInterfaceController.commit(_:)` method.
+        // Note how this flow naturally prevents initiating purchases for products that have already been purchased.
+        // If the restore purchases action is tapped, call `ProductInterfaceController.restorePurchases()`.
+        
         switch self.row(at: indexPath) {
             case .product(let product):
                 let state = self.productInterfaceController.state(for: product)
@@ -242,6 +287,8 @@ extension PurchaseProductsViewController : UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, titleForHeaderInSection sectionIndex: Int) -> String? {
+        // Feed the delegate with some basic UI.
+        
         switch self.section(at: sectionIndex) {
             case .introduction(_):
                 return nil
@@ -253,6 +300,9 @@ extension PurchaseProductsViewController : UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, titleForFooterInSection sectionIndex: Int) -> String? {
+        // Feed the delegate with some basic UI.
+        // Display fetching errors as a footer of the product list section in the table, if there was an error.
+        
         switch (self.section(at: sectionIndex), self.productInterfaceController.fetchingState) {
             case (.products(_), .failed(let reason)):
                 switch reason {
@@ -267,7 +317,9 @@ extension PurchaseProductsViewController : UITableViewDelegate {
                 return nil
         }
     }
+    
     public func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        // Some basic contextual interactions. Allow selection of all action button cells, never allow selection for text cells, and conditionally allow selection for product cells if they are purchasable.
         switch self.row(at: indexPath) {
             case .product(let product):
                 let state = self.productInterfaceController.state(for: product)
@@ -286,15 +338,19 @@ extension PurchaseProductsViewController : UITableViewDelegate {
     }
 }
 
+// These utility methods are basically inconsequential to the `MerchantKit` example, but are needed to make the demo app work.
 extension PurchaseProductsViewController {
+    // Returns the section for the given index.
     private func section(at index: Int) -> Section {
         return self.tableSections[index]
     }
     
+    // Returns the row for the given `IndexPath`.
     private func row(at indexPath: IndexPath) -> Row {
         return self.tableSections[indexPath.section].row(at: indexPath.row)
     }
     
+    // Returns the `IndexPath` for the row that matches a `predicate`.
     private func indexPath(ofRowWhere predicate: (Row) -> Bool) -> IndexPath? {
         for (sectionIndex, section) in self.tableSections.enumerated() {
             for rowIndex in 0..<section.rowCount {
@@ -309,12 +365,14 @@ extension PurchaseProductsViewController {
         return nil
     }
     
+    // Returns the `IndexPath` for the given `row`.
     private func indexPath(of row: Row) -> IndexPath? {
         return self.indexPath(ofRowWhere: { candidate in
             candidate == row
         })
     }
     
+    // Returns the `IndexPath` for the given row which presents a `Product` with the given `productIdentifier`.
     private func indexPath(ofRowForProductWithIdentifier productIdentifier: String) -> IndexPath? {
         return self.indexPath(ofRowWhere: { row in
             switch row {
@@ -326,6 +384,7 @@ extension PurchaseProductsViewController {
         })
     }
     
+    // Presents a simple modal error dialog.
     private func presentError(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -345,5 +404,10 @@ extension PurchaseProductsViewController {
         } else {
             self.navigationItem.rightBarButtonItem = nil
         }
+    }
+    
+    // A consistent tint color for the action button. This is needed because we aren't using proper `UITableViewCell` subclasses in the demo.
+    private var actionTintColor: UIColor {
+        return UIColor(red: 0/255.0, green: 122/255.0, blue: 255/255.0, alpha: 1.0)
     }
 }

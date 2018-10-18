@@ -61,9 +61,9 @@
 			children = (
 				4359BC442177CA71003DC630 /* AppDelegate.swift */,
 				4359BC462177CA71003DC630 /* PurchaseProductsViewController.swift */,
+				4359BC562177D85A003DC630 /* ProductDatabase.swift */,
 				4359BC4B2177CA72003DC630 /* Assets.xcassets */,
 				4359BC502177CA72003DC630 /* Info.plist */,
-				4359BC562177D85A003DC630 /* ProductDatabase.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
