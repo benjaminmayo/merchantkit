@@ -58,6 +58,7 @@ public final class Merchant {
     /// Call this method at application launch. It performs necessary initialization routines.
     public func setup() {
         guard !self.hasSetup else { return }
+        self.hasSetup = true
         
         self.beginObservingTransactions()
         
