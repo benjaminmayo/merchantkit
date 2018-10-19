@@ -7,12 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0508CDE726C813DBA612966B /* libPods-MerchantKitExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DD7D4361A676B33508836C2 /* libPods-MerchantKitExample.a */; };
 		4359BC452177CA71003DC630 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4359BC442177CA71003DC630 /* AppDelegate.swift */; };
 		4359BC472177CA71003DC630 /* PurchaseProductsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4359BC462177CA71003DC630 /* PurchaseProductsViewController.swift */; };
 		4359BC4C2177CA72003DC630 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4359BC4B2177CA72003DC630 /* Assets.xcassets */; };
 		4359BC572177D85A003DC630 /* ProductDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4359BC562177D85A003DC630 /* ProductDatabase.swift */; };
+		4369E55F2179D9A1002086C3 /* MerchantKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4369E55E2179D9A1002086C3 /* MerchantKit.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4369E55D2179D96D002086C3 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4359BC412177CA71003DC630 /* MerchantKitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MerchantKitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -21,9 +34,8 @@
 		4359BC4B2177CA72003DC630 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4359BC502177CA72003DC630 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4359BC562177D85A003DC630 /* ProductDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDatabase.swift; sourceTree = "<group>"; };
-		74E75A8D8160A6F131109B37 /* Pods-MerchantKitExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MerchantKitExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MerchantKitExample/Pods-MerchantKitExample.debug.xcconfig"; sourceTree = "<group>"; };
-		86B6B749CAEC028B675D2281 /* Pods-MerchantKitExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MerchantKitExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-MerchantKitExample/Pods-MerchantKitExample.release.xcconfig"; sourceTree = "<group>"; };
-		8DD7D4361A676B33508836C2 /* libPods-MerchantKitExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MerchantKitExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4369E54C2179D8F4002086C3 /* MerchantKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MerchantKit.xcodeproj; path = ../MerchantKit.xcodeproj; sourceTree = "<group>"; };
+		4369E55E2179D9A1002086C3 /* MerchantKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MerchantKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,7 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0508CDE726C813DBA612966B /* libPods-MerchantKitExample.a in Frameworks */,
+				4369E55F2179D9A1002086C3 /* MerchantKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,10 +53,10 @@
 		4359BC382177CA71003DC630 = {
 			isa = PBXGroup;
 			children = (
+				4369E54C2179D8F4002086C3 /* MerchantKit.xcodeproj */,
 				4359BC432177CA71003DC630 /* Source */,
 				4359BC422177CA71003DC630 /* Products */,
-				5AE45D148DC50BDCE8B179B6 /* Pods */,
-				84EC73DA54A10ECBE0DE1041 /* Frameworks */,
+				4369E5562179D92F002086C3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -68,19 +80,10 @@
 			path = Source;
 			sourceTree = "<group>";
 		};
-		5AE45D148DC50BDCE8B179B6 /* Pods */ = {
+		4369E5562179D92F002086C3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				74E75A8D8160A6F131109B37 /* Pods-MerchantKitExample.debug.xcconfig */,
-				86B6B749CAEC028B675D2281 /* Pods-MerchantKitExample.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-		84EC73DA54A10ECBE0DE1041 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				8DD7D4361A676B33508836C2 /* libPods-MerchantKitExample.a */,
+				4369E55E2179D9A1002086C3 /* MerchantKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -92,11 +95,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4359BC532177CA72003DC630 /* Build configuration list for PBXNativeTarget "MerchantKitExample" */;
 			buildPhases = (
-				BFC905087C215CB4C7B79F4E /* [CP] Check Pods Manifest.lock */,
 				4359BC3D2177CA71003DC630 /* Sources */,
 				4359BC3E2177CA71003DC630 /* Frameworks */,
 				4359BC3F2177CA71003DC630 /* Resources */,
-				C3799B60CDAFB2083EB6F665 /* [CP] Copy Pods Resources */,
+				4369E55D2179D96D002086C3 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -150,57 +152,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		BFC905087C215CB4C7B79F4E /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MerchantKitExample-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C3799B60CDAFB2083EB6F665 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-MerchantKitExample/Pods-MerchantKitExample-resources.sh",
-				"${PODS_ROOT}/MerchantKit/Source/Internal/Resources/en.lproj/MerchantKitResourcesLocalizedPeriodUnits.stringsdict",
-				"${PODS_ROOT}/MerchantKit/Source/Internal/Resources/en.lproj/MerchantKitResourcesLocalizedSubscriptionPricePhrases.stringsdict",
-				"${PODS_ROOT}/MerchantKit/Source/Internal/Resources/es.lproj/MerchantKitResourcesLocalizedPeriodUnits.stringsdict",
-				"${PODS_ROOT}/MerchantKit/Source/Internal/Resources/fr.lproj/MerchantKitResourcesLocalizedPeriodUnits.stringsdict",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MerchantKitResourcesLocalizedPeriodUnits.stringsdict",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MerchantKitResourcesLocalizedSubscriptionPricePhrases.stringsdict",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MerchantKitExample/Pods-MerchantKitExample-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4359BC3D2177CA71003DC630 /* Sources */ = {
@@ -334,7 +285,6 @@
 		};
 		4359BC542177CA72003DC630 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 74E75A8D8160A6F131109B37 /* Pods-MerchantKitExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Manual;
@@ -354,7 +304,6 @@
 		};
 		4359BC552177CA72003DC630 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 86B6B749CAEC028B675D2281 /* Pods-MerchantKitExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Manual;
