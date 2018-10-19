@@ -13,6 +13,7 @@
 		4359BC572177D85A003DC630 /* ProductDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4359BC562177D85A003DC630 /* ProductDatabase.swift */; };
 		4369E55F2179D9A1002086C3 /* MerchantKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4369E55E2179D9A1002086C3 /* MerchantKit.framework */; };
 		4369E5612179DFA9002086C3 /* ExampleListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4369E5602179DFA9002086C3 /* ExampleListViewController.swift */; };
+		4369E563217A0263002086C3 /* PriceFormatterDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4369E562217A0263002086C3 /* PriceFormatterDemoViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -38,6 +39,7 @@
 		4369E54C2179D8F4002086C3 /* MerchantKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MerchantKit.xcodeproj; path = ../MerchantKit.xcodeproj; sourceTree = "<group>"; };
 		4369E55E2179D9A1002086C3 /* MerchantKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MerchantKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4369E5602179DFA9002086C3 /* ExampleListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleListViewController.swift; sourceTree = "<group>"; };
+		4369E562217A0263002086C3 /* PriceFormatterDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceFormatterDemoViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +78,7 @@
 				4359BC442177CA71003DC630 /* AppDelegate.swift */,
 				4369E5602179DFA9002086C3 /* ExampleListViewController.swift */,
 				4359BC462177CA71003DC630 /* PurchaseProductsViewController.swift */,
+				4369E562217A0263002086C3 /* PriceFormatterDemoViewController.swift */,
 				4359BC562177D85A003DC630 /* ProductDatabase.swift */,
 				4359BC4B2177CA72003DC630 /* Assets.xcassets */,
 				4359BC502177CA72003DC630 /* Info.plist */,
@@ -164,6 +167,7 @@
 				4359BC572177D85A003DC630 /* ProductDatabase.swift in Sources */,
 				4369E5612179DFA9002086C3 /* ExampleListViewController.swift in Sources */,
 				4359BC472177CA71003DC630 /* PurchaseProductsViewController.swift in Sources */,
+				4369E563217A0263002086C3 /* PriceFormatterDemoViewController.swift in Sources */,
 				4359BC452177CA71003DC630 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

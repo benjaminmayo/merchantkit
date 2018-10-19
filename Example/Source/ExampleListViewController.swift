@@ -7,12 +7,12 @@ public class ExampleListViewController : UIViewController {
     private let examples: [Example]
 
     // User Interface
-    private let tableView = UITableView(frame: .zero, style: .grouped)
+    private let tableView = UITableView(frame: .zero, style: .plain)
 
     // Instantiate a view controller that will display available examples. Stores a reference to a `Merchant` that can be passed on.
     public init(merchant: Merchant) {
         self.merchant = merchant
-        self.examples = [.productStorefront]
+        self.examples = [.productStorefront, .priceFormatters]
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -29,6 +29,9 @@ public class ExampleListViewController : UIViewController {
         
         self.tableView.dataSource = self
         self.tableView.delegate = self
+        
+        self.tableView.backgroundColor = self.tableBackgroundColor
+        self.tableView.tableFooterView = UIView()
         
         self.view.addSubview(self.tableView)
     }
@@ -52,11 +55,14 @@ public class ExampleListViewController : UIViewController {
     // A simple view model representing different examples in the project
     private enum Example {
         case productStorefront
+        case priceFormatters
         
         var name: String {
             switch self {
                 case .productStorefront:
                     return "Product Storefront"
+                case .priceFormatters:
+                    return "Price Formatters"
             }
         }
         
@@ -64,6 +70,8 @@ public class ExampleListViewController : UIViewController {
             switch self {
                 case .productStorefront:
                     return "Uses ProductInterfaceController to manage a storefront interface and purchase products."
+                case .priceFormatters:
+                    return "A demo of various configurations of price and duration formatters offered in MerchantKit."
             }
         }
     }
@@ -78,6 +86,10 @@ extension ExampleListViewController {
                 let purchaseProductsViewController = PurchaseProductsViewController(presenting: ProductDatabase.allProducts, using: self.merchant)
                 
                 return purchaseProductsViewController
+            case .priceFormatters:
+                let priceFormatterViewController = PriceFormatterDemoViewController()
+            
+                return priceFormatterViewController
         }
     }
 }
@@ -102,10 +114,15 @@ extension ExampleListViewController : UITableViewDataSource {
         let example = self.examples[indexPath.row]
         
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-        cell.textLabel?.text = example.name
-        cell.detailTextLabel?.text = example.summary
-        cell.detailTextLabel?.numberOfLines = 0
+        cell.textLabel!.text = example.name
+        cell.textLabel!.font = UIFont.preferredFont(forTextStyle: .headline)
+        
+        cell.detailTextLabel!.text = example.summary
+        cell.detailTextLabel!.font = UIFont.preferredFont(forTextStyle: .body)
+        cell.detailTextLabel!.numberOfLines = 0
+        
         cell.accessoryType = .disclosureIndicator
+        cell.separatorInset = .zero
         
         return cell
     }
@@ -119,5 +136,12 @@ extension ExampleListViewController : UITableViewDelegate {
         let detailViewController = self.detailViewController(for: example)
         
         self.navigationController?.pushViewController(detailViewController, animated: true)
+    }
+}
+
+extension ExampleListViewController {
+    // A grouped-style background color to improve contrast between the cells and the background.
+    private var tableBackgroundColor: UIColor {
+        return UIColor(red: 239/255.0, green: 239/255.0, blue: 243/255.0, alpha: 1.0)
     }
 }
