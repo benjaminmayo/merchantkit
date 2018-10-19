@@ -19,11 +19,11 @@ public class AppDelegate: UIResponder, UIApplicationDelegate {
         // Ensure to call `Merchant.setup()` during app launch to allow `Merchant` to begin observing `StoreKit` transactions.
         self.merchant.setup()
         
-        // Create a view controller to display purchases. In this example, we are displaying all products in the `ProductDatabase`.
-        let purchaseProductsViewController = PurchaseProductsViewController(presenting: ProductDatabase.allProducts, using: self.merchant)
+        // Create a view controller to display the list of examples to choose from.
+        let exampleListViewController = ExampleListViewController(merchant: self.merchant)
         
         // Present the view controller in a navigation controller to make the UI look slightly better.
-        let navigationController = UINavigationController(rootViewController: purchaseProductsViewController)
+        let navigationController = UINavigationController(rootViewController: exampleListViewController)
         
         // Display the window.
         self.window = {

@@ -4,7 +4,7 @@ import MerchantKit
 public class PurchaseProductsViewController : UIViewController {
     // Model
     private let productInterfaceController: ProductInterfaceController
-    private var tableSections = [Section]()
+    private let tableSections: [Section]
     
     // Formatters
     private let priceFormatter = PriceFormatter() // if presenting subscription purchases, see `SubscriptionPriceFormatter`.
@@ -115,7 +115,7 @@ public class PurchaseProductsViewController : UIViewController {
 extension PurchaseProductsViewController : ProductInterfaceControllerDelegate {
     public func productInterfaceControllerDidChangeFetchingState(_ controller: ProductInterfaceController) {
         // Toggle the presentation of the loading indicator in the navigation bar, responding to changes in `ProductInterfaceController.fetchingState`.
-        // Call `self.tableView.reloadData()` because our table section footer (defined in `UITableViewDataSource.tableView(_:titleForFooterInSection:)`) depends on the `ProductInterfaceController.fetchingState`, and `UITableView` does not offer a way to directly reload the footer.
+        // Call `self.tableView.reloadData()` because our table section footer (as seen in `UITableViewDataSource.tableView(_:titleForFooterInSection:)`) depends on the `ProductInterfaceController.fetchingState`, and `UITableView` does not offer a way to only reload the footer of a section.
 
         let isVisible: Bool
         
@@ -127,20 +127,22 @@ extension PurchaseProductsViewController : ProductInterfaceControllerDelegate {
         }
         
         self.updateFetchingIndicator(isVisible: isVisible)
-        
         self.tableView.reloadData()
     }
     
     public func productInterfaceController(_ controller: ProductInterfaceController, didChangeStatesFor products: Set<Product>) {
         // The table depends on the state of products to render its interface. Therefore, we update the table when we are notified that the state of a product changes.
         // This implementation could be as simple as `self.tableView.reloadData()`.
-        // For the demo, we reload the corresponding cell for each product, using a fade animation.
+        // For the demo, we update the specific cells corresponding to each changed product state.
         
-        let changedIndexPaths = products.compactMap { product in
-            self.indexPath(ofRowForProductWithIdentifier: product.identifier)
+        for product in products {
+            guard
+                let indexPath = self.indexPath(ofRowForProductWithIdentifier: product.identifier),
+                let cell = self.tableView.cellForRow(at: indexPath)
+            else { continue }
+
+            self.configureCell(cell, for: product)
         }
-        
-        self.tableView.reloadRows(at: changedIndexPaths, with: .fade)
     }
     
     public func productInterfaceController(_ controller: ProductInterfaceController, didCommit purchase: Purchase, with result: ProductInterfaceController.CommitPurchaseResult) {
@@ -193,50 +195,15 @@ extension PurchaseProductsViewController : UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Display each cell, including product information based on the current state of the product.
-        // We are assuming that this view controller specifies that it only manages products available in the `ProductDatabase`. This requirement could have been relaxed if the view controller was informed about product names in a more general way.
+        // Provide cells for each row in the table.
         // A real app would use much nicer UI components than these basic tweaks to default `UITableViewCell` styles.
         // Cell dequeue is also omitted for simplicity of the demo.
         
         switch self.row(at: indexPath) {
             case .product(let product):
-                let productState = self.productInterfaceController.state(for: product)
-                let productName = ProductDatabase.localizedDisplayName(for: product)
-                
-                let title: String
-                let detailText: String
-                let accessoryView: UIView?
-                
-                switch productState {
-                    case .purchasable(let purchase):
-                        title = productName
-                        detailText = self.priceFormatter.string(from: purchase.price)
-                        accessoryView = nil
-                    case .purchased(_, _):
-                        title = productName
-                        detailText = "Purchased"
-                        accessoryView = nil
-                    case .purchaseUnavailable:
-                        title = "\(productName)"
-                        detailText = "Purchase Unavailable"
-                        accessoryView = nil
-                    case .purchasing(_):
-                        let loadingIndicatorView = UIActivityIndicatorView(style: .gray)
-                        loadingIndicatorView.startAnimating()
-                        
-                        title = productName
-                        detailText = ""
-                        accessoryView = loadingIndicatorView
-                    case .unknown:
-                        title = productName
-                        detailText = "—"
-                        accessoryView = nil
-                }
-                
                 let cell = UITableViewCell(style: .value1, reuseIdentifier: nil)
-                cell.textLabel!.text = title
-                cell.detailTextLabel!.text = detailText
-                cell.accessoryView = accessoryView
+                
+                self.configureCell(cell, for: product) // product cell configuration
                 
                 return cell
             case .action(let action):
@@ -259,6 +226,47 @@ extension PurchaseProductsViewController : UITableViewDataSource {
                 
                 return cell
         }
+    }
+
+    // Display information about the state of the `product` in the cell.
+    // We are assuming that this view controller specifies that it only manages products available in the `ProductDatabase`. This requirement could have been relaxed if the view controller was informed about product names in a more general way.
+    private func configureCell(_ cell: UITableViewCell, for product: Product) {
+        let productState = self.productInterfaceController.state(for: product)
+        let productName = ProductDatabase.localizedDisplayName(for: product)
+        
+        let title: String
+        let detailText: String
+        let accessoryView: UIView?
+        
+        switch productState {
+            case .purchasable(let purchase):
+                title = productName
+                detailText = self.priceFormatter.string(from: purchase.price)
+                accessoryView = nil
+            case .purchased(_, _):
+                title = productName
+                detailText = "Purchased"
+                accessoryView = nil
+            case .purchaseUnavailable:
+                title = "\(productName)"
+                detailText = "Purchase Unavailable"
+                accessoryView = nil
+            case .purchasing(_):
+                let loadingIndicatorView = UIActivityIndicatorView(style: .gray)
+                loadingIndicatorView.startAnimating()
+                
+                title = productName
+                detailText = ""
+                accessoryView = loadingIndicatorView
+            case .unknown:
+                title = productName
+                detailText = "—"
+                accessoryView = nil
+        }
+        
+        cell.textLabel!.text = title
+        cell.detailTextLabel!.text = detailText
+        cell.accessoryView = accessoryView
     }
 }
 
@@ -301,20 +309,20 @@ extension PurchaseProductsViewController : UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, titleForFooterInSection sectionIndex: Int) -> String? {
         // Feed the delegate with some basic UI.
-        // Display fetching errors as a footer of the product list section in the table, if there was an error.
+        // Display fetching errors as a section footer, if there was an error.
         
-        switch (self.section(at: sectionIndex), self.productInterfaceController.fetchingState) {
-            case (.products(_), .failed(let reason)):
-                switch reason {
-                    case .storeKitFailure(let error):
-                        return "There was an error communicating with the iTunes Store. (Error code: \(error.code.rawValue))"
-                    case .networkFailure(let error):
-                        return "There was an error connecting to the Internet. Check your network connectivity and try again later. (Error code: \(error.code.rawValue))"
-                    case .genericProblem:
-                        return "There was an error loading products. Try again later."
-                }
-            default:
-                return nil
+        guard
+            sectionIndex == self.indexOfSectionForFetchingErrorFooter(),
+            case .failed(let reason) = self.productInterfaceController.fetchingState
+        else { return nil }
+        
+        switch reason {
+            case .storeKitFailure(let error):
+                return "There was an error communicating with the iTunes Store. (Error code: \(error.code.rawValue))"
+            case .networkFailure(let error):
+                return "There was an error connecting to the Internet. Check your network connectivity and try again later. (Error code: \(error.code.rawValue))"
+            case .genericProblem:
+                return "There was an error loading products. Try again later."
         }
     }
     
@@ -343,6 +351,16 @@ extension PurchaseProductsViewController {
     // Returns the section for the given index.
     private func section(at index: Int) -> Section {
         return self.tableSections[index]
+    }
+    
+    // Returns the index of the section in which to display a fetching error in its footer.
+    private func indexOfSectionForFetchingErrorFooter() -> Int {
+        return self.tableSections.firstIndex(where: { section in
+            switch section {
+                case .products(_): return true
+                default: return false
+            }
+        })!
     }
     
     // Returns the row for the given `IndexPath`.
