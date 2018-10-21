@@ -12,11 +12,12 @@ public final class PriceFormatterDemoViewController : UIViewController {
         }
     }
     
-    // User Interface
-    private let tableView = UITableView(frame: .zero, style: .grouped)
-    
+    // Formatters
     private let priceFormatter = PriceFormatter()
     private let subscriptionPriceFormatter = SubscriptionPriceFormatter()
+    
+    // User Interface
+    private let tableView = UITableView(frame: .zero, style: .grouped)
     
     public init() {
         super.init(nibName: nil, bundle: nil)
@@ -172,7 +173,7 @@ public final class PriceFormatterDemoViewController : UIViewController {
         func stepperValues(for option: NumericOption) -> (current: Int, min: Int, max: Int) {
             switch option {
                 case .priceValue:
-                    return (self.priceValueMultiplier, 1, 100)
+                    return (self.priceValueMultiplier, 0, 100)
                 case .subscriptionPeriodUnitCount:
                     return (self.subscriptionPeriodUnitCount, 1, 30)
             }
@@ -300,7 +301,7 @@ extension PriceFormatterDemoViewController {
     private func updateNumericCell(_ cell: UITableViewCell, for option: NumericOption) {
         switch option {
             case .priceValue:
-                cell.textLabel!.text = "Value: \(self.viewModel.price.value.0.stringValue)"
+                cell.textLabel!.text = "Value: \(self.viewModel.price.value.number)"
             case .subscriptionPeriodUnitCount:
                 cell.textLabel!.text = "Period Units: \(self.viewModel.subscriptionPeriodUnitCount)"
         }
