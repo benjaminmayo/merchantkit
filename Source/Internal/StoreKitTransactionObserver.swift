@@ -4,7 +4,7 @@ internal protocol StoreKitTransactionObserverDelegate : AnyObject {
     func storeKitTransactionObserverWillUpdatePurchases(_ observer: StoreKitTransactionObserver)
     func storeKitTransactionObserverDidUpdatePurchases(_ observer: StoreKitTransactionObserver)
     
-    func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didPurchaseProductWith identifier: String)
+    func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didPurchaseProductWith identifier: String, completion: @escaping () -> Void)
     func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFailToPurchaseWith error: Error, forProductWith identifier: String)
 }
 
@@ -42,9 +42,9 @@ internal final class StoreKitTransactionObserver : NSObject, SKPaymentTransactio
     }
     
     private func completePurchase(for transaction: SKPaymentTransaction) {        
-        self.delegate?.storeKitTransactionObserver(self, didPurchaseProductWith: transaction.payment.productIdentifier)
-        
-        SKPaymentQueue.default().finishTransaction(transaction)
+        self.delegate?.storeKitTransactionObserver(self, didPurchaseProductWith: transaction.payment.productIdentifier, completion: {
+            SKPaymentQueue.default().finishTransaction(transaction)
+        })
     }
     
     private func failPurchase(for transaction: SKPaymentTransaction) {

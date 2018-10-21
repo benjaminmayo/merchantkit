@@ -56,7 +56,7 @@ public func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Prod
 - Permissive open source license.
 - Compatibility with latest Swift version using idiomatic language constructs.
 
-The codebase is in flux right now and the project does not guarantee API stability. `MerchantKit` is useful, it works, and will probably save you time. That being said, `MerchantKit` is by no means finished and there are major components that are in the project's scope but completely unimplemented (predominantly, consumable products are not supported). The test suite is currently bare.
+The codebase is in flux right now and the project does not guarantee API stability. `MerchantKit` is useful, it works, and will probably save you time. That being said, `MerchantKit` is by no means finished The test suite is patchy.
 
 ## Getting Started
 
@@ -116,7 +116,10 @@ The tasks vended by a `Merchant` give developers access to the core operations t
 
 The `ProductInterfaceController` class encompasses common behaviours needed to present In-App Purchase for sale. However, it remains abstract enough not be tied down to one specific user interface appearance or layout. 
 
-Developers simply provide the list of products to display and tells the controller to fetch data. The `delegate` notifies the app when to update its custom UI. It handles loading data, intermittent network connectivity and in-flight changes to the availability and state of products.  
+Developers simply provide the list of products to display and tells the controller to fetch data. The `delegate` notifies the app when to update its custom UI. It handles loading data, intermittent network connectivity and in-flight changes to the availability and state of products.
+
+See the [Example project](Example/) for a basic implementation of the `ProductInterfaceController`.
+
 
 ## Formatters 
 
@@ -141,13 +144,15 @@ func subscriptionDetailsForDisplay() -> String? {
 
 `PriceFormatter` works in every locale supported by the App Store. `SubscriptionPriceFormatter` and `SubscriptionPeriodFormatter` are currently offered in a small subset of languages. Voluntary translations are welcomed.
 
+See the [Example project](Example/) for a demo where you can experiment with various configuration options for  `PriceFormatter` and  `SubscriptionPriceFormatter`.
+
 ## Consumable Products
 
 `Merchant` tracks the purchased state of non-consumable and subscription products. Consumable products are considered transitory purchases and not recorded beyond the initial time of purchase. Because of their special nature, there is a special method in the `MerchantDelegate` for consumable products. This method is required to be implemented by applications that manage consumable products.
 
 ```swift
-func merchant(_ merchant: Merchant, didConsume product: Product) {
-    self.addCreditsToUserAccount(for: product) // application-specific handling 
+func merchant(_ merchant: Merchant, consume product: Product, completion: @escaping () -> Void) {
+    self.addCreditsToUserAccount(for: product, completion: completion) // application-specific handling 
 }
 ```
 
@@ -156,8 +161,7 @@ The `Merchant` will always report a consumable product's state as `PurchasedStat
 ## To Be Completed (in no particular order)
 
 - Increase the number of localizations for `SubscriptionPriceFormatter` and `SubscriptionPeriodFormatter`.
-- Add extensive documentation with example usage projects, including usage of `ProductInterfaceController`.
-- Improve handling of failure cases with richer error messages and feedback for when things go wrong. 
+- Add extensive documentation with more examples in the Example project.
 - Support downloadable content In-App Purchases.
 - Probably a lot more stuff I haven't thought of yet.
 

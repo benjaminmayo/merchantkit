@@ -414,10 +414,14 @@ extension Merchant : StoreKitTransactionObserverDelegate {
         
     }
     
-    internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didPurchaseProductWith identifier: String) {
+    internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didPurchaseProductWith identifier: String, completion: @escaping () -> Void) {
+        func didCompletePurchase() {
+            completion()
+        }
+        
         if let product = self.product(withIdentifier: identifier) {
             if product.kind == .consumable { // consumable product purchases are not recorded
-                self.delegate.merchant(self, didConsume: product)
+                self.delegate.merchant(self, consume: product, completion: didCompletePurchase)
             } else { // non-consumable and subscription products are recorded
                 let record = PurchaseRecord(productIdentifier: identifier, expiryDate: nil)
                 let result = self.storage.save(record)
@@ -429,6 +433,8 @@ extension Merchant : StoreKitTransactionObserverDelegate {
                 if case .subscription(_) = product.kind {
                     self.identifiersForPendingObservedPurchases.insert(product.identifier) // we need to get the receipt to find the expiry date, the `PurchaseRecord` will be updated when that information is available
                 }
+                
+                didCompletePurchase()
             }
         }
         

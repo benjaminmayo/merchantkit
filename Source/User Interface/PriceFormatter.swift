@@ -20,7 +20,7 @@ public final class PriceFormatter {
         return formatter
     }()
     
-    private static let zero = NSDecimalNumber(value: 0.0)
+    private static let zero: Decimal = 0.0
     
     public init() {
         
@@ -37,14 +37,14 @@ extension PriceFormatter {
     private func formattedPrice(from price: Price) -> String {
         let (number, locale) = price.value
         
-        let isFree = number.compare(PriceFormatter.zero) != .orderedDescending
+        let isFree = number <= PriceFormatter.zero
         
         if isFree && !self.freeReplacementText.isEmpty {
             return self.freeReplacementText
         }
         
         self.numberFormatter.locale = locale
-        let numberFragment = self.numberFormatter.string(from: number)!
+        let numberFragment = self.numberFormatter.string(from: number as NSDecimalNumber)!
         
         let components = [self.prefix, numberFragment, self.suffix]
         

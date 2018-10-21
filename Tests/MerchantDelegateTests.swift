@@ -23,7 +23,7 @@ class MerchantDelegateTests : XCTestCase {
         
         testingQueue.async {
             let merchant = Merchant(storage: EphemeralPurchaseStorage(), delegate: self)
-            self.merchant(merchant, didConsume: consumableProduct)
+            self.merchant(merchant, consume: consumableProduct, completion: {})
         }
         
         self.wait(for: [expectation], timeout: 1)
