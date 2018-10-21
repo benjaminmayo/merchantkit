@@ -6,7 +6,7 @@ class PriceFormatterTests : XCTestCase {
     func testDefaultsInUSEnglish() {
         let formatter = PriceFormatter()
         
-        let testingPrice = Price(from: NSDecimalNumber(string: "1.99"), in: Locale(identifier: "en-US"))
+        let testingPrice = Price(value: (Decimal(string: "1.99")!, Locale(identifier: "en-US")))
         
         let formattedString = formatter.string(from: testingPrice)
         
@@ -16,7 +16,7 @@ class PriceFormatterTests : XCTestCase {
     func testDefaultsInUKEnglish() {
         let formatter = PriceFormatter()
         
-        let testingPrice = Price(from: NSDecimalNumber(string: "9.99"), in: Locale(identifier: "en-GB"))
+        let testingPrice = Price(value: (Decimal(string: "9.99")!, Locale(identifier: "en-GB")))
         
         let formattedString = formatter.string(from: testingPrice)
         
@@ -27,7 +27,7 @@ class PriceFormatterTests : XCTestCase {
         let formatter = PriceFormatter()
         formatter.suffix = " with suffix"
         
-        let testingPrice = Price(from: NSDecimalNumber(string: "1.99"), in: Locale(identifier: "en-US"))
+        let testingPrice = Price(value: (Decimal(string: "1.99")!, Locale(identifier: "en-US")))
         
         let formattedString = formatter.string(from: testingPrice)
         
@@ -38,7 +38,7 @@ class PriceFormatterTests : XCTestCase {
         let formatter = PriceFormatter()
         formatter.freeReplacementText = "FREE"
         
-        let freePrice = Price(from: NSDecimalNumber(string: "0"), in: Locale(identifier: "en-US"))
+        let freePrice = Price(value: (Decimal(string: "0")!, Locale(identifier: "en-US")))
         
         let formattedString = formatter.string(from: freePrice)
         

@@ -20,7 +20,7 @@ class SubscriptionPriceFormatterTests : XCTestCase {
         let formatter = SubscriptionPriceFormatter()
         formatter.locale = locale
         
-        let price = Price(from: NSDecimalNumber(string: "5.99"), in: locale)
+        let price = Price(value: (Decimal(string: "5.99")!, locale))
 
         for (duration, result) in expectations {
             let formattedString = formatter.string(from: price, duration: duration)
@@ -31,7 +31,7 @@ class SubscriptionPriceFormatterTests : XCTestCase {
     
     private func englishResult(forPrice priceString: String, duration: SubscriptionDuration, phrasingStyle: SubscriptionPriceFormatter.PhrasingStyle) -> String {
         let locale = Locale(identifier: "en-US")
-        let price = Price(from: NSDecimalNumber(string: priceString), in: locale)
+        let price = Price(value: (Decimal(string: priceString)!, locale))
         
         let formatter = SubscriptionPriceFormatter()
         formatter.locale = locale
@@ -140,7 +140,7 @@ class SubscriptionPriceFormatterTests : XCTestCase {
     
     func test6MonthFormalInEnglishSpellOut() {
         let locale = Locale(identifier: "en-US")
-        let price = Price(from: NSDecimalNumber(string: "1.99"), in: locale)
+        let price = Price(value: (Decimal(string: "1.99")!, locale))
         
         let formatter = SubscriptionPriceFormatter()
         formatter.locale = locale
@@ -156,7 +156,7 @@ class SubscriptionPriceFormatterTests : XCTestCase {
         let locale = Locale(identifier: "en-GB")
 
         let duration: SubscriptionDuration = .init(period: .years(2), isRecurring: true)
-        let price = Price(from: NSDecimalNumber(string: "9.99"), in: locale)
+        let price = Price(value: (Decimal(string: "9.99")!, locale))
 
         let formatter = SubscriptionPriceFormatter()
         formatter.locale = locale
@@ -175,8 +175,8 @@ class SubscriptionPriceFormatterTests : XCTestCase {
         let locale = Locale(identifier: "en-GB")
         
         let duration: SubscriptionDuration = .init(period: .years(1), isRecurring: false)
-        let price = Price(from: NSDecimalNumber(string: "0.00"), in: locale)
-        
+        let price = Price(value: (Decimal(string: "0.00")!, locale))
+
         let formatter = SubscriptionPriceFormatter()
         formatter.locale = locale
         formatter.unitCountStyle = .numeric

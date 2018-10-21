@@ -26,9 +26,9 @@ public struct PurchaseSet {
             let bPrice = b.price.value.0
             
             if ascending {
-                return aPrice.compare(bPrice) == .orderedAscending
+                return aPrice < bPrice
             } else {
-                return aPrice.compare(bPrice) == .orderedDescending
+                return aPrice > bPrice
             }
         })
     }

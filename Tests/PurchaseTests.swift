@@ -4,13 +4,6 @@ import StoreKit
 @testable import MerchantKit
 
 class PurchaseTests : XCTestCase {
-    func testHash() {
-        let mockProduct = MockSKProduct(productIdentifier: "testProduct", price: NSDecimalNumber(string: "1.00"), priceLocale: .current)
-        
-        let purchase = Purchase(from: mockProduct, characteristics: [])
-        XCTAssertEqual(purchase.hashValue, mockProduct.productIdentifier.hashValue)
-    }
-    
     func testMatchingSubscriptionPeriod() {
         let expectations: [(SKProduct.PeriodUnit, SubscriptionPeriod.Unit)] = [
             (.day, .day),
@@ -38,8 +31,8 @@ class PurchaseTests : XCTestCase {
         let mockSubscriptionPeriod = MockSKProductSubscriptionPeriod(unit: .month, numberOfUnits: 1)
         
         let expectations: [(SKProductDiscount, SubscriptionTerms.IntroductoryOffer)] = [
-            (MockSKProductDiscount(price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, numberOfPeriods: 6, paymentMode: .payAsYouGo), SubscriptionTerms.IntroductoryOffer.recurringDiscount(discountedPrice: Price(from: NSDecimalNumber(string: "1.00"), in: .current), recurringPeriod: .months(1), discountedPeriodCount: 6)),
-            (MockSKProductDiscount(price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, numberOfPeriods: 6, paymentMode: .payUpFront), SubscriptionTerms.IntroductoryOffer.upfrontDiscount(discountedPrice: Price(from: NSDecimalNumber(string: "1.00"), in: .current), period: .months(6))),
+            (MockSKProductDiscount(price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, numberOfPeriods: 6, paymentMode: .payAsYouGo), SubscriptionTerms.IntroductoryOffer.recurringDiscount(discountedPrice: Price(value: (Decimal(string: "1.00")!, .current)), recurringPeriod: .months(1), discountedPeriodCount: 6)),
+            (MockSKProductDiscount(price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, numberOfPeriods: 6, paymentMode: .payUpFront), SubscriptionTerms.IntroductoryOffer.upfrontDiscount(discountedPrice: Price(value: (Decimal(string: "1.00")!, .current)), period: .months(6))),
             (MockSKProductDiscount(price: NSDecimalNumber(string: "0.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, numberOfPeriods: 1, paymentMode: .freeTrial), SubscriptionTerms.IntroductoryOffer.freeTrial(period: .months(1)))
         ]
 
@@ -63,17 +56,6 @@ class PurchaseTests : XCTestCase {
         let purchase = Purchase(from: mockProduct, characteristics: [])
         
         XCTAssertNil(purchase.subscriptionTerms)
-    }
-    
-    func testCustomizedHashableConformance() {
-        let locale = Locale(identifier: "en-US")
-        let number = NSDecimalNumber(string: "9.99")
-        
-        let price = Price(from: number, in: locale)
-        let equivalentPrice = Price(from: number, in: locale)
-        
-        XCTAssertEqual(price, equivalentPrice)
-        XCTAssertEqual(price.hashValue, equivalentPrice.hashValue)
     }
 }
 

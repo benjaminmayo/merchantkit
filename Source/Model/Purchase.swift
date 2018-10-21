@@ -12,7 +12,7 @@ public struct Purchase : Hashable, CustomStringConvertible {
     
     internal init(from skProduct: SKProduct, characteristics: Characteristics) {
         self.productIdentifier = skProduct.productIdentifier
-        self.price = Price(from: skProduct.price, in: skProduct.priceLocale)
+        self.price = Price(value: (skProduct.price as Decimal, skProduct.priceLocale))
         
         self.skProduct = skProduct
         self.characteristics = characteristics
@@ -20,10 +20,6 @@ public struct Purchase : Hashable, CustomStringConvertible {
     
     public var description: String {
         return self.defaultDescription(withProperties: ("", "'\(self.productIdentifier)'"), ("price", self.price))
-    }
-    
-    public var hashValue: Int {
-        return self.productIdentifier.hashValue
     }
     
     public var localizedTitle: String {
@@ -65,7 +61,7 @@ public struct Purchase : Hashable, CustomStringConvertible {
             if let skDiscount = self.skProduct.introductoryPrice {
                 let locale = priceLocaleFromProductDiscount(skDiscount) ?? Locale.current
                 
-                let price = Price(from: skDiscount.price, in: locale)
+                let price = Price(value: (skDiscount.price as Decimal, locale))
                 let introductoryPeriod = subscriptionPeriod(from: skDiscount.subscriptionPeriod)
                 
                 switch skDiscount.paymentMode {
@@ -87,15 +83,11 @@ public struct Purchase : Hashable, CustomStringConvertible {
         
         return SubscriptionTerms(duration: duration, introductoryOffer: introductoryOffer)
     }
-    
-    public static func ==(lhs: Purchase, rhs: Purchase) -> Bool {
-        return lhs.productIdentifier == rhs.productIdentifier && lhs.price == rhs.price && lhs.characteristics == rhs.characteristics
-    }
 }
 
 extension Purchase {
     /// This type is not intended to ever be publicly exposed. It carries internal metadata.
-    internal struct Characteristics : OptionSet {
+    internal struct Characteristics : OptionSet, Hashable {
         let rawValue: UInt
         
         init(rawValue: UInt) {
