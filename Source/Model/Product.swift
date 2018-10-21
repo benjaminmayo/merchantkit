@@ -3,6 +3,7 @@ public struct Product : Hashable, CustomStringConvertible {
     public let identifier: String
     public let kind: Kind
     
+    /// Create a product with the unique product `identifier` and `kind` of In-App Purchase it represents.
     public init(identifier: String, kind: Kind) {
         self.identifier = identifier
         self.kind = kind

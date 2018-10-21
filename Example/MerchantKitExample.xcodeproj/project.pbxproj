@@ -16,6 +16,23 @@
 		4369E563217A0263002086C3 /* PriceFormatterDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4369E562217A0263002086C3 /* PriceFormatterDemoViewController.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		4311F102217D10DF00ED9A2E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4369E54C2179D8F4002086C3 /* MerchantKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4342025D1EAE08F80012983A;
+			remoteInfo = MerchantKit;
+		};
+		4311F104217D10DF00ED9A2E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4369E54C2179D8F4002086C3 /* MerchantKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 434202661EAE08F80012983A;
+			remoteInfo = MerchantKitTests;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		4369E55D2179D96D002086C3 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -54,6 +71,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4311F0FE217D10DF00ED9A2E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4311F103217D10DF00ED9A2E /* MerchantKit.framework */,
+				4311F105217D10DF00ED9A2E /* MerchantKitTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		4359BC382177CA71003DC630 = {
 			isa = PBXGroup;
 			children = (
@@ -141,12 +167,35 @@
 			mainGroup = 4359BC382177CA71003DC630;
 			productRefGroup = 4359BC422177CA71003DC630 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 4311F0FE217D10DF00ED9A2E /* Products */;
+					ProjectRef = 4369E54C2179D8F4002086C3 /* MerchantKit.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				4359BC402177CA71003DC630 /* MerchantKitExample */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		4311F103217D10DF00ED9A2E /* MerchantKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = MerchantKit.framework;
+			remoteRef = 4311F102217D10DF00ED9A2E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4311F105217D10DF00ED9A2E /* MerchantKitTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = MerchantKitTests.xctest;
+			remoteRef = 4311F104217D10DF00ED9A2E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		4359BC3F2177CA71003DC630 /* Resources */ = {

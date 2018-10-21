@@ -1,5 +1,5 @@
 import UIKit
-@testable import MerchantKit // This demo accesses internal initializers to construct some values. In your own code, do not use `@testable`.
+import MerchantKit
 
 // This view controller demos different configurations of price formatters included with `MerchantKit`.
 // Run the app and tweak the settings to get a sense of the flexibility.
@@ -55,7 +55,7 @@ public final class PriceFormatterDemoViewController : UIViewController {
         private var enabledToggles = Set<ToggleableOption>()
         
         var price: Price {
-            return Price(from: self.priceValue, in: self.locale)
+            return Price(value: (self.priceValue, self.locale))
         }
         
         var duration: SubscriptionDuration {
@@ -65,11 +65,11 @@ public final class PriceFormatterDemoViewController : UIViewController {
             return SubscriptionDuration(period: period, isRecurring: isRecurring)
         }
         
-        private var priceValue: NSDecimalNumber {
+        private var priceValue: Decimal {
             if self.priceValueMultiplier > 0 {
-                return NSDecimalNumber(value: self.priceValueMultiplier).subtracting(NSDecimalNumber(string: "0.01"))
+                return Decimal(self.priceValueMultiplier) - Decimal(string: "0.01")!
             } else {
-                return NSDecimalNumber(value: 0)
+                return 0.0
             }
         }
         

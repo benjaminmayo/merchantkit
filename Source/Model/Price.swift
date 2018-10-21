@@ -7,6 +7,7 @@ public struct Price : Hashable, CustomStringConvertible {
     /// Underlying values that make up the `Price`
     public let value: Value
     
+    /// Create a `Price` with the given `value`. Typically, you do not construct `Price` values manually. Instead, access the `price` on a `Purchase` instance.
     public init(value: Value) {
         self.value = value
     }
