@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		43138DF521C5A258005813B7 /* MerchantKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4311F103217D10DF00ED9A2E /* MerchantKit.framework */; };
+		43138DF621C5A258005813B7 /* MerchantKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4311F103217D10DF00ED9A2E /* MerchantKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4359BC452177CA71003DC630 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4359BC442177CA71003DC630 /* AppDelegate.swift */; };
 		4359BC472177CA71003DC630 /* PurchaseProductsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4359BC462177CA71003DC630 /* PurchaseProductsViewController.swift */; };
 		4359BC4C2177CA72003DC630 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4359BC4B2177CA72003DC630 /* Assets.xcassets */; };
 		4359BC572177D85A003DC630 /* ProductDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4359BC562177D85A003DC630 /* ProductDatabase.swift */; };
-		4369E55F2179D9A1002086C3 /* MerchantKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4369E55E2179D9A1002086C3 /* MerchantKit.framework */; };
 		4369E5612179DFA9002086C3 /* ExampleListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4369E5602179DFA9002086C3 /* ExampleListViewController.swift */; };
 		4369E563217A0263002086C3 /* PriceFormatterDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4369E562217A0263002086C3 /* PriceFormatterDemoViewController.swift */; };
 /* End PBXBuildFile section */
@@ -31,6 +32,13 @@
 			remoteGlobalIDString = 434202661EAE08F80012983A;
 			remoteInfo = MerchantKitTests;
 		};
+		43138DF721C5A258005813B7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4369E54C2179D8F4002086C3 /* MerchantKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4342025C1EAE08F80012983A;
+			remoteInfo = MerchantKit;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,6 +48,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				43138DF621C5A258005813B7 /* MerchantKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -64,7 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4369E55F2179D9A1002086C3 /* MerchantKit.framework in Frameworks */,
+				43138DF521C5A258005813B7 /* MerchantKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,6 +144,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				43138DF821C5A258005813B7 /* PBXTargetDependency */,
 			);
 			name = MerchantKitExample;
 			productName = MerchantKitExample;
@@ -222,6 +232,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		43138DF821C5A258005813B7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = MerchantKit;
+			targetProxy = 43138DF721C5A258005813B7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		4359BC512177CA72003DC630 /* Debug */ = {
@@ -343,6 +361,7 @@
 		4359BC542177CA72003DC630 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
@@ -362,6 +381,7 @@
 		4359BC552177CA72003DC630 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
