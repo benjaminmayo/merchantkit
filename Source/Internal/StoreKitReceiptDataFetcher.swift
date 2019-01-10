@@ -62,7 +62,7 @@ extension StoreKitReceiptDataFetcher {
     }
     
     private func attemptFinishTaskFetchingLocalData(onFailure: () -> Void) {
-        if let url = Bundle.main.appStoreReceiptURL, let data = try? Data(contentsOf: url) {
+        if let url = Bundle.main.appStoreReceiptURL, let isReachable = try? url.checkResourceIsReachable(), isReachable == true, let data = try? Data(contentsOf: url) {
             self.finish(with: .succeeded(data))
         } else {
             onFailure()
