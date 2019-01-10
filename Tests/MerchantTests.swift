@@ -3,6 +3,8 @@ import Foundation
 @testable import MerchantKit
 
 class MerchantTests : XCTestCase {
+    private let metadata = ReceiptMetadata(originalApplicationVersion: "1.0")
+    
     func testInitialization() {
         let mockDelegate = MockValidationMerchantDelegate()
         
@@ -33,7 +35,7 @@ class MerchantTests : XCTestCase {
         self.runTest(with: [expectedOutcome], withReceiptDataFetchResult: .succeeded(Data()), validationRequestHandler: { (request, completion) in
             let nonConsumableEntry = ReceiptEntry(productIdentifier: "testNonConsumableProduct", expiryDate: nil)
             
-            let receipt = ConstructedReceipt(from: [nonConsumableEntry])
+            let receipt = ConstructedReceipt(from: [nonConsumableEntry], metadata: self.metadata)
             
             completion(.succeeded(receipt))
         })
@@ -52,7 +54,7 @@ class MerchantTests : XCTestCase {
             let subscriptionEntry2 = ReceiptEntry(productIdentifier: "testSubscriptionProduct", expiryDate: secondExpiryDate)
             let subscriptionEntry3 = ReceiptEntry(productIdentifier: "testSubscriptionProduct", expiryDate: thirdExpiryDate)
             
-            let receipt = ConstructedReceipt(from: [subscriptionEntry1, subscriptionEntry2, subscriptionEntry3])
+            let receipt = ConstructedReceipt(from: [subscriptionEntry1, subscriptionEntry2, subscriptionEntry3], metadata: self.metadata)
             
             completion(.succeeded(receipt))
         })
