@@ -39,7 +39,7 @@ public final class Merchant {
     private var identifiersForPendingObservedPurchases: Set<String> = []
     
     private let nowDate: Date = Date()
-    private var latestFetchedReceipt: Receipt?
+    internal var latestFetchedReceipt: Receipt?
     
     /// Create a `Merchant`, probably at application launch. Assign a consistent `storage` and a `delegate` to receive callbacks.
     public init(storage: PurchaseStorage, delegate: MerchantDelegate) {
@@ -114,6 +114,15 @@ public final class Merchant {
     public func restorePurchasesTask() -> RestorePurchasesTask {
         return self.makeTask(initializing: {
             let task = RestorePurchasesTask(with: self)
+            
+            return task
+        })
+    }
+    
+    /// Get local app receipt metadata, if available.
+    public func receiptMetadataTask() -> ReceiptMetadataTask {
+        return self.makeTask(initializing: {
+            let task = ReceiptMetadataTask(with: self)
             
             return task
         })

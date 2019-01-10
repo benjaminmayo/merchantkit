@@ -35,6 +35,7 @@
 		432133BE1EAE3DFB0096919B /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133BD1EAE3DFB0096919B /* Result.swift */; };
 		43222A0921E778EE006A227F /* ReceiptMetadataValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43222A0821E778EE006A227F /* ReceiptMetadataValues.swift */; };
 		43222A0B21E77A55006A227F /* ReceiptMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43222A0A21E77A55006A227F /* ReceiptMetadata.swift */; };
+		43222A0D21E77FC8006A227F /* ReceiptMetadataTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43222A0C21E77FC8006A227F /* ReceiptMetadataTask.swift */; };
 		4329BE4A1EB8A43400052D3E /* MerchantTaskUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4329BE491EB8A43400052D3E /* MerchantTaskUtilities.swift */; };
 		432BFFCE208E099600257585 /* PurchasedProductInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432BFFCD208E099600257585 /* PurchasedProductInfo.swift */; };
 		432BFFD1208E0B9C00257585 /* MerchantDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432BFFCF208E0B8000257585 /* MerchantDelegateTests.swift */; };
@@ -155,6 +156,7 @@
 		432133BD1EAE3DFB0096919B /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		43222A0821E778EE006A227F /* ReceiptMetadataValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptMetadataValues.swift; sourceTree = "<group>"; };
 		43222A0A21E77A55006A227F /* ReceiptMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptMetadata.swift; sourceTree = "<group>"; };
+		43222A0C21E77FC8006A227F /* ReceiptMetadataTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptMetadataTask.swift; sourceTree = "<group>"; };
 		4329BE491EB8A43400052D3E /* MerchantTaskUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MerchantTaskUtilities.swift; sourceTree = "<group>"; };
 		432BFFCD208E099600257585 /* PurchasedProductInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasedProductInfo.swift; sourceTree = "<group>"; };
 		432BFFCF208E0B8000257585 /* MerchantDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantDelegateTests.swift; sourceTree = "<group>"; };
@@ -372,6 +374,7 @@
 				432133B51EAE2FEA0096919B /* AvailablePurchasesTask.swift */,
 				436CE1331EAF3D5200AB41CD /* CommitPurchaseTask.swift */,
 				4350D4751EB3931300DA47C5 /* RestorePurchasesTask.swift */,
+				43222A0C21E77FC8006A227F /* ReceiptMetadataTask.swift */,
 			);
 			path = Tasks;
 			sourceTree = "<group>";
@@ -615,6 +618,7 @@
 				436CE12E1EAE4B5B00AB41CD /* DescriptionUtilities.swift in Sources */,
 				43703A4220854A9C003AA087 /* ASN1.swift in Sources */,
 				436CE1341EAF3D5200AB41CD /* CommitPurchaseTask.swift in Sources */,
+				43222A0D21E77FC8006A227F /* ReceiptMetadataTask.swift in Sources */,
 				436CE1321EAEA55D00AB41CD /* DateUtilities.swift in Sources */,
 				434202841EAE09100012983A /* Product.swift in Sources */,
 				434202871EAE09100012983A /* Receipt.swift in Sources */,
