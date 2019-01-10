@@ -1,4 +1,4 @@
-/// Restore completed purchases made by a user in the past. Executing this target may present UI.
+/// This task restores previous purchases made by the signed-in user. Executing this task may present UI.
 /// If using MerchantKit, it is important to use this task rather than manually invoking StoreKit.
 public final class RestorePurchasesTask : MerchantTask {
     public typealias RestoredPurchases = Set<Product>
