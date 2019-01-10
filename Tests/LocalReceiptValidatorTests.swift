@@ -5,11 +5,12 @@ class LocalReceiptValidatorTests : XCTestCase {
     struct SampleResource {
         let name: String
         let expectedProductIdentifiers: Set<String>
+        let expectedOriginalApplicationVersion: String
     }
     
     func testSampleResources() {
-        let twoNonconsumablesResource = SampleResource(name: "testSampleReceiptTwoNonConsumablesPurchased", expectedProductIdentifiers: ["codeSharingUnlockable", "saveScannedCodeUnlockable"])
-        let subscriptionResource = SampleResource(name: "testSampleReceiptOneSubscriptionPurchased", expectedProductIdentifiers: ["premiumsubscription"])
+        let twoNonconsumablesResource = SampleResource(name: "testSampleReceiptTwoNonConsumablesPurchased", expectedProductIdentifiers: ["codeSharingUnlockable", "saveScannedCodeUnlockable"], expectedOriginalApplicationVersion: "26")
+        let subscriptionResource = SampleResource(name: "testSampleReceiptOneSubscriptionPurchased", expectedProductIdentifiers: ["premiumsubscription"], expectedOriginalApplicationVersion: "1.0.21")
         
         let resources = [twoNonconsumablesResource, subscriptionResource]
         
@@ -25,6 +26,7 @@ class LocalReceiptValidatorTests : XCTestCase {
             validator.onCompletion = { result in
                 switch result {
                     case .succeeded(let receipt):
+                        XCTAssertEqual(receipt.metadata.originalApplicationVersion, resource.expectedOriginalApplicationVersion)
                         XCTAssertEqual(receipt.productIdentifiers, resource.expectedProductIdentifiers)
                     case .failed(let error):
                         XCTFail(String(describing: error))
