@@ -9,6 +9,7 @@ internal class LocalReceiptPayloadParser {
     private var foundInAppPurchaseAttributes = [(InAppPurchaseReceiptAttributeType, ReceiptAttributeASN1SetProcessor.ReceiptAttribute)]()
     
     private var receiptEntries = [ReceiptEntry]()
+    private var metadataValues = ReceiptMetadataValues()
     
     init() {
         
@@ -20,9 +21,13 @@ internal class LocalReceiptPayloadParser {
         
         try self.payloadProcessor.start()
         
+        // self.metadataValues is populated with available fields
+        
+        let metadata = ReceiptMetadata(originalApplicationVersion: self.metadataValues.originalApplicationVersion)
+        
         // self.receiptEntries is populated in the processor delegate
         
-        return ConstructedReceipt(from: self.receiptEntries)
+        return ConstructedReceipt(from: self.receiptEntries, metadata: metadata)
     }
 }
 
@@ -88,6 +93,8 @@ extension LocalReceiptPayloadParser {
         switch attributeType {
             case .inAppPurchase:
                 self.processInAppPurchaseSet(attribute.rawBuffer)
+            case .originalApplicationVersion:
+                self.metadataValues.originalApplicationVersion = attribute.stringValue ?? ""
             default:
                 break
         }

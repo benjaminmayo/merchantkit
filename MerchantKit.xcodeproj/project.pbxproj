@@ -33,6 +33,8 @@
 		432133BA1EAE36170096919B /* Purchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133B91EAE36170096919B /* Purchase.swift */; };
 		432133BC1EAE39640096919B /* Price.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133BB1EAE39640096919B /* Price.swift */; };
 		432133BE1EAE3DFB0096919B /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133BD1EAE3DFB0096919B /* Result.swift */; };
+		43222A0921E778EE006A227F /* ReceiptMetadataValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43222A0821E778EE006A227F /* ReceiptMetadataValues.swift */; };
+		43222A0B21E77A55006A227F /* ReceiptMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43222A0A21E77A55006A227F /* ReceiptMetadata.swift */; };
 		4329BE4A1EB8A43400052D3E /* MerchantTaskUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4329BE491EB8A43400052D3E /* MerchantTaskUtilities.swift */; };
 		432BFFCE208E099600257585 /* PurchasedProductInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432BFFCD208E099600257585 /* PurchasedProductInfo.swift */; };
 		432BFFD1208E0B9C00257585 /* MerchantDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432BFFCF208E0B8000257585 /* MerchantDelegateTests.swift */; };
@@ -151,6 +153,8 @@
 		432133B91EAE36170096919B /* Purchase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Purchase.swift; sourceTree = "<group>"; };
 		432133BB1EAE39640096919B /* Price.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Price.swift; sourceTree = "<group>"; };
 		432133BD1EAE3DFB0096919B /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		43222A0821E778EE006A227F /* ReceiptMetadataValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptMetadataValues.swift; sourceTree = "<group>"; };
+		43222A0A21E77A55006A227F /* ReceiptMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptMetadata.swift; sourceTree = "<group>"; };
 		4329BE491EB8A43400052D3E /* MerchantTaskUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MerchantTaskUtilities.swift; sourceTree = "<group>"; };
 		432BFFCD208E099600257585 /* PurchasedProductInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasedProductInfo.swift; sourceTree = "<group>"; };
 		432BFFCF208E0B8000257585 /* MerchantDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantDelegateTests.swift; sourceTree = "<group>"; };
@@ -407,6 +411,7 @@
 				438C9DA71F548E7A00C5F0E0 /* ReceiptValidationRequest.swift */,
 				4342027E1EAE09100012983A /* Receipt.swift */,
 				4319AC6620936D9F000ACC04 /* ReceiptEntry.swift */,
+				43222A0A21E77A55006A227F /* ReceiptMetadata.swift */,
 				432133BD1EAE3DFB0096919B /* Result.swift */,
 				43D4FE6E207F7E8700AEA92F /* SubscriptionTerms.swift */,
 				435418E82080DEA300FB3833 /* SubscriptionPeriod.swift */,
@@ -428,6 +433,7 @@
 				43D0AD792072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift */,
 				436CE13D1EAF462B00AB41CD /* MerchantProductObserver.swift */,
 				436CE14F1EB0A5B900AB41CD /* ConstructedReceipt.swift */,
+				43222A0821E778EE006A227F /* ReceiptMetadataValues.swift */,
 				43703A502085EB38003AA087 /* ReceiptAttributeASN1SetProcessor.swift */,
 				43703A49208563EA003AA087 /* PKCS7ReceiptDataContainer.swift */,
 				436CE1511EB0A61200AB41CD /* Buckets.swift */,
@@ -615,6 +621,7 @@
 				436CE1301EAE7B6400AB41CD /* PriceFormatter.swift in Sources */,
 				432BFFCE208E099600257585 /* PurchasedProductInfo.swift in Sources */,
 				436CE1561EB0C0D300AB41CD /* KeychainPurchaseStorage.swift in Sources */,
+				43222A0921E778EE006A227F /* ReceiptMetadataValues.swift in Sources */,
 				43703A522085EB67003AA087 /* ReceiptAttributeASN1SetProcessor.swift in Sources */,
 				436CE13E1EAF462B00AB41CD /* MerchantProductObserver.swift in Sources */,
 				4319AC6A2093BCA3000ACC04 /* MerchantKitFatalError.swift in Sources */,
@@ -628,6 +635,7 @@
 				4314B25F2082C5B400ECC35C /* LocalizedResources.swift in Sources */,
 				436EA3BD1ED5B336005F3B3B /* LocalReceiptValidator.swift in Sources */,
 				43195FA020987BE300C906F5 /* StoreParameters.swift in Sources */,
+				43222A0B21E77A55006A227F /* ReceiptMetadata.swift in Sources */,
 				434202851EAE09100012983A /* PurchasedState.swift in Sources */,
 				436CE1541EB0B3F600AB41CD /* StoreKitReceiptDataFetcher.swift in Sources */,
 				432133BA1EAE36170096919B /* Purchase.swift in Sources */,
