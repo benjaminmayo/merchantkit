@@ -50,7 +50,7 @@ public struct Purchase : Hashable, CustomStringConvertible {
             return SubscriptionPeriod(unit: unit, unitCount: unitCount)
         }
         
-        guard let skSubscriptionPeriod = self.skProduct.subscriptionPeriod else {
+        guard self.characteristics.contains(.isSubscription), let skSubscriptionPeriod = self.skProduct.subscriptionPeriod else { // `SKProduct.subscriptionPeriod` can be non-nil for products that do not represent subscriptions, so we add in our own check here
             return nil
         }
         
@@ -93,6 +93,7 @@ extension Purchase {
             self.rawValue = rawValue
         }
         
-        public static let isAutorenewingSubscription: Characteristics = Characteristics(rawValue: 1 << 1)
+        public static let isSubscription: Characteristics = Characteristics(rawValue: 1 << 1)
+        public static let isAutorenewingSubscription: Characteristics = Characteristics(rawValue: 1 << 2)
     }
 }

@@ -61,12 +61,13 @@ extension AvailablePurchasesTask : SKProductsRequestDelegate {
         let purchases: [Purchase] = skProducts.map { skProduct in
             var characteristics = Purchase.Characteristics()
             
-            if let product = self.products.first(where: { product in
-                product.identifier == skProduct.productIdentifier
-            }) {
+            if let product = self.products.first(where: { $0.identifier == skProduct.productIdentifier }) {
                 switch product.kind {
                     case .subscription(automaticallyRenews: true):
+                        characteristics.insert(.isSubscription)
                         characteristics.insert(.isAutorenewingSubscription)
+                    case .subscription(automaticallyRenews: false):
+                        characteristics.insert(.isSubscription)
                     default:
                         break
                 }
