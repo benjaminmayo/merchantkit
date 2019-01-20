@@ -184,15 +184,11 @@ extension ProductInterfaceController {
         
         public struct PurchaseMetadata : Equatable {
             public let price: Price
-            
-            @available(iOS 11.2, *)
-            public var subscriptionTerms: SubscriptionTerms? { return self._subscriptionTerms }
-            
-            private let _subscriptionTerms: SubscriptionTerms?
+            public let subscriptionTerms: SubscriptionTerms?
             
             internal init(price: Price, subscriptionTerms: SubscriptionTerms?) {
                 self.price = price
-                self._subscriptionTerms = subscriptionTerms
+                self.subscriptionTerms = subscriptionTerms
             }
         }
     }
