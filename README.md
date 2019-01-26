@@ -58,11 +58,29 @@ public func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Prod
 
 The codebase is in flux right now and the project does not guarantee API stability. `MerchantKit` is useful, it works, and will probably save you time. That being said, `MerchantKit` is by no means finished The test suite is patchy.
 
+## Installation
+
+#### CocoaPods
+
+To integrate  `MerchantKit` into your Xcode project using CocoaPods, specify it in your `Podfile`
+```
+pod 'MerchantKit'
+```
+
+#### Carthage
+
+To integrate  `MerchantKit` into your Xcode project using Carthage, specify it in your `Cartfile`
+```
+github "benjaminmayo/merchantkit"
+```
+
+#### Manually
+
+Compile the `MerchantKit` framework and embed it in your application. You can download the source code from Github and embed the Xcode project into your app, although you'll have to upgrade to the latest releases manually.
+
 ## Getting Started
 
-1. Compile the `MerchantKit` framework and embed it in your application. The easiest way to get up and running right now is to use Cocoapods; add `MerchantKit` to your app's Podfile and build. You can also just download the source code from Github and embed the Xcode project into your app, although you'll have to upgrade to the latest releases manually.
-
-2. In your app delegate, import `MerchantKit` create a `Merchant` instance in `application(_:, didFinishLaunchingWithOptions:)`. Supply a storage object (recommended: `KeychainPurchaseStorage`) and a delegate.
+1. In your app delegate, import `MerchantKit` create a `Merchant` instance in `application(_:, didFinishLaunchingWithOptions:)`. Supply a storage object (recommended: `KeychainPurchaseStorage`) and a delegate.
 ```swift
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     ...
@@ -73,7 +91,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 }
 ```
 
-3. Implement the two required methods in `MerchantDelegate` to validate receipt data and receive notifications when the `PurchasedState` changes for registered products.
+2. Implement the two required methods in `MerchantDelegate` to validate receipt data and receive notifications when the `PurchasedState` changes for registered products.
 ```swift
 func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Product>) {
     for product in products {
@@ -90,13 +108,13 @@ func merchant(_ merchant: Merchant, validate request: ReceiptValidationRequest, 
     validator.start()
 }
 ```
-4. Register products as soon as possible (typically within `application(_:, didFinishLaunchingWithOptions:)`). You may want to load these products from a resource file. The included `LocalConfiguration` object provides a mechanism for this.
+3. Register products as soon as possible (typically within `application(_:, didFinishLaunchingWithOptions:)`). You may want to load these products from a resource file. The included `LocalConfiguration` object provides a mechanism for this.
 ```swift
 let config = try! MerchantKit.LocalConfiguration(fromResourceNamed: "MerchantConfig", extension: "plist")
 self.merchant.register(config.products)
 
 ```
-5. Call `setup()` on the merchant instance before escaping the `application(_:, didFinishLaunchingWithOptions:)` method. This tells the merchant to start observing the payment queue.
+4. Call `setup()` on the merchant instance before escaping the `application(_:, didFinishLaunchingWithOptions:)` method. This tells the merchant to start observing the payment queue.
 ```swift
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     ...
@@ -108,7 +126,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
     ...
 }
 ```
-6. Profit! Or something.
+5. Profit! Or something.
 
 ## Product Interface Controller
 
