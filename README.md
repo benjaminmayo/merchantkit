@@ -62,14 +62,14 @@ The codebase is in flux right now and the project does not guarantee API stabili
 
 #### CocoaPods
 
-To integrate  `MerchantKit` into your Xcode project using CocoaPods, specify it in your `Podfile`
+To integrate  `MerchantKit` into your Xcode project using CocoaPods, specify it in your `Podfile`.
 ```
 pod 'MerchantKit'
 ```
 
 #### Carthage
 
-To integrate  `MerchantKit` into your Xcode project using Carthage, specify it in your `Cartfile`
+To integrate  `MerchantKit` into your Xcode project using Carthage, specify it in your `Cartfile`.
 ```
 github "benjaminmayo/merchantkit"
 ```
@@ -80,12 +80,12 @@ Compile the `MerchantKit` framework and embed it in your application. You can do
 
 ## Getting Started
 
-1. In your app delegate, import `MerchantKit` create a `Merchant` instance in `application(_:, didFinishLaunchingWithOptions:)`. Supply a storage object (recommended: `KeychainPurchaseStorage`) and a delegate.
+1. In your app delegate, import `MerchantKit` create a `Merchant` instance in `application(_:, didFinishLaunchingWithOptions:)`. Supply a configuration (such as `Merchant.Configuration.default`) and an optional delegate.
 ```swift
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     ...
     
-    self.merchant = Merchant(storage: KeychainPurchaseStorage(serviceName: "AppName"), delegate: self)
+    self.merchant = Merchant(configuration: .default, delegate: self)
     
     ...
 }
@@ -97,21 +97,17 @@ func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Product>) {
     for product in products {
         print("updated \(product)")
     }
- }
+}
     
-func merchant(_ merchant: Merchant, validate request: ReceiptValidationRequest, completion: @escaping (Result<Receipt>) -> Void) {
-    let validator = LocalReceiptValidator(request: request)
-    validator.onCompletion = { result in
-        completion(result)
-    }
-        
-    validator.start()
+func merchantDidChangeLoadingState(_ merchant: Merchant) {
+    
 }
 ```
-3. Register products as soon as possible (typically within `application(_:, didFinishLaunchingWithOptions:)`). You may want to load these products from a resource file. The included `LocalConfiguration` object provides a mechanism for this.
+3. Register products as soon as possible (typically within `application(_:, didFinishLaunchingWithOptions:)`). You may want to load `Product` structures from a file, or simply declaring them as constants in code. These constants can then be referred to statically later.  
 ```swift
-let config = try! MerchantKit.LocalConfiguration(fromResourceNamed: "MerchantConfig", extension: "plist")
-self.merchant.register(config.products)
+let product = Product(identifier: "iap.productIdentifier", kind: .nonConsumable)
+let otherProduct = Product(identifier: "iap.otherProductIdentifier", kind: .subscription(automaticallyRenews: true)) 
+self.merchant.register([product, otherProduct])
 
 ```
 4. Call `setup()` on the merchant instance before escaping the `application(_:, didFinishLaunchingWithOptions:)` method. This tells the merchant to start observing the payment queue.
@@ -119,7 +115,7 @@ self.merchant.register(config.products)
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     ...
     
-    self.merchant = Merchant(storage: KeychainPurchaseStorage(serviceName: "AppName"), delegate: self)    
+    self.merchant = Merchant(configuration: .default, delegate: self)    
     self.merchant.register(...)
     self.merchant.setup()
     
@@ -127,6 +123,14 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 }
 ```
 5. Profit! Or something.
+
+## Configuration
+
+`Merchant` is initialized with a configuration object; an instance of `Merchant.Configuration`. The configuration controls how `Merchant` validates receipts and persist product state to storage.
+Most applications can simply use `Merchant.Configuration.default` and get the result they expect. You can supply your own `Merchant.Configuration` if you want to do something more customized.
+
+Tip: `MerchantKit` provides  `Merchant.Configuration.usefulForTestingAsPurchasedStateResetsOnApplicationLaunch` as a built-in configuration. This can be used to test purchase flows during development as the configuration does not persist purchase states to permanent storage.
+You can repeatedly test 'buying' any `Product`, including non-consumables, simply by restarting the app. As indicated by its unwieldy name, you should not use this configuration in a released application.
 
 ## Product Interface Controller
 
