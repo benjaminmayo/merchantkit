@@ -170,7 +170,7 @@ See the [Example project](Example/) for a demo where you can experiment with var
 
 ## Consumable Products
 
-`Merchant` tracks the purchased state of non-consumable and subscription products. Consumable products are considered transitory purchases and not recorded beyond the initial time of purchase. Because of their special nature, there is a special method in the `MerchantDelegate` for consumable products. This method is required to be implemented by applications that manage consumable products.
+`Merchant` tracks the purchased state of non-consumable and subscription products. Consumable products are considered transitory purchases and not recorded beyond the initial time of purchase. Because of their special nature, they must be handled differently. Ensure you supply a `consumableHandler` when creating the Merchant. This can by any object that conforms to the `MerchantConsumableProductHandler` protocol. The protocol has a single required method:
 
 ```swift
 func merchant(_ merchant: Merchant, consume product: Product, completion: @escaping () -> Void) {
@@ -178,7 +178,7 @@ func merchant(_ merchant: Merchant, consume product: Product, completion: @escap
 }
 ```
 
-The `Merchant` will always report a consumable product's state as `PurchasedState.notPurchased`. Forgetting to implement the delegate method will result in a runtime error.
+The `Merchant` will always report a consumable product's state as `PurchasedState.notPurchased`. Forgetting to implement the delegate method will result in a runtime fatal error.
 
 ## To Be Completed (in no particular order)
 
