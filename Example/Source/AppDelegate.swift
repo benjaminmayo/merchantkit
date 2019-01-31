@@ -9,9 +9,11 @@ public class AppDelegate: UIResponder, UIApplicationDelegate {
     private var merchant: Merchant!
     
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Create a `Merchant` with a storage and a delegate.
-        // For the demo, we are using ephemeral storage. The recommended storage for real apps is `KeychainPurchaseStorage`, or you can supply your own instance that conforms to the `PurchaseStorage` protocol.
-        self.merchant = Merchant(storage: EphemeralPurchaseStorage(), delegate: self)
+        // Create a `Merchant` with a configuration and an optional delegate.
+        // The configuration contains a validator and storage. The `Merchant.Configuration.default` configuration is appropriate for most applications and typically will not need to be customized. The `default` configuration validates receipts on device and stores state into the Keychain.
+        // `MerchantKit` provides an alternative built-in configuration called `usefulForTestingAsPurchasedStateResetsOnApplicationLaunch`. This uses ephemeral storage so you can repeat product purchase flows just by quitting and relaunching the application. This is useful for testing but should never be used in production.
+        // If you want to do something more intricate, you can create your own `Merchant.Configuration`.
+        self.merchant = Merchant(configuration: .default, delegate: self)
         
         // Register products with the `Merchant`. This could be supplied in code, like this demo, or from a resource file — see `LocalConfiguration`.
         self.merchant.register(ProductDatabase.allProducts)
@@ -48,17 +50,10 @@ extension AppDelegate : MerchantDelegate {
         
     }
     
-    // Validate the given receipt request, calling the completion handler when done.
-    // You can provide your own custom validation or use one of the validators provided as part of `MerchantKit`.
-    // `LocalReceiptValidator` supports all types of purchases, including subscriptions, purely using on-device inspection of the receipt data.
-    // The `LocalReceiptValidator` is a great way to get up and running, albeit offering few protections against piracy. In general, anti-piracy on iOS is not worth worrying about though.
-    // The flexibility provided here is worth exploring. In sandbox/testing environments, you could validate all purchases as purchased, for example.
-    public func merchant(_ merchant: Merchant, validate request: ReceiptValidationRequest, completion: @escaping (Result<Receipt>) -> Void) {
-        let validator = LocalReceiptValidator(request: request)
-        validator.onCompletion = { result in
-            completion(result)
-        }
-        
-        validator.start()
+    // The delegate is notified when the `isLoading` property of the `Merchant` changes.
+    // You could adjust some global interface element here, or simply do nothing, if appropriate.
+    // For this example, we toggle the `UIApplication.shared.isNetworkActivityIndicatorVisible` property to show a loading indicator in the status bar.
+    public func merchantDidChangeLoadingState(_ merchant: Merchant) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = merchant.isLoading
     }
 }
