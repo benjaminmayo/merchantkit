@@ -29,17 +29,15 @@ public final class ReceiptMetadataTask : MerchantTask {
                 switch result {
                     case .succeeded(let data):
                         let request = ReceiptValidationRequest(data: data, reason: .initialization)
-                        let validator = LocalReceiptValidator(request: request)
-                        validator.onCompletion = { [weak self] result in
+                        let validator = LocalReceiptValidator() // use LocalReceiptValidator concretely; we do not want to use the validator from the `Merchant.Configuration` here.
+                        validator.validate(request, completion: { [weak self] result in
                             switch result {
                                 case .succeeded(let receipt):
                                     self?.finish(with: .succeeded(receipt.metadata))
                                 case .failed(let error):
                                     self?.finish(with: .failed(error))
                             }
-                        }
-                        
-                        validator.start()
+                        })
                     case .failed(let error):
                         self?.finish(with: .failed(error))
                 }

@@ -5,7 +5,10 @@ import StoreKit
 /// There will typically be only one `Merchant` instantiated in an application.
 public final class Merchant {
     /// The `delegate` will be called to respond to various events.
-    public let delegate: MerchantDelegate
+    public let delegate: MerchantDelegate?
+    
+    // The `consumableHandler` will be used if, and only if, you use the `Merchant` to try and purchase consumable products. It is not required otherwise.
+    public let consumableHandler: MerchantConsumableProductHandler!
     
     /// The parameters to forward onto the underlying `StoreKit` framework. These parameters apply to all transactions handled by the `Merchant`.
     public var storeParameters: StoreParameters = StoreParameters()
@@ -25,7 +28,8 @@ public final class Merchant {
     
     internal let logger = Logger()
     
-    private let storage: PurchaseStorage
+    private let configuration: Configuration
+    
     private let transactionObserver: StoreKitTransactionObserver = StoreKitTransactionObserver()
     
     private var _registeredProducts: [String : Product] = [:]
@@ -41,10 +45,13 @@ public final class Merchant {
     private let nowDate: Date = Date()
     internal var latestFetchedReceipt: Receipt?
     
-    /// Create a `Merchant`, probably at application launch. Assign a consistent `storage` and a `delegate` to receive callbacks.
-    public init(storage: PurchaseStorage, delegate: MerchantDelegate) {
+    /// Create a `Merchant` as part of application launch lifecycle. Use `Merchant.Configuration.default` for an appropriate default setup, or you can supply your own customized `Merchant.Configuration`.
+    /// The `delegate` is optional, but you may want to use it to be globally alerted to changes in state. You can always ask for the current purchased state of a `Product` using `Merchant.state(for:)`.
+    /// The `consumableHandler` is required if your application uses consumable products.
+    public init(configuration: Configuration, delegate: MerchantDelegate?, consumableHandler: MerchantConsumableProductHandler? = nil) {
+        self.configuration = configuration
         self.delegate = delegate
-        self.storage = storage
+        self.consumableHandler = consumableHandler
     }
     
     /// Register products that you want to use in your application. Products must be registered before their states are consistently valid. Products should be registered as early as possible, typically just before calling `setup()`.
@@ -73,7 +80,7 @@ public final class Merchant {
     
     /// Returns the state for a `product`. Consumable products always report that they are `notPurchased`.
     public func state(for product: Product) -> PurchasedState {
-        guard let record = self.storage.record(forProductIdentifier: product.identifier) else {
+        guard let record = self.configuration.storage.record(forProductIdentifier: product.identifier) else {
             return .notPurchased
         }
         
@@ -207,7 +214,7 @@ extension Merchant {
         if updatedIsLoading != isLoading {
             self.isLoading = updatedIsLoading
             
-            self.delegate.merchantDidChangeLoadingState(self)
+            self.delegate?.merchantDidChangeLoadingState(self)
         }
     }
 }
@@ -332,11 +339,9 @@ extension Merchant {
     }
     
     private func validateReceipt(with data: Data, reason: ReceiptValidationRequest.Reason, completion: @escaping (Result<Receipt>) -> Void) {
-        DispatchQueue.main.async {
-            let request = ReceiptValidationRequest(data: data, reason: reason)
-            
-            self.delegate.merchant(self, validate: request, completion: completion)
-        }
+        let request = ReceiptValidationRequest(data: data, reason: reason)
+        
+        self.configuration.receiptValidator.validate(request, completion: completion)
     }
     
     private func updateStorageWithValidatedReceipt(_ receipt: Receipt, updateProducts updateType: ReceiptUpdateType) -> Set<Product> {
@@ -364,18 +369,18 @@ extension Merchant {
                 let expiryDate = entries.compactMap { $0.expiryDate }.max()
                 
                 if let expiryDate = expiryDate, !self.isSubscriptionActive(forExpiryDate: expiryDate) {
-                    result = self.storage.removeRecord(forProductIdentifier: productIdentifier)
+                    result = self.configuration.storage.removeRecord(forProductIdentifier: productIdentifier)
                     
                     self.logger.log(message: "Removed record for \(productIdentifier), given expiry date \(expiryDate)", category: .purchaseStorage)
                 } else {
                     let record = PurchaseRecord(productIdentifier: productIdentifier, expiryDate: expiryDate)
                 
-                    result = self.storage.save(record)
+                    result = self.configuration.storage.save(record)
                     
                     self.logger.log(message: "Saved record: \(record)", category: .purchaseStorage)
                 }
             } else {
-                result = self.storage.removeRecord(forProductIdentifier: productIdentifier)
+                result = self.configuration.storage.removeRecord(forProductIdentifier: productIdentifier)
                 
                 self.logger.log(message: "Removed record for \(productIdentifier)", category: .purchaseStorage)
             }
@@ -390,7 +395,7 @@ extension Merchant {
             let identifiersForProductsNotInReceipt = registeredProductIdentifiers.subtracting(receipt.productIdentifiers)
             
             for productIdentifier in identifiersForProductsNotInReceipt {
-                let result = self.storage.removeRecord(forProductIdentifier: productIdentifier)
+                let result = self.configuration.storage.removeRecord(forProductIdentifier: productIdentifier)
                 self.logger.log(message: "Removed record for \(productIdentifier): product not in receipt", category: .purchaseStorage)
 
                 if result == .didChangeRecords {
@@ -412,7 +417,7 @@ extension Merchant {
 extension Merchant {
     /// Call on main thread only.
     private func didChangeState(for products: Set<Product>) {
-        self.delegate.merchant(self, didChangeStatesFor: products)
+        self.delegate?.merchant(self, didChangeStatesFor: products)
     }
 }
 
@@ -429,10 +434,14 @@ extension Merchant : StoreKitTransactionObserverDelegate {
         
         if let product = self.product(withIdentifier: identifier) {
             if product.kind == .consumable { // consumable product purchases are not recorded
-                self.delegate.merchant(self, consume: product, completion: didCompletePurchase)
+                guard let consumableHandler = self.consumableHandler else {
+                    MerchantKitFatalError.raise("Merchant tried to purchase a consumable product but the `Merchant.consumableHandler` was not set. Provide a `consumbleHandler` when you create the `Merchant`.")
+                }
+                
+                consumableHandler.merchant(self, consume: product, completion: didCompletePurchase)
             } else { // non-consumable and subscription products are recorded
                 let record = PurchaseRecord(productIdentifier: identifier, expiryDate: nil)
-                let result = self.storage.save(record)
+                let result = self.configuration.storage.save(record)
             
                 if result == .didChangeRecords {
                     self.didChangeState(for: [product])

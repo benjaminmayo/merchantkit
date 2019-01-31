@@ -6,21 +6,18 @@ class MerchantTests : XCTestCase {
     private let metadata = ReceiptMetadata(originalApplicationVersion: "1.0")
     
     func testInitialization() {
-        let mockDelegate = MockValidationMerchantDelegate()
+        let mockDelegate = MockMerchantDelegate()
         
-        let testStorage = EphemeralPurchaseStorage()
-        
-        let merchant = Merchant(storage: testStorage, delegate: mockDelegate)
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate)
         XCTAssertFalse(merchant.isLoading)
     }
     
     func testProductRegistration() {
-        let mockDelegate = MockValidationMerchantDelegate()
+        let mockDelegate = MockMerchantDelegate()
         
-        let testStorage = EphemeralPurchaseStorage()
         let testProduct = Product(identifier: "testProduct", kind: .nonConsumable)
         
-        let merchant = Merchant(storage: testStorage, delegate: mockDelegate)
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate)
         merchant.register([testProduct])
         
         let foundProduct = merchant.product(withIdentifier: "testProduct")
@@ -75,12 +72,11 @@ class MerchantTests : XCTestCase {
         }
         
         self.runTest(with: expectedOutcome, withReceiptDataFetchResult: .succeeded(receiptData), validationRequestHandler: { (request, completion) in
-            let validator = LocalReceiptValidator(request: request)
-            validator.onCompletion = { result in
-                completion(result)
-            }
+            let validator = LocalReceiptValidator()
             
-            validator.start()
+            validator.validate(request, completion: { result in
+                completion(result)
+            })
         })
     }
     
@@ -145,8 +141,6 @@ extension MerchantTests {
     }
     
     fileprivate func runTest(with outcomes: [ProductTestExpectedOutcome], withReceiptDataFetchResult receiptDataFetchResult: Result<Data>, validationRequestHandler: @escaping ValidationRequestHandler) {
-        let testStorage = EphemeralPurchaseStorage()
-        
         let testExpectations: [XCTestExpectation] = outcomes.map { outcome in
             let testExpectation = self.expectation(description: "\(outcome.product) didChangeState to expected state")
             testExpectation.isInverted = !outcome.shouldChangeState
@@ -158,8 +152,8 @@ extension MerchantTests {
         
         let validateRequestCompletionExpectation = self.expectation(description: "validation request completion handler called")
         
-        let mockDelegate = MockValidationMerchantDelegate()
-        mockDelegate.validateRequest = { request, completion in
+        let mockReceiptValidator = MockReceiptValidator()
+        mockReceiptValidator.validateRequest = { request, completion in
             let interceptedCompletion: (Result<Receipt>) -> Void = { result in
                 validateRequestCompletionExpectation.fulfill()
                 
@@ -169,6 +163,7 @@ extension MerchantTests {
             validationRequestHandler(request, interceptedCompletion)
         }
         
+        let mockDelegate = MockMerchantDelegate()
         mockDelegate.didChangeStates = { products in
             for product in products {
                 guard let index = outcomes.index(where: { $0.product == product }) else {
@@ -184,7 +179,9 @@ extension MerchantTests {
             }
         }
         
-        merchant = Merchant(storage: testStorage, delegate: mockDelegate)
+        let configuration = Merchant.Configuration(receiptValidator: mockReceiptValidator, storage: EphemeralPurchaseStorage())
+        
+        merchant = Merchant(configuration: configuration, delegate: mockDelegate)
         merchant.setCustomReceiptDataFetcherInitializer({ policy in
             let testingFetcher = MockReceiptDataFetcher(policy: policy)
             testingFetcher.result = receiptDataFetchResult
@@ -209,8 +206,19 @@ extension MerchantTests {
     }
 }
 
-private class MockValidationMerchantDelegate : MerchantDelegate {
+private class MockReceiptValidator : ReceiptValidator {
     var validateRequest: MerchantTests.ValidationRequestHandler!
+    
+    init() {
+        
+    }
+    
+    func validate(_ request: ReceiptValidationRequest, completion: @escaping (Result<Receipt>) -> Void) {
+        self.validateRequest(request, completion)
+    }
+}
+
+private class MockMerchantDelegate : MerchantDelegate {
     var didChangeStates: ((_ products: Set<Product>) -> Void)?
     
     init() {
@@ -221,8 +229,8 @@ private class MockValidationMerchantDelegate : MerchantDelegate {
         self.didChangeStates?(products)
     }
     
-    func merchant(_ merchant: Merchant, validate request: ReceiptValidationRequest, completion: @escaping (Result<Receipt>) -> Void) {
-        self.validateRequest(request, completion)
+    func merchantDidChangeLoadingState(_ merchant: Merchant) {
+        
     }
 }
 

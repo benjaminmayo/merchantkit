@@ -22,8 +22,11 @@ class LocalReceiptValidatorTests : XCTestCase {
             
             let expectation = self.expectation(description: resource.name)
             
-            let validator = LocalReceiptValidator(request: .init(data: data, reason: .initialization))
-            validator.onCompletion = { result in
+            let request = ReceiptValidationRequest(data: data, reason: .initialization)
+            
+            
+            let validator = LocalReceiptValidator()
+            validator.validate(request, completion: { result in
                 switch result {
                     case .succeeded(let receipt):
                         XCTAssertEqual(receipt.metadata.originalApplicationVersion, resource.expectedOriginalApplicationVersion)
@@ -33,9 +36,7 @@ class LocalReceiptValidatorTests : XCTestCase {
                 }
                 
                 expectation.fulfill()
-            }
-            
-            validator.start()
+            })
             
             self.wait(for: [expectation], timeout: 5)
         }

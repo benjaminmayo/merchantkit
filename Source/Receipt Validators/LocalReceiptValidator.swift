@@ -1,26 +1,19 @@
 import Foundation
 
-/// Atempts to generate a validated receipt from the request and calls `onCompletion` when finished.
-public final class LocalReceiptValidator {
-    public typealias Completion = (Result<Receipt>) -> Void
-    public let request: ReceiptValidationRequest
-    
-    public var onCompletion: Completion?
-    
-    /// Create a new validator for the `request`. This validator uses client-side processing to extract the relevant fields from opaque receipt data.
-    /// - Parameter request: The validation request vended by the `Merchant` in the `merchant(_:validate:completion:)` delegate callback.
-    public init(request: ReceiptValidationRequest) {
-        self.request = request
+/// Atempts to generate a parsed receipt from the request. Currently, this flow does very little to ensure the receipt is legitimate. It is mostly a parser. If this is unsuitable, you can always make your own `ReceiptValidator`.
+public final class LocalReceiptValidator : ReceiptValidator {
+    public init() {
+        
     }
     
-    public func start() {
+    public func validate(_ request: ReceiptValidationRequest, completion: @escaping (Result<Receipt>) -> Void) {
         DispatchQueue.global(qos: .background).async {
             do {
-                let receipt = try self.receipt(from: self.request.data)
+                let receipt = try self.receipt(from: request.data)
                 
-                self.onCompletion?(.succeeded(receipt))
+                completion(.succeeded(receipt))
             } catch let error {
-                self.onCompletion?(.failed(error))
+                completion(.failed(error))
             }
         }
     }
