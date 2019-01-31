@@ -47,8 +47,7 @@ public final class Merchant {
         self.storage = storage
     }
     
-    /// Products must be registered before their states are consistently valid. Products should be registered as early as possible.
-    /// See `LocalConfiguration` for a basic way to register products using a locally stored file.
+    /// Register products that you want to use in your application. Products must be registered before their states are consistently valid. Products should be registered as early as possible, typically just before calling `setup()`.
     public func register<Products : Sequence>(_ products: Products) where Products.Iterator.Element == Product {
         for product in products {
             self._registeredProducts[product.identifier] = product
