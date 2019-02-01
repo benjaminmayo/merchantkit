@@ -373,10 +373,10 @@
 		436CE1391EAF42A000AB41CD /* User Interface */ = {
 			isa = PBXGroup;
 			children = (
+				43DBC1081F26283700DB4B25 /* ProductInterfaceController.swift */,
 				436CE12F1EAE7B6400AB41CD /* PriceFormatter.swift */,
 				439DD22720865F4000B0F0C4 /* SubscriptionPriceFormatter.swift */,
 				438C5D2E2080BD5400D303C8 /* SubscriptionPeriodFormatter.swift */,
-				43DBC1081F26283700DB4B25 /* ProductInterfaceController.swift */,
 			);
 			path = "User Interface";
 			sourceTree = "<group>";
