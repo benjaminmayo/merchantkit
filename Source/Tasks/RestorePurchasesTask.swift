@@ -13,11 +13,12 @@ public final class RestorePurchasesTask : MerchantTask {
         self.merchant = merchant
     }
     
+    /// Start the task to begin restoring purchases. Call `start()` on the main thread.
     public func start() {
         self.assertIfStartedBefore()
         
         self.isStarted = true
-        self.merchant.updateActiveTask(self)
+        self.merchant.taskDidStart(self)
         
         self.merchant.logger.log(message: "Started restore purchases", category: .tasks)
 
@@ -33,7 +34,7 @@ public final class RestorePurchasesTask : MerchantTask {
             self.onCompletion?(result)
             
             DispatchQueue.main.async {
-                self.merchant.resignActiveTask(self)
+                self.merchant.taskDidResign(self)
             }
             
             self.merchant.logger.log(message: "Finished restore purchases task: \(result)", category: .tasks)

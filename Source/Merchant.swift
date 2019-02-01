@@ -178,23 +178,18 @@ extension Merchant {
     private func makeTask<Task : MerchantTask>(initializing creator: () -> Task) -> Task {
         let task = creator()
         
-        self.addActiveTask(task)
+        self.activeTasks.append(task)
         
         return task
     }
     
-    private func addActiveTask(_ task: MerchantTask) {
-        self.activeTasks.append(task)
+    // Call on main thread only.
+    internal func taskDidStart(_ task: MerchantTask) {
         self.updateLoadingStateIfNecessary()
     }
     
     // Call on main thread only.
-    internal func updateActiveTask(_ task: MerchantTask) {
-        self.updateLoadingStateIfNecessary()
-    }
-    
-    // Call on main thread only.
-    internal func resignActiveTask(_ task: MerchantTask) {
+    internal func taskDidResign(_ task: MerchantTask) {
         guard let index = self.activeTasks.index(where: { $0 === task }) else { return }
         
         self.activeTasks.remove(at: index)

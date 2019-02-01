@@ -16,11 +16,12 @@ public final class CommitPurchaseTask : MerchantTask {
         self.merchant = merchant
     }
     
+    /// Start the task to begin committing the purchase. Call `start()` on the main thread.
     public func start() {
         self.assertIfStartedBefore()
         
         self.isStarted = true
-        self.merchant.updateActiveTask(self)
+        self.merchant.taskDidStart(self)
         
         self.merchant.addPurchaseObserver(self, forProductIdentifier: self.purchase.productIdentifier)
         
@@ -36,7 +37,7 @@ public final class CommitPurchaseTask : MerchantTask {
     public func cancel() {
         self.merchant.removePurchaseObserver(self, forProductIdentifier: self.purchase.productIdentifier)
         
-        self.merchant.resignActiveTask(self)
+        self.merchant.taskDidResign(self)
     }
 }
 
@@ -47,7 +48,7 @@ extension CommitPurchaseTask {
         self.merchant.removePurchaseObserver(self, forProductIdentifier: self.purchase.productIdentifier)
         
         DispatchQueue.main.async {
-            self.merchant.resignActiveTask(self)
+            self.merchant.taskDidResign(self)
         }
         
         self.merchant.logger.log(message: "Finished commit purchase purchase task: \(result)", category: .tasks)

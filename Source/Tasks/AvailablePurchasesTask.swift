@@ -18,11 +18,12 @@ public final class AvailablePurchasesTask : NSObject, MerchantTask {
         self.merchant = merchant
     }
     
+    /// Start the task to begin fetching purchases. Call `start()` on the main thread.
     public func start() {
         self.assertIfStartedBefore()
         
         self.isStarted = true
-        self.merchant.updateActiveTask(self)
+        self.merchant.taskDidStart(self)
         
         let productIdentifiers: [String] = self.products.map {
             $0.identifier
@@ -40,14 +41,14 @@ public final class AvailablePurchasesTask : NSObject, MerchantTask {
     public func cancel() {
         self.skRequest?.cancel()
         
-        self.merchant.resignActiveTask(self)
+        self.merchant.taskDidResign(self)
     }
     
     private func finish(with result: Result<Purchases>) {
         self.onCompletion(result)
         
         DispatchQueue.main.async {
-            self.merchant.resignActiveTask(self)
+            self.merchant.taskDidResign(self)
         }
         
         self.merchant.logger.log(message: "Finished available purchases task: \(result)", category: .tasks)

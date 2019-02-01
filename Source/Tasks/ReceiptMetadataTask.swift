@@ -12,11 +12,15 @@ public final class ReceiptMetadataTask : MerchantTask {
         self.merchant = merchant
     }
     
+    /// Start the task to begin fetching receipt metadata.
     public func start() {
         self.assertIfStartedBefore()
         
         self.isStarted = true
-        self.merchant.updateActiveTask(self)
+        
+        DispatchQueue.main.async {
+            self.merchant.taskDidStart(self)
+        }
         
         self.merchant.logger.log(message: "Started fetching receipt metadata", category: .tasks)
         
@@ -59,7 +63,7 @@ extension ReceiptMetadataTask {
         self.fetcher = nil
         
         DispatchQueue.main.async {
-            self.merchant.resignActiveTask(self)
+            self.merchant.taskDidResign(self)
         }
     }
 }
