@@ -54,7 +54,7 @@ public final class Merchant {
         self.consumableHandler = consumableHandler
     }
     
-    @available(*, unavailable, message: "This initializer has been removed in favor of Merchant.init(configuration:delegate:consumableHandler:). You will need to migrate the `Merchant` and `MerchantDelegate` to the new API.")
+    @available(*, unavailable, message: "This initializer has been removed. Use `Merchant.init(configuration:delegate:consumableHandler:)`, likely passing a `.default` configuration as the first parameter — `delegate` and `consumableHandler` are optional. You will need to migrate `Merchant` and your `MerchantDelegate` conformance to the new API.")
     public init(storage: PurchaseStorage, delegate: MerchantDelegate) {
         fatalError("Merchant.init(storage:delegate:) initializer is no longer supported. Please switch to Merchant.init(configuration:delegate:consumableHandler:)")
     }
