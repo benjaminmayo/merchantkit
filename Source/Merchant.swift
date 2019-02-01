@@ -99,7 +99,7 @@ public final class Merchant {
         }
     }
     
-    /// Find possible purchases for the given products. If `products` is empty, then the merchant looks up all purchases for all registered products.
+    /// Find possible purchases for the given products. If `products` is empty, then the zMerchantz finds purchases for all registered products.
     public func availablePurchasesTask(for products: Set<Product> = []) -> AvailablePurchasesTask {
         self.ensureSetup()
         
