@@ -31,6 +31,8 @@ internal final class StoreKitTransactionObserver : NSObject, SKPaymentTransactio
                     self.failPurchase(for: transaction)
                 case .deferred:
                     break
+                @unknown default:
+                    break
             }
         }
         

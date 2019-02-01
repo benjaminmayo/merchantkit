@@ -45,6 +45,8 @@ public struct Purchase : Hashable, CustomStringConvertible {
                     unit = .month
                 case .year:
                     unit = .year
+                @unknown default:
+                    fatalError("Unexpected value (\(skSubscriptionPeriod.unit.rawValue)) for `SKSubscriptionPeriod`.")
             }
             
             return SubscriptionPeriod(unit: unit, unitCount: unitCount)
@@ -72,6 +74,8 @@ public struct Purchase : Hashable, CustomStringConvertible {
                         return .upfrontDiscount(discountedPrice: price, period: totalPeriod)
                     case .freeTrial:
                         return .freeTrial(period: introductoryPeriod)
+                    @unknown default:
+                        fatalError("Unexpected value (\(skDiscount.paymentMode.rawValue)) for `SKProductDiscount.PaymentMode`.")
                 }
             } else {
                 return nil

@@ -166,7 +166,7 @@ extension MerchantTests {
         let mockDelegate = MockMerchantDelegate()
         mockDelegate.didChangeStates = { products in
             for product in products {
-                guard let index = outcomes.index(where: { $0.product == product }) else {
+                guard let index = outcomes.firstIndex(where: { $0.product == product }) else {
                     XCTFail("unexpected product \(product.identifier) surfaced by Merchant")
                     continue
                 }

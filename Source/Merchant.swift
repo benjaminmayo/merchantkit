@@ -165,7 +165,7 @@ extension Merchant {
     internal func removePurchaseObserver(_ observer: MerchantPurchaseObserver, forProductIdentifier productIdentifier: String) {
         var observers = self.purchaseObservers[productIdentifier]
         
-        if let index = observers.index(where: { $0 === observer }) {
+        if let index = observers.firstIndex(where: { $0 === observer }) {
             observers.remove(at: index)
             
             self.purchaseObservers[productIdentifier] = observers
@@ -190,7 +190,7 @@ extension Merchant {
     
     // Call on main thread only.
     internal func taskDidResign(_ task: MerchantTask) {
-        guard let index = self.activeTasks.index(where: { $0 === task }) else { return }
+        guard let index = self.activeTasks.firstIndex(where: { $0 === task }) else { return }
         
         self.activeTasks.remove(at: index)
         self.updateLoadingStateIfNecessary()
