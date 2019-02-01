@@ -47,8 +47,8 @@ public final class Merchant {
     
     /// Create a `Merchant` as part of application launch lifecycle. Use `Merchant.Configuration.default` for an appropriate default setup, or you can supply your own customized `Merchant.Configuration`.
     /// The `delegate` is optional, but you may want to use it to be globally alerted to changes in state. You can always ask for the current purchased state of a `Product` using `Merchant.state(for:)`.
-    /// The `consumableHandler` is required if your application uses consumable products.
-    public init(configuration: Configuration, delegate: MerchantDelegate?, consumableHandler: MerchantConsumableProductHandler? = nil) {
+    /// The `consumableHandler` is **required** if your application uses consumable products.
+    public init(configuration: Configuration, delegate: MerchantDelegate? = nil, consumableHandler: MerchantConsumableProductHandler? = nil) {
         self.configuration = configuration
         self.delegate = delegate
         self.consumableHandler = consumableHandler

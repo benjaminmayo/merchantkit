@@ -103,7 +103,7 @@ self.merchant.register([product, otherProduct])
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     ...
     
-    self.merchant = Merchant(configuration: .default, delegate: self)    
+    self.merchant = Merchant(configuration: .default)    
     self.merchant.register(...)
     self.merchant.setup()
     
@@ -122,7 +122,7 @@ You can repeatedly test 'buying' any `Product`, including non-consumables, simpl
 
 ## Merchant Delegate
 
-You can provide a delegate to the `Merchant` object when instantiated (e.g. `Merchant(configuration: .default, delegate: self)`). This delegate provides an opportunity to respond to state change events at an app-level. The delegate has two methods:
+You can provide a delegate to the `Merchant` object when instantiated (e.g. `Merchant(configuration: .default, delegate: self)`). This delegate provides an opportunity to respond to state change events at an app-level. The `MerchantDelegate` protocol declares two methods:
 
 ```swift
 func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Product>) {
