@@ -85,32 +85,20 @@ Compile the `MerchantKit` framework and embed it in your application. You can do
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     ...
     
-    self.merchant = Merchant(configuration: .default, delegate: self)
+    self.merchant = Merchant(configuration: .default)
     
     ...
 }
-```
 
-2. Implement the two required methods in `MerchantDelegate` to validate receipt data and receive notifications when the `PurchasedState` changes for registered products.
-```swift
-func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Product>) {
-    for product in products {
-        print("updated \(product)")
-    }
-}
-    
-func merchantDidChangeLoadingState(_ merchant: Merchant) {
-    
-}
 ```
-3. Register products as soon as possible (typically within `application(_:, didFinishLaunchingWithOptions:)`). You may want to load `Product` structures from a file, or simply declaring them as constants in code. These constants can then be referred to statically later.  
+2. Register products as soon as possible (typically within `application(_:, didFinishLaunchingWithOptions:)`). You may want to load `Product` structures from a file, or simply declaring them as constants in code. These constants can then be referred to statically later.  
 ```swift
 let product = Product(identifier: "iap.productIdentifier", kind: .nonConsumable)
 let otherProduct = Product(identifier: "iap.otherProductIdentifier", kind: .subscription(automaticallyRenews: true)) 
 self.merchant.register([product, otherProduct])
 
 ```
-4. Call `setup()` on the merchant instance before escaping the `application(_:, didFinishLaunchingWithOptions:)` method. This tells the merchant to start observing the payment queue.
+3. Call `setup()` on the merchant instance before escaping the `application(_:, didFinishLaunchingWithOptions:)` method. This tells the merchant to start observing the payment queue.
 ```swift
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     ...
@@ -122,7 +110,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
     ...
 }
 ```
-5. Profit! Or something.
+4. Profit! Or something.
 
 ## Configuration
 
@@ -131,6 +119,24 @@ Most applications can simply use `Merchant.Configuration.default` and get the re
 
 Tip: `MerchantKit` provides  `Merchant.Configuration.usefulForTestingAsPurchasedStateResetsOnApplicationLaunch` as a built-in configuration. This can be used to test purchase flows during development as the configuration does not persist purchase states to permanent storage.
 You can repeatedly test 'buying' any `Product`, including non-consumables, simply by restarting the app. As indicated by its unwieldy name, you should not use this configuration in a released application.
+
+## Merchant Delegate
+
+You can provide a delegate to the `Merchant` object when instantiated (e.g. `Merchant(configuration: .default, delegate: self)`). This delegate provides an opportunity to respond to state change events at an app-level. The delegate has two methods:
+
+```swift
+func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Product>) {
+    // Called when the purchased state of a `Product` changes.
+    
+    for product in products {
+        print("updated \(product)")
+    }
+}
+
+func merchantDidChangeLoadingState(_ merchant: Merchant) {
+    // Called when `Merchant.isLoading` changes. You could show/hide the status bar network activity indicator here, for instance.
+}
+```
 
 ## Product Interface Controller
 
@@ -141,7 +147,6 @@ The `ProductInterfaceController` class encompasses common behaviours needed to p
 Developers simply provide the list of products to display and tells the controller to fetch data. The `delegate` notifies the app when to update its custom UI. It handles loading data, intermittent network connectivity and in-flight changes to the availability and state of products.
 
 See the [Example project](Example/) for a basic implementation of the `ProductInterfaceController`.
-
 
 ## Formatters 
 
