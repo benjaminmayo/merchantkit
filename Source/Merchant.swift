@@ -440,7 +440,7 @@ extension Merchant : StoreKitTransactionObserverDelegate {
         if let product = self.product(withIdentifier: identifier) {
             if product.kind == .consumable { // consumable product purchases are not recorded
                 guard let consumableHandler = self.consumableHandler else {
-                    MerchantKitFatalError.raise("Merchant tried to purchase a consumable product but the `Merchant.consumableHandler` was not set. Provide a `consumbleHandler` when you create the `Merchant`.")
+                    MerchantKitFatalError.raise("`Merchant` tried to purchase a consumable product but the `Merchant.consumableHandler` was not set. You must provide a `consumbleHandler` when you instantiate the `Merchant` to handle consumables.")
                 }
                 
                 consumableHandler.merchant(self, consume: product, completion: didCompletePurchase)

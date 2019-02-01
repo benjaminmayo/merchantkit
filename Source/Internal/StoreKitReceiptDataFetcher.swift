@@ -81,7 +81,7 @@ extension StoreKitReceiptDataFetcher {
 extension StoreKitReceiptDataFetcher : SKRequestDelegate {
     func requestDidFinish(_ request: SKRequest) {
         self.attemptFinishTaskFetchingLocalData(onFailure: {
-            MerchantKitFatalError.raise("SKRequest inconsistency")
+            MerchantKitFatalError.raise("`SKReceiptRefreshRequest` did not behave as expected. Receipt data was not found after refreshing the receipt successfully.")
         })
     }
     

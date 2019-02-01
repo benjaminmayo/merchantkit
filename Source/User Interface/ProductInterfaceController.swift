@@ -91,7 +91,7 @@ public final class ProductInterfaceController {
     public func commit(_ purchase: Purchase) {
         guard let product = self.products.first(where: { product in
             product.identifier == purchase.productIdentifier
-        }) else { MerchantKitFatalError.raise("committing incompatible purchase") }
+        }) else { MerchantKitFatalError.raise("The `Purchase` cannot be committed to this `ProductInterfaceController` instance as it is not vended by it. This indicates a logic error in your application.") }
         
         let task = self.merchant.commitPurchaseTask(for: purchase)
         task.onCompletion = { result in

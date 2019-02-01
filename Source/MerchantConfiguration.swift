@@ -14,7 +14,7 @@ extension Merchant.Configuration {
     /// A standard configuration that will be applicable to most use cases. It validates receipts locally on device without requiring a network, and persists purchase data into the user's Keychain.
     public static var `default`: Merchant.Configuration {
         guard let serviceName = Bundle.main.bundleIdentifier, !serviceName.isEmpty else {
-            MerchantKitFatalError.raise("Bundle.main.bundleIdentifier is used by `Merchant.Configuration.default`, but the string does not exist. You may want to supply your own `Merchant.Configuration`.")
+            MerchantKitFatalError.raise("`Bundle.main.bundleIdentifier` is used by `Merchant.Configuration.default`, but the string does not exist. You may want to supply your own `Merchant.Configuration`.")
         }
         
         let validator = LocalReceiptValidator()

@@ -117,7 +117,7 @@ extension LocalReceiptPayloadParser : ReceiptAttributeASN1SetProcessorDelegate {
                     self.didFindInAppPurchaseReceiptAttribute(of: attributeType, attribute: attribute)
                 }
             default:
-                MerchantKitFatalError.raise("undetected processor")
+                MerchantKitFatalError.raise("The `LocalReceiptPayloadParser` faced an unexpected `processor` and does not know how to handle it.")
         }
     }
 }
