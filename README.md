@@ -56,7 +56,7 @@ public func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Prod
 - Permissive open source license.
 - Compatibility with latest Swift version using idiomatic language constructs.
 
-The codebase is in flux right now and the project does not guarantee API stability. `MerchantKit` is useful, it works, and will probably save you time. That being said, `MerchantKit` is by no means finished The test suite is patchy.
+The codebase is in flux right now and the project does not guarantee API stability. `MerchantKit` is useful, it works, and will probably save you time. That being said, `MerchantKit` is by no means finished. The test suite is patchy.
 
 ## Installation
 
