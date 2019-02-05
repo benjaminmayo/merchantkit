@@ -34,15 +34,15 @@ class ASN1Tests : XCTestCase {
     }
     
     func testSuccessfulBooleanBufferConversion() {
-        let trueBuffer = Data(bytes: [1])
-        let falseBuffer = Data(bytes: [0])
+        let trueBuffer = Data([1])
+        let falseBuffer = Data([0])
         
         XCTAssertEqual(try ASN1.value(convertedFrom: trueBuffer, as: .boolean), ASN1.BufferValue.boolean(true))
         XCTAssertEqual(try ASN1.value(convertedFrom: falseBuffer, as: .boolean), ASN1.BufferValue.boolean(false))
     }
     
     func testInvalidBooleanBufferConversion() {
-        let invalidBuffer = Data(bytes: [0, 1])
+        let invalidBuffer = Data([0, 1])
         
         XCTAssertThrowsError(try ASN1.value(convertedFrom: invalidBuffer, as: .boolean)) { error in
             switch error {
@@ -72,7 +72,7 @@ class ASN1Tests : XCTestCase {
         let stringTypes: Set<ASN1.BufferType> = [.teletexString, .graphicString, .printableString, .utf8String, .ia5String]
         
         for bufferType in stringTypes {
-            let invalidData = Data(bytes: [0xff, 0xff])
+            let invalidData = Data([0xff, 0xff])
             
             XCTAssertThrowsError(_ = try ASN1.value(convertedFrom: invalidData, as: bufferType)) { error in
                 switch error {
@@ -93,7 +93,7 @@ class ASN1Tests : XCTestCase {
             (.string("test"), "'test'"),
             (.data(Data()), "0 bytes"),
             (.date("01-02-2000"), "'01-02-2000'"),
-            (.objectIdentifier(ASN1.ObjectIdentifier(bytes: Data(bytes: [0xFF, 0x4, 0x8, 0x16]))), "[ASN1.ObjectIdentifier stringValue: 6.15.4.8.22]")
+            (.objectIdentifier(ASN1.ObjectIdentifier(bytes: Data([0xFF, 0x4, 0x8, 0x16]))), "[ASN1.ObjectIdentifier stringValue: 6.15.4.8.22]")
         ]
         
         for (value, formattedDescriptionComponent) in expectations {

@@ -29,12 +29,12 @@ class MerchantTests : XCTestCase {
         let testProduct = Product(identifier: "testNonConsumableProduct", kind: .nonConsumable)
         let expectedOutcome = ProductTestExpectedOutcome(for: testProduct, finalState: .isPurchased(PurchasedProductInfo(expiryDate: nil)))
         
-        self.runTest(with: [expectedOutcome], withReceiptDataFetchResult: .succeeded(Data()), validationRequestHandler: { (request, completion) in
+        self.runTest(with: [expectedOutcome], withReceiptDataFetchResult: .success(Data()), validationRequestHandler: { (request, completion) in
             let nonConsumableEntry = ReceiptEntry(productIdentifier: "testNonConsumableProduct", expiryDate: nil)
             
             let receipt = ConstructedReceipt(from: [nonConsumableEntry], metadata: self.metadata)
             
-            completion(.succeeded(receipt))
+            completion(.success(receipt))
         })
     }
     
@@ -46,14 +46,14 @@ class MerchantTests : XCTestCase {
         let testProduct = Product(identifier: "testSubscriptionProduct", kind: .subscription(automaticallyRenews: true))
         let expectedOutcome = ProductTestExpectedOutcome(for: testProduct, finalState: .isPurchased(PurchasedProductInfo(expiryDate: thirdExpiryDate)))
         
-        self.runTest(with: [expectedOutcome], withReceiptDataFetchResult: .succeeded(Data()), validationRequestHandler: { (request, completion) in
+        self.runTest(with: [expectedOutcome], withReceiptDataFetchResult: .success(Data()), validationRequestHandler: { (request, completion) in
             let subscriptionEntry1 = ReceiptEntry(productIdentifier: "testSubscriptionProduct", expiryDate: firstExpiryDate)
             let subscriptionEntry2 = ReceiptEntry(productIdentifier: "testSubscriptionProduct", expiryDate: secondExpiryDate)
             let subscriptionEntry3 = ReceiptEntry(productIdentifier: "testSubscriptionProduct", expiryDate: thirdExpiryDate)
             
             let receipt = ConstructedReceipt(from: [subscriptionEntry1, subscriptionEntry2, subscriptionEntry3], metadata: self.metadata)
             
-            completion(.succeeded(receipt))
+            completion(.success(receipt))
         })
     }
     
@@ -71,7 +71,7 @@ class MerchantTests : XCTestCase {
             ProductTestExpectedOutcome(for: product, finalState: .isPurchased(PurchasedProductInfo(expiryDate: nil)))
         }
         
-        self.runTest(with: expectedOutcome, withReceiptDataFetchResult: .succeeded(receiptData), validationRequestHandler: { (request, completion) in
+        self.runTest(with: expectedOutcome, withReceiptDataFetchResult: .success(receiptData), validationRequestHandler: { (request, completion) in
             let validator = LocalReceiptValidator()
             
             validator.validate(request, completion: { result in
@@ -94,7 +94,7 @@ class MerchantTests : XCTestCase {
             ProductTestExpectedOutcome(for: product, finalState: .isPurchased(PurchasedProductInfo(expiryDate: nil)))
         }
         
-        self.runTest(with: expectedOutcomes, withReceiptDataFetchResult: .succeeded(receiptData), validationRequestHandler: { (request, completion) in
+        self.runTest(with: expectedOutcomes, withReceiptDataFetchResult: .success(receiptData), validationRequestHandler: { (request, completion) in
             let validator = ServerReceiptValidator(request: request, sharedSecret: nil)
             validator.onCompletion = { result in
                 completion(result)
@@ -114,7 +114,7 @@ class MerchantTests : XCTestCase {
         
         let expectedOutcome = ProductTestExpectedOutcome(for: product, finalState: .notPurchased, shouldChangeState: false)
         
-        self.runTest(with: [expectedOutcome], withReceiptDataFetchResult: .succeeded(receiptData), validationRequestHandler: { (request, completion) in
+        self.runTest(with: [expectedOutcome], withReceiptDataFetchResult: .success(receiptData), validationRequestHandler: { (request, completion) in
             let validator = ServerReceiptValidator(request: request, sharedSecret: nil)
             validator.onCompletion = { result in
                 completion(result)
@@ -126,7 +126,7 @@ class MerchantTests : XCTestCase {
 }
 
 extension MerchantTests {
-    fileprivate typealias ValidationRequestHandler = ((_ request: ReceiptValidationRequest, _ completion: @escaping (Result<Receipt>) -> Void) -> Void)
+    fileprivate typealias ValidationRequestHandler = ((_ request: ReceiptValidationRequest, _ completion: @escaping (Result<Receipt, Error>) -> Void) -> Void)
     
     struct ProductTestExpectedOutcome {
         let product: Product
@@ -140,7 +140,7 @@ extension MerchantTests {
         }
     }
     
-    fileprivate func runTest(with outcomes: [ProductTestExpectedOutcome], withReceiptDataFetchResult receiptDataFetchResult: Result<Data>, validationRequestHandler: @escaping ValidationRequestHandler) {
+    fileprivate func runTest(with outcomes: [ProductTestExpectedOutcome], withReceiptDataFetchResult receiptDataFetchResult: Result<Data, Error>, validationRequestHandler: @escaping ValidationRequestHandler) {
         let testExpectations: [XCTestExpectation] = outcomes.map { outcome in
             let testExpectation = self.expectation(description: "\(outcome.product) didChangeState to expected state")
             testExpectation.isInverted = !outcome.shouldChangeState
@@ -154,7 +154,7 @@ extension MerchantTests {
         
         let mockReceiptValidator = MockReceiptValidator()
         mockReceiptValidator.validateRequest = { request, completion in
-            let interceptedCompletion: (Result<Receipt>) -> Void = { result in
+            let interceptedCompletion: (Result<Receipt, Error>) -> Void = { result in
                 validateRequestCompletionExpectation.fulfill()
                 
                 completion(result)
@@ -213,7 +213,7 @@ private class MockReceiptValidator : ReceiptValidator {
         
     }
     
-    func validate(_ request: ReceiptValidationRequest, completion: @escaping (Result<Receipt>) -> Void) {
+    func validate(_ request: ReceiptValidationRequest, completion: @escaping (Result<Receipt, Error>) -> Void) {
         self.validateRequest(request, completion)
     }
 }
@@ -237,9 +237,9 @@ private class MockMerchantDelegate : MerchantDelegate {
 private class MockReceiptDataFetcher : ReceiptDataFetcher {
     private var completionBlocks = [Completion]()
     
-    typealias Completion = (Result<Data>) -> Void
+    typealias Completion = (Result<Data, Error>) -> Void
     
-    var result: Result<Data>!
+    var result: Result<Data, Error>!
     
     required init(policy: ReceiptFetchPolicy) {
         

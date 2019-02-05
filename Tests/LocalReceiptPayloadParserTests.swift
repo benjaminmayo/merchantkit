@@ -13,9 +13,7 @@ class LocalReceiptPayloadParserTests : XCTestCase {
         let count = 512
         var randomData = Data(count: count)
         
-        randomData.withUnsafeMutableBytes({ (bytes: UnsafeMutablePointer<UInt8>) in
-            _ = SecRandomCopyBytes(kSecRandomDefault, count, bytes)
-        })
+        _ = SecRandomCopyBytes(kSecRandomDefault, count, &randomData)
         
         let parser = LocalReceiptPayloadParser()
         
