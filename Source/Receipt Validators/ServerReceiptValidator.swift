@@ -1,7 +1,7 @@
 /// Sends a request to the iTunes server for validation.
 /// Attempts to make a validated receipt from the response and calls `onCompletion` when finished.
 public final class ServerReceiptValidator {
-    public typealias Completion = (Result<Receipt>) -> Void
+    public typealias Completion = (Result<Receipt, Error>) -> Void
     public let request: ReceiptValidationRequest
     
     public var onCompletion: Completion?
@@ -26,7 +26,7 @@ public final class ServerReceiptValidator {
 }
 
 extension ServerReceiptValidator {
-    private func complete(with result: Result<Receipt>) {
+    private func complete(with result: Result<Receipt, Error>) {
         self.onCompletion?(result)
     }
     
@@ -39,23 +39,23 @@ extension ServerReceiptValidator {
         return fetcher
     }
     
-    private func didFetchVerificationData(with result: Result<Data>) {
+    private func didFetchVerificationData(with result: Result<Data, Error>) {
         switch result {
-            case .succeeded(let data):
+            case .success(let data):
                 do {
                     let parser = ServerReceiptVerificationResponseParser() // this object handles the actual parsing of the data
                     let response = try parser.response(from: data)
                     let validatedReceipt = try parser.receipt(from: response)
                     
-                    self.complete(with: .succeeded(validatedReceipt))
+                    self.complete(with: .success(validatedReceipt))
                 } catch ServerReceiptVerificationResponseParser.ReceiptStatusError.receiptIncompatibleWithProductionEnvironment {
                     self.dataFetcher = self.makeFetcher(for: .sandbox)
                     self.dataFetcher.start()
                 } catch let error {
-                    self.complete(with: .failed(error))
+                    self.complete(with: .failure(error))
                 }
-            case .failed(let error):
-                self.complete(with: .failed(error))
+            case .failure(let error):
+                self.complete(with: .failure(error))
         }
     }
 }

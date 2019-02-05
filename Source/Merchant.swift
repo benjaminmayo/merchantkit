@@ -279,14 +279,14 @@ extension Merchant {
             guard let self = self else { return }
             
             switch dataResult {
-                case .succeeded(let receiptData):
+                case .success(let receiptData):
                     self.logger.log(message: "Receipt fetch succeeded: found \(receiptData.count) bytes", category: .receipt)
                     
                     self.validateReceipt(with: receiptData, reason: reason, completion: { [weak self] validateResult in
                         guard let self = self else { return }
                         
                         switch validateResult {
-                            case .succeeded(let receipt):
+                            case .success(let receipt):
                                 self.logger.log(message: "Receipt validation succeeded: \(receipt)", category: .receipt)
                                 
                                 self.latestFetchedReceipt = receipt
@@ -300,13 +300,13 @@ extension Merchant {
                                 }
                                 
                                 completion(updatedProducts, nil)
-                            case .failed(let error):
+                            case .failure(let error):
                                 self.logger.log(message: "Receipt validation failed: \(error)", category: .receipt)
 
                                 completion([], error)
                         }
                     })
-                case .failed(let error):
+                case .failure(let error):
                     self.logger.log(message: "Receipt fetch failed: \(error)", category: .receipt)
 
                     completion([], error)
@@ -338,7 +338,7 @@ extension Merchant {
         return StoreKitReceiptDataFetcher(policy: policy)
     }
     
-    private func validateReceipt(with data: Data, reason: ReceiptValidationRequest.Reason, completion: @escaping (Result<Receipt>) -> Void) {
+    private func validateReceipt(with data: Data, reason: ReceiptValidationRequest.Reason, completion: @escaping (Result<Receipt, Error>) -> Void) {
         let request = ReceiptValidationRequest(data: data, reason: reason)
         
         self.configuration.receiptValidator.validate(request, completion: completion)

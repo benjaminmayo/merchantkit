@@ -23,12 +23,12 @@ public final class RestorePurchasesTask : MerchantTask {
         self.merchant.logger.log(message: "Started restore purchases", category: .tasks)
 
         self.merchant.restorePurchases(completion: { updatedProducts, error in
-            let result: Result<RestoredPurchases>
+            let result: Result<RestoredPurchases, Error>
             
             if let error = error {
-                result = .failed(error)
+                result = .failure(error)
             } else {
-                result = .succeeded(updatedProducts)
+                result = .success(updatedProducts)
             }
             
             self.onCompletion?(result)

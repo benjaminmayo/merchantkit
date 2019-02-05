@@ -44,7 +44,7 @@ public final class AvailablePurchasesTask : NSObject, MerchantTask {
         self.merchant.taskDidResign(self)
     }
     
-    private func finish(with result: Result<Purchases>) {
+    private func finish(with result: Result<Purchases, Error>) {
         self.onCompletion(result)
         
         DispatchQueue.main.async {
@@ -77,10 +77,10 @@ extension AvailablePurchasesTask : SKProductsRequestDelegate {
             return Purchase(from: skProduct, characteristics: characteristics)
         }
         
-        self.finish(with: .succeeded(PurchaseSet(from: purchases)))
+        self.finish(with: .success(PurchaseSet(from: purchases)))
     }
     
     public func request(_ request: SKRequest, didFailWithError error: Error) {
-        self.finish(with: .failed(error))
+        self.finish(with: .failure(error))
     }
 }

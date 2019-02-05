@@ -6,14 +6,14 @@ public final class LocalReceiptValidator : ReceiptValidator {
         
     }
     
-    public func validate(_ request: ReceiptValidationRequest, completion: @escaping (Result<Receipt>) -> Void) {
+    public func validate(_ request: ReceiptValidationRequest, completion: @escaping (Result<Receipt, Error>) -> Void) {
         DispatchQueue.global(qos: .background).async {
             do {
                 let receipt = try self.receipt(from: request.data)
                 
-                completion(.succeeded(receipt))
+                completion(.success(receipt))
             } catch let error {
-                completion(.failed(error))
+                completion(.failure(error))
             }
         }
     }

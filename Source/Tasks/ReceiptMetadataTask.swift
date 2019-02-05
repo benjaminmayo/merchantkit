@@ -25,25 +25,25 @@ public final class ReceiptMetadataTask : MerchantTask {
         self.merchant.logger.log(message: "Started fetching receipt metadata", category: .tasks)
         
         if let receipt = self.merchant.latestFetchedReceipt {
-            self.finish(with: .succeeded(receipt.metadata))
+            self.finish(with: .success(receipt.metadata))
         } else {
             let fetcher = StoreKitReceiptDataFetcher(policy: .onlyFetch)
             
             fetcher.enqueueCompletion { [weak self] result in
                 switch result {
-                    case .succeeded(let data):
+                    case .success(let data):
                         let request = ReceiptValidationRequest(data: data, reason: .initialization)
                         let validator = LocalReceiptValidator() // use LocalReceiptValidator concretely; we do not want to use the validator from the `Merchant.Configuration` here.
                         validator.validate(request, completion: { [weak self] result in
                             switch result {
-                                case .succeeded(let receipt):
-                                    self?.finish(with: .succeeded(receipt.metadata))
-                                case .failed(let error):
-                                    self?.finish(with: .failed(error))
+                                case .success(let receipt):
+                                    self?.finish(with: .success(receipt.metadata))
+                                case .failure(let error):
+                                    self?.finish(with: .failure(error))
                             }
                         })
-                    case .failed(let error):
-                        self?.finish(with: .failed(error))
+                    case .failure(let error):
+                        self?.finish(with: .failure(error))
                 }
             }
             
@@ -55,7 +55,7 @@ public final class ReceiptMetadataTask : MerchantTask {
 }
 
 extension ReceiptMetadataTask {
-    private func finish(with result: Result<ReceiptMetadata>) {
+    private func finish(with result: Result<ReceiptMetadata, Error>) {
         self.onCompletion?(result)
         
         self.merchant.logger.log(message: "Finished fetching receipt metadata: \(result)", category: .tasks)

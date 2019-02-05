@@ -2,7 +2,7 @@ import Foundation
 import StoreKit
 
 internal final class StoreKitReceiptDataFetcher : NSObject, ReceiptDataFetcher {
-    typealias Completion = ((Result<Data>) -> Void)
+    typealias Completion = ((Result<Data, Error>) -> Void)
     
     internal let policy: ReceiptFetchPolicy
 
@@ -28,7 +28,7 @@ internal final class StoreKitReceiptDataFetcher : NSObject, ReceiptDataFetcher {
                 })
             case .onlyFetch:
                 self.attemptFinishTaskFetchingLocalData(onFailure: {
-                    self.finish(with: .failed(Error.receiptUnavailableWithoutUserInteraction))
+                    self.finish(with: .failure(ReceiptFetchError.receiptUnavailableWithoutRefresh))
                 })
         }
     }
@@ -43,14 +43,6 @@ internal final class StoreKitReceiptDataFetcher : NSObject, ReceiptDataFetcher {
         self.request?.cancel()
         self.isFinished = true
     }
-    
-    enum Error : Swift.Error, LocalizedError {
-        case receiptUnavailableWithoutUserInteraction
-        
-        var localizedDescription: String {
-            return "Receipt unavailable without user interaction."
-        }
-    }
 }
 
 extension StoreKitReceiptDataFetcher {
@@ -63,13 +55,13 @@ extension StoreKitReceiptDataFetcher {
     
     private func attemptFinishTaskFetchingLocalData(onFailure: () -> Void) {
         if let url = Bundle.main.appStoreReceiptURL, let isReachable = try? url.checkResourceIsReachable(), isReachable == true, let data = try? Data(contentsOf: url) {
-            self.finish(with: .succeeded(data))
+            self.finish(with: .success(data))
         } else {
             onFailure()
         }
     }
     
-    private func finish(with result: Result<Data>) {
+    private func finish(with result: Result<Data, Error>) {
         for completion in self.completionHandlers {
             completion(result)
         }
@@ -86,6 +78,6 @@ extension StoreKitReceiptDataFetcher : SKRequestDelegate {
     }
     
     func request(_ request: SKRequest, didFailWithError error: Swift.Error) {
-        self.finish(with: .failed(error))
+        self.finish(with: .failure(error))
     }
 }

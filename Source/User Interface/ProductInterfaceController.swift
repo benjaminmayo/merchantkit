@@ -100,11 +100,11 @@ public final class ProductInterfaceController {
             self.didChangeState(for: [product])
             
             switch result {
-                case .succeeded(_):
+                case .success(_):
                     DispatchQueue.main.async {
                         self.delegate?.productInterfaceController(self, didCommit: purchase, with: .succeeded)
                     }
-                case .failed(let baseError):
+                case .failure(let baseError):
                     let error: CommitPurchaseResult.Error
                     let shouldDisplayError: Bool
                     
@@ -156,12 +156,12 @@ public final class ProductInterfaceController {
                 let restoreResult: RestorePurchasesResult
                 
                 switch result {
-                    case .succeeded(let restoredProducts):
+                    case .success(let restoredProducts):
                         let updatedProducts = self.products.intersection(restoredProducts)
                         self.didChangeState(for: updatedProducts)
                         
                         restoreResult = .succeeded(updatedProducts)
-                    case .failed(let error):
+                    case .failure(let error):
                         restoreResult = .failed(error)
                 }
                 
@@ -241,7 +241,7 @@ extension ProductInterfaceController {
             let loadResult: FetchResult<PurchaseSet>
             
             switch result {
-                case .failed(let error):
+                case .failure(let error):
                     let failureReason: FetchingState.FailureReason
                     let underlyingError = (error as NSError).userInfo[NSUnderlyingErrorKey] as? Error
                     
@@ -255,7 +255,7 @@ extension ProductInterfaceController {
                     }
                     
                     loadResult = .failed(failureReason)
-                case .succeeded(let purchases):
+                case .success(let purchases):
                     loadResult = .succeeded(purchases)
             }
             

@@ -42,7 +42,7 @@ public final class CommitPurchaseTask : MerchantTask {
 }
 
 extension CommitPurchaseTask {
-    private func finish(with result: Result<Void>) {
+    private func finish(with result: Result<Void, Error>) {
         self.onCompletion(result)
         
         self.merchant.removePurchaseObserver(self, forProductIdentifier: self.purchase.productIdentifier)
@@ -57,10 +57,10 @@ extension CommitPurchaseTask {
 
 extension CommitPurchaseTask : MerchantPurchaseObserver {
     func merchant(_ merchant: Merchant, didCompletePurchaseForProductWith productIdentifier: String) {        
-        self.finish(with: .succeeded(()))
+        self.finish(with: .success(()))
     }
     
     func merchant(_ merchant: Merchant, didFailPurchaseWith error: Error, forProductWith productIdentifier: String) {
-        self.finish(with: .failed(error))
+        self.finish(with: .failure(error))
     }
 }

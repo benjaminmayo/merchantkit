@@ -1,7 +1,7 @@
 import Foundation
 
 internal final class ServerReceiptVerificationResponseDataFetcher {
-    public typealias Completion = (Result<Data>) -> Void
+    public typealias Completion = (Result<Data, Error>) -> Void
     
     var onCompletion: Completion?
     
@@ -28,7 +28,7 @@ internal final class ServerReceiptVerificationResponseDataFetcher {
 }
 
 extension ServerReceiptVerificationResponseDataFetcher {
-    private func complete(with result: Result<Data>) {
+    private func complete(with result: Result<Data, Error>) {
         self.onCompletion?(result)
     }
     
@@ -66,9 +66,9 @@ extension ServerReceiptVerificationResponseDataFetcher {
     
     private func didReceiveServerResponse(data: Data?, error: Error?) {
         if let error = error {
-            self.complete(with: .failed(error))
+            self.complete(with: .failure(error))
         } else {
-            self.complete(with: .succeeded(data!))
+            self.complete(with: .success(data!))
         }
     }
 }
