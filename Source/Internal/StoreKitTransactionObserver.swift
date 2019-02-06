@@ -6,6 +6,9 @@ internal protocol StoreKitTransactionObserverDelegate : AnyObject {
     
     func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didPurchaseProductWith identifier: String, completion: @escaping () -> Void)
     func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFailToPurchaseWith error: Error, forProductWith identifier: String)
+    
+    func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, purchaseFor source: Purchase.Source) -> Purchase?
+    func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, responseForStoreIntentToCommit purchase: Purchase) -> StoreIntentResponse
 }
 
 /// Observes the payment queue for changes and notifies the delegate of significant updates.
@@ -38,7 +41,16 @@ internal final class StoreKitTransactionObserver : NSObject, SKPaymentTransactio
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {
-        return true
+        let purchase = self.delegate?.storeKitTransactionObserver(self, purchaseFor: .pendingStorePayment(product, payment))
+        
+        let response = purchase.flatMap { self.delegate?.storeKitTransactionObserver(self, responseForStoreIntentToCommit: $0) } ?? .default
+            
+        switch response {
+            case .automaticallyCommit:
+                return true
+            case .defer:
+                return false
+        }
     }
     
     private func completePurchase(for transaction: SKPaymentTransaction) {        

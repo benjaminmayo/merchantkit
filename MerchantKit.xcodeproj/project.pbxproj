@@ -99,6 +99,7 @@
 		43D4FE6F207F7E8700AEA92F /* SubscriptionTerms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D4FE6E207F7E8700AEA92F /* SubscriptionTerms.swift */; };
 		43DBC1091F26283700DB4B25 /* ProductInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC1081F26283700DB4B25 /* ProductInterfaceController.swift */; };
 		43DBC10B1F26288500DB4B25 /* NetworkAvailabilityCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */; };
+		43DE571B220B20B8005442FE /* StoreIntentResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DE571A220B20B8005442FE /* StoreIntentResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -225,6 +226,7 @@
 		43D4FE6E207F7E8700AEA92F /* SubscriptionTerms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionTerms.swift; sourceTree = "<group>"; };
 		43DBC1081F26283700DB4B25 /* ProductInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductInterfaceController.swift; sourceTree = "<group>"; };
 		43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAvailabilityCenter.swift; sourceTree = "<group>"; };
+		43DE571A220B20B8005442FE /* StoreIntentResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreIntentResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -411,6 +413,7 @@
 				435418E82080DEA300FB3833 /* SubscriptionPeriod.swift */,
 				43C5AE0B2088AB7200F804CE /* SubscriptionDuration.swift */,
 				43195F9F20987BE300C906F5 /* StoreParameters.swift */,
+				43DE571A220B20B8005442FE /* StoreIntentResponse.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -610,6 +613,7 @@
 				43D0AD7A2072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift in Sources */,
 				436CE12E1EAE4B5B00AB41CD /* DescriptionUtilities.swift in Sources */,
 				43703A4220854A9C003AA087 /* ASN1.swift in Sources */,
+				43DE571B220B20B8005442FE /* StoreIntentResponse.swift in Sources */,
 				436CE1341EAF3D5200AB41CD /* CommitPurchaseTask.swift in Sources */,
 				43222A0D21E77FC8006A227F /* ReceiptMetadataTask.swift in Sources */,
 				436CE1321EAEA55D00AB41CD /* DateUtilities.swift in Sources */,
