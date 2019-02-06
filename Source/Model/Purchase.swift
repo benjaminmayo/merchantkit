@@ -10,6 +10,22 @@ public struct Purchase : Hashable, CustomStringConvertible {
     internal let source: Source
     internal let characteristics: Characteristics
     
+    internal init(from source: Source, for product: Product) {
+        var characteristics = Purchase.Characteristics()
+        
+        switch product.kind {
+            case .subscription(automaticallyRenews: true):
+                characteristics.insert(.isSubscription)
+                characteristics.insert(.isAutorenewingSubscription)
+            case .subscription(automaticallyRenews: false):
+                characteristics.insert(.isSubscription)
+            default:
+                break
+        }
+        
+        self.init(from: source, characteristics: characteristics)
+    }
+    
     internal init(from source: Source, characteristics: Characteristics) {
         self.productIdentifier = source.skProduct.productIdentifier
         self.price = Price(value: (source.skProduct.price as Decimal, source.skProduct.priceLocale))
