@@ -256,9 +256,9 @@ extension Merchant {
 
 // MARK: Receipt fetch and validation
 extension Merchant {
-    internal typealias CheckReceiptCompletion = (_ updatedProducts: Set<Product>, Error?) -> Void
+    internal typealias CheckReceiptCompletion = (Result<Set<Product>, Error>) -> Void
     
-    private func checkReceipt(updateProducts updateType: ReceiptUpdateType, policy: ReceiptFetchPolicy, reason: ReceiptValidationRequest.Reason, completion: @escaping CheckReceiptCompletion = { _,_ in }) {
+    private func checkReceipt(updateProducts updateType: ReceiptUpdateType, policy: ReceiptFetchPolicy, reason: ReceiptValidationRequest.Reason, completion: @escaping CheckReceiptCompletion = { _ in }) {
         let fetcher: ReceiptDataFetcher
         let isStarted: Bool
         
@@ -299,17 +299,17 @@ extension Merchant {
                                     }
                                 }
                                 
-                                completion(updatedProducts, nil)
+                                completion(.success(updatedProducts))
                             case .failure(let error):
                                 self.logger.log(message: "Receipt validation failed: \(error)", category: .receipt)
 
-                                completion([], error)
+                                completion(.failure(error))
                         }
                     })
                 case .failure(let error):
                     self.logger.log(message: "Receipt fetch failed: \(error)", category: .receipt)
 
-                    completion([], error)
+                    completion(.failure(error))
             }
             
             self.receiptFetchers.removeValue(forKey: policy)
@@ -470,7 +470,7 @@ extension Merchant : StoreKitTransactionObserverDelegate {
         if !self.identifiersForPendingObservedPurchases.isEmpty {
             self.logger.log(message: "Invoked receipt update for purchases \(self.identifiersForPendingObservedPurchases)", category: .receipt)
 
-            self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedPurchases), policy: .onlyFetch, reason: .completePurchase, completion: { _, _ in })
+            self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedPurchases), policy: .onlyFetch, reason: .completePurchase)
         }
         
         self.identifiersForPendingObservedPurchases.removeAll()

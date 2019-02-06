@@ -22,15 +22,7 @@ public final class RestorePurchasesTask : MerchantTask {
         
         self.merchant.logger.log(message: "Started restore purchases", category: .tasks)
 
-        self.merchant.restorePurchases(completion: { updatedProducts, error in
-            let result: Result<RestoredPurchases, Error>
-            
-            if let error = error {
-                result = .failure(error)
-            } else {
-                result = .success(updatedProducts)
-            }
-            
+        self.merchant.restorePurchases(completion: { result in
             self.onCompletion?(result)
             
             DispatchQueue.main.async {
