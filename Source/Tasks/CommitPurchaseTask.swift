@@ -25,8 +25,14 @@ public final class CommitPurchaseTask : MerchantTask {
         
         self.merchant.addPurchaseObserver(self, forProductIdentifier: self.purchase.productIdentifier)
         
-        let payment = SKMutablePayment(product: self.purchase.skProduct)
-        payment.applicationUsername = self.merchant.storeParameters.applicationUsername
+        let payment: SKPayment
+        
+        switch self.purchase.source {
+            case .availableProduct(let product):
+                payment = self.payment(forAvailableProduct: product)
+            case .pendingStorePayment(_, let pendingPayment):
+                payment = pendingPayment
+        }
         
         SKPaymentQueue.default().add(payment)
         
@@ -52,6 +58,16 @@ extension CommitPurchaseTask {
         }
         
         self.merchant.logger.log(message: "Finished commit purchase purchase task: \(result)", category: .tasks)
+    }
+    
+    private func payment(forAvailableProduct: SKProduct) -> SKPayment {
+        let payment = SKMutablePayment(product: self.purchase.source.skProduct)
+        
+        if !self.merchant.storeParameters.applicationUsername.isEmpty {
+            payment.applicationUsername = self.merchant.storeParameters.applicationUsername
+        }
+        
+        return payment
     }
 }
 

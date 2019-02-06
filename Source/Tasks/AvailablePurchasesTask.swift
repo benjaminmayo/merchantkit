@@ -74,7 +74,7 @@ extension AvailablePurchasesTask : SKProductsRequestDelegate {
                 }
             }
             
-            return Purchase(from: skProduct, characteristics: characteristics)
+            return Purchase(from: .availableProduct(skProduct), characteristics: characteristics)
         }
         
         self.finish(with: .succeeded(PurchaseSet(from: purchases)))
