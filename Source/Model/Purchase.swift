@@ -8,7 +8,7 @@ public struct Purchase : Hashable, CustomStringConvertible {
     public let price: Price
 
     internal let source: Source
-    internal let characteristics: Characteristics
+    private let characteristics: Characteristics
     
     internal init(from source: Source, for product: Product) {
         var characteristics = Purchase.Characteristics()
@@ -26,7 +26,7 @@ public struct Purchase : Hashable, CustomStringConvertible {
         self.init(from: source, characteristics: characteristics)
     }
     
-    internal init(from source: Source, characteristics: Characteristics) {
+    private init(from source: Source, characteristics: Characteristics) {
         self.productIdentifier = source.skProduct.productIdentifier
         self.price = Price(value: (source.skProduct.price as Decimal, source.skProduct.priceLocale))
         
@@ -116,8 +116,8 @@ extension Purchase {
         }
     }
     
-    /// This type is not intended to ever be publicly exposed. It carries internal metadata.
-    internal struct Characteristics : OptionSet, Hashable {
+    /// This type is not intended to ever be publicly exposed. It carries file-private metadata.
+    private struct Characteristics : OptionSet, Hashable {
         let rawValue: UInt
         
         init(rawValue: UInt) {
