@@ -23,10 +23,6 @@ public struct Purchase : Hashable, CustomStringConvertible {
                 break
         }
         
-        self.init(from: source, characteristics: characteristics)
-    }
-    
-    private init(from source: Source, characteristics: Characteristics) {
         self.productIdentifier = source.skProduct.productIdentifier
         self.price = Price(value: (source.skProduct.price as Decimal, source.skProduct.priceLocale))
         
