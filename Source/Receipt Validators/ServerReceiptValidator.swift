@@ -40,22 +40,20 @@ extension ServerReceiptValidator {
     }
     
     private func didFetchVerificationData(with result: Result<Data, Error>) {
+        let result: Result<Receipt, Error> = result.attemptMap { data in
+            let parser = ServerReceiptVerificationResponseParser() // this object handles the actual parsing of the data
+            let response = try parser.response(from: data)
+            let validatedReceipt = try parser.receipt(from: response)
+
+            return validatedReceipt
+        }
+        
         switch result {
-            case .success(let data):
-                do {
-                    let parser = ServerReceiptVerificationResponseParser() // this object handles the actual parsing of the data
-                    let response = try parser.response(from: data)
-                    let validatedReceipt = try parser.receipt(from: response)
-                    
-                    self.complete(with: .success(validatedReceipt))
-                } catch ServerReceiptVerificationResponseParser.ReceiptStatusError.receiptIncompatibleWithProductionEnvironment {
-                    self.dataFetcher = self.makeFetcher(for: .sandbox)
-                    self.dataFetcher.start()
-                } catch let error {
-                    self.complete(with: .failure(error))
-                }
-            case .failure(let error):
-                self.complete(with: .failure(error))
+            case .failure(ServerReceiptVerificationResponseParser.ReceiptStatusError.receiptIncompatibleWithProductionEnvironment):
+                self.dataFetcher = self.makeFetcher(for: .sandbox)
+                self.dataFetcher.start()
+            default:
+                self.complete(with: result)
         }
     }
 }

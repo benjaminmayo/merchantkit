@@ -30,21 +30,11 @@ public final class ReceiptMetadataTask : MerchantTask {
             let fetcher = StoreKitReceiptDataFetcher(policy: .onlyFetch)
             
             fetcher.enqueueCompletion { [weak self] result in
-                switch result {
-                    case .success(let data):
-                        let request = ReceiptValidationRequest(data: data, reason: .initialization)
-                        let validator = LocalReceiptValidator() // use LocalReceiptValidator concretely; we do not want to use the validator from the `Merchant.Configuration` here.
-                        validator.validate(request, completion: { [weak self] result in
-                            switch result {
-                                case .success(let receipt):
-                                    self?.finish(with: .success(receipt.metadata))
-                                case .failure(let error):
-                                    self?.finish(with: .failure(error))
-                            }
-                        })
-                    case .failure(let error):
-                        self?.finish(with: .failure(error))
+                let result = result.attemptMap { data in
+                    try LocalReceiptDataDecoder().decode(data).metadata
                 }
+                
+                self?.finish(with: result)
             }
             
             fetcher.start()

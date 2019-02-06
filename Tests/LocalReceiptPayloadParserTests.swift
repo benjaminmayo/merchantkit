@@ -12,9 +12,12 @@ class LocalReceiptPayloadParserTests : XCTestCase {
     func testRandomData() {
         let count = 512
         var randomData = Data(count: count)
-        
-        _ = SecRandomCopyBytes(kSecRandomDefault, count, &randomData)
-        
+        randomData.withUnsafeMutableBytes({ buffer in
+            for idx in buffer.indices {
+                buffer[idx] = UInt8.random(in: .min ... .max)
+            }
+        })
+                
         let parser = LocalReceiptPayloadParser()
         
         XCTAssertThrowsError(try parser.receipt(from: randomData))
