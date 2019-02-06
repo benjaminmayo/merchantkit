@@ -204,7 +204,7 @@ extension ProductInterfaceController {
         case paymentInvalid
         case genericProblem(Swift.Error)
         
-        public var shouldDisplayError: Bool {
+        public var shouldDisplayInUserInterface: Bool {
             switch self {
                 case .userCancelled: return false
                 default: return true
