@@ -102,7 +102,7 @@ public final class ProductInterfaceController {
             switch result {
                 case .success(_):
                     DispatchQueue.main.async {
-                        self.delegate?.productInterfaceController(self, didCommit: purchase, with: .success(()))
+                        self.delegate?.productInterfaceController(self, didCommit: purchase, with: .success)
                     }
                 case .failure(let baseError):
                     let error: CommitPurchaseError
