@@ -155,11 +155,10 @@ extension PurchaseProductsViewController : ProductInterfaceControllerDelegate {
         }
         
         switch result {
-            case .succeeded, .failed(_, shouldDisplayError: false):
-                break
-            
-            case .failed(let error, shouldDisplayError: true):
+            case .failure(let error) where error.shouldDisplayInUserInterface:
                 self.presentError(title: "Failed To Purchase", message: error.localizedDescription)
+            default:
+                break
         }
     }
     
@@ -173,9 +172,9 @@ extension PurchaseProductsViewController : ProductInterfaceControllerDelegate {
         }
         
         switch result {
-            case .succeeded(_):
+            case .success(_):
                 break
-            case .failed(let error):
+            case .failure(let error):
                 self.presentError(title: "Failed To Restore Purchases", message: error.localizedDescription)
         }
     }
