@@ -19,6 +19,8 @@ class MerchantTaskTests : XCTestCase {
         }
         
         self.wait(for: [expectation], timeout: 2)
+        
+        MerchantKitFatalError.customHandler = nil 
     }
 }
 

@@ -17,10 +17,7 @@ extension Merchant.Configuration {
             MerchantKitFatalError.raise("`Bundle.main.bundleIdentifier` is used by `Merchant.Configuration.default`, but the string does not exist. You may want to supply your own `Merchant.Configuration`.")
         }
         
-        let validator = LocalReceiptValidator()
-        let storage = KeychainPurchaseStorage(serviceName: serviceName)
-        
-        return Merchant.Configuration(receiptValidator: validator, storage: storage)
+        return self.default(withServiceName: serviceName)
     }
     
     /// As you can tell by the intentionally unwieldy name, this configuration is useful for testing but should not be used in shipping applications.
@@ -28,6 +25,15 @@ extension Merchant.Configuration {
     public static var usefulForTestingAsPurchasedStateResetsOnApplicationLaunch: Merchant.Configuration {
         let validator = LocalReceiptValidator()
         let storage = EphemeralPurchaseStorage()
+        
+        return Merchant.Configuration(receiptValidator: validator, storage: storage)
+    }
+}
+
+extension Merchant.Configuration {
+    internal static func `default`(withServiceName serviceName: String) -> Merchant.Configuration {
+        let validator = LocalReceiptValidator()
+        let storage = KeychainPurchaseStorage(serviceName: serviceName)
         
         return Merchant.Configuration(receiptValidator: validator, storage: storage)
     }

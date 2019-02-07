@@ -80,6 +80,7 @@
 		43703A4A208563EA003AA087 /* PKCS7ReceiptDataContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43703A49208563EA003AA087 /* PKCS7ReceiptDataContainer.swift */; };
 		43703A4F20856C12003AA087 /* testSampleReceiptTwoNonConsumablesPurchased.data in Resources */ = {isa = PBXBuildFile; fileRef = 43703A4E20856C12003AA087 /* testSampleReceiptTwoNonConsumablesPurchased.data */; };
 		43703A522085EB67003AA087 /* ReceiptAttributeASN1SetProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43703A502085EB38003AA087 /* ReceiptAttributeASN1SetProcessor.swift */; };
+		4370FCFB220C4451003BA681 /* MerchantConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4370FCFA220C4451003BA681 /* MerchantConfigurationTests.swift */; };
 		438BDB3120FA3EE6003AAADA /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438BDB3020FA3EE6003AAADA /* Logger.swift */; };
 		438C5D2F2080BD5400D303C8 /* SubscriptionPeriodFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438C5D2E2080BD5400D303C8 /* SubscriptionPeriodFormatter.swift */; };
 		438C9DA81F548E7A00C5F0E0 /* ReceiptValidationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438C9DA71F548E7A00C5F0E0 /* ReceiptValidationRequest.swift */; };
@@ -206,6 +207,7 @@
 		43703A49208563EA003AA087 /* PKCS7ReceiptDataContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKCS7ReceiptDataContainer.swift; sourceTree = "<group>"; };
 		43703A4E20856C12003AA087 /* testSampleReceiptTwoNonConsumablesPurchased.data */ = {isa = PBXFileReference; lastKnownFileType = file; path = testSampleReceiptTwoNonConsumablesPurchased.data; sourceTree = "<group>"; };
 		43703A502085EB38003AA087 /* ReceiptAttributeASN1SetProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptAttributeASN1SetProcessor.swift; sourceTree = "<group>"; };
+		4370FCFA220C4451003BA681 /* MerchantConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantConfigurationTests.swift; sourceTree = "<group>"; };
 		438BDB3020FA3EE6003AAADA /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		438C5D2E2080BD5400D303C8 /* SubscriptionPeriodFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionPeriodFormatter.swift; sourceTree = "<group>"; };
 		438C9DA71F548E7A00C5F0E0 /* ReceiptValidationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptValidationRequest.swift; sourceTree = "<group>"; };
@@ -325,6 +327,7 @@
 			isa = PBXGroup;
 			children = (
 				432BFFD2208E0CC400257585 /* MerchantTests.swift */,
+				4370FCFA220C4451003BA681 /* MerchantConfigurationTests.swift */,
 				4314B27A208377B300ECC35C /* PurchasedStateTests.swift */,
 				4337A8961EB1F1CA00EAF633 /* ServerReceiptResponseParserTests.swift */,
 				431C1FF31F5E07D9009E2CD7 /* LocalReceiptPayloadParserTests.swift */,
@@ -665,6 +668,7 @@
 				4319AC6320927AFB000ACC04 /* LocalReceiptValidatorTests.swift in Sources */,
 				4337A89B1EB1FAAD00EAF633 /* BucketsTests.swift in Sources */,
 				4337A8971EB1F1CA00EAF633 /* ServerReceiptResponseParserTests.swift in Sources */,
+				4370FCFB220C4451003BA681 /* MerchantConfigurationTests.swift in Sources */,
 				4314B2652082CF5600ECC35C /* SubscriptionPeriodFormatterTests.swift in Sources */,
 				4319AC6820936DC4000ACC04 /* ReceiptTests.swift in Sources */,
 				432BFFDA208E2F9700257585 /* DescriptionUtilitiesTests.swift in Sources */,
