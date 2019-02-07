@@ -483,7 +483,7 @@ extension Merchant : StoreKitTransactionObserverDelegate {
     }
     
     func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, responseForStoreIntentToCommit purchase: Purchase) -> StoreIntentResponse {
-        let intent = self.delegate?.merchant(self, storeIntentDidRequestCommit: purchase) ?? .default
+        let intent = self.delegate?.merchant(self, didReceiveStoreIntentToCommit: purchase) ?? .default
         
         return intent
     }
