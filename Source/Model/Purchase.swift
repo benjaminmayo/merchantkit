@@ -7,14 +7,26 @@ public struct Purchase : Hashable, CustomStringConvertible {
     public let productIdentifier: String
     public let price: Price
 
-    internal let skProduct: SKProduct
-    internal let characteristics: Characteristics
+    internal let source: Source
+    private let characteristics: Characteristics
     
-    internal init(from skProduct: SKProduct, characteristics: Characteristics) {
-        self.productIdentifier = skProduct.productIdentifier
-        self.price = Price(value: (skProduct.price as Decimal, skProduct.priceLocale))
+    internal init(from source: Source, for product: Product) {
+        var characteristics = Purchase.Characteristics()
         
-        self.skProduct = skProduct
+        switch product.kind {
+            case .subscription(automaticallyRenews: true):
+                characteristics.insert(.isSubscription)
+                characteristics.insert(.isAutorenewingSubscription)
+            case .subscription(automaticallyRenews: false):
+                characteristics.insert(.isSubscription)
+            default:
+                break
+        }
+        
+        self.productIdentifier = product.identifier
+        self.price = Price(value: (source.skProduct.price as Decimal, source.skProduct.priceLocale))
+        
+        self.source = source
         self.characteristics = characteristics
     }
     
@@ -23,11 +35,11 @@ public struct Purchase : Hashable, CustomStringConvertible {
     }
     
     public var localizedTitle: String {
-        return self.skProduct.localizedTitle
+        return self.source.skProduct.localizedTitle
     }
     
     public var localizedDescription: String {
-        return self.skProduct.localizedDescription
+        return self.source.skProduct.localizedDescription
     }
     
     /// Describes the terms of the subscription purchase, such as renewal period and any introductory offers. Returns nil for non-subscription purchases.
@@ -52,14 +64,14 @@ public struct Purchase : Hashable, CustomStringConvertible {
             return SubscriptionPeriod(unit: unit, unitCount: unitCount)
         }
         
-        guard self.characteristics.contains(.isSubscription), let skSubscriptionPeriod = self.skProduct.subscriptionPeriod else { // `SKProduct.subscriptionPeriod` can be non-nil for products that do not represent subscriptions, so we add in our own check here
+        guard self.characteristics.contains(.isSubscription), let skSubscriptionPeriod = self.source.skProduct.subscriptionPeriod else { // `SKProduct.subscriptionPeriod` can be non-nil for products that do not represent subscriptions, so we add in our own check here
             return nil
         }
         
         let period: SubscriptionPeriod = subscriptionPeriod(from: skSubscriptionPeriod)
         
         let introductoryOffer: SubscriptionTerms.IntroductoryOffer? = {
-            if let skDiscount = self.skProduct.introductoryPrice {
+            if let skDiscount = self.source.skProduct.introductoryPrice {
                 let locale = priceLocaleFromProductDiscount(skDiscount) ?? Locale.current
                 
                 let price = Price(value: (skDiscount.price as Decimal, locale))
@@ -90,14 +102,29 @@ public struct Purchase : Hashable, CustomStringConvertible {
 
 extension Purchase {
     /// This type is not intended to ever be publicly exposed. It carries internal metadata.
-    internal struct Characteristics : OptionSet, Hashable {
+    internal enum Source : Hashable {
+        case availableProduct(SKProduct)
+        case pendingStorePayment(SKProduct, SKPayment)
+        
+        var skProduct: SKProduct {
+            switch self {
+                case .availableProduct(let product):
+                    return product
+                case .pendingStorePayment(let product, _):
+                    return product
+            }
+        }
+    }
+    
+    /// This type is not intended to ever be publicly exposed. It carries file-private metadata.
+    private struct Characteristics : OptionSet, Hashable {
         let rawValue: UInt
         
         init(rawValue: UInt) {
             self.rawValue = rawValue
         }
         
-        public static let isSubscription: Characteristics = Characteristics(rawValue: 1 << 1)
-        public static let isAutorenewingSubscription: Characteristics = Characteristics(rawValue: 1 << 2)
+        static let isSubscription: Characteristics = Characteristics(rawValue: 1 << 1)
+        static let isAutorenewingSubscription: Characteristics = Characteristics(rawValue: 1 << 2)
     }
 }

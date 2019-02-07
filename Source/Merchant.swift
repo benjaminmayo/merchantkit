@@ -475,4 +475,16 @@ extension Merchant : StoreKitTransactionObserverDelegate {
         
         self.identifiersForPendingObservedPurchases.removeAll()
     }
+    
+    internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, purchaseFor source: Purchase.Source) -> Purchase? {
+        guard let product = self.product(withIdentifier: source.skProduct.productIdentifier) else { return nil }
+        
+        return Purchase(from: source, for: product)
+    }
+    
+    func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, responseForStoreIntentToCommit purchase: Purchase) -> StoreIntentResponse {
+        let intent = self.delegate?.merchant(self, didReceiveStoreIntentToCommit: purchase) ?? .default
+        
+        return intent
+    }
 }

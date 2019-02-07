@@ -11,7 +11,7 @@ class PurchaseSetTests : XCTestCase {
     }
     
     func testSinglePurchase() {
-        let testPurchase = Purchase(from: self.mockedProduct(forIdentifier: "test", price: "1.00"), characteristics: [])
+        let testPurchase = self.mockPurchase(forIdentifier: "test", price: "1.00")
         
         let purchaseSet = PurchaseSet(from: [testPurchase])
         
@@ -30,7 +30,7 @@ class PurchaseSetTests : XCTestCase {
     }
     
     func testSinglePurchaseIdentity() {
-        let testPurchase = Purchase(from: self.mockedProduct(forIdentifier: "test", price: "1.00"), characteristics: [])
+        let testPurchase = self.mockPurchase(forIdentifier: "test", price: "1.00")
         
         let purchaseSet = PurchaseSet(from: [testPurchase, testPurchase])
         
@@ -49,8 +49,8 @@ class PurchaseSetTests : XCTestCase {
     }
     
     func testMultiplePurchases() {
-        let testPurchase = Purchase(from: self.mockedProduct(forIdentifier: "test", price: "1.00"), characteristics: [])
-        let differentTestPurchase = Purchase(from: self.mockedProduct(forIdentifier: "test2", price: "2.00"), characteristics: [])
+        let testPurchase = self.mockPurchase(forIdentifier: "test", price: "1.00")
+        let differentTestPurchase = self.mockPurchase(forIdentifier: "test2", price: "2.00")
         
         let purchaseSet = PurchaseSet(from: [testPurchase, differentTestPurchase])
         
@@ -78,9 +78,9 @@ class PurchaseSetTests : XCTestCase {
     }
     
     func testSortingPurchases() {
-        let cheapestPurchase = Purchase(from: self.mockedProduct(forIdentifier: "1", price: "1.00"), characteristics: [])
-        let mediumPricedPurchase = Purchase(from: self.mockedProduct(forIdentifier: "2", price: "2.00"), characteristics: [])
-        let mostExpensivePurchase = Purchase(from: self.mockedProduct(forIdentifier: "3", price: "3.00"), characteristics: [])
+        let cheapestPurchase = self.mockPurchase(forIdentifier: "1", price: "1.00")
+        let mediumPricedPurchase = self.mockPurchase(forIdentifier: "2", price: "2.00")
+        let mostExpensivePurchase = self.mockPurchase(forIdentifier: "3", price: "3.00")
         
         let set = PurchaseSet(from: [cheapestPurchase, mediumPricedPurchase, mostExpensivePurchase])
         
@@ -99,7 +99,7 @@ class PurchaseSetTests : XCTestCase {
     
     func testAccessor() {
         let productForMockedProduct = Product(identifier: "test", kind: .nonConsumable)
-        let testPurchase = Purchase(from: self.mockedProduct(forIdentifier: "test", price: "1.00"), characteristics: [])
+        let testPurchase = self.mockPurchase(forIdentifier: "test", price: "1.00")
         
         let purchaseSet = PurchaseSet(from: [testPurchase])
         
@@ -109,13 +109,15 @@ class PurchaseSetTests : XCTestCase {
         XCTAssertEqual(purchase, testPurchase)
     }
     
-    private func mockedProduct(forIdentifier productIdentifier: String, price: String) -> SKProduct {
+    private func mockPurchase(forIdentifier productIdentifier: String, price: String) -> Purchase {
+        let product = Product(identifier: productIdentifier, kind: .nonConsumable)
+
         let price = NSDecimalNumber(string: price)
         let locale = Locale(identifier: "en_US_POSIX")
         
-        let mockProduct = MockSKProduct(productIdentifier: productIdentifier, price: price, priceLocale: locale)
+        let mockSKProduct = MockSKProduct(productIdentifier: productIdentifier, price: price, priceLocale: locale)
         
-        return mockProduct
+        return Purchase(from: .availableProduct(mockSKProduct), for: product)
     }
 }
 

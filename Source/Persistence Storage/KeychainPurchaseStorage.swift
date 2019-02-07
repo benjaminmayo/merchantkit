@@ -18,12 +18,16 @@ public final class KeychainPurchaseStorage : PurchaseStorage {
             return record
         }
         
-        if let dict = try? self.dictFromKeychain(forKey: storageKey) {
+        do {
+            let dict = try self.dictFromKeychain(forKey: storageKey)
+            
             if let record = PurchaseRecord(from: dict) {
                 self.purchaseRecordCache[productIdentifier] = record
                 
                 return record
             }
+        } catch {
+            
         }
         
         return nil
@@ -32,14 +36,13 @@ public final class KeychainPurchaseStorage : PurchaseStorage {
     public func save(_ record: PurchaseRecord) -> PurchaseStorageUpdateResult {
         let storageKey = self.storageKey(forProductIdentifier: record.productIdentifier)
 
-        do {
-            try self.saveToKeychain(record.dictionaryRepresentation, forKey: storageKey)
+        let result = self.saveToKeychain(record.dictionaryRepresentation, forKey: storageKey)
+        
+        if result == .didChangeRecords {
             self.purchaseRecordCache.removeValue(forKey: record.productIdentifier)
-
-            return .didChangeRecords
-        } catch {            
-            return .noChanges
         }
+        
+        return result
     }
     
     public func removeRecord(forProductIdentifier productIdentifier: String) -> PurchaseStorageUpdateResult {
@@ -59,12 +62,27 @@ public final class KeychainPurchaseStorage : PurchaseStorage {
         return self.storageKeyPrefix + "." + productIdentifier
     }
     
-    private func saveToKeychain(_ dict: [String : Any], forKey key: String) throws {
-        let encodedData = try PropertyListSerialization.data(fromPropertyList: dict, format: .binary, options: 0)
+    private func saveToKeychain(_ dict: [String : AnyHashable], forKey key: String) -> PurchaseStorageUpdateResult {
+        guard let encodedData = try? PropertyListSerialization.data(fromPropertyList: dict, format: .binary, options: 0) else { return .noChanges }
     
-        let (status, _) = self.resultFromKeychain(forQuery: self.keychainFindQuery(forKey: key))
-        
-        if status == errSecItemNotFound {
+        do {
+            let existingDict = try self.dictFromKeychain(forKey: key)
+            
+            if dict != existingDict {
+                // update keychain
+                
+                let updateQuery = self.keychainQuery(forKey: key)
+                
+                var updatingAttributes = [String : Any]()
+                updatingAttributes[kSecValueData as String] = encodedData
+                
+                let status = SecItemUpdate(updateQuery as CFDictionary, updatingAttributes as CFDictionary)
+                
+                guard status == noErr else { throw KeychainError.other(status) }
+                
+                return .didChangeRecords
+            }
+        } catch KeychainError.noneFound {
             // add to keychain
             
             var newItemQuery = self.keychainQuery(forKey: key)
@@ -72,19 +90,14 @@ public final class KeychainPurchaseStorage : PurchaseStorage {
             
             let status = SecItemAdd(newItemQuery as CFDictionary, nil)
             
-            guard status == noErr else { throw KeychainError.other(status) }
-        } else {
-            // update keychain
+            if status == noErr {
+                return .didChangeRecords
+            }
+        } catch {
             
-            let updateQuery = self.keychainQuery(forKey: key)
-            
-            var updatingAttributes = [String : Any]()
-            updatingAttributes[kSecValueData as String] = encodedData
-            
-            let status = SecItemUpdate(updateQuery as CFDictionary, updatingAttributes as CFDictionary)
-            
-            guard status == noErr else { throw KeychainError.other(status) }
         }
+        
+        return .noChanges
     }
     
     private func resultFromKeychain(forQuery query: [String : Any]) -> (OSStatus, AnyObject?) {
@@ -105,7 +118,7 @@ public final class KeychainPurchaseStorage : PurchaseStorage {
         return query
     }
     
-    private func dictFromKeychain(forKey key: String) throws -> [String : Any] {
+    private func dictFromKeychain(forKey key: String) throws -> [String : AnyHashable] {
         let query = self.keychainFindQuery(forKey: key)
         
         let (status, result) = self.resultFromKeychain(forQuery: query)
@@ -118,7 +131,7 @@ public final class KeychainPurchaseStorage : PurchaseStorage {
             let data = item[kSecValueData as String] as? Data
         else { throw KeychainError.unexpectedData }
         
-        guard let propertyList = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil), let dict = propertyList as? [String : Any] else { throw KeychainError.unexpectedData }
+        guard let propertyList = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil), let dict = propertyList as? [String : AnyHashable] else { throw KeychainError.unexpectedData }
         
         return dict
     }
@@ -128,7 +141,11 @@ public final class KeychainPurchaseStorage : PurchaseStorage {
         
         let status = SecItemDelete(query as CFDictionary)
         
-        guard status == noErr || status == errSecItemNotFound else { throw KeychainError.other(status) }
+        if status == errSecItemNotFound {
+            throw KeychainError.noneFound
+        }
+        
+        guard status == noErr else { throw KeychainError.other(status) }
     }
     
     private func keychainQuery(forKey key: String) -> [String : Any] {

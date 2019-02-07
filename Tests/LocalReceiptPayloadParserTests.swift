@@ -41,6 +41,8 @@ class LocalReceiptPayloadParserTests : XCTestCase {
         }
         
         self.wait(for: [expectation], timeout: 1)
+        
+        MerchantKitFatalError.customHandler = nil 
     }
     
     private struct SampleResource {

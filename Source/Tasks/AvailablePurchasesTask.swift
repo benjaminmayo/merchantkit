@@ -59,22 +59,10 @@ extension AvailablePurchasesTask : SKProductsRequestDelegate {
     public func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         let skProducts = response.products
         
-        let purchases: [Purchase] = skProducts.map { skProduct in
-            var characteristics = Purchase.Characteristics()
+        let purchases: [Purchase] = skProducts.compactMap { skProduct in
+            guard let product = self.products.first(where: { $0.identifier == skProduct.productIdentifier }) else { return nil }
             
-            if let product = self.products.first(where: { $0.identifier == skProduct.productIdentifier }) {
-                switch product.kind {
-                    case .subscription(automaticallyRenews: true):
-                        characteristics.insert(.isSubscription)
-                        characteristics.insert(.isAutorenewingSubscription)
-                    case .subscription(automaticallyRenews: false):
-                        characteristics.insert(.isSubscription)
-                    default:
-                        break
-                }
-            }
-            
-            return Purchase(from: skProduct, characteristics: characteristics)
+            return Purchase(from: .availableProduct(skProduct), for: product)
         }
         
         self.finish(with: .success(PurchaseSet(from: purchases)))

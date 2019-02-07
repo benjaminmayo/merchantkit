@@ -12,18 +12,28 @@ class PurchaseTests : XCTestCase {
             (.year, .year)
         ]
         
-        for (numberOfUnits, expectation) in expectations.enumerated() {
-            let mockSubscriptionPeriod = MockSKProductSubscriptionPeriod(unit: expectation.0, numberOfUnits: numberOfUnits)
-            let mockProduct = MockSKProductWithSubscription(productIdentifier: "testProduct", price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, introductoryOffer: nil)
-            
-            let purchase = Purchase(from: mockProduct, characteristics: [.isSubscription])
-            
-            let terms = purchase.subscriptionTerms
-            XCTAssertNotNil(terms)
-            
-            let period = SubscriptionPeriod(unit: expectation.1, unitCount: numberOfUnits)
-            let duration = SubscriptionDuration(period: period, isRecurring: false)
-            XCTAssertEqual(terms!.duration, duration)
+        for subscriptionTestProduct in self.testProducts(areSubscriptions: true) {
+            for (numberOfUnits, expectation) in expectations.enumerated() {
+                let mockSubscriptionPeriod = MockSKProductSubscriptionPeriod(unit: expectation.0, numberOfUnits: numberOfUnits)
+                let mockProduct = MockSKProductWithSubscription(productIdentifier: subscriptionTestProduct.identifier, price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, introductoryOffer: nil)
+                
+                let purchase = Purchase(from: .availableProduct(mockProduct), for: subscriptionTestProduct)
+                
+                let terms = purchase.subscriptionTerms
+                XCTAssertNotNil(terms)
+                
+                let isRecurring: Bool
+                
+                switch subscriptionTestProduct.kind {
+                    case .subscription(automaticallyRenews: true): isRecurring = true
+                    default: isRecurring = false
+                }
+                
+                let period = SubscriptionPeriod(unit: expectation.1, unitCount: numberOfUnits)
+                let duration = SubscriptionDuration(period: period, isRecurring: isRecurring)
+                
+                XCTAssertEqual(terms!.duration, duration)
+            }
         }
     }
     
@@ -36,35 +46,55 @@ class PurchaseTests : XCTestCase {
             (MockSKProductDiscount(price: NSDecimalNumber(string: "0.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, numberOfPeriods: 1, paymentMode: .freeTrial), SubscriptionTerms.IntroductoryOffer.freeTrial(period: .months(1)))
         ]
 
-        for expectation in expectations {
-            let mockProduct = MockSKProductWithSubscription(productIdentifier: "testProduct", price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, introductoryOffer: expectation.0)
-            
-            let purchase = Purchase(from: mockProduct, characteristics: [.isSubscription])
-            
-            let terms = purchase.subscriptionTerms
-            XCTAssertNotNil(terms)
-            
-            let introductoryOffer = terms!.introductoryOffer
-            XCTAssertNotNil(introductoryOffer)
-            
-            XCTAssertEqual(introductoryOffer!, expectation.1)
+        for subscriptionTestProduct in self.testProducts(areSubscriptions: true) {
+            for expectation in expectations {
+                let mockProduct = MockSKProductWithSubscription(productIdentifier: subscriptionTestProduct.identifier, price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, introductoryOffer: expectation.0)
+                
+                let purchase = Purchase(from: .availableProduct(mockProduct), for: subscriptionTestProduct)
+                
+                let terms = purchase.subscriptionTerms
+                XCTAssertNotNil(terms)
+                
+                let introductoryOffer = terms!.introductoryOffer
+                XCTAssertNotNil(introductoryOffer)
+                
+                XCTAssertEqual(introductoryOffer!, expectation.1)
+            }
         }
     }
     
     func testNoSubscriptionPeriod() {
-        let mockProduct = MockSKProductWithSubscription(productIdentifier: "testProduct", price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: nil, introductoryOffer: nil)
-        let purchase = Purchase(from: mockProduct, characteristics: [.isSubscription])
+        for subscriptionTestProduct in self.testProducts(areSubscriptions: true) {
+            let mockProduct = MockSKProductWithSubscription(productIdentifier: subscriptionTestProduct.identifier, price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: nil, introductoryOffer: nil)
+            let purchase = Purchase(from: .availableProduct(mockProduct), for: subscriptionTestProduct)
         
-        XCTAssertNil(purchase.subscriptionTerms)
+            XCTAssertNil(purchase.subscriptionTerms)
+        }
     }
     
     func testNoSubscriptionTermsForNonSubscriptionProduct() {
-        let mockSubscriptionPeriod = MockSKProductSubscriptionPeriod(unit: .day, numberOfUnits: 0)
-        let mockProduct = MockSKProductWithSubscription(productIdentifier: "testProduct", price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, introductoryOffer: nil)
+        for nonSubscriptionTestProduct in self.testProducts(areSubscriptions: false) {
+            let mockSubscriptionPeriod = MockSKProductSubscriptionPeriod(unit: .day, numberOfUnits: 0)
+            let mockProduct = MockSKProductWithSubscription(productIdentifier: nonSubscriptionTestProduct.identifier, price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, introductoryOffer: nil)
 
-        let purchase = Purchase(from: mockProduct, characteristics: [])
+            let purchase = Purchase(from: .availableProduct(mockProduct), for: nonSubscriptionTestProduct)
 
-        XCTAssertNil(purchase.subscriptionTerms)
+            XCTAssertNil(purchase.subscriptionTerms)
+        }
+    }
+    
+    private func testProducts(areSubscriptions: Bool) -> Set<Product> {
+        let productKinds: [Product.Kind]
+            
+        if areSubscriptions {
+            productKinds = [.subscription(automaticallyRenews: true), .subscription(automaticallyRenews: false)]
+        } else {
+            productKinds = [.nonConsumable, .consumable]
+        }
+        
+        return Set(productKinds.map {
+            Product(identifier: "testProduct", kind: $0)
+        })
     }
 }
 
