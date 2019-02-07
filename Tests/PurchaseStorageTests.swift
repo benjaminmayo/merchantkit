@@ -3,19 +3,22 @@ import Foundation
 @testable import MerchantKit
 
 class PurchaseStorageTests : XCTestCase {
-    private var testablePurchaseStorageTypes: [PurchaseStorage] {
+    private var testablePurchaseStorages = [PurchaseStorage]()
+    
+    override func setUp() {
         let ephemeralPurchaseStorage = EphemeralPurchaseStorage()
+        let userDefaultsPurchaseStorage = UserDefaultsPurchaseStorage(defaults: .standard)
+        let keychainPurchaseStorage = KeychainPurchaseStorage(serviceName: "PurchaseStorageTests")
         
-        UserDefaults.standard.removePersistentDomain(forName: "PurchaseStorageTests")
-        let defaults = UserDefaults(suiteName: "PurchaseStorageTests")!
+        self.testablePurchaseStorages = [ephemeralPurchaseStorage, userDefaultsPurchaseStorage, keychainPurchaseStorage]
         
-        let userDefaultsPurchaseStorage = UserDefaultsPurchaseStorage(defaults: defaults)
-        
-        return [ephemeralPurchaseStorage, userDefaultsPurchaseStorage]
+        for storage in self.testablePurchaseStorages {
+            _ = storage.removeRecord(forProductIdentifier: self.testRecord.productIdentifier)
+        }
     }
     
     func testSaveRecord() {
-        for storage in self.testablePurchaseStorageTypes {
+        for storage in self.testablePurchaseStorages {
             let testRecord = self.testRecord
             
             let result = storage.save(testRecord)
@@ -29,7 +32,7 @@ class PurchaseStorageTests : XCTestCase {
     }
     
     func testDeleteRecord() {
-        for storage in self.testablePurchaseStorageTypes {
+        for storage in self.testablePurchaseStorages {
             let testRecord = self.testRecord
             
             let saveResult = storage.save(testRecord)
@@ -43,24 +46,24 @@ class PurchaseStorageTests : XCTestCase {
             let deletionResult = storage.removeRecord(forProductIdentifier: testRecord.productIdentifier)
             XCTAssertEqual(deletionResult, PurchaseStorageUpdateResult.didChangeRecords)
             
-            XCTAssertNil(storage.record(forProductIdentifier: testRecord.productIdentifier))
+            XCTAssertNil(storage.record(forProductIdentifier: testRecord.productIdentifier), "Deleted record still exists for \(storage).")
         }
     }
     
     func testSaveSameRecord() {
-        for storage in self.testablePurchaseStorageTypes {
+        for storage in self.testablePurchaseStorages {
             let testRecord = self.testRecord
             
             let result = storage.save(testRecord)
             XCTAssertEqual(result, PurchaseStorageUpdateResult.didChangeRecords)
             
             let repeatedResult = storage.save(testRecord)
-            XCTAssertEqual(repeatedResult, PurchaseStorageUpdateResult.noChanges)
+            XCTAssertEqual(repeatedResult, PurchaseStorageUpdateResult.noChanges, "Saving the same record twice should report `noChanges` for \(storage).")
         }
     }
     
     func testRemoveSameRecord() {
-        for storage in self.testablePurchaseStorageTypes {
+        for storage in self.testablePurchaseStorages {
             let testRecord = self.testRecord
         
             _ = storage.save(testRecord)
@@ -69,7 +72,7 @@ class PurchaseStorageTests : XCTestCase {
             XCTAssertEqual(deletionResult, PurchaseStorageUpdateResult.didChangeRecords)
         
             let repeatedDeletionResult = storage.removeRecord(forProductIdentifier: testRecord.productIdentifier)
-            XCTAssertEqual(repeatedDeletionResult, PurchaseStorageUpdateResult.noChanges)
+            XCTAssertEqual(repeatedDeletionResult, PurchaseStorageUpdateResult.noChanges, "Deleting the same record twice should report `noChanges` for \(storage).")
         }
     }
     

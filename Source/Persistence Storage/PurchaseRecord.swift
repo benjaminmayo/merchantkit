@@ -27,8 +27,8 @@ extension PurchaseRecord {
         self.expiryDate = expiryDate as Date?
     }
     
-    internal var dictionaryRepresentation: [String : Any] {
-        var dict: [String : Any] = [
+    internal var dictionaryRepresentation: [String : AnyHashable] {
+        var dict: [String : AnyHashable] = [
             self.productIdentifierKey: self.productIdentifier,
         ]
         

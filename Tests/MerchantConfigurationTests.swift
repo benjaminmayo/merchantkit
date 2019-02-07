@@ -4,7 +4,7 @@ import Foundation
 
 class MerchantConfigurationTests : XCTestCase {
     func testDefaultConfiguration() {
-        let defaultConfiguration = Merchant.Configuration.default(withServiceName: "test")
+        let defaultConfiguration = Merchant.Configuration.default
         
         if !(defaultConfiguration.storage is KeychainPurchaseStorage) {
             XCTFail("`Merchant.Configuration.default` should use `KeychainPurchaseStorage`.")
@@ -12,6 +12,14 @@ class MerchantConfigurationTests : XCTestCase {
         
         if !(defaultConfiguration.receiptValidator is LocalReceiptValidator) {
             XCTFail("`Merchant.Configuration.default` should use `LocalReceiptValidator`.")
+        }
+    }
+    
+    func testEphemeralConfiguration() {
+        let testConfiguration = Merchant.Configuration.usefulForTestingAsPurchasedStateResetsOnApplicationLaunch
+        
+        if !(testConfiguration.storage is EphemeralPurchaseStorage) {
+            XCTFail("`Merchant.Configuration.usefulForTestingAsPurchasedStateResetsOnApplicationLaunch` should use `EphemeralPurchaseStorage`.")
         }
     }
 }

@@ -35,7 +35,7 @@ public final class UserDefaultsPurchaseStorage : PurchaseStorage {
         let key = self.storageKey(forProductIdentifier: productIdentifier)
         
         if self.defaults.object(forKey: key) != nil {
-            self.defaults.removeObject(forKey: key)
+            self.defaults.set(nil, forKey: key)
             
             return .didChangeRecords
         }
