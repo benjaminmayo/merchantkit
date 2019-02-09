@@ -21,5 +21,9 @@ class MerchantConfigurationTests : XCTestCase {
         if !(testConfiguration.storage is EphemeralPurchaseStorage) {
             XCTFail("`Merchant.Configuration.usefulForTestingAsPurchasedStateResetsOnApplicationLaunch` should use `EphemeralPurchaseStorage`.")
         }
+        
+        if !(testConfiguration.receiptValidator is TestingReceiptValidator) {
+            XCTFail("`Merchant.Configuration.usefulForTestingAsPurchasedStateResetsOnApplicationLaunch` should use `TestingReceiptValidator`.")
+        }
     }
 }

@@ -40,7 +40,9 @@ public final class Merchant {
     
     private var receiptFetchers: [ReceiptFetchPolicy : ReceiptDataFetcher] = [:]
     private var receiptDataFetcherCustomInitializer: ReceiptDataFetcherInitializer?
+    
     private var identifiersForPendingObservedPurchases: Set<String> = []
+    private var identifiersForPendingObservedRestoredPurchases: Set<String> = []
     
     private let nowDate: Date = Date()
     internal var latestFetchedReceipt: Receipt?
@@ -427,7 +429,9 @@ extension Merchant : StoreKitTransactionObserverDelegate {
                 
                 consumableHandler.merchant(self, consume: product, completion: didCompletePurchase)
             } else { // non-consumable and subscription products are recorded
-                let record = PurchaseRecord(productIdentifier: identifier, expiryDate: nil)
+                let knownExpiryDate = self.configuration.storage.record(forProductIdentifier: identifier)?.expiryDate
+                
+                let record = PurchaseRecord(productIdentifier: identifier, expiryDate: knownExpiryDate)
                 let result = self.configuration.storage.save(record)
             
                 if result == .didChangeRecords {
@@ -435,7 +439,7 @@ extension Merchant : StoreKitTransactionObserverDelegate {
                 }
                 
                 if case .subscription(_) = product.kind {
-                    self.identifiersForPendingObservedPurchases.insert(product.identifier) // we need to get the receipt to find the expiry date, the `PurchaseRecord` will be updated when that information is available
+                    self.identifiersForPendingObservedPurchases.insert(product.identifier) // we need to get the receipt to find the new expiry date, the `PurchaseRecord` will be updated when that information is available
                 }
                 
                 didCompletePurchase()
@@ -444,6 +448,26 @@ extension Merchant : StoreKitTransactionObserverDelegate {
         
         for observer in self.purchaseObservers {
             observer.merchant(self, didCompletePurchaseForProductWith: identifier)
+        }
+    }
+    
+    internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didRestoreProductWith identifier: String) {
+        if let product = self.product(withIdentifier: identifier) {
+            if case .subscription(_) = product.kind {
+                self.identifiersForPendingObservedRestoredPurchases.insert(product.identifier)
+            } else {
+                let record = PurchaseRecord(productIdentifier: identifier, expiryDate: nil)
+
+                let result = self.configuration.storage.save(record)
+                
+                if result == .didChangeRecords {
+                    self.didChangeState(for: [product])
+                }
+                
+                for observer in self.purchaseObservers {
+                    observer.merchant(self, didCompletePurchaseForProductWith: product.identifier)
+                }
+            }
         }
     }
     
@@ -464,9 +488,27 @@ extension Merchant : StoreKitTransactionObserverDelegate {
     }
     
     internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFinishRestoringPurchasesWith error: Error?) {
-        for observer in self.purchaseObservers {
-            observer.merchant(self, didCompleteRestoringPurchasesWith: error)
+        if self.identifiersForPendingObservedRestoredPurchases.isEmpty {
+            for observer in self.purchaseObservers {
+                observer.merchant(self, didCompleteRestoringPurchasesWith: error)
+            }
+        } else {
+            self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedRestoredPurchases), policy: .onlyFetch, reason: .completePurchase, completion: { restoredProducts, _ in
+                let restored = restoredProducts.filter { self.state(for: $0).isPurchased }
+                
+                for observer in self.purchaseObservers {
+                    for product in restored {
+                        observer.merchant(self, didCompletePurchaseForProductWith: product.identifier)
+                    }
+                }
+                
+                for observer in self.purchaseObservers {
+                    observer.merchant(self, didCompleteRestoringPurchasesWith: error)
+                }
+            })
         }
+        
+        self.identifiersForPendingObservedRestoredPurchases.removeAll()
     }
     
     internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, purchaseFor source: Purchase.Source) -> Purchase? {

@@ -5,6 +5,8 @@ import StoreKit
 
 class PurchaseTests : XCTestCase {
     func testMatchingSubscriptionPeriod() {
+        guard #available(iOS 11.2, *) else { return }
+        
         let expectations: [(SKProduct.PeriodUnit, SubscriptionPeriod.Unit)] = [
             (.day, .day),
             (.week, .week),
@@ -38,6 +40,8 @@ class PurchaseTests : XCTestCase {
     }
     
     func testMatchingSubscriptionIntroductoryOffer() {
+        guard #available(iOS 11.2, *) else { return }
+        
         let mockSubscriptionPeriod = MockSKProductSubscriptionPeriod(unit: .month, numberOfUnits: 1)
         
         let expectations: [(SKProductDiscount, SubscriptionTerms.IntroductoryOffer)] = [
@@ -64,6 +68,8 @@ class PurchaseTests : XCTestCase {
     }
     
     func testNoSubscriptionPeriod() {
+        guard #available(iOS 11.2, *) else { return }
+        
         for subscriptionTestProduct in self.testProducts(areSubscriptions: true) {
             let mockProduct = MockSKProductWithSubscription(productIdentifier: subscriptionTestProduct.identifier, price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: nil, introductoryOffer: nil)
             let purchase = Purchase(from: .availableProduct(mockProduct), for: subscriptionTestProduct)
@@ -73,6 +79,8 @@ class PurchaseTests : XCTestCase {
     }
     
     func testNoSubscriptionTermsForNonSubscriptionProduct() {
+        guard #available(iOS 11.2, *) else { return }
+        
         for nonSubscriptionTestProduct in self.testProducts(areSubscriptions: false) {
             let mockSubscriptionPeriod = MockSKProductSubscriptionPeriod(unit: .day, numberOfUnits: 0)
             let mockProduct = MockSKProductWithSubscription(productIdentifier: nonSubscriptionTestProduct.identifier, price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, introductoryOffer: nil)
@@ -122,6 +130,7 @@ private class MockSKProduct : SKProduct {
     }
 }
 
+@available (iOS 11.2, *)
 private class MockSKProductWithSubscription : SKProduct {
     private let _productIdentifier: String
     private let _price: NSDecimalNumber
@@ -158,6 +167,7 @@ private class MockSKProductWithSubscription : SKProduct {
     }
 }
 
+@available(iOS 11.2, *)
 private class MockSKProductSubscriptionPeriod : SKProductSubscriptionPeriod {
     private let _unit: SKProduct.PeriodUnit
     private let _numberOfUnits: Int
@@ -176,6 +186,7 @@ private class MockSKProductSubscriptionPeriod : SKProductSubscriptionPeriod {
     }
 }
 
+@available(iOS 11.2, *)
 private class MockSKProductDiscount : SKProductDiscount {
     let _price: NSDecimalNumber
     let _priceLocale: Locale!
