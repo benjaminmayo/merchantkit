@@ -8,6 +8,8 @@ public final class RestorePurchasesTask : MerchantTask {
     
     private unowned let merchant: Merchant
     
+    private var restoredProductIdentifiers = Set<String>()
+    
     /// Create a task using the `Merchant.restorePurchasesTask()` API.
     internal init(with merchant: Merchant) {
         self.merchant = merchant
@@ -19,17 +21,47 @@ public final class RestorePurchasesTask : MerchantTask {
         
         self.isStarted = true
         self.merchant.taskDidStart(self)
+
+        let applicationUsername = self.merchant.storeParameters.applicationUsername.isEmpty ? nil : self.merchant.storeParameters.applicationUsername
+        
+        self.merchant.addPurchaseObserver(self)
+        
+        SKPaymentQueue.default().restoreCompletedTransactions(withApplicationUsername: applicationUsername)
         
         self.merchant.logger.log(message: "Started restore purchases", category: .tasks)
+    }
+}
 
-        self.merchant.restorePurchases(completion: { result in
-            self.onCompletion?(result)
+extension RestorePurchasesTask {
+    private func finish(with result: Result<RestoredPurchases>) {
+        self.onCompletion?(result)
+        
+        self.merchant.removePurchaseObserver(self)
+        
+        DispatchQueue.main.async {
+            self.merchant.taskDidResign(self)
+        }
+        
+        self.merchant.logger.log(message: "Finished restore purchases task: \(result)", category: .tasks)
+    }
+}
+
+extension RestorePurchasesTask : MerchantPurchaseObserver {
+    func merchant(_ merchant: Merchant, didCompletePurchaseForProductWith productIdentifier: String) {
+        self.restoredProductIdentifiers.insert(productIdentifier)
+    }
+    
+    func merchant(_ merchant: Merchant, didFailPurchaseWith error: Error, forProductWith productIdentifier: String) {
+        
+    }
+    
+    func merchant(_ merchant: Merchant, didCompleteRestoringPurchasesWith error: Error?) {
+        if let error = error {
+            self.finish(with: .failed(error))
+        } else {
+            let restoredProducts = Set(self.restoredProductIdentifiers.compactMap { self.merchant.product(withIdentifier: $0) })
             
-            DispatchQueue.main.async {
-                self.merchant.taskDidResign(self)
-            }
-            
-            self.merchant.logger.log(message: "Finished restore purchases task: \(result)", category: .tasks)
-        })
+            self.finish(with: .succeeded(restoredProducts))
+        }
     }
 }

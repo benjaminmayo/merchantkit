@@ -35,7 +35,7 @@ public final class Merchant {
     private var _registeredProducts: [String : Product] = [:]
     private var activeTasks: [MerchantTask] = []
     
-    private var purchaseObservers: Buckets<String, MerchantPurchaseObserver> = Buckets()
+    private var purchaseObservers = [MerchantPurchaseObserver]()
     private var hasSetup: Bool = false
     
     private var receiptFetchers: [ReceiptFetchPolicy : ReceiptDataFetcher] = [:]
@@ -152,23 +152,15 @@ extension Merchant {
 
 // MARK: Purchase observers
 extension Merchant {
-    internal func addPurchaseObserver(_ observer: MerchantPurchaseObserver, forProductIdentifier productIdentifier: String) {
-        var observers = self.purchaseObservers[productIdentifier]
-        
-        if !observers.contains(where: { $0 === observer }) {
-            observers.append(observer)
+    internal func addPurchaseObserver(_ observer: MerchantPurchaseObserver) {
+        if !self.purchaseObservers.contains(where: { $0 === observer }) {
+            self.purchaseObservers.append(observer)
         }
-        
-        self.purchaseObservers[productIdentifier] = observers
     }
     
-    internal func removePurchaseObserver(_ observer: MerchantPurchaseObserver, forProductIdentifier productIdentifier: String) {
-        var observers = self.purchaseObservers[productIdentifier]
-        
-        if let index = observers.firstIndex(where: { $0 === observer }) {
-            observers.remove(at: index)
-            
-            self.purchaseObservers[productIdentifier] = observers
+    internal func removePurchaseObserver(_ observer: MerchantPurchaseObserver) {
+        if let index = self.purchaseObservers.firstIndex(where: { $0 === observer }) {
+            self.purchaseObservers.remove(at: index)
         }
     }
 }
@@ -246,11 +238,6 @@ extension Merchant {
         
         // Print the warning to the console. As this is a serious usage error, we do not route it through the optional framework logging.
         print("Merchant is attempting to vend purchases, but the Merchant has not been setup. Remember to call `Merchant.setup()` during application launch.")
-    }
-    
-    // Right now, Merchant relies on refreshing receipts to restore purchases. The implementation may be changed in future.
-    internal func restorePurchases(completion: @escaping CheckReceiptCompletion) {
-        self.checkReceipt(updateProducts: .all, policy: .alwaysRefresh, reason: .restorePurchases, completion: completion)
     }
 }
 
@@ -455,13 +442,13 @@ extension Merchant : StoreKitTransactionObserverDelegate {
             }
         }
         
-        for observer in self.purchaseObservers[identifier] {
+        for observer in self.purchaseObservers {
             observer.merchant(self, didCompletePurchaseForProductWith: identifier)
         }
     }
     
     internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFailToPurchaseWith error: Error, forProductWith identifier: String) {
-        for observer in self.purchaseObservers[identifier] {
+        for observer in self.purchaseObservers {
             observer.merchant(self, didFailPurchaseWith: error, forProductWith: identifier)
         }
     }
@@ -476,13 +463,19 @@ extension Merchant : StoreKitTransactionObserverDelegate {
         self.identifiersForPendingObservedPurchases.removeAll()
     }
     
+    internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFinishRestoringPurchasesWith error: Error?) {
+        for observer in self.purchaseObservers {
+            observer.merchant(self, didCompleteRestoringPurchasesWith: error)
+        }
+    }
+    
     internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, purchaseFor source: Purchase.Source) -> Purchase? {
         guard let product = self.product(withIdentifier: source.skProduct.productIdentifier) else { return nil }
         
         return Purchase(from: source, for: product)
     }
     
-    func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, responseForStoreIntentToCommit purchase: Purchase) -> StoreIntentResponse {
+    internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, responseForStoreIntentToCommit purchase: Purchase) -> StoreIntentResponse {
         let intent = self.delegate?.merchant(self, didReceiveStoreIntentToCommit: purchase) ?? .default
         
         return intent
