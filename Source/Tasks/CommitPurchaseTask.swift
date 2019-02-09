@@ -23,7 +23,7 @@ public final class CommitPurchaseTask : MerchantTask {
         self.isStarted = true
         self.merchant.taskDidStart(self)
         
-        self.merchant.addPurchaseObserver(self, forProductIdentifier: self.purchase.productIdentifier)
+        self.merchant.addPurchaseObserver(self)
         
         let payment: SKPayment
         
@@ -41,7 +41,7 @@ public final class CommitPurchaseTask : MerchantTask {
     
     /// Cancel the task. Cancellation does not fire the `onCompletion` handler.
     public func cancel() {
-        self.merchant.removePurchaseObserver(self, forProductIdentifier: self.purchase.productIdentifier)
+        self.merchant.removePurchaseObserver(self)
         
         self.merchant.taskDidResign(self)
     }
@@ -51,7 +51,7 @@ extension CommitPurchaseTask {
     private func finish(with result: Result<Void>) {
         self.onCompletion(result)
         
-        self.merchant.removePurchaseObserver(self, forProductIdentifier: self.purchase.productIdentifier)
+        self.merchant.removePurchaseObserver(self)
         
         DispatchQueue.main.async {
             self.merchant.taskDidResign(self)
@@ -72,11 +72,19 @@ extension CommitPurchaseTask {
 }
 
 extension CommitPurchaseTask : MerchantPurchaseObserver {
-    func merchant(_ merchant: Merchant, didCompletePurchaseForProductWith productIdentifier: String) {        
-        self.finish(with: .succeeded(()))
+    func merchant(_ merchant: Merchant, didCompletePurchaseForProductWith productIdentifier: String) {
+        if self.purchase.productIdentifier == productIdentifier {
+            self.finish(with: .succeeded(()))
+        }
     }
     
     func merchant(_ merchant: Merchant, didFailPurchaseWith error: Error, forProductWith productIdentifier: String) {
-        self.finish(with: .failed(error))
+        if self.purchase.productIdentifier == productIdentifier {
+            self.finish(with: .failed(error))
+        }
+    }
+    
+    func merchant(_ merchant: Merchant, didCompleteRestoringPurchasesWith error: Error?) {
+        
     }
 }
