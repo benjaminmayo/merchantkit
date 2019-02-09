@@ -33,7 +33,7 @@ public final class RestorePurchasesTask : MerchantTask {
 }
 
 extension RestorePurchasesTask {
-    private func finish(with result: Result<RestoredPurchases>) {
+    private func finish(with result: Result<RestoredPurchases, Error>) {
         self.onCompletion?(result)
         
         self.merchant.removePurchaseObserver(self)
