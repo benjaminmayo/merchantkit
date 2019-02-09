@@ -184,11 +184,16 @@ extension ProductInterfaceController {
         
         public struct PurchaseMetadata : Equatable {
             public let price: Price
-            public let subscriptionTerms: SubscriptionTerms?
+            private let _subscriptionTerms: SubscriptionTerms? // hidden to support <iOS11.2 versions
             
             internal init(price: Price, subscriptionTerms: SubscriptionTerms?) {
                 self.price = price
-                self.subscriptionTerms = subscriptionTerms
+                self._subscriptionTerms = subscriptionTerms
+            }
+            
+            @available(iOS 11.2, *)
+            public var subscriptionTerms: SubscriptionTerms? {
+                return self._subscriptionTerms
             }
         }
     }
@@ -307,9 +312,17 @@ extension ProductInterfaceController {
                 switch self.availablePurchasesFetchResult {
                     case .succeeded(let purchases)?:
                         if let purchase = purchases.purchase(for: product) {
+                            let subscriptionTerms: SubscriptionTerms?
+                            
+                            if #available(iOS 11.2, *) {
+                                subscriptionTerms = purchase.subscriptionTerms
+                            } else {
+                                subscriptionTerms = nil
+                            }
+                            
                             return ProductState.PurchaseMetadata(
                                 price: purchase.price,
-                                subscriptionTerms: purchase.subscriptionTerms
+                                subscriptionTerms: subscriptionTerms
                             )
                         }
                     default:
