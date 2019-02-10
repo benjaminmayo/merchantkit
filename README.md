@@ -80,12 +80,12 @@ Compile the `MerchantKit` framework and embed it in your application. You can do
 
 ## Getting Started
 
-1. In your app delegate, import `MerchantKit` create a `Merchant` instance in `application(_:, didFinishLaunchingWithOptions:)`. Supply a configuration (such as `Merchant.Configuration.default`) and an optional delegate.
+1. In your app delegate, import `MerchantKit` create a `Merchant` instance in `application(_:, didFinishLaunchingWithOptions:)`. Supply a configuration (such as `Merchant.Configuration.default`) and a delegate.
 ```swift
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     ...
     
-    self.merchant = Merchant(configuration: .default)
+    self.merchant = Merchant(configuration: .default, delegate: self)
     
     ...
 }
@@ -103,7 +103,7 @@ self.merchant.register([product, otherProduct])
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     ...
     
-    self.merchant = Merchant(configuration: .default)    
+    self.merchant = Merchant(configuration: .default, delegate: self)    
     self.merchant.register(...)
     self.merchant.setup()
     
@@ -112,7 +112,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 ```
 4. Profit! Or something.
 
-## Configuration
+## Merchant Configuration
 
 `Merchant` is initialized with a configuration object; an instance of `Merchant.Configuration`. The configuration controls how `Merchant` validates receipts and persist product state to storage.
 Most applications can simply use `Merchant.Configuration.default` and get the result they expect. You can supply your own `Merchant.Configuration` if you want to do something more customized.
@@ -122,7 +122,7 @@ You can repeatedly test 'buying' any `Product`, including non-consumables, simpl
 
 ## Merchant Delegate
 
-You can provide a delegate to the `Merchant` object when instantiated (e.g. `Merchant(configuration: .default, delegate: self)`). This delegate provides an opportunity to respond to state change events at an app-level. The `MerchantDelegate` protocol declares two methods:
+The delegate implements the `MerchantDelegate` protocol. This delegate provides an opportunity to respond to events at an app-wide level. The `MerchantDelegate` protocol declares a handful of methods, but only one is required to be implemented.
 
 ```swift
 func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Product>) {
@@ -132,11 +132,9 @@ func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Product>) {
         print("updated \(product)")
     }
 }
-
-func merchantDidChangeLoadingState(_ merchant: Merchant) {
-    // Called when `Merchant.isLoading` changes. You could show/hide the status bar network activity indicator here, for instance.
-}
 ```
+
+The delegate optionally receives loading state change events, and a customization point for handling Promoted In-App Purchase flows that were initiated externally by the App Store. Sensible default implementations are provided for these two methods.
 
 ## Product Interface Controller
 
