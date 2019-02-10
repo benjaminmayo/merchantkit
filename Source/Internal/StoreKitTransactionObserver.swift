@@ -8,7 +8,8 @@ internal protocol StoreKitTransactionObserverDelegate : AnyObject {
     
     func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didPurchaseProductWith identifier: String, completion: @escaping () -> Void)
     func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFailToPurchaseWith error: Error, forProductWith identifier: String)
-    
+    func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didRestoreProductWith identifier: String)
+
     func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, purchaseFor source: Purchase.Source) -> Purchase?
     func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, responseForStoreIntentToCommit purchase: Purchase) -> StoreIntentResponse
 }
@@ -31,7 +32,7 @@ internal final class StoreKitTransactionObserver : NSObject, SKPaymentTransactio
                 case .purchasing:
                     break
                 case .restored:
-                    self.completePurchase(for: transaction.original!)
+                    self.completeRestorePurchase(for: transaction, original: transaction.original!)
                 case .failed:
                     self.failPurchase(for: transaction)
                 case .deferred:
@@ -65,10 +66,16 @@ internal final class StoreKitTransactionObserver : NSObject, SKPaymentTransactio
         self.delegate?.storeKitTransactionObserver(self, didFinishRestoringPurchasesWith: error)
     }
     
-    private func completePurchase(for transaction: SKPaymentTransaction) {        
+    private func completePurchase(for transaction: SKPaymentTransaction) {
         self.delegate?.storeKitTransactionObserver(self, didPurchaseProductWith: transaction.payment.productIdentifier, completion: {
             SKPaymentQueue.default().finishTransaction(transaction)
         })
+    }
+    
+    private func completeRestorePurchase(for transaction: SKPaymentTransaction, original: SKPaymentTransaction) {
+        self.delegate?.storeKitTransactionObserver(self, didRestoreProductWith: original.payment.productIdentifier)
+        
+        SKPaymentQueue.default().finishTransaction(transaction)
     }
     
     private func failPurchase(for transaction: SKPaymentTransaction) {

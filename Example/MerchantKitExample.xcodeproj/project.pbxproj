@@ -39,6 +39,13 @@
 			remoteGlobalIDString = 4342025C1EAE08F80012983A;
 			remoteInfo = MerchantKit;
 		};
+		43D2D79E220F94B900ABDB94 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4369E54C2179D8F4002086C3 /* MerchantKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4370FD00220C48CF003BA681;
+			remoteInfo = MerchantKitTestsHost;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -85,6 +92,7 @@
 			children = (
 				4311F103217D10DF00ED9A2E /* MerchantKit.framework */,
 				4311F105217D10DF00ED9A2E /* MerchantKitTests.xctest */,
+				43D2D79F220F94B900ABDB94 /* MerchantKitTestsHost.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -203,6 +211,13 @@
 			fileType = wrapper.cfbundle;
 			path = MerchantKitTests.xctest;
 			remoteRef = 4311F104217D10DF00ED9A2E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		43D2D79F220F94B900ABDB94 /* MerchantKitTestsHost.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = MerchantKitTestsHost.app;
+			remoteRef = 43D2D79E220F94B900ABDB94 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -366,6 +381,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -386,6 +402,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
