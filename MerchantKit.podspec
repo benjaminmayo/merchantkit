@@ -22,6 +22,8 @@ Pod::Spec.new do |spec|
     spec.resources = ["Source/Internal/Resources/**/*.{stringsdict}"]
     
     spec.test_spec "Tests" do |test_spec|
+        test_spec.requires_app_host = true
+
         test_spec.source_files = "Tests/**/*.{h,swift}"
         test_spec.resources = ["Tests/Sample Resources/*.{json,data,plist}"]
     end
