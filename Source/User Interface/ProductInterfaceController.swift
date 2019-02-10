@@ -384,15 +384,9 @@ extension ProductInterfaceController {
         guard self.networkAvailabilityCenter.isConnectedToNetwork else { return }
         
         if case .failed(.networkFailure(_))? = self.availablePurchasesFetchResult {
-            return
+            DispatchQueue.main.async {
+                self.refetchAvailablePurchases()
+            }
         }
-        
-        self.fetchPurchases(onFetchingStateChanged: {}, onCompletion: { [weak self] result in
-            guard let self = self else { return }
-            
-            self.availablePurchasesFetchResult = result
-            
-            self.didChangeState(for: self.products)
-        })
     }
 }
