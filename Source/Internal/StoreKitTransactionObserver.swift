@@ -32,7 +32,7 @@ internal final class StoreKitTransactionObserver : NSObject, SKPaymentTransactio
                 case .purchasing:
                     break
                 case .restored:
-                    self.completeRestorePurchase(for: transaction, original: transaction.original!)
+                    self.completeRestorePurchase(for: transaction, original: transaction.original ?? transaction)
                 case .failed:
                     self.failPurchase(for: transaction)
                 case .deferred:
