@@ -488,11 +488,11 @@ extension Merchant : StoreKitTransactionObserverDelegate {
                 observer.merchant(self, didCompleteRestoringPurchasesWith: error)
             }
         } else {
-            self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedRestoredPurchases), policy: .onlyFetch, reason: .completePurchase, completion: { restoredProducts, _ in
-                let restored = restoredProducts.filter { self.state(for: $0).isPurchased }
+            self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedRestoredPurchases), policy: .onlyFetch, reason: .completePurchase, completion: { result in
+                let restoredProducts = (try? result.get().filter { self.state(for: $0).isPurchased }) ?? []
                 
                 for observer in self.purchaseObservers {
-                    for product in restored {
+                    for product in restoredProducts {
                         observer.merchant(self, didCompletePurchaseForProductWith: product.identifier)
                     }
                 }

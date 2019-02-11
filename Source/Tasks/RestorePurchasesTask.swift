@@ -47,21 +47,21 @@ extension RestorePurchasesTask {
 }
 
 extension RestorePurchasesTask : MerchantPurchaseObserver {
-    func merchant(_ merchant: Merchant, didCompletePurchaseForProductWith productIdentifier: String) {
+    internal func merchant(_ merchant: Merchant, didCompletePurchaseForProductWith productIdentifier: String) {
         self.restoredProductIdentifiers.insert(productIdentifier)
     }
     
-    func merchant(_ merchant: Merchant, didFailPurchaseWith error: Error, forProductWith productIdentifier: String) {
+    internal func merchant(_ merchant: Merchant, didFailPurchaseWith error: Error, forProductWith productIdentifier: String) {
         
     }
     
-    func merchant(_ merchant: Merchant, didCompleteRestoringPurchasesWith error: Error?) {
+    internal func merchant(_ merchant: Merchant, didCompleteRestoringPurchasesWith error: Error?) {
         if let error = error {
-            self.finish(with: .failed(error))
+            self.finish(with: .failure(error))
         } else {
             let restoredProducts = Set(self.restoredProductIdentifiers.compactMap { self.merchant.product(withIdentifier: $0) })
             
-            self.finish(with: .succeeded(restoredProducts))
+            self.finish(with: .success(restoredProducts))
         }
     }
 }
