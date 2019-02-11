@@ -1,9 +1,9 @@
 /// This task restores previous purchases made by the signed-in user. Executing this task may present UI.
 /// If using MerchantKit, it is important to use this task rather than manually invoking StoreKit.
 public final class RestorePurchasesTask : MerchantTask {
-    public typealias RestoredPurchases = Set<Product>
+    public typealias RestoredProducts = Set<Product>
     
-    public var onCompletion: TaskCompletion<RestoredPurchases>?
+    public var onCompletion: MerchantTaskCompletion<RestoredProducts>?
     public private(set) var isStarted: Bool = false
     
     private unowned let merchant: Merchant
@@ -22,18 +22,15 @@ public final class RestorePurchasesTask : MerchantTask {
         self.isStarted = true
         self.merchant.taskDidStart(self)
 
-        let applicationUsername = self.merchant.storeParameters.applicationUsername.isEmpty ? nil : self.merchant.storeParameters.applicationUsername
-        
         self.merchant.addPurchaseObserver(self)
-        
-        SKPaymentQueue.default().restoreCompletedTransactions(withApplicationUsername: applicationUsername)
+        self.merchant.storeInterface.restorePurchases(using: self.merchant.storeParameters)
         
         self.merchant.logger.log(message: "Started restore purchases", category: .tasks)
     }
 }
 
 extension RestorePurchasesTask {
-    private func finish(with result: Result<RestoredPurchases, Error>) {
+    private func finish(with result: Result<RestoredProducts, Error>) {
         self.onCompletion?(result)
         
         self.merchant.removePurchaseObserver(self)

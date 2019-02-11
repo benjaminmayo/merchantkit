@@ -180,14 +180,10 @@ extension MerchantTests {
         }
         
         let configuration = Merchant.Configuration(receiptValidator: mockReceiptValidator, storage: EphemeralPurchaseStorage())
-        
-        merchant = Merchant(configuration: configuration, delegate: mockDelegate)
-        merchant.setCustomReceiptDataFetcherInitializer({ policy in
-            let testingFetcher = MockReceiptDataFetcher(policy: policy)
-            testingFetcher.result = receiptDataFetchResult
+        let mockStoreInterface = MockStoreInterface()
+        mockStoreInterface.receiptFetchResult = receiptDataFetchResult
             
-            return testingFetcher
-        })
+        merchant = Merchant(configuration: configuration, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
         
         merchant.register(outcomes.map { $0.product })
         merchant.setup()
@@ -231,6 +227,37 @@ private class MockMerchantDelegate : MerchantDelegate {
     
     func merchantDidChangeLoadingState(_ merchant: Merchant) {
         
+    }
+}
+
+private class MockStoreInterface : StoreInterface {
+    var receiptFetchResult: Result<Data, Error>!
+    
+    func makeReceiptFetcher(for policy: ReceiptFetchPolicy) -> ReceiptDataFetcher {
+        let fetcher = MockReceiptDataFetcher(policy: policy)
+        fetcher.result = self.receiptFetchResult
+        
+        return fetcher
+    }
+    
+    func observeTransactions(withDelegate delegate: StoreKitTransactionObserverDelegate) {
+        
+    }
+    
+    func stopObservingTransactions() {
+        
+    }
+    
+    func makeAvailablePurchasesFetcher(for products: Set<Product>) -> AvailablePurchasesFetcher {
+        fatalError()
+    }
+    
+    func commitPurchase(_ purchase: Purchase, using storeParameters: StoreParameters) {
+        fatalError()
+    }
+    
+    func restorePurchases(using storeParameters: StoreParameters) {
+        fatalError()
     }
 }
 

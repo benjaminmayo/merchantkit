@@ -8,4 +8,4 @@ public protocol MerchantTask : AnyObject {
 }
 
 // The prototype completion handler for a `MerchantTask`. This may be called from any thread. See individual task interfaces for usage details.
-public typealias TaskCompletion<Value> = (Result<Value, Error>) -> Void
+public typealias MerchantTaskCompletion<Value> = (Result<Value, Error>) -> Void

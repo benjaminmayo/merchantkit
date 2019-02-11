@@ -1,11 +1,11 @@
 /// This task fetches receipt metadata that some app business logic may be interested in knowing.
 /// In general, this task will be rarely used and many apps will not need to use it at all.
 public final class ReceiptMetadataTask : MerchantTask {
-    public var onCompletion: TaskCompletion<ReceiptMetadata>?
+    public var onCompletion: MerchantTaskCompletion<ReceiptMetadata>?
     public private(set) var isStarted: Bool = false
     
     private unowned let merchant: Merchant
-    private var fetcher: StoreKitReceiptDataFetcher?
+    private var fetcher: ReceiptDataFetcher?
     
     /// Create a task using the `Merchant.receiptMetadataTask()` API.
     internal init(with merchant: Merchant) {
@@ -27,7 +27,7 @@ public final class ReceiptMetadataTask : MerchantTask {
         if let receipt = self.merchant.latestFetchedReceipt {
             self.finish(with: .success(receipt.metadata))
         } else {
-            let fetcher = StoreKitReceiptDataFetcher(policy: .onlyFetch)
+            let fetcher = self.merchant.storeInterface.makeReceiptFetcher(for: .onlyFetch)
             
             fetcher.enqueueCompletion { [weak self] result in
                 let result = result.attemptMap { data in

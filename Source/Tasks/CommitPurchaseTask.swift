@@ -1,11 +1,8 @@
-import Foundation 
-import StoreKit
-
 /// This task starts the purchase flow for a purchase discovered by a previous `AvailablePurchasesTask` callback.
 public final class CommitPurchaseTask : MerchantTask {
     public let purchase: Purchase
     
-    public var onCompletion: TaskCompletion<Void>!
+    public var onCompletion: MerchantTaskCompletion<Void>!
     public private(set) var isStarted: Bool = false
     
     private unowned let merchant: Merchant
@@ -25,16 +22,7 @@ public final class CommitPurchaseTask : MerchantTask {
         
         self.merchant.addPurchaseObserver(self)
         
-        let payment: SKPayment
-        
-        switch self.purchase.source {
-            case .availableProduct(let product):
-                payment = self.payment(forAvailableProduct: product)
-            case .pendingStorePayment(_, let pendingPayment):
-                payment = pendingPayment
-        }
-        
-        SKPaymentQueue.default().add(payment)
+        self.merchant.storeInterface.commitPurchase(self.purchase, using: self.merchant.storeParameters)
         
         self.merchant.logger.log(message: "Started commit purchase task for product: \(self.purchase.productIdentifier)", category: .tasks)
     }
@@ -59,32 +47,22 @@ extension CommitPurchaseTask {
         
         self.merchant.logger.log(message: "Finished commit purchase purchase task: \(result)", category: .tasks)
     }
-    
-    private func payment(forAvailableProduct: SKProduct) -> SKPayment {
-        let payment = SKMutablePayment(product: self.purchase.source.skProduct)
-        
-        if !self.merchant.storeParameters.applicationUsername.isEmpty {
-            payment.applicationUsername = self.merchant.storeParameters.applicationUsername
-        }
-        
-        return payment
-    }
 }
 
 extension CommitPurchaseTask : MerchantPurchaseObserver {
-    func merchant(_ merchant: Merchant, didCompletePurchaseForProductWith productIdentifier: String) {
+    internal func merchant(_ merchant: Merchant, didCompletePurchaseForProductWith productIdentifier: String) {
         if self.purchase.productIdentifier == productIdentifier {
-            self.finish(with: .success(()))
+            self.finish(with: .success)
         }
     }
     
-    func merchant(_ merchant: Merchant, didFailPurchaseWith error: Error, forProductWith productIdentifier: String) {
+    internal func merchant(_ merchant: Merchant, didFailPurchaseWith error: Error, forProductWith productIdentifier: String) {
         if self.purchase.productIdentifier == productIdentifier {
             self.finish(with: .failure(error))
         }
     }
     
-    func merchant(_ merchant: Merchant, didCompleteRestoringPurchasesWith error: Error?) {
+    internal func merchant(_ merchant: Merchant, didCompleteRestoringPurchasesWith error: Error?) {
         
     }
 }

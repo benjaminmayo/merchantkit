@@ -27,26 +27,24 @@ public final class Merchant {
     }
     
     internal let logger = Logger()
-    
+    internal let storeInterface: StoreInterface
+    internal var latestFetchedReceipt: Receipt?
+
     private let configuration: Configuration
-    
-    private let transactionObserver: StoreKitTransactionObserver = StoreKitTransactionObserver()
-    
-    private var _registeredProducts: [String : Product] = [:]
+
+    private var registeredProducts: [String : Product] = [:]
     private var activeTasks: [MerchantTask] = []
     
     private var purchaseObservers = [MerchantPurchaseObserver]()
     private var hasSetup: Bool = false
     
     private var receiptFetchers: [ReceiptFetchPolicy : ReceiptDataFetcher] = [:]
-    private var receiptDataFetcherCustomInitializer: ReceiptDataFetcherInitializer?
     
     private var identifiersForPendingObservedPurchases: Set<String> = []
     private var identifiersForPendingObservedRestoredPurchases: Set<String> = []
     
     private let nowDate: Date = Date()
-    internal var latestFetchedReceipt: Receipt?
-    
+
     /// Create a `Merchant` as part of application launch lifecycle. Use `Merchant.Configuration.default` for an appropriate default setup, or you can supply your own customized `Merchant.Configuration`.
     /// The `delegate` enables the application to be centrally alerted to changes in state. Depending on the functionality of your app, you may not need to do any actual work in the delegate methods. Remember, you can always ask for the current purchased state of a `Product` using `Merchant.state(for:)`.
     /// The `consumableHandler` is **required** if your application uses consumable products.
@@ -54,12 +52,14 @@ public final class Merchant {
         self.configuration = configuration
         self.delegate = delegate
         self.consumableHandler = consumableHandler
+        
+        self.storeInterface = StoreKitStoreInterface()
     }
     
     /// Register products that you want to use in your application. Products must be registered before their states are consistently valid. Products should be registered as early as possible, typically just before calling `setup()`.
     public func register<Products : Sequence>(_ products: Products) where Products.Iterator.Element == Product {
         for product in products {
-            self._registeredProducts[product.identifier] = product
+            self.registeredProducts[product.identifier] = product
         }
     }
     
@@ -68,16 +68,16 @@ public final class Merchant {
         guard !self.hasSetup else { return }
         self.hasSetup = true
         
-        self.beginObservingTransactions()
+        self.storeInterface.observeTransactions(withDelegate: self)
         
         self.checkReceipt(updateProducts: .all, policy: .onlyFetch, reason: .initialization)
         
-        self.logger.log(message: "Merchant has been setup, with \(self._registeredProducts.count) registered \(self._registeredProducts.count == 1 ? "product" : "products").", category: .initialization)
+        self.logger.log(message: "Merchant has been setup, with \(self.registeredProducts.count) registered \(self.registeredProducts.count == 1 ? "product" : "products").", category: .initialization)
     }
     
     /// Returns a registered product for a given `productIdentifier`, or `nil` if not found.
     public func product(withIdentifier productIdentifier: String) -> Product? {
-        return self._registeredProducts[productIdentifier]
+        return self.registeredProducts[productIdentifier]
     }
     
     /// Returns the state for a `product`. Consumable products always report that they are `notPurchased`.
@@ -101,7 +101,7 @@ public final class Merchant {
         self.ensureSetup()
         
         return self.makeTask(initializing: {
-            let products = products.isEmpty ? Set(self._registeredProducts.values) : products
+            let products = products.isEmpty ? Set(self.registeredProducts.values) : products
             
             let task = AvailablePurchasesTask(for: products, with: self)
     
@@ -135,15 +135,14 @@ public final class Merchant {
             return task
         })
     }
-}
-
-// MARK: Testing hooks
-extension Merchant {
-    typealias ReceiptDataFetcherInitializer = (ReceiptFetchPolicy) -> ReceiptDataFetcher
     
-    /// Allows tests in the test suite to change the receipt data fetcher that is created.
-    internal func setCustomReceiptDataFetcherInitializer(_ initializer: @escaping ReceiptDataFetcherInitializer) {
-        self.receiptDataFetcherCustomInitializer = initializer
+    /// Internal initializer to enable hooks for testing. The public initializer always uses the `StoreKitStoreInterface`.
+    internal init(configuration: Configuration, delegate: MerchantDelegate, consumableHandler: MerchantConsumableProductHandler?, storeInterface: StoreInterface) {
+        self.configuration = configuration
+        self.delegate = delegate
+        self.consumableHandler = consumableHandler
+        
+        self.storeInterface = storeInterface
     }
 }
 
@@ -208,36 +207,6 @@ extension Merchant {
     }
 }
 
-// MARK: Subscription utilities
-extension Merchant {
-    private func isSubscriptionActive(forExpiryDate expiryDate: Date) -> Bool {
-        let leeway: TimeInterval = 60 // one minute of leeway, could make this a configurable setting in future
-        
-        return expiryDate.addingTimeInterval(leeway) > self.nowDate
-    }
-}
-
-// MARK: Payment queue related behaviour
-extension Merchant {
-    private func beginObservingTransactions() {
-        self.transactionObserver.delegate = self
-        
-        SKPaymentQueue.default().add(self.transactionObserver)
-    }
-    
-    private func stopObservingTransactions() {
-        SKPaymentQueue.default().remove(self.transactionObserver)
-    }
-    
-    // Warns users if `Merchant` has not been correctly configured.
-    private func ensureSetup() {
-        guard !self.hasSetup else { return }
-        
-        // Print the warning to the console. As this is a serious usage error, we do not route it through the optional framework logging.
-        print("Merchant is attempting to vend purchases, but the Merchant has not been setup. Remember to call `Merchant.setup()` during application launch.")
-    }
-}
-
 // MARK: Receipt fetch and validation
 extension Merchant {
     internal typealias CheckReceiptCompletion = (Result<Set<Product>, Error>) -> Void
@@ -252,7 +221,7 @@ extension Merchant {
             
             self.logger.log(message: "Reused receipt fetcher for \(policy)", category: .receipt)
         } else {
-            fetcher = self.makeFetcher(for: policy)
+            fetcher = self.storeInterface.makeReceiptFetcher(for: policy)
             isStarted = false
             
             self.receiptFetchers[policy] = fetcher
@@ -314,14 +283,6 @@ extension Merchant {
         }
     }
     
-    private func makeFetcher(for policy: ReceiptFetchPolicy) -> ReceiptDataFetcher {
-        if let initializer = self.receiptDataFetcherCustomInitializer {
-            return initializer(policy)
-        }
-        
-        return StoreKitReceiptDataFetcher(policy: policy)
-    }
-    
     private func validateReceipt(with data: Data, reason: ReceiptValidationRequest.Reason, completion: @escaping (Result<Receipt, Error>) -> Void) {
         let request = ReceiptValidationRequest(data: data, reason: reason)
         
@@ -375,7 +336,7 @@ extension Merchant {
         }
         
         if updateType == .all { // clean out from storage if registered products are not in the receipt
-            let registeredProductIdentifiers = Set(self._registeredProducts.map { $0.key })
+            let registeredProductIdentifiers = Set(self.registeredProducts.map { $0.key })
             let identifiersForProductsNotInReceipt = registeredProductIdentifiers.subtracting(receipt.productIdentifiers)
             
             for productIdentifier in identifiersForProductsNotInReceipt {
@@ -383,7 +344,7 @@ extension Merchant {
                 self.logger.log(message: "Removed record for \(productIdentifier): product not in receipt", category: .purchaseStorage)
 
                 if result == .didChangeRecords {
-                    updatedProducts.insert(self._registeredProducts[productIdentifier]!)
+                    updatedProducts.insert(self.registeredProducts[productIdentifier]!)
                 }
             }
         }
@@ -402,6 +363,24 @@ extension Merchant {
     /// Call on main thread only.
     private func didChangeState(for products: Set<Product>) {
         self.delegate.merchant(self, didChangeStatesFor: products)
+    }
+}
+
+// MARK: Utilities
+extension Merchant {
+    /// Check if a subscription should be considered active for a given expiry date.
+    private func isSubscriptionActive(forExpiryDate expiryDate: Date) -> Bool {
+        let leeway: TimeInterval = 60 // one minute of leeway, could make this a configurable setting in future
+        
+        return expiryDate.addingTimeInterval(leeway) > self.nowDate
+    }
+    
+    /// Warns users if `Merchant` has not been correctly configured.
+    private func ensureSetup() {
+        guard !self.hasSetup else { return }
+        
+        // Print the warning to the console. As this is a serious usage error, we do not route it through the optional framework logging.
+        print("Merchant is attempting to vend purchases, but the `Merchant` has not been setup. Remember to call `Merchant.setup()` during application launch.")
     }
 }
 

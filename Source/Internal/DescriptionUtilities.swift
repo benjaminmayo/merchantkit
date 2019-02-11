@@ -10,7 +10,7 @@ extension CustomStringConvertible {
             return "\(name): \(value)"
         }
         
-        let typeName = typeName.isEmpty ? "\(type(of: self))" : typeName
+        let typeName = typeName.nonEmpty ?? "\(type(of: self))"
         let description = "[\(typeName) \(formattedProperties.joined(separator: ", "))]"
         
         return description
