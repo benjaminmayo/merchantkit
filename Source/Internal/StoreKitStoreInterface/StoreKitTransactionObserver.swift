@@ -4,11 +4,11 @@ internal protocol StoreKitTransactionObserverDelegate : AnyObject {
     func storeKitTransactionObserverWillUpdatePurchases(_ observer: StoreKitTransactionObserver)
     func storeKitTransactionObserverDidUpdatePurchases(_ observer: StoreKitTransactionObserver)
     
-    func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFinishRestoringPurchasesWith error: Error?)
+    func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFinishRestoringPurchasesWith result: Result<Void, Error>)
     
     func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didPurchaseProductWith identifier: String, completion: @escaping () -> Void)
-    func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFailToPurchaseWith error: Error, forProductWith identifier: String)
-    func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didRestoreProductWith identifier: String)
+    func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFailToPurchaseProductWith identifier: String, error: Error)
+    func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didRestorePurchaseForProductWith identifier: String)
 
     func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, purchaseFor source: Purchase.Source) -> Purchase?
     func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, responseForStoreIntentToCommit purchase: Purchase) -> StoreIntentResponse
@@ -59,11 +59,11 @@ internal final class StoreKitTransactionObserver : NSObject, SKPaymentTransactio
     }
     
     func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
-        self.delegate?.storeKitTransactionObserver(self, didFinishRestoringPurchasesWith: nil)
+        self.delegate?.storeKitTransactionObserver(self, didFinishRestoringPurchasesWith: .success)
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
-        self.delegate?.storeKitTransactionObserver(self, didFinishRestoringPurchasesWith: error)
+        self.delegate?.storeKitTransactionObserver(self, didFinishRestoringPurchasesWith: .failure(error))
     }
     
     private func completePurchase(for transaction: SKPaymentTransaction) {
@@ -73,13 +73,13 @@ internal final class StoreKitTransactionObserver : NSObject, SKPaymentTransactio
     }
     
     private func completeRestorePurchase(for transaction: SKPaymentTransaction, original: SKPaymentTransaction) {
-        self.delegate?.storeKitTransactionObserver(self, didRestoreProductWith: original.payment.productIdentifier)
+        self.delegate?.storeKitTransactionObserver(self, didRestorePurchaseForProductWith: original.payment.productIdentifier)
         
         SKPaymentQueue.default().finishTransaction(transaction)
     }
     
     private func failPurchase(for transaction: SKPaymentTransaction) {
-        self.delegate?.storeKitTransactionObserver(self, didFailToPurchaseWith: transaction.error!, forProductWith: transaction.payment.productIdentifier)
+        self.delegate?.storeKitTransactionObserver(self, didFailToPurchaseProductWith: transaction.payment.productIdentifier, error: transaction.error!)
         
         SKPaymentQueue.default().finishTransaction(transaction)
     }

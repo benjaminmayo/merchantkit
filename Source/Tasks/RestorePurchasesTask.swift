@@ -22,7 +22,7 @@ public final class RestorePurchasesTask : MerchantTask {
         self.isStarted = true
         self.merchant.taskDidStart(self)
 
-        self.merchant.addPurchaseObserver(self)
+        self.merchant.addProductPurchaseObserver(self)
         self.merchant.storeInterface.restorePurchases(using: self.merchant.storeParameters)
         
         self.merchant.logger.log(message: "Started restore purchases", category: .tasks)
@@ -33,7 +33,7 @@ extension RestorePurchasesTask {
     private func finish(with result: Result<RestoredProducts, Error>) {
         self.onCompletion?(result)
         
-        self.merchant.removePurchaseObserver(self)
+        self.merchant.removeProductPurchaseObserver(self)
         
         DispatchQueue.main.async {
             self.merchant.taskDidResign(self)
@@ -43,22 +43,23 @@ extension RestorePurchasesTask {
     }
 }
 
-extension RestorePurchasesTask : MerchantPurchaseObserver {
-    internal func merchant(_ merchant: Merchant, didCompletePurchaseForProductWith productIdentifier: String) {
-        self.restoredProductIdentifiers.insert(productIdentifier)
-    }
-    
-    internal func merchant(_ merchant: Merchant, didFailPurchaseWith error: Error, forProductWith productIdentifier: String) {
-        
-    }
-    
-    internal func merchant(_ merchant: Merchant, didCompleteRestoringPurchasesWith error: Error?) {
-        if let error = error {
-            self.finish(with: .failure(error))
-        } else {
-            let restoredProducts = Set(self.restoredProductIdentifiers.compactMap { self.merchant.product(withIdentifier: $0) })
-            
-            self.finish(with: .success(restoredProducts))
+extension RestorePurchasesTask : MerchantProductPurchaseObserver {
+    func merchant(_ merchant: Merchant, didFinishPurchaseWith result: Result<Void, Error>, forProductWith productIdentifier: String) {
+        switch result {
+            case .success(_):
+                self.restoredProductIdentifiers.insert(productIdentifier)
+            case .failure(_):
+                break
         }
+    }
+    
+    func merchant(_ merchant: Merchant, didCompleteRestoringProductsWith result: Result<Void, Error>) {
+        let result: Result<RestoredProducts, Error> = result.map { _ in
+            let restoredProducts = Set(self.restoredProductIdentifiers.compactMap { self.merchant.product(withIdentifier: $0) })
+
+            return restoredProducts
+        }
+        
+        self.finish(with: result)
     }
 }

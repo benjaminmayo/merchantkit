@@ -35,7 +35,7 @@ public final class Merchant {
     private var registeredProducts: [String : Product] = [:]
     private var activeTasks: [MerchantTask] = []
     
-    private var purchaseObservers = [MerchantPurchaseObserver]()
+    private var purchaseObservers = [MerchantProductPurchaseObserver]()
     private var hasSetup: Bool = false
     
     private var receiptFetchers: [ReceiptFetchPolicy : ReceiptDataFetcher] = [:]
@@ -148,13 +148,13 @@ public final class Merchant {
 
 // MARK: Purchase observers
 extension Merchant {
-    internal func addPurchaseObserver(_ observer: MerchantPurchaseObserver) {
+    internal func addProductPurchaseObserver(_ observer: MerchantProductPurchaseObserver) {
         if !self.purchaseObservers.contains(where: { $0 === observer }) {
             self.purchaseObservers.append(observer)
         }
     }
     
-    internal func removePurchaseObserver(_ observer: MerchantPurchaseObserver) {
+    internal func removeProductPurchaseObserver(_ observer: MerchantProductPurchaseObserver) {
         if let index = self.purchaseObservers.firstIndex(where: { $0 === observer }) {
             self.purchaseObservers.remove(at: index)
         }
@@ -421,11 +421,11 @@ extension Merchant : StoreKitTransactionObserverDelegate {
         }
         
         for observer in self.purchaseObservers {
-            observer.merchant(self, didCompletePurchaseForProductWith: identifier)
+            observer.merchant(self, didFinishPurchaseWith: .success, forProductWith: identifier)
         }
     }
     
-    internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didRestoreProductWith identifier: String) {
+    func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didRestorePurchaseForProductWith identifier: String) {
         if let product = self.product(withIdentifier: identifier) {
             if case .subscription(_) = product.kind {
                 self.identifiersForPendingObservedRestoredPurchases.insert(product.identifier)
@@ -439,15 +439,15 @@ extension Merchant : StoreKitTransactionObserverDelegate {
                 }
                 
                 for observer in self.purchaseObservers {
-                    observer.merchant(self, didCompletePurchaseForProductWith: product.identifier)
+                    observer.merchant(self, didFinishPurchaseWith: .success, forProductWith: product.identifier)
                 }
             }
         }
     }
     
-    internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFailToPurchaseWith error: Error, forProductWith identifier: String) {
+    func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFailToPurchaseProductWith identifier: String, error: Error) {
         for observer in self.purchaseObservers {
-            observer.merchant(self, didFailPurchaseWith: error, forProductWith: identifier)
+            observer.merchant(self, didFinishPurchaseWith: .failure(error), forProductWith: identifier)
         }
     }
     
@@ -461,23 +461,23 @@ extension Merchant : StoreKitTransactionObserverDelegate {
         self.identifiersForPendingObservedPurchases.removeAll()
     }
     
-    internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFinishRestoringPurchasesWith error: Error?) {
+    internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFinishRestoringPurchasesWith result: Result<Void, Error>) {
         if self.identifiersForPendingObservedRestoredPurchases.isEmpty {
             for observer in self.purchaseObservers {
-                observer.merchant(self, didCompleteRestoringPurchasesWith: error)
+                observer.merchant(self, didCompleteRestoringProductsWith: result)
             }
         } else {
-            self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedRestoredPurchases), policy: .onlyFetch, reason: .completePurchase, completion: { result in
-                let restoredProducts = (try? result.get().filter { self.state(for: $0).isPurchased }) ?? []
+            self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedRestoredPurchases), policy: .onlyFetch, reason: .completePurchase, completion: { updatedProductsResult in
+                let restoredProducts = (try? updatedProductsResult.get().filter { self.state(for: $0).isPurchased }) ?? []
                 
                 for observer in self.purchaseObservers {
                     for product in restoredProducts {
-                        observer.merchant(self, didCompletePurchaseForProductWith: product.identifier)
+                        observer.merchant(self, didFinishPurchaseWith: .success, forProductWith: product.identifier)
                     }
                 }
                 
                 for observer in self.purchaseObservers {
-                    observer.merchant(self, didCompleteRestoringPurchasesWith: error)
+                    observer.merchant(self, didCompleteRestoringProductsWith: result)
                 }
             })
         }

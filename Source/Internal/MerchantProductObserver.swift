@@ -1,6 +1,5 @@
-internal protocol MerchantPurchaseObserver : AnyObject {
-    func merchant(_ merchant: Merchant, didCompletePurchaseForProductWith productIdentifier: String)
-    func merchant(_ merchant: Merchant, didFailPurchaseWith error: Error, forProductWith productIdentifier: String)
+internal protocol MerchantProductPurchaseObserver : AnyObject {
+    func merchant(_ merchant: Merchant, didFinishPurchaseWith result: Result<Void, Error>, forProductWith productIdentifier: String)
     
-    func merchant(_ merchant: Merchant, didCompleteRestoringPurchasesWith error: Error?)
+    func merchant(_ merchant: Merchant, didCompleteRestoringProductsWith result: Result<Void, Error>)
 }

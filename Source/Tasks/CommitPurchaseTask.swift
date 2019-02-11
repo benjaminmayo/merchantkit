@@ -20,7 +20,7 @@ public final class CommitPurchaseTask : MerchantTask {
         self.isStarted = true
         self.merchant.taskDidStart(self)
         
-        self.merchant.addPurchaseObserver(self)
+        self.merchant.addProductPurchaseObserver(self)
         
         self.merchant.storeInterface.commitPurchase(self.purchase, using: self.merchant.storeParameters)
         
@@ -29,7 +29,7 @@ public final class CommitPurchaseTask : MerchantTask {
     
     /// Cancel the task. Cancellation does not fire the `onCompletion` handler.
     public func cancel() {
-        self.merchant.removePurchaseObserver(self)
+        self.merchant.removeProductPurchaseObserver(self)
         
         self.merchant.taskDidResign(self)
     }
@@ -39,7 +39,7 @@ extension CommitPurchaseTask {
     private func finish(with result: Result<Void, Error>) {
         self.onCompletion(result)
         
-        self.merchant.removePurchaseObserver(self)
+        self.merchant.removeProductPurchaseObserver(self)
         
         DispatchQueue.main.async {
             self.merchant.taskDidResign(self)
@@ -49,20 +49,14 @@ extension CommitPurchaseTask {
     }
 }
 
-extension CommitPurchaseTask : MerchantPurchaseObserver {
-    internal func merchant(_ merchant: Merchant, didCompletePurchaseForProductWith productIdentifier: String) {
-        if self.purchase.productIdentifier == productIdentifier {
-            self.finish(with: .success)
-        }
+extension CommitPurchaseTask : MerchantProductPurchaseObserver {
+    func merchant(_ merchant: Merchant, didFinishPurchaseWith result: Result<Void, Error>, forProductWith productIdentifier: String) {
+        guard self.purchase.productIdentifier == productIdentifier else { return }
+        
+        self.finish(with: result)
     }
     
-    internal func merchant(_ merchant: Merchant, didFailPurchaseWith error: Error, forProductWith productIdentifier: String) {
-        if self.purchase.productIdentifier == productIdentifier {
-            self.finish(with: .failure(error))
-        }
-    }
-    
-    internal func merchant(_ merchant: Merchant, didCompleteRestoringPurchasesWith error: Error?) {
+    func merchant(_ merchant: Merchant, didCompleteRestoringProductsWith result: Result<Void, Error>) {
         
     }
 }
