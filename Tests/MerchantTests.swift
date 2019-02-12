@@ -94,13 +94,17 @@ class MerchantTests : XCTestCase {
             ProductTestExpectedOutcome(for: product, finalState: .isPurchased(PurchasedProductInfo(expiryDate: nil)))
         }
         
+<<<<<<< HEAD
         self.runTest(with: expectedOutcomes, withReceiptDataFetchResult: .succeeded(receiptData), validationRequestHandler: { (request, completion) in
             let validator = ServerReceiptValidator(request: request, sharedSecret: nil)
             validator.onCompletion = { result in
+=======
+        self.runTest(with: expectedOutcomes, withReceiptDataFetchResult: .success(receiptData), validationRequestHandler: { (request, completion) in
+            let validator = ServerReceiptValidator(sharedSecret: nil)
+            validator.validate(request, completion: { result in
+>>>>>>> c51c1d3... Conformed `ServerReceiptValidator` to `ReceiptValidator` protocol. Updated associated tests.
                 completion(result)
-            }
-            
-            validator.start()
+            })
         })
     }
     
@@ -114,13 +118,17 @@ class MerchantTests : XCTestCase {
         
         let expectedOutcome = ProductTestExpectedOutcome(for: product, finalState: .notPurchased, shouldChangeState: false)
         
+<<<<<<< HEAD
         self.runTest(with: [expectedOutcome], withReceiptDataFetchResult: .succeeded(receiptData), validationRequestHandler: { (request, completion) in
             let validator = ServerReceiptValidator(request: request, sharedSecret: nil)
             validator.onCompletion = { result in
+=======
+        self.runTest(with: [expectedOutcome], withReceiptDataFetchResult: .success(receiptData), validationRequestHandler: { (request, completion) in
+            let validator = ServerReceiptValidator(sharedSecret: nil)
+            validator.validate(request, completion: { result in
+>>>>>>> c51c1d3... Conformed `ServerReceiptValidator` to `ReceiptValidator` protocol. Updated associated tests.
                 completion(result)
-            }
-            
-            validator.start()
+            })
         })
     }
 }
