@@ -80,6 +80,7 @@
 		4370FCFB220C4451003BA681 /* MerchantConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4370FCFA220C4451003BA681 /* MerchantConfigurationTests.swift */; };
 		4370FD03220C48CF003BA681 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4370FD02220C48CF003BA681 /* AppDelegate.swift */; };
 		437734592212E7770010EF79 /* StoreInterfaceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437734582212E7770010EF79 /* StoreInterfaceDelegate.swift */; };
+		4377345C2212F9060010EF79 /* MockStoreInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4377345B2212F9060010EF79 /* MockStoreInterface.swift */; };
 		438BDB3120FA3EE6003AAADA /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438BDB3020FA3EE6003AAADA /* Logger.swift */; };
 		438C5D2F2080BD5400D303C8 /* SubscriptionPeriodFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438C5D2E2080BD5400D303C8 /* SubscriptionPeriodFormatter.swift */; };
 		438C9DA81F548E7A00C5F0E0 /* ReceiptValidationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438C9DA71F548E7A00C5F0E0 /* ReceiptValidationRequest.swift */; };
@@ -215,6 +216,7 @@
 		4370FD0E220C48D3003BA681 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4370FD12220C4E8B003BA681 /* TestsHost.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestsHost.entitlements; sourceTree = "<group>"; };
 		437734582212E7770010EF79 /* StoreInterfaceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreInterfaceDelegate.swift; sourceTree = "<group>"; };
+		4377345B2212F9060010EF79 /* MockStoreInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStoreInterface.swift; sourceTree = "<group>"; };
 		438BDB3020FA3EE6003AAADA /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		438C5D2E2080BD5400D303C8 /* SubscriptionPeriodFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionPeriodFormatter.swift; sourceTree = "<group>"; };
 		438C9DA71F548E7A00C5F0E0 /* ReceiptValidationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptValidationRequest.swift; sourceTree = "<group>"; };
@@ -349,6 +351,7 @@
 			isa = PBXGroup;
 			children = (
 				432BFFD2208E0CC400257585 /* MerchantTests.swift */,
+				4377345B2212F9060010EF79 /* MockStoreInterface.swift */,
 				4370FCFA220C4451003BA681 /* MerchantConfigurationTests.swift */,
 				4314B27A208377B300ECC35C /* PurchasedStateTests.swift */,
 				4337A8961EB1F1CA00EAF633 /* ServerReceiptResponseParserTests.swift */,
@@ -736,6 +739,7 @@
 				431C84451EC1D2C50098516E /* PurchaseSet.swift in Sources */,
 				43A74AB5220302D300F22264 /* MerchantConfiguration.swift in Sources */,
 				43DE5717220AF103005442FE /* LocalReceiptDataDecoder.swift in Sources */,
+				4377345C2212F9060010EF79 /* MockStoreInterface.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -123,6 +123,10 @@ class MerchantTests : XCTestCase {
             validator.start()
         })
     }
+    
+    func testFetchPurchaseAndPurchaseProduct() {
+        
+    }
 }
 
 extension MerchantTests {
@@ -226,59 +230,6 @@ private class MockMerchantDelegate : MerchantDelegate {
     }
     
     func merchantDidChangeLoadingState(_ merchant: Merchant) {
-        
-    }
-}
-
-private class MockStoreInterface : StoreInterface {
-    var receiptFetchResult: Result<Data, Error>!
-    
-    func makeReceiptFetcher(for policy: ReceiptFetchPolicy) -> ReceiptDataFetcher {
-        let fetcher = MockReceiptDataFetcher(policy: policy)
-        fetcher.result = self.receiptFetchResult
-        
-        return fetcher
-    }
-    
-    func setup(withDelegate delegate: StoreInterfaceDelegate) {
-        
-    }
-    
-    func makeAvailablePurchasesFetcher(for products: Set<Product>) -> AvailablePurchasesFetcher {
-        fatalError()
-    }
-    
-    func commitPurchase(_ purchase: Purchase, using storeParameters: StoreParameters) {
-        fatalError()
-    }
-    
-    func restorePurchases(using storeParameters: StoreParameters) {
-        fatalError()
-    }
-}
-
-private class MockReceiptDataFetcher : ReceiptDataFetcher {
-    private var completionBlocks = [Completion]()
-    
-    typealias Completion = (Result<Data, Error>) -> Void
-    
-    var result: Result<Data, Error>!
-    
-    required init(policy: ReceiptFetchPolicy) {
-        
-    }
-    
-    func enqueueCompletion(_ completion: @escaping Completion) {
-        self.completionBlocks.append(completion)
-    }
-    
-    func start() {
-        for block in self.completionBlocks {
-            block(self.result)
-        }
-    }
-    
-    func cancel() {
         
     }
 }
