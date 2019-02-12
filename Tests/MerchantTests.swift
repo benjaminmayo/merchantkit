@@ -240,11 +240,7 @@ private class MockStoreInterface : StoreInterface {
         return fetcher
     }
     
-    func observeTransactions(withDelegate delegate: StoreKitTransactionObserverDelegate) {
-        
-    }
-    
-    func stopObservingTransactions() {
+    func setup(withDelegate delegate: StoreInterfaceDelegate) {
         
     }
     

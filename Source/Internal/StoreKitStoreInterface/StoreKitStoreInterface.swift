@@ -1,18 +1,25 @@
+import StoreKit
+
 internal class StoreKitStoreInterface : StoreInterface {
-    private let transactionObserver = StoreKitTransactionObserver()
+    private var transactionObserver: StoreKitTransactionObserver!
+    fileprivate var delegate: StoreInterfaceDelegate? {
+        didSet {
+            self.transactionObserver.delegate = self.delegate
+        }
+    }
     
+    internal init() {
+        self.transactionObserver = StoreKitTransactionObserver(storeInterface: self)
+    }
+    
+    internal func setup(withDelegate delegate: StoreInterfaceDelegate) {
+        self.delegate = delegate
+        
+        self.transactionObserver.start()
+    }
+
     internal func makeReceiptFetcher(for policy: ReceiptFetchPolicy) -> ReceiptDataFetcher {
         return StoreKitReceiptDataFetcher(policy: policy)
-    }
-    
-    internal func observeTransactions(withDelegate delegate: StoreKitTransactionObserverDelegate) {
-        self.transactionObserver.delegate = delegate
-        
-        SKPaymentQueue.default().add(self.transactionObserver)
-    }
-    
-    internal func stopObservingTransactions() {
-        SKPaymentQueue.default().remove(self.transactionObserver)
     }
     
     internal func makeAvailablePurchasesFetcher(for products: Set<Product>) -> AvailablePurchasesFetcher {
@@ -33,6 +40,8 @@ internal class StoreKitStoreInterface : StoreInterface {
     }
     
     internal func restorePurchases(using storeParameters: StoreParameters) {
+        self.delegate?.storeInterfaceWillStartRestoringPurchases(self)
+        
         SKPaymentQueue.default().restoreCompletedTransactions(withApplicationUsername: storeParameters.applicationUsername.nonEmpty)
     }
 }
