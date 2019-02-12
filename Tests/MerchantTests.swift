@@ -95,12 +95,10 @@ class MerchantTests : XCTestCase {
         }
         
         self.runTest(with: expectedOutcomes, withReceiptDataFetchResult: .success(receiptData), validationRequestHandler: { (request, completion) in
-            let validator = ServerReceiptValidator(request: request, sharedSecret: nil)
-            validator.onCompletion = { result in
+            let validator = ServerReceiptValidator(sharedSecret: nil)
+            validator.validate(request, completion: { result in
                 completion(result)
-            }
-            
-            validator.start()
+            })
         })
     }
     
@@ -115,12 +113,10 @@ class MerchantTests : XCTestCase {
         let expectedOutcome = ProductTestExpectedOutcome(for: product, finalState: .notPurchased, shouldChangeState: false)
         
         self.runTest(with: [expectedOutcome], withReceiptDataFetchResult: .success(receiptData), validationRequestHandler: { (request, completion) in
-            let validator = ServerReceiptValidator(request: request, sharedSecret: nil)
-            validator.onCompletion = { result in
+            let validator = ServerReceiptValidator(sharedSecret: nil)
+            validator.validate(request, completion: { result in
                 completion(result)
-            }
-            
-            validator.start()
+            })
         })
     }
     
