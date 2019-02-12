@@ -153,7 +153,6 @@ class MerchantTests : XCTestCase {
                         case .success(_):
                             XCTAssertTrue(merchant.state(for: product).isPurchased, "The product \(product) should be purchased after a successful commit.")
                         
-                        
                         case .failure(_):
                             XCTFail("Failed to commit purchase.")
                     }
@@ -247,57 +246,5 @@ extension MerchantTests {
                 XCTAssertEqual(expectation.finalState, foundState)
             }
         })
-    }
-}
-
-private class MockReceiptValidator : ReceiptValidator {
-    var validateRequest: MerchantTests.ValidationRequestHandler!
-    
-    init() {
-        
-    }
-    
-    func validate(_ request: ReceiptValidationRequest, completion: @escaping (Result<Receipt, Error>) -> Void) {
-        self.validateRequest(request, completion)
-    }
-}
-
-private class MockMerchantDelegate : MerchantDelegate {
-    var didChangeStates: ((_ products: Set<Product>) -> Void)?
-    
-    init() {
-        
-    }
-    
-    func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Product>) {
-        self.didChangeStates?(products)
-    }
-    
-    func merchantDidChangeLoadingState(_ merchant: Merchant) {
-        
-    }
-}
-
-private class MockSKProduct : SKProduct {
-    private let _productIdentifier: String
-    private let _price: NSDecimalNumber
-    private let _priceLocale: Locale
-    
-    init(productIdentifier: String, price: NSDecimalNumber, priceLocale: Locale) {
-        self._productIdentifier = productIdentifier
-        self._price = price
-        self._priceLocale = priceLocale
-    }
-    
-    override var productIdentifier: String {
-        return self._productIdentifier
-    }
-    
-    override var price: NSDecimalNumber {
-        return self._price
-    }
-    
-    override var priceLocale: Locale {
-        return self._priceLocale
     }
 }

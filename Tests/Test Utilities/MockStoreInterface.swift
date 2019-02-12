@@ -1,7 +1,10 @@
+import Foundation
+@testable import MerchantKit
+
 internal class MockStoreInterface : StoreInterface {
     internal var receiptFetchResult: Result<Data, Error>!
     internal var availablePurchasesResult: Result<PurchaseSet, Error>!
-    internal var commitPurchaseResult: (productIdentifier: String, result: Result<Void, Error>)?
+    internal var commitPurchaseResult: (productIdentifier: String, result: Result<Void, Error>)!
     
     private var delegate: StoreInterfaceDelegate?
     
