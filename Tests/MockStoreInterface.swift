@@ -1,6 +1,9 @@
 internal class MockStoreInterface : StoreInterface {
     internal var receiptFetchResult: Result<Data, Error>!
     internal var availablePurchasesResult: Result<PurchaseSet, Error>!
+    internal var commitPurchaseResult: (productIdentifier: String, result: Result<Void, Error>)?
+    
+    private var delegate: StoreInterfaceDelegate?
     
     internal init() {
         
@@ -14,7 +17,7 @@ internal class MockStoreInterface : StoreInterface {
     }
     
     internal func setup(withDelegate delegate: StoreInterfaceDelegate) {
-        
+        self.delegate = delegate
     }
     
     internal func makeAvailablePurchasesFetcher(for products: Set<Product>) -> AvailablePurchasesFetcher {
@@ -25,7 +28,20 @@ internal class MockStoreInterface : StoreInterface {
     }
     
     internal func commitPurchase(_ purchase: Purchase, using storeParameters: StoreParameters) {
-        fatalError()
+        let (productIdentifier, result) = self.commitPurchaseResult!
+        
+        self.delegate?.storeInterfaceWillUpdatePurchases(self)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+            switch result {
+                case .success(_):
+                    self.delegate?.storeInterface(self, didPurchaseProductWith: productIdentifier, completion: {})
+                case .failure(let error):
+                    self.delegate?.storeInterface(self, didFailToPurchaseProductWith: productIdentifier, error: error)
+            }
+            
+            self.delegate?.storeInterfaceDidUpdatePurchases(self)
+        })
     }
     
     internal func restorePurchases(using storeParameters: StoreParameters) {

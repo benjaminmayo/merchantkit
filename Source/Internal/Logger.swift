@@ -31,6 +31,7 @@ internal class Logger {
         case tasks
         case receipt
         case purchaseStorage
+        case storeInterface
         
         fileprivate var stringValue: String {
             switch self {
@@ -42,6 +43,8 @@ internal class Logger {
                     return "Receipt"
                 case .purchaseStorage:
                     return "Purchase Storage"
+                case .storeInterface:
+                    return "Store Interface"
             }
         }
     }

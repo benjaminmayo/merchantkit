@@ -120,8 +120,56 @@ class MerchantTests : XCTestCase {
         })
     }
     
-    func testFetchPurchaseAndPurchaseProduct() {
+    func testSuccessfulFetchPurchaseAndPurchaseProduct() {
+        let completionExpectation = self.expectation(description: "Completed fetch purchase and purchase product successfully.")
         
+        let skProduct = MockSKProduct(productIdentifier: "testProduct", price: NSDecimalNumber(string: "0.99"), priceLocale: Locale(identifier: "en_US_POSIX"))
+        let product = Product(identifier: "testProduct", kind: .nonConsumable)
+        
+        let mockDelegate = MockMerchantDelegate()
+        let mockStoreInterface = MockStoreInterface()
+        mockStoreInterface.availablePurchasesResult = .success(PurchaseSet(from: [Purchase(from: .availableProduct(skProduct), for: product)]))
+        mockStoreInterface.commitPurchaseResult = ("testProduct", .success)
+        mockStoreInterface.receiptFetchResult = .success(Data())
+        
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.register([product])
+        merchant.setup()
+        
+        let task = merchant.availablePurchasesTask(for: [product])
+        task.onCompletion = { result in
+            do {
+                let purchases = try result.get()
+                
+                guard let purchase = purchases.purchase(for: product) else {
+                    XCTFail("`Purchase` not found for \(product)")
+                    
+                    return
+                }
+                
+                let task = merchant.commitPurchaseTask(for: purchase)
+                task.onCompletion = { result in
+                    switch result {
+                        case .success(_):
+                            XCTAssertTrue(merchant.state(for: product).isPurchased, "The product \(product) should be purchased after a successful commit.")
+                        
+                        
+                        case .failure(_):
+                            XCTFail("Failed to commit purchase.")
+                    }
+                    
+                    completionExpectation.fulfill()
+                }
+                
+                task.start()
+            } catch {
+                
+            }
+        }
+        
+        task.start()
+        
+        self.wait(for: [completionExpectation], timeout: 10)
     }
 }
 
@@ -227,5 +275,29 @@ private class MockMerchantDelegate : MerchantDelegate {
     
     func merchantDidChangeLoadingState(_ merchant: Merchant) {
         
+    }
+}
+
+private class MockSKProduct : SKProduct {
+    private let _productIdentifier: String
+    private let _price: NSDecimalNumber
+    private let _priceLocale: Locale
+    
+    init(productIdentifier: String, price: NSDecimalNumber, priceLocale: Locale) {
+        self._productIdentifier = productIdentifier
+        self._price = price
+        self._priceLocale = priceLocale
+    }
+    
+    override var productIdentifier: String {
+        return self._productIdentifier
+    }
+    
+    override var price: NSDecimalNumber {
+        return self._price
+    }
+    
+    override var priceLocale: Locale {
+        return self._priceLocale
     }
 }

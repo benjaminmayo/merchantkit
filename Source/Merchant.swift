@@ -432,6 +432,8 @@ extension Merchant : StoreInterfaceDelegate {
             for observer in self.purchaseObservers {
                 observer.merchant(self, didFinishPurchaseWith: .success, forProductWith: product.identifier)
             }
+        } else {
+            self.logger.log(message: "Purchase was not handled as the productIdentifier (\"\(productIdentifier)\") was unknown to the `Merchant`. If you recognize the product identifier, ensure the corresponding `Product` has been registered before attempting to commit purchases.", category: .storeInterface)
         }
     }
     
@@ -452,12 +454,18 @@ extension Merchant : StoreInterfaceDelegate {
                     observer.merchant(self, didFinishPurchaseWith: .success, forProductWith: product.identifier)
                 }
             }
+        } else {
+            self.logger.log(message: "Restored purchase was not handled as the productIdentifier (\"\(productIdentifier)\") was unknown to the `Merchant`. If you recognize the product identifier, ensure the corresponding `Product` has been registered before attempting to restore purchases.", category: .storeInterface)
         }
     }
     
     internal func storeInterface(_ storeInterface: StoreInterface, didFailToPurchaseProductWith productIdentifier: String, error: Error) {
-        for observer in self.purchaseObservers {
-            observer.merchant(self, didFinishPurchaseWith: .failure(error), forProductWith: productIdentifier)
+        if let product = self.product(withIdentifier: productIdentifier) {
+            for observer in self.purchaseObservers {
+                observer.merchant(self, didFinishPurchaseWith: .failure(error), forProductWith: product.identifier)
+            }
+        } else {
+            self.logger.log(message: "Purchase failure \"\(error.localizedDescription)\" was not handled as the productIdentifier (\"\(productIdentifier)\") was unknown to the `Merchant`. If you recognize the product identifier, ensure the corresponding `Product` has been registered before attempting to commit purchases.", category: .storeInterface)
         }
     }
     
