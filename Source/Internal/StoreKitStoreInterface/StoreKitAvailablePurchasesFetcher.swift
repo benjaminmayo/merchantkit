@@ -34,6 +34,7 @@ internal class StoreKitAvailablePurchasesFetcher : NSObject, AvailablePurchasesF
     
     func cancel() {
         self.request?.cancel()
+        self.completionHandlers.removeAll()
     }
 }
 
