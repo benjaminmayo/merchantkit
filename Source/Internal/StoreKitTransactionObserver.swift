@@ -32,7 +32,8 @@ internal final class StoreKitTransactionObserver : NSObject, SKPaymentTransactio
                 case .purchasing:
                     break
                 case .restored:
-                    self.completeRestorePurchase(for: transaction, original: transaction.original ?? transaction)
+                    // In some cases, `transaction.original` can be nil. More investigation is required to determine if there is semantic value to this, or if it is a bug. For now, we use details from the main transaction only.
+                    self.completeRestorePurchase(for: transaction, original: transaction.original)
                 case .failed:
                     self.failPurchase(for: transaction)
                 case .deferred:
@@ -70,8 +71,8 @@ internal final class StoreKitTransactionObserver : NSObject, SKPaymentTransactio
         })
     }
     
-    private func completeRestorePurchase(for transaction: SKPaymentTransaction, original: SKPaymentTransaction) {
-        self.delegate?.storeKitTransactionObserver(self, didRestoreProductWith: original.payment.productIdentifier)
+    private func completeRestorePurchase(for transaction: SKPaymentTransaction, original: SKPaymentTransaction?) {
+        self.delegate?.storeKitTransactionObserver(self, didRestoreProductWith: transaction.payment.productIdentifier)
         
         SKPaymentQueue.default().finishTransaction(transaction)
     }
