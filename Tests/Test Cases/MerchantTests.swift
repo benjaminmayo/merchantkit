@@ -129,8 +129,11 @@ class MerchantTests : XCTestCase {
         let mockDelegate = MockMerchantDelegate()
         let mockStoreInterface = MockStoreInterface()
         mockStoreInterface.availablePurchasesResult = .success(PurchaseSet(from: [Purchase(from: .availableProduct(skProduct), for: product)]))
-        mockStoreInterface.commitPurchaseResult = ("testProduct", .success)
         mockStoreInterface.receiptFetchResult = .success(Data())
+
+        mockStoreInterface.didCommitPurchase = { purchase in
+            mockStoreInterface.dispatchCommitPurchaseEvent(forProductWith: purchase.productIdentifier, result: .success)
+        }
         
         let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
         merchant.register([product])

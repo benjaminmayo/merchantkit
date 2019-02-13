@@ -24,8 +24,8 @@ extension StoreKitTransactionObserver {
         })
     }
     
-    fileprivate func completeRestorePurchase(for transaction: SKPaymentTransaction, original: SKPaymentTransaction) {
-        self.delegate?.storeInterface(self.storeInterface, didRestorePurchaseForProductWith: original.payment.productIdentifier)
+    fileprivate func completeRestorePurchase(for transaction: SKPaymentTransaction, original: SKPaymentTransaction?) {
+        self.delegate?.storeInterface(self.storeInterface, didRestorePurchaseForProductWith: transaction.payment.productIdentifier)
         
         SKPaymentQueue.default().finishTransaction(transaction)
     }
@@ -48,7 +48,7 @@ extension StoreKitTransactionObserver : SKPaymentTransactionObserver {
                 case .purchasing:
                     break
                 case .restored:
-                    self.completeRestorePurchase(for: transaction, original: transaction.original!)
+                    self.completeRestorePurchase(for: transaction, original: transaction.original)
                 case .failed:
                     self.failPurchase(for: transaction)
                 case .deferred:

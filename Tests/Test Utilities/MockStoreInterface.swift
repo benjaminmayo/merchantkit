@@ -1,10 +1,10 @@
 import Foundation
 @testable import MerchantKit
 
-internal class MockStoreInterface : StoreInterface {
+internal class MockStoreInterface {
     internal var receiptFetchResult: Result<Data, Error>!
     internal var availablePurchasesResult: Result<PurchaseSet, Error>!
-    internal var commitPurchaseResult: (productIdentifier: String, result: Result<Void, Error>)!
+    internal var didCommitPurchase: ((Purchase) -> Void)?
     
     private var delegate: StoreInterfaceDelegate?
     
@@ -12,6 +12,23 @@ internal class MockStoreInterface : StoreInterface {
         
     }
     
+    func dispatchCommitPurchaseEvent(forProductWith productIdentifier: String, result: Result<Void, Error>, afterDelay delay: TimeInterval = 0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
+            self.delegate?.storeInterfaceWillUpdatePurchases(self)
+            
+            switch result {
+                case .success(_):
+                    self.delegate?.storeInterface(self, didPurchaseProductWith: productIdentifier, completion: {})
+                case .failure(let error):
+                    self.delegate?.storeInterface(self, didFailToPurchaseProductWith: productIdentifier, error: error)
+            }
+            
+            self.delegate?.storeInterfaceDidUpdatePurchases(self)
+        })
+    }
+}
+
+extension MockStoreInterface : StoreInterface {
     internal func makeReceiptFetcher(for policy: ReceiptFetchPolicy) -> ReceiptDataFetcher {
         let fetcher = MockReceiptDataFetcher(policy: policy)
         fetcher.result = self.receiptFetchResult
@@ -31,20 +48,7 @@ internal class MockStoreInterface : StoreInterface {
     }
     
     internal func commitPurchase(_ purchase: Purchase, using storeParameters: StoreParameters) {
-        let (productIdentifier, result) = self.commitPurchaseResult!
-        
-        self.delegate?.storeInterfaceWillUpdatePurchases(self)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-            switch result {
-                case .success(_):
-                    self.delegate?.storeInterface(self, didPurchaseProductWith: productIdentifier, completion: {})
-                case .failure(let error):
-                    self.delegate?.storeInterface(self, didFailToPurchaseProductWith: productIdentifier, error: error)
-            }
-            
-            self.delegate?.storeInterfaceDidUpdatePurchases(self)
-        })
+        self.didCommitPurchase?(purchase)
     }
     
     internal func restorePurchases(using storeParameters: StoreParameters) {
