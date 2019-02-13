@@ -40,43 +40,54 @@ class MerchantTaskProcedureTests : XCTestCase {
     }
     
     func testRestorePurchases() {
-        let products = self.testProductsAndPurchases().map { $0.0 }
-        let completionExpectation = self.expectation(description: "Completed restoring purchases.")
+        let allProducts = self.testProductsAndPurchases().map { $0.0 }
+        let productsWithoutSubscriptions = allProducts.filter { $0.kind == .nonConsumable || $0.kind == .consumable }
+        
+        for products in [allProducts, productsWithoutSubscriptions] {
+            let completionExpectation = self.expectation(description: "Completed restoring purchases.")
 
-        let mockDelegate = MockMerchantDelegate()
-        let mockStoreInterface = MockStoreInterface()
-        mockStoreInterface.receiptFetchResult = .success(Data())
-        mockStoreInterface.restoredProductsResult = Result<Set<String>, Error>.success(Set(products.map { $0.identifier }))
-        
-        let validator = MockReceiptValidator()
-        validator.validateRequest = { request, completion in
-            let entries = products.map { product in
-                ReceiptEntry(productIdentifier: product.identifier, expiryDate: nil)
+            let mockDelegate = MockMerchantDelegate()
+            let mockStoreInterface = MockStoreInterface()
+            mockStoreInterface.receiptFetchResult = .success(Data())
+            mockStoreInterface.restoredProductsResult = Result<Set<String>, Error>.success(Set(products.map { $0.identifier }))
+            
+            let validator = MockReceiptValidator()
+            validator.validateRequest = { request, completion in
+                let metadata = ReceiptMetadata(originalApplicationVersion: "1.0")
+
+                guard request.reason == .restorePurchases else {
+                    completion(.success(ConstructedReceipt(from: [], metadata: metadata)))
+                    
+                    return
+                }
+                
+                let entries = products.map { product in
+                    ReceiptEntry(productIdentifier: product.identifier, expiryDate: nil)
+                }
+                
+                let receipt = ConstructedReceipt(from: entries, metadata: metadata)
+                
+                completion(.success(receipt))
             }
             
-            let metadata = ReceiptMetadata(originalApplicationVersion: "1.0")
-            let receipt = ConstructedReceipt(from: entries, metadata: metadata)
+            let configuration = Merchant.Configuration(receiptValidator: validator, storage: EphemeralPurchaseStorage())
             
-            completion(.success(receipt))
-        }
-        
-        let configuration = Merchant.Configuration(receiptValidator: validator, storage: EphemeralPurchaseStorage())
-        
-        let merchant = Merchant(configuration: configuration, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
-        merchant.register(products)
-        merchant.setup()
-        
-        let task = merchant.restorePurchasesTask()
-        task.onCompletion = { result in
-            for product in products {
-                XCTAssertTrue(merchant.state(for: product).isPurchased, "Product \(product) was expected to be purchased after restoration, but the state reported it was not purchased.")
+            let merchant = Merchant(configuration: configuration, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+            merchant.register(products)
+            merchant.setup()
+            
+            let task = merchant.restorePurchasesTask()
+            task.onCompletion = { result in
+                for product in products {
+                    XCTAssertTrue(merchant.state(for: product).isPurchased, "Product \(product) was expected to be purchased after restoration, but the state reported it was not purchased.")
+                }
+                
+                completionExpectation.fulfill()
             }
             
-            completionExpectation.fulfill()
+            task.start()
+            self.wait(for: [completionExpectation], timeout: 5)
         }
-        
-        task.start()
-        self.wait(for: [completionExpectation], timeout: 5)
     }
 }
 
@@ -200,9 +211,5 @@ extension MerchantTaskProcedureTests {
             
             return (product: product, purchase: purchase)
         }
-    }
-    
-    private enum MockError : Swift.Error {
-        case mockError
     }
 }

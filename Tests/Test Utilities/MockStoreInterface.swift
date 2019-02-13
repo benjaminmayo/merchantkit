@@ -27,6 +27,12 @@ internal class MockStoreInterface {
             self.delegate?.storeInterfaceDidUpdatePurchases(self)
         })
     }
+    
+    func dispatchStoreIntentToCommitPurchase(from source: Purchase.Source) -> StoreIntentResponse {
+        let response = self.delegate!.storeInterface(self, responseForStoreIntentToCommitPurchaseFrom: source)
+        
+        return response
+    }
 }
 
 extension MockStoreInterface : StoreInterface {

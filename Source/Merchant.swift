@@ -73,6 +73,10 @@ public final class Merchant {
         self.checkReceipt(updateProducts: .all, policy: .onlyFetch, reason: .initialization)
         
         self.logger.log(message: "Merchant has been setup, with \(self.registeredProducts.count) registered \(self.registeredProducts.count == 1 ? "product" : "products").", category: .initialization)
+        
+        if self.registeredProducts.isEmpty {
+            self.logger.log(message: "There are no registered products for the `Merchant`. Remember to call `Merchant.register(_)` to register a sequence of `Product` items.", category: .initialization)
+        }
     }
     
     /// Returns a registered product for a given `productIdentifier`, or `nil` if not found.
@@ -479,7 +483,7 @@ extension Merchant : StoreInterfaceDelegate {
                 observer.merchant(self, didCompleteRestoringProductsWith: result)
             }
         } else {
-            self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedRestoredPurchases), policy: .onlyFetch, reason: .completePurchase, completion: { updatedProductsResult in
+            self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedRestoredPurchases), policy: .onlyFetch, reason: .restorePurchases, completion: { updatedProductsResult in
                 let restoredProducts = (try? updatedProductsResult.get().filter { self.state(for: $0).isPurchased }) ?? []
                 
                 for observer in self.purchaseObservers {
