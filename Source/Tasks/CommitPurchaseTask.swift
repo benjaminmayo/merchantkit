@@ -26,13 +26,6 @@ public final class CommitPurchaseTask : MerchantTask {
         
         self.merchant.logger.log(message: "Started commit purchase task for product: \(self.purchase.productIdentifier)", category: .tasks)
     }
-    
-    /// Cancel the task. Cancellation does not fire the `onCompletion` handler.
-    public func cancel() {
-        self.merchant.removeProductPurchaseObserver(self)
-        
-        self.merchant.taskDidResign(self)
-    }
 }
 
 extension CommitPurchaseTask {
