@@ -43,6 +43,9 @@ class PurchaseStorageTests : XCTestCase {
             XCTAssertNotNil(record)
             XCTAssertEqual(record, testRecord)
             
+            let recordWithRepeatedRequestForSameRecord = storage.record(forProductIdentifier: testRecord.productIdentifier)
+            XCTAssertEqual(recordWithRepeatedRequestForSameRecord, testRecord)
+            
             let deletionResult = storage.removeRecord(forProductIdentifier: testRecord.productIdentifier)
             XCTAssertEqual(deletionResult, PurchaseStorageUpdateResult.didChangeRecords)
             

@@ -2,6 +2,7 @@ import MerchantKit
 
 class MockMerchantDelegate : MerchantDelegate {
     var didChangeStates: ((_ products: Set<Product>) -> Void)?
+    var didChangeLoadingState: (() -> Void)?
     
     init() {
         
@@ -12,6 +13,6 @@ class MockMerchantDelegate : MerchantDelegate {
     }
     
     func merchantDidChangeLoadingState(_ merchant: Merchant) {
-        
+        self.didChangeLoadingState?()
     }
 }

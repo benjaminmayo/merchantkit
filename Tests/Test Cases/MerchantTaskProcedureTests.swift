@@ -38,6 +38,46 @@ class MerchantTaskProcedureTests : XCTestCase {
             commitPurchaseResults: commitPurchaseResults
         )
     }
+    
+    func testRestorePurchases() {
+        let products = self.testProductsAndPurchases().map { $0.0 }
+        let completionExpectation = self.expectation(description: "Completed restoring purchases.")
+
+        let mockDelegate = MockMerchantDelegate()
+        let mockStoreInterface = MockStoreInterface()
+        mockStoreInterface.receiptFetchResult = .success(Data())
+        mockStoreInterface.restoredProductsResult = Result<Set<String>, Error>.success(Set(products.map { $0.identifier }))
+        
+        let validator = MockReceiptValidator()
+        validator.validateRequest = { request, completion in
+            let entries = products.map { product in
+                ReceiptEntry(productIdentifier: product.identifier, expiryDate: nil)
+            }
+            
+            let metadata = ReceiptMetadata(originalApplicationVersion: "1.0")
+            let receipt = ConstructedReceipt(from: entries, metadata: metadata)
+            
+            completion(.success(receipt))
+        }
+        
+        let configuration = Merchant.Configuration(receiptValidator: validator, storage: EphemeralPurchaseStorage())
+        
+        let merchant = Merchant(configuration: configuration, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.register(products)
+        merchant.setup()
+        
+        let task = merchant.restorePurchasesTask()
+        task.onCompletion = { result in
+            for product in products {
+                XCTAssertTrue(merchant.state(for: product).isPurchased, "Product \(product) was expected to be purchased after restoration, but the state reported it was not purchased.")
+            }
+            
+            completionExpectation.fulfill()
+        }
+        
+        task.start()
+        self.wait(for: [completionExpectation], timeout: 5)
+    }
 }
 
 extension MerchantTaskProcedureTests {
@@ -59,15 +99,25 @@ extension MerchantTaskProcedureTests {
         let products = Set(expectedOutcomes.map { $0.product })
         XCTAssertEqual(products.count, expectedOutcomes.count)
         
-        let completionExpectation = self.expectation(description: "Async expectation")
+        let completionExpectation = self.expectation(description: "Completed determining outcomes for products under test.")
         completionExpectation.expectedFulfillmentCount = expectedOutcomes.count
+        let changeLoadingStateExpectation = self.expectation(description: "did change loading state expectation")
+        changeLoadingStateExpectation.assertForOverFulfill = false
         
+        var merchant: Merchant!
         let mockDelegate = MockMerchantDelegate()
+        mockDelegate.didChangeLoadingState = {
+            if !merchant.isLoading {
+                changeLoadingStateExpectation.fulfill()
+            }
+        }
+        
         let mockStoreInterface = MockStoreInterface()
         mockStoreInterface.availablePurchasesResult = availablePurchasesResult.mapError { $0 as Error }
         mockStoreInterface.receiptFetchResult = .success(Data())
         
-        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.canGenerateLogs = true
         merchant.register(products)
         merchant.setup()
         
@@ -137,7 +187,7 @@ extension MerchantTaskProcedureTests {
         
         task.start()
         
-        self.wait(for: [completionExpectation], timeout: 10)
+        self.wait(for: [completionExpectation, changeLoadingStateExpectation], timeout: 5, enforceOrder: true)
     }
     
     private func testProductsAndPurchases(forKinds kinds: [Product.Kind] = [.nonConsumable, .subscription(automaticallyRenews: false), .subscription(automaticallyRenews: true)]) -> [(product: Product, purchase: Purchase)] {

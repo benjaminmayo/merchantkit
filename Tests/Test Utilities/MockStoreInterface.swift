@@ -5,6 +5,7 @@ internal class MockStoreInterface {
     internal var receiptFetchResult: Result<Data, Error>!
     internal var availablePurchasesResult: Result<PurchaseSet, Error>!
     internal var didCommitPurchase: ((Purchase) -> Void)?
+    internal var restoredProductsResult: Result<Set<String>, Error>!
     
     private var delegate: StoreInterfaceDelegate?
     
@@ -52,7 +53,15 @@ extension MockStoreInterface : StoreInterface {
     }
     
     internal func restorePurchases(using storeParameters: StoreParameters) {
-        fatalError()
+        self.delegate?.storeInterfaceWillStartRestoringPurchases(self)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+            for productIdentifier in (try? self.restoredProductsResult!.get()) ?? [] {
+                self.delegate?.storeInterface(self, didRestorePurchaseForProductWith: productIdentifier)
+            }
+            
+            self.delegate?.storeInterface(self, didFinishRestoringPurchasesWith: self.restoredProductsResult.map { _ in () })
+        })
     }
 }
 

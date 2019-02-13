@@ -119,60 +119,6 @@ class MerchantTests : XCTestCase {
             })
         })
     }
-    
-    func testSuccessfulFetchPurchaseAndPurchaseProduct() {
-        let completionExpectation = self.expectation(description: "Completed fetch purchase and purchase product successfully.")
-        
-        let skProduct = MockSKProduct(productIdentifier: "testProduct", price: NSDecimalNumber(string: "0.99"), priceLocale: Locale(identifier: "en_US_POSIX"))
-        let product = Product(identifier: "testProduct", kind: .nonConsumable)
-        
-        let mockDelegate = MockMerchantDelegate()
-        let mockStoreInterface = MockStoreInterface()
-        mockStoreInterface.availablePurchasesResult = .success(PurchaseSet(from: [Purchase(from: .availableProduct(skProduct), for: product)]))
-        mockStoreInterface.receiptFetchResult = .success(Data())
-
-        mockStoreInterface.didCommitPurchase = { purchase in
-            mockStoreInterface.dispatchCommitPurchaseEvent(forProductWith: purchase.productIdentifier, result: .success)
-        }
-        
-        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
-        merchant.register([product])
-        merchant.setup()
-        
-        let task = merchant.availablePurchasesTask(for: [product])
-        task.onCompletion = { result in
-            do {
-                let purchases = try result.get()
-                
-                guard let purchase = purchases.purchase(for: product) else {
-                    XCTFail("`Purchase` not found for \(product)")
-                    
-                    return
-                }
-                
-                let task = merchant.commitPurchaseTask(for: purchase)
-                task.onCompletion = { result in
-                    switch result {
-                        case .success(_):
-                            XCTAssertTrue(merchant.state(for: product).isPurchased, "The product \(product) should be purchased after a successful commit.")
-                        
-                        case .failure(_):
-                            XCTFail("Failed to commit purchase.")
-                    }
-                    
-                    completionExpectation.fulfill()
-                }
-                
-                task.start()
-            } catch {
-                
-            }
-        }
-        
-        task.start()
-        
-        self.wait(for: [completionExpectation], timeout: 10)
-    }
 }
 
 extension MerchantTests {
@@ -234,7 +180,7 @@ extension MerchantTests {
         mockStoreInterface.receiptFetchResult = receiptDataFetchResult
             
         merchant = Merchant(configuration: configuration, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
-        
+        merchant.canGenerateLogs = true
         merchant.register(outcomes.map { $0.product })
         merchant.setup()
         
