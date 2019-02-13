@@ -10,6 +10,7 @@ internal class StoreKitAvailablePurchasesFetcher : NSObject, AvailablePurchasesF
     private var completionHandlers = [Completion]()
 
     private var isFinished: Bool = false
+    private var isCancelled: Bool = false
     
     internal required init(forProducts products: Set<Product>) {
         self.products = products
@@ -34,12 +35,17 @@ internal class StoreKitAvailablePurchasesFetcher : NSObject, AvailablePurchasesF
     
     func cancel() {
         self.request?.cancel()
-        self.completionHandlers.removeAll()
+        self.isCancelled = true
+        self.isFinished = true
     }
 }
 
 extension StoreKitAvailablePurchasesFetcher {
     private func finish(with result: Result<PurchaseSet, Error>) {
+        if self.isCancelled {
+            return
+        }
+        
         assert(!self.isFinished)
         
         for handler in self.completionHandlers {

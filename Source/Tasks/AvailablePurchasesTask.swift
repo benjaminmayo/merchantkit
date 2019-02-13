@@ -26,7 +26,9 @@ public final class AvailablePurchasesTask : MerchantTask {
         self.merchant.taskDidStart(self)
         
         self.availablePurchasesFetcher = self.merchant.storeInterface.makeAvailablePurchasesFetcher(for: self.products)
-        self.availablePurchasesFetcher.enqueueCompletion(self.onCompletion)
+        self.availablePurchasesFetcher.enqueueCompletion({ [unowned self] result in
+            self.finish(with: result)
+        })
         
         self.availablePurchasesFetcher.start()
         
