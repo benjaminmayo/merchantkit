@@ -1,13 +1,7 @@
 /// Sends a request to the iTunes server for validation.
 /// Attempts to make a validated receipt from the response and calls `onCompletion` when finished.
-<<<<<<< HEAD
-public final class ServerReceiptValidator {
-    public typealias Completion = (Result<Receipt>) -> Void
-    public let request: ReceiptValidationRequest
-=======
 public final class ServerReceiptValidator : ReceiptValidator {
-    public typealias Completion = (Result<Receipt, Error>) -> Void
->>>>>>> c51c1d3... Conformed `ServerReceiptValidator` to `ReceiptValidator` protocol. Updated associated tests.
+    public typealias Completion = (Result<Receipt>) -> Void
     
     private let sharedSecret: String?
     
@@ -53,15 +47,8 @@ fileprivate class ServerReceiptValidatorTask {
         self.dataFetcher = self.makeFetcher(for: .production)
         self.dataFetcher.start()
     }
-<<<<<<< HEAD
-}
-
-extension ServerReceiptValidator {
-    private func complete(with result: Result<Receipt>) {
-=======
     
-    private func complete(with result: Result<Receipt, Error>) {
->>>>>>> c51c1d3... Conformed `ServerReceiptValidator` to `ReceiptValidator` protocol. Updated associated tests.
+    private func complete(with result: Result<Receipt>) {
         self.onCompletion?(result)
     }
     
@@ -74,41 +61,30 @@ extension ServerReceiptValidator {
         return fetcher
     }
     
-<<<<<<< HEAD
-    private func didFetchVerificationData(with result: Result<Data>) {
-        switch result {
-            case .succeeded(let data):
-                do {
+    private func didFetchVerificationData(with dataResult: Result<Data>) {
+        let result: Result<Receipt>
+            
+        do {
+            switch dataResult {
+                case .succeeded(let data):
                     let parser = ServerReceiptVerificationResponseParser() // this object handles the actual parsing of the data
                     let response = try parser.response(from: data)
                     let validatedReceipt = try parser.receipt(from: response)
-                    
-                    self.complete(with: .succeeded(validatedReceipt))
-                } catch ServerReceiptVerificationResponseParser.ReceiptStatusError.receiptIncompatibleWithProductionEnvironment {
-                    self.dataFetcher = self.makeFetcher(for: .sandbox)
-                    self.dataFetcher.start()
-                } catch let error {
-                    self.complete(with: .failed(error))
-                }
-            case .failed(let error):
-                self.complete(with: .failed(error))
-=======
-    private func didFetchVerificationData(with result: Result<Data, Error>) {
-        let result: Result<Receipt, Error> = result.attemptMap { data in
-            let parser = ServerReceiptVerificationResponseParser() // this object handles the actual parsing of the data
-            let response = try parser.response(from: data)
-            let validatedReceipt = try parser.receipt(from: response)
-            
-            return validatedReceipt
+
+                    result = .succeeded(validatedReceipt)
+                case .failed(let error):
+                    result = .failed(error)
+            }
+        } catch let error {
+            result = .failed(error)
         }
         
         switch result {
-        case .failure(ServerReceiptVerificationResponseParser.ReceiptStatusError.receiptIncompatibleWithProductionEnvironment):
-            self.dataFetcher = self.makeFetcher(for: .sandbox)
-            self.dataFetcher.start()
-        default:
-            self.complete(with: result)
->>>>>>> c51c1d3... Conformed `ServerReceiptValidator` to `ReceiptValidator` protocol. Updated associated tests.
+            case .failed(ServerReceiptVerificationResponseParser.ReceiptStatusError.receiptIncompatibleWithProductionEnvironment):
+                self.dataFetcher = self.makeFetcher(for: .sandbox)
+                self.dataFetcher.start()
+            default:
+                self.complete(with: result)
         }
     }
 }
