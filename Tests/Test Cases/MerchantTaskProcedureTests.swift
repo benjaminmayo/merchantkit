@@ -24,6 +24,34 @@ class MerchantTaskProcedureTests : XCTestCase {
         self.runTest(with: outcomes, availablePurchasesResult: .failure(MockError.mockError), commitPurchaseResults: [:])
     }
     
+    func testCancelledFetch() {
+        let completionExpectation = self.expectation(description: "Cancelled fetch.")
+        completionExpectation.isInverted = true
+        
+        let testProductsAndPurchases = self.testProductsAndPurchases()
+        let products = testProductsAndPurchases.map { $0.product }
+
+        let mockDelegate = MockMerchantDelegate()
+        
+        let mockStoreInterface = MockStoreInterface()
+        mockStoreInterface.receiptFetchResult = .failure(MockError.mockError)
+        mockStoreInterface.availablePurchasesResult = .success(PurchaseSet(from: testProductsAndPurchases.map { $0.purchase }))
+        
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.register(products)
+        merchant.setup()
+        
+        let task = merchant.availablePurchasesTask(for: Set(products))
+        task.onCompletion = { _ in
+            completionExpectation.fulfill()
+        }
+        
+        task.start()
+        task.cancel()
+        
+        self.wait(for: [completionExpectation], timeout: 3)
+    }
+    
     func testSuccessfulFetchAndFailureToPurchase() {
         let productsAndPurchases = self.testProductsAndPurchases()
         
