@@ -72,8 +72,15 @@ public final class ProductInterfaceController {
     }
     
     public func fetchDataIfNecessary() {
-        guard self.availablePurchasesFetchResult == nil else { return }
-        
+        switch self.availablePurchasesFetchResult {
+            case .succeeded(_)?: return
+            case .failed(_)?:
+                self.refetchAvailablePurchases(silentlyFetch: false)
+                return
+            default:
+                break
+        }
+                
         self.fetchPurchases(onFetchingStateChanged: { [weak self] in
             guard let self = self else { return }
             
@@ -255,9 +262,8 @@ extension ProductInterfaceController {
             }
             
             DispatchQueue.main.async {
-                fetchingStateChanged()
-                
                 completion(loadResult)
+                fetchingStateChanged()
             }
         }
         
@@ -267,8 +273,12 @@ extension ProductInterfaceController {
         fetchingStateChanged()
     }
     
-    private func refetchAvailablePurchases() {
-        self.fetchPurchases(onFetchingStateChanged: {}, onCompletion: { [weak self] result in
+    private func refetchAvailablePurchases(silentlyFetch: Bool) {
+        self.fetchPurchases(onFetchingStateChanged: { [weak self] in
+            guard !silentlyFetch, let self = self else { return }
+
+            self.delegate?.productInterfaceControllerDidChangeFetchingState(self)
+        }, onCompletion: { [weak self] result in
             guard let self = self else { return }
             
             let didSucceed: Bool
@@ -374,7 +384,7 @@ extension ProductInterfaceController {
         
         if case .failed(.networkFailure(_))? = self.availablePurchasesFetchResult {
             DispatchQueue.main.async {
-                self.refetchAvailablePurchases()
+                self.refetchAvailablePurchases(silentlyFetch: true)
             }
         }
     }

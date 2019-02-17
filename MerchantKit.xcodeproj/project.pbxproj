@@ -117,6 +117,7 @@
 		43DE5717220AF103005442FE /* LocalReceiptDataDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DE5716220AF103005442FE /* LocalReceiptDataDecoder.swift */; };
 		43DE5719220AF2B2005442FE /* ResultUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DE5718220AF2B2005442FE /* ResultUtilities.swift */; };
 		43DE571B220B20B8005442FE /* StoreIntentResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DE571A220B20B8005442FE /* StoreIntentResponse.swift */; };
+		43F7EB3D221A019E0084DA17 /* ProductInterfaceControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F7EB3B221A01870084DA17 /* ProductInterfaceControllerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -264,6 +265,7 @@
 		43DE5716220AF103005442FE /* LocalReceiptDataDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalReceiptDataDecoder.swift; sourceTree = "<group>"; };
 		43DE5718220AF2B2005442FE /* ResultUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultUtilities.swift; sourceTree = "<group>"; };
 		43DE571A220B20B8005442FE /* StoreIntentResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreIntentResponse.swift; sourceTree = "<group>"; };
+		43F7EB3B221A01870084DA17 /* ProductInterfaceControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductInterfaceControllerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -529,6 +531,7 @@
 				4314B2632082CEC800ECC35C /* SubscriptionPeriodFormatterTests.swift */,
 				4314B277208375F900ECC35C /* PriceFormatterTests.swift */,
 				43DD2C882219A55700288149 /* StoreKitStoreInterfaceTests.swift */,
+				43F7EB3B221A01870084DA17 /* ProductInterfaceControllerTests.swift */,
 				43703A4520855198003AA087 /* ASN1Tests.swift */,
 				439546902086009700B9D2C6 /* PKCS7ReceiptDataContainerTests.swift */,
 				439DD22E2086840300B0F0C4 /* SubscriptionPriceFormatterTests.swift */,
@@ -801,6 +804,7 @@
 				4337A89D1EB1FE3300EAF633 /* PurchaseRecordTests.swift in Sources */,
 				439546912086009700B9D2C6 /* PKCS7ReceiptDataContainerTests.swift in Sources */,
 				4319AC6D2093CD03000ACC04 /* MerchantTaskTests.swift in Sources */,
+				43F7EB3D221A019E0084DA17 /* ProductInterfaceControllerTests.swift in Sources */,
 				4314B27B208377B300ECC35C /* PurchasedStateTests.swift in Sources */,
 				4377346322137D710010EF79 /* TestsUtilities.swift in Sources */,
 				43703A4620855198003AA087 /* ASN1Tests.swift in Sources */,
