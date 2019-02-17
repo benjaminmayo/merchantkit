@@ -119,8 +119,21 @@ class ASN1Tests : XCTestCase {
                 case .custom(let value):
                     XCTAssertEqual(value, byte)
                 case .type(let bufferType):
-                    XCTFail("The byte \(byte) was resolved to tag type \(bufferType), when a custom interpretation was expected.")
+                    XCTFail("The byte \(byte) was resolved to tag type \(bufferType), when a custom field was expected.")
             }
+            
+            XCTAssertEqual(byte, descriptor.tag.rawType, "The tag raw type is \(descriptor.tag.rawType), when \(byte) was expected.")
+            XCTAssertNil(descriptor.tag.type, "The tag was resolved to a tag type, when it should be `nil` as the tag is a custom field.")
         }
+    }
+    
+    func testPayloadDescriptorWithTagDoesNotAffectOtherProperties() {
+        let descriptor = ASN1.Parser.PayloadDescriptor(from: 14)
+
+        let newDescriptor = descriptor.withTag(.type(.generalString))
+        
+        XCTAssertEqual(newDescriptor.tag, ASN1.Parser.PayloadDescriptor.Tag.type(ASN1.BufferType.generalString))
+        XCTAssertEqual(descriptor.domain, newDescriptor.domain)
+        XCTAssertEqual(descriptor.valueKind, newDescriptor.valueKind)
     }
 }

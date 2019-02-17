@@ -89,19 +89,19 @@ extension ASN1.Parser {
             self.init(domain: domain, tag: tag, valueKind: valueKind)
         }
         
-        enum Domain : UInt8 {
+        enum Domain : UInt8, Equatable {
             case universal = 0x0
             case application = 0x1
             case contextSpecific = 0x2
             case `private` = 0x3
         }
         
-        enum ValueKind {
+        enum ValueKind : Equatable {
             case primitive
             case constructed
         }
         
-        enum Tag {
+        enum Tag : Equatable {
             case custom(UInt8)
             case type(ASN1.BufferType)
             
@@ -137,7 +137,7 @@ extension ASN1.Parser {
             throw Error.aborted
         }
 
-        var descriptor = try PayloadDescriptor(from: subdata.first!)
+        var descriptor = PayloadDescriptor(from: subdata.first!)
         
         if descriptor.tag.type == ASN1.BufferType.usesLongForm {
             throw Error.usesLongFormNotSupported
