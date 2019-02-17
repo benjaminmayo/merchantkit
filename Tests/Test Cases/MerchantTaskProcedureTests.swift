@@ -89,6 +89,36 @@ class MerchantTaskProcedureTests : XCTestCase {
             self.wait(for: [completionExpectation], timeout: 5)
         }
     }
+    
+    func testReceiptMetadataFailure() {
+        let completionExpectation = self.expectation(description: "Completed fetching receipt metadata.")
+
+        let mockDelegate = MockMerchantDelegate()
+        let mockStoreInterface = MockStoreInterface()
+        mockStoreInterface.receiptFetchResult = .failure(MockError.mockError)
+        
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.register([])
+        merchant.setup()
+        
+        let task = merchant.receiptMetadataTask()
+        task.onCompletion = { result in
+            switch result {
+                case .success(_):
+                    XCTFail("The task succeeded when a failure was expected.")
+                case .failure(MockError.mockError):
+                    break
+                case .failure(let error):
+                    XCTFail("The task failed with error \(error), when \(MockError.mockError) was expected.")
+            }
+            
+            completionExpectation.fulfill()
+        }
+        
+        task.start()
+        
+        self.wait(for: [completionExpectation], timeout: 5)
+    }
 }
 
 extension MerchantTaskProcedureTests {
