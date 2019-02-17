@@ -43,6 +43,8 @@ class MerchantTaskProcedureTests : XCTestCase {
         let allProducts = self.testProductsAndPurchases().map { $0.0 }
         let productsWithoutSubscriptions = allProducts.filter { $0.kind == .nonConsumable || $0.kind == .consumable }
         
+        let randomOtherProduct = Product(identifier: "randomOtherProductIdentifier", kind: .nonConsumable)
+        
         for products in [allProducts, productsWithoutSubscriptions] {
             let completionExpectation = self.expectation(description: "Completed restoring purchases.")
 
@@ -67,7 +69,9 @@ class MerchantTaskProcedureTests : XCTestCase {
                 
                 let receipt = ConstructedReceipt(from: entries, metadata: metadata)
                 
-                completion(.success(receipt))
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+                    completion(.success(receipt))
+                })
             }
             
             let configuration = Merchant.Configuration(receiptValidator: validator, storage: EphemeralPurchaseStorage())
@@ -75,7 +79,7 @@ class MerchantTaskProcedureTests : XCTestCase {
             let merchant = Merchant(configuration: configuration, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
             merchant.canGenerateLogs = true
 
-            merchant.register(products)
+            merchant.register(products + [randomOtherProduct])
             merchant.setup()
             
             let task = merchant.restorePurchasesTask()
@@ -88,6 +92,9 @@ class MerchantTaskProcedureTests : XCTestCase {
             }
             
             task.start()
+            
+            mockStoreInterface.dispatchCommitPurchaseEvent(forProductWith: randomOtherProduct.identifier, result: .failure(MockError.mockError), afterDelay: 0)
+            
             self.wait(for: [completionExpectation], timeout: 5)
         }
     }

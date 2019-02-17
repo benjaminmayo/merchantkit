@@ -25,4 +25,18 @@ class PKCS7ReceiptDataContainerTests : XCTestCase {
         
         XCTAssertEqual(extractedData, repeatedlyExtractedData)
     }
+    
+    func testReceiptDataWithMalformedContainer() {
+        let data = Data([0b11000001, 1, 1])
+        
+        let container = PKCS7ReceiptDataContainer(receiptData: data)
+        XCTAssertThrowsError(_ = try container.content(), "", { error in
+            switch error {
+                case PKCS7ReceiptDataContainer.Error.malformedContainer:
+                    break
+                case let error:
+                    XCTFail("The `PKCS7ReceiptDataContainer.content()` failed with error \(error) but error \(PKCS7ReceiptDataContainer.Error.malformedContainer) was expected.")
+            }
+        })
+    }
 }

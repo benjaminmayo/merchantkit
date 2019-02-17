@@ -12,6 +12,15 @@ class ASN1Tests : XCTestCase {
         XCTAssertEqual(identifier.description, "[ASN1.ObjectIdentifier stringValue: 1.2.840.113549.1.7.2]")
     }
     
+    func testObjectIdentifierWithNilStringValue() {
+        let data = Data([255, 255])
+        
+        let identifier = ASN1.ObjectIdentifier(bytes: data)
+        
+        XCTAssertNil(identifier.stringValue)
+        XCTAssertEqual(identifier.description, "[ASN1.ObjectIdentifier stringValue: nil]")
+    }
+    
     func testParseEmptyData() {
         let parser = ASN1.Parser(data: Data())
         
@@ -135,5 +144,81 @@ class ASN1Tests : XCTestCase {
         XCTAssertEqual(newDescriptor.tag, ASN1.Parser.PayloadDescriptor.Tag.type(ASN1.BufferType.generalString))
         XCTAssertEqual(descriptor.domain, newDescriptor.domain)
         XCTAssertEqual(descriptor.valueKind, newDescriptor.valueKind)
+    }
+    
+    func testTimeBufferTypeConversion() {
+        for type in [ASN1.BufferType.generalizedTime, ASN1.BufferType.utcTime] {
+            let asciiText = "this is a test"
+            let asciiData = asciiText.data(using: .ascii)!
+            
+            var result: ASN1.BufferValue!
+            
+            XCTAssertNoThrow(result = try ASN1.value(convertedFrom: asciiData, as: type))
+            
+            XCTAssertEqual(result, .date(asciiText))
+        }
+    }
+    
+    func testStringBufferTypeConversion() {
+        for type in [ASN1.BufferType.teletexString, .graphicString, .printableString, .utf8String, .ia5String] {
+            let asciiText = "this is a test"
+            let asciiData = asciiText.data(using: .utf8)!
+            
+            var result: ASN1.BufferValue!
+            
+            XCTAssertNoThrow(result = try ASN1.value(convertedFrom: asciiData, as: type))
+            
+            XCTAssertEqual(result, .string(asciiText))
+            
+            let failingData = Data([67, 97, 102, 195])
+            
+            XCTAssertThrowsError(result = try ASN1.value(convertedFrom: failingData, as: type))
+        }
+    }
+    
+    func testInvalidBufferTypeConversion() {
+        let unsupportedBufferTypes = [ASN1.BufferType.eoc, .objectDescriptor, .externalReference, .real, .enumerated, .embeddedPDV, .sequence, .set, .numericString, .videoTextString, .visibleString, .generalString, .universalString, .bitmapString, .usesLongForm]
+        
+        for type in unsupportedBufferTypes {
+            let data = Data([1, 2, 3])
+            
+            XCTAssertThrowsError(_ = try ASN1.value(convertedFrom: data, as: type))
+        }
+    }
+    
+    func testDataBufferTypeConversion() {
+        for type in [ASN1.BufferType.bitString, .octetString] {
+            let data = Data([1, 2, 3])
+            var result: ASN1.BufferValue!
+
+            XCTAssertNoThrow(result = try ASN1.value(convertedFrom: data, as: type))
+            XCTAssertEqual(result, .data(data))
+        }
+    }
+    
+    func testThrowsConsumeLengthBecauseInfinite() {
+        let empty = Data([128])
+        
+        XCTAssertThrowsError(_ = try ASN1.consumeLength(from: empty), "An infinite length should be not supported.", { error in
+            switch error {
+                case ASN1.PayloadValueConversionError.invalidLength:
+                    break
+                case let error:
+                    XCTFail("The `ASN1.consumeLength(from:)` conversion failed with error \(error) but the error \(ASN1.PayloadValueConversionError.invalidLength) was expected.")
+            }
+        })
+    }
+    
+    func testThrowsConsumeLengthBecauseInvalidLength() {
+        let data = Data([130])
+        
+        XCTAssertThrowsError(_ = try ASN1.consumeLength(from: data), "An invalid length buffer value should be not supported.", { error in
+            switch error {
+                case ASN1.PayloadValueConversionError.invalidLength:
+                    break
+                case let error:
+                    XCTFail("The `ASN1.consumeLength(from:)` conversion failed with error \(error) but the error \(ASN1.PayloadValueConversionError.invalidLength) was expected.")
+            }
+        })
     }
 }

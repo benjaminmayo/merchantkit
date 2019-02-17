@@ -17,39 +17,40 @@ extension ASN1 {
             result |= (UInt64(byte) << UInt64((buffer.count - 1 - index) * 8))
         }
         
-        if let value = Int(exactly: result) {
-            return value
-        } else {
+        guard let value = Int(exactly: result) else {
             throw PayloadValueConversionError.invalidIntegerRepresentation
         }
+        
+        return value
     }
     
     typealias ConsumingConversionResult<T> = (value: T, remainingData: Data)
     
     static func consumeLength(from data: Data) throws -> ConsumingConversionResult<Int> {
-        let byte = data.first!
+        guard let byte = data.first else { throw PayloadValueConversionError.invalidLength }
         
         let next = data.index(after: data.startIndex)
         
         if ((byte & 0x80) == 0x00) {
             return (Int(byte), data[next...])
-        } else if ((byte & 0x7f) > 0x00) {
-            let byteCount = Int(byte & 0x7f)
-            
-            if next.advanced(by: byteCount) >= data.endIndex {
-                throw PayloadValueConversionError.invalidLength
-            }
-            
-            let endIndex = data.index(next, offsetBy: byteCount)
-            let buffer = data[next..<endIndex]
-            
-            let integer = try ASN1.integer(from: buffer)
-            
-            return (integer, data[endIndex...])
-        } else {
-            // infinite length not supported
+        }
+        
+        let byteCount = Int(byte & 0x7f)
+        
+        guard byteCount > 0 else {
+            throw PayloadValueConversionError.invalidLength // infinite length not supported
+        }
+        
+        if next.advanced(by: byteCount) >= data.endIndex {
             throw PayloadValueConversionError.invalidLength
         }
+        
+        let endIndex = data.index(next, offsetBy: byteCount)
+        let buffer = data[next..<endIndex]
+        
+        let integer = try ASN1.integer(from: buffer)
+        
+        return (integer, data[endIndex...])
     }
     
     static func value(convertedFrom buffer: Data, as bufferType: BufferType) throws -> ASN1.BufferValue {
@@ -87,7 +88,7 @@ extension ASN1 {
                 
                 return .string(string)
             case .utcTime, .generalizedTime:
-                guard let string = String(data: buffer, encoding: .ascii) else { throw PayloadValueConversionError.unsupportedEncoding(payloadType: bufferType) }
+                let string = String(data: buffer, encoding: .ascii)!
                 
                 return .date(string)
             default:

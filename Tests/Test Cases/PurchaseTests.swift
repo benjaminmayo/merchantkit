@@ -104,6 +104,16 @@ class PurchaseTests : XCTestCase {
             Product(identifier: "testProduct", kind: $0)
         })
     }
+    
+    func testLocalizedTitleAndDescriptionMatchUnderlyingSKProduct() {
+        let product = Product(identifier: "testProduct", kind: .nonConsumable)
+        let skProduct = MockSKProduct(productIdentifier: product.identifier, price: NSDecimalNumber(string: "1.99"), priceLocale: Locale(identifier: "en_US_POSIX"), localizedTitle: "LocalizedTitle", localizedDescription: "LocalizedDescription")
+        
+        let purchase = Purchase(from: .availableProduct(skProduct), for: product)
+        
+        XCTAssertEqual(purchase.localizedTitle, "LocalizedTitle")
+        XCTAssertEqual(purchase.localizedDescription, "LocalizedDescription")
+    }
 }
 
 @available (iOS 11.2, *)
