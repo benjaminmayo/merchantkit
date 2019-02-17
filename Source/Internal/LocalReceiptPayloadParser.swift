@@ -2,7 +2,6 @@ import Foundation
 
 /// Parse a payload from a local App Store receipt file.
 internal class LocalReceiptPayloadParser {
-    private var parser: ASN1.Parser!
     private var payloadProcessor: ReceiptAttributeASN1SetProcessor!
     private var inAppPurchaseSetProcessor: ReceiptAttributeASN1SetProcessor!
     

@@ -50,7 +50,6 @@ extension ASN1 {
             case aborted
             case unknownASN1Type(UInt8)
             case usesLongFormNotSupported
-            case invalidDomain
             case malformedLengthForData
         }
     }
@@ -68,7 +67,7 @@ extension ASN1.Parser {
             self.valueKind = valueKind
         }
         
-        init(from byte: UInt8) throws {
+        internal init(from byte: UInt8) {
             // Octet:   | 8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 |
             // Decoded: |Domain_|IsC|TagNumber__________|
             
@@ -78,17 +77,16 @@ extension ASN1.Parser {
             
             let domainRawValue = byte >> 6
             
-            guard let domain = Domain(rawValue: domainRawValue) else { throw Error.invalidDomain }
-            self.domain = domain
+            let domain = Domain(rawValue: domainRawValue)!
             
             let isConstructed = ((byte >> 5) & 1) == 1
-            self.valueKind = isConstructed ? .constructed : .primitive
+            let valueKind: ValueKind = isConstructed ? .constructed : .primitive
             
             let tagRawValue = byte & 0x1f
 
             let tag: Tag = ASN1.BufferType(rawValue: tagRawValue).map { .type($0) } ?? .custom(tagRawValue)
             
-            self.tag = tag
+            self.init(domain: domain, tag: tag, valueKind: valueKind)
         }
         
         enum Domain : UInt8 {

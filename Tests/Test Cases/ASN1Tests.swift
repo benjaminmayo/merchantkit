@@ -102,4 +102,25 @@ class ASN1Tests : XCTestCase {
             XCTAssertEqual(String(describing: value), expectedDescription)
         }
     }
+    
+    func testGenerateAllPayloadDescriptors() {
+        for byte: UInt8 in 0...255 { // exhaustively check for no weirdness like crashes
+            let _ = ASN1.Parser.PayloadDescriptor(from: byte)
+        }
+    }
+    
+    func testCustomTagsForPayloadDescriptors() {
+        let customTagComponents: [UInt8] = [14, 15, 29]
+        
+        for byte in customTagComponents {
+            let descriptor = ASN1.Parser.PayloadDescriptor(from: byte)
+            
+            switch descriptor.tag {
+                case .custom(let value):
+                    XCTAssertEqual(value, byte)
+                case .type(let bufferType):
+                    XCTFail("The byte \(byte) was resolved to tag type \(bufferType), when a custom interpretation was expected.")
+            }
+        }
+    }
 }
