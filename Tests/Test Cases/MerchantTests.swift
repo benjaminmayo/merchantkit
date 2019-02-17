@@ -7,17 +7,23 @@ class MerchantTests : XCTestCase {
     
     func testInitialization() {
         let mockDelegate = MockMerchantDelegate()
-        
-        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate)
+        let mockStoreInterface = MockStoreInterface()
+
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.canGenerateLogs = true
+
         XCTAssertFalse(merchant.isLoading)
     }
     
     func testProductRegistration() {
         let mockDelegate = MockMerchantDelegate()
+        let mockStoreInterface = MockStoreInterface()
         
         let testProduct = Product(identifier: "testProduct", kind: .nonConsumable)
         
-        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate)
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.canGenerateLogs = true
+
         merchant.register([testProduct])
         
         let foundProduct = merchant.product(withIdentifier: "testProduct")
@@ -181,6 +187,7 @@ extension MerchantTests {
             
         merchant = Merchant(configuration: configuration, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
         merchant.canGenerateLogs = true
+        
         merchant.register(outcomes.map { $0.product })
         merchant.setup()
         

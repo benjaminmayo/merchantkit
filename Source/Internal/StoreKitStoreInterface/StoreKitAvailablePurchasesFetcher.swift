@@ -1,7 +1,7 @@
 import StoreKit
 
 internal class StoreKitAvailablePurchasesFetcher : NSObject, AvailablePurchasesFetcher {
-    internal typealias Completion = (Result<PurchaseSet, Error>) -> Void
+    internal typealias Completion = (Result<PurchaseSet, Swift.Error>) -> Void
     
     private let products: Set<Product>
     
@@ -27,10 +27,14 @@ internal class StoreKitAvailablePurchasesFetcher : NSObject, AvailablePurchasesF
     internal func start() {
         let productIdentifiers = self.products.map { $0.identifier }
         
-        let request = SKProductsRequest(productIdentifiers: Set(productIdentifiers))
-        request.delegate = self
+        self.request = {
+            let request = SKProductsRequest(productIdentifiers: Set(productIdentifiers))
+            request.delegate = self
+            
+            return request
+        }()
         
-        self.request = request
+        self.request?.start()
     }
     
     func cancel() {
@@ -38,10 +42,14 @@ internal class StoreKitAvailablePurchasesFetcher : NSObject, AvailablePurchasesF
         self.isCancelled = true
         self.isFinished = true
     }
+    
+    enum Error : Swift.Error {
+        case noAvailablePurchases(invalidProductIdentifiers: [String])
+    }
 }
 
 extension StoreKitAvailablePurchasesFetcher {
-    private func finish(with result: Result<PurchaseSet, Error>) {
+    private func finish(with result: Result<PurchaseSet, Swift.Error>) {
         if self.isCancelled {
             return
         }
@@ -66,10 +74,14 @@ extension StoreKitAvailablePurchasesFetcher : SKProductsRequestDelegate {
             return Purchase(from: .availableProduct(skProduct), for: product)
         }
         
-        self.finish(with: .success(PurchaseSet(from: purchases)))
+        if purchases.isEmpty && !response.invalidProductIdentifiers.isEmpty {
+            self.finish(with: .failure(Error.noAvailablePurchases(invalidProductIdentifiers: response.invalidProductIdentifiers)))
+        } else {
+            self.finish(with: .success(PurchaseSet(from: purchases)))
+        }
     }
     
-    internal func request(_ request: SKRequest, didFailWithError error: Error) {
+    internal func request(_ request: SKRequest, didFailWithError error: Swift.Error) {
         self.finish(with: .failure(error))
     }
 }

@@ -113,6 +113,7 @@
 		43DBC1091F26283700DB4B25 /* ProductInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC1081F26283700DB4B25 /* ProductInterfaceController.swift */; };
 		43DBC10B1F26288500DB4B25 /* NetworkAvailabilityCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */; };
 		43DD2C872218E7F200288149 /* PriceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DD2C852218E78400288149 /* PriceTests.swift */; };
+		43DD2C8A2219A56900288149 /* StoreKitStoreInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DD2C882219A55700288149 /* StoreKitStoreInterfaceTests.swift */; };
 		43DE5717220AF103005442FE /* LocalReceiptDataDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DE5716220AF103005442FE /* LocalReceiptDataDecoder.swift */; };
 		43DE5719220AF2B2005442FE /* ResultUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DE5718220AF2B2005442FE /* ResultUtilities.swift */; };
 		43DE571B220B20B8005442FE /* StoreIntentResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DE571A220B20B8005442FE /* StoreIntentResponse.swift */; };
@@ -259,6 +260,7 @@
 		43DBC1081F26283700DB4B25 /* ProductInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductInterfaceController.swift; sourceTree = "<group>"; };
 		43DBC10A1F26288500DB4B25 /* NetworkAvailabilityCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAvailabilityCenter.swift; sourceTree = "<group>"; };
 		43DD2C852218E78400288149 /* PriceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceTests.swift; sourceTree = "<group>"; };
+		43DD2C882219A55700288149 /* StoreKitStoreInterfaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitStoreInterfaceTests.swift; sourceTree = "<group>"; };
 		43DE5716220AF103005442FE /* LocalReceiptDataDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalReceiptDataDecoder.swift; sourceTree = "<group>"; };
 		43DE5718220AF2B2005442FE /* ResultUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultUtilities.swift; sourceTree = "<group>"; };
 		43DE571A220B20B8005442FE /* StoreIntentResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreIntentResponse.swift; sourceTree = "<group>"; };
@@ -526,6 +528,7 @@
 				4314B2602082C67C00ECC35C /* LocalizedResourcesTests.swift */,
 				4314B2632082CEC800ECC35C /* SubscriptionPeriodFormatterTests.swift */,
 				4314B277208375F900ECC35C /* PriceFormatterTests.swift */,
+				43DD2C882219A55700288149 /* StoreKitStoreInterfaceTests.swift */,
 				43703A4520855198003AA087 /* ASN1Tests.swift */,
 				439546902086009700B9D2C6 /* PKCS7ReceiptDataContainerTests.swift */,
 				439DD22E2086840300B0F0C4 /* SubscriptionPriceFormatterTests.swift */,
@@ -810,6 +813,7 @@
 				4377346A221387800010EF79 /* MockReceiptValidator.swift in Sources */,
 				43773468221387510010EF79 /* MockSKProduct.swift in Sources */,
 				4370FCFB220C4451003BA681 /* MerchantConfigurationTests.swift in Sources */,
+				43DD2C8A2219A56900288149 /* StoreKitStoreInterfaceTests.swift in Sources */,
 				4314B2652082CF5600ECC35C /* SubscriptionPeriodFormatterTests.swift in Sources */,
 				437734662213872A0010EF79 /* MockMerchantDelegate.swift in Sources */,
 				43DD2C872218E7F200288149 /* PriceTests.swift in Sources */,

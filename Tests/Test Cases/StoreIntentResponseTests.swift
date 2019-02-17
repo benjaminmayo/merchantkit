@@ -8,6 +8,8 @@ class StoreIntentResponseTests : XCTestCase {
         mockStoreInterface.receiptFetchResult = .failure(MockError.mockError)
         
         let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockMerchantDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.canGenerateLogs = true
+
         merchant.register([])
         merchant.setup()
         
@@ -42,6 +44,8 @@ class StoreIntentResponseTests : XCTestCase {
         let testProduct = Product(identifier: "testProduct", kind: .nonConsumable)
         
         let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockMerchantDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.canGenerateLogs = true
+
         merchant.register([testProduct])
         merchant.setup()
         

@@ -3,16 +3,22 @@ import XCTest
 
 class MerchantDelegateTests : XCTestCase {
     func testConformance() { // this just ensures we didn't forget any default implementations
-        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: self)
-        
+        let mockStoreInterface = MockStoreInterface()
+
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: self, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.canGenerateLogs = true
+
         self.merchant(merchant, didChangeStatesFor: [])
         self.merchantDidChangeLoadingState(merchant)
         _ = self.merchant(merchant, didReceiveStoreIntentToCommit: self.testPurchase)
     }
     
     func testDefaultStoreIntent() {
-        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: self)
+        let mockStoreInterface = MockStoreInterface()
         
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: self, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.canGenerateLogs = true
+
         let result = self.merchant(merchant, didReceiveStoreIntentToCommit: self.testPurchase)
         
         XCTAssertEqual(result, .automaticallyCommit)

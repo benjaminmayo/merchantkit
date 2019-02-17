@@ -73,6 +73,8 @@ class MerchantTaskProcedureTests : XCTestCase {
             let configuration = Merchant.Configuration(receiptValidator: validator, storage: EphemeralPurchaseStorage())
             
             let merchant = Merchant(configuration: configuration, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+            merchant.canGenerateLogs = true
+
             merchant.register(products)
             merchant.setup()
             
@@ -98,6 +100,8 @@ class MerchantTaskProcedureTests : XCTestCase {
         mockStoreInterface.receiptFetchResult = .failure(MockError.mockError)
         
         let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.canGenerateLogs = true
+        
         merchant.register([])
         merchant.setup()
         
@@ -159,6 +163,7 @@ extension MerchantTaskProcedureTests {
         
         merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
         merchant.canGenerateLogs = true
+        
         merchant.register(products)
         merchant.setup()
         

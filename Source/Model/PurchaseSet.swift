@@ -1,5 +1,5 @@
 /// A collection of unique `Purchase` objects. This set is vended by an `AvailablePurchasesTask`.
-public struct PurchaseSet {
+public struct PurchaseSet : Equatable {
     private let storage: [String : Purchase]
     
     internal init<Purchases : Sequence>(from purchases: Purchases) where Purchases.Iterator.Element == Purchase {
@@ -25,11 +25,9 @@ public struct PurchaseSet {
             let aPrice = a.price.value.0
             let bPrice = b.price.value.0
             
-            if ascending {
-                return aPrice < bPrice
-            } else {
-                return aPrice > bPrice
-            }
+            let comparator: (Decimal, Decimal) -> Bool = ascending ? (<) : (>)
+            
+            return comparator(aPrice, bPrice)
         })
     }
 }
