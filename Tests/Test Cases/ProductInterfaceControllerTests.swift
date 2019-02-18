@@ -78,17 +78,17 @@ class ProductInterfaceControllerTests : XCTestCase {
         merchant.register(testProducts)
         merchant.setup()
         
-        self.mockProductInterfaceControllerDelegate = MockProductInterfaceControllerDelegate()
+        let mockProductInterfaceControllerDelegate = MockProductInterfaceControllerDelegate()
         
         let controller = ProductInterfaceController(products: Set(testProducts), with: merchant)
-        controller.delegate = self.mockProductInterfaceControllerDelegate
+        controller.delegate = mockProductInterfaceControllerDelegate
         
-        self.mockProductInterfaceControllerDelegate.didChangeFetchingState = {
+        mockProductInterfaceControllerDelegate.didChangeFetchingState = {
             switch controller.fetchingState {
                 case .failed(.genericProblem):
                     mockStoreInterface.availablePurchasesResult = .success(PurchaseSet(from: testProductsAndPurchases.map { $0.purchase }))
                     
-                    self.mockProductInterfaceControllerDelegate.didChangeFetchingState = {                        
+                    mockProductInterfaceControllerDelegate.didChangeFetchingState = {
                         switch controller.fetchingState {
                             case .dormant:
                                 for (product, purchase) in testProductsAndPurchases {
@@ -126,7 +126,273 @@ class ProductInterfaceControllerTests : XCTestCase {
         self.wait(for: [completionExpectation], timeout: 10)
     }
     
-    private var mockProductInterfaceControllerDelegate: MockProductInterfaceControllerDelegate!
+    
+    func testUnknownProduct() {
+        let testProducts = self.testProductsAndPurchases().map { $0.product }
+        
+        let mockDelegate = MockMerchantDelegate()
+        let mockStoreInterface = MockStoreInterface()
+        mockStoreInterface.receiptFetchResult = .success(Data())
+        
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.register(testProducts)
+        merchant.setup()
+            
+        let controller = ProductInterfaceController(products: Set(testProducts), with: merchant)
+            
+        let nonExistentProduct = Product(identifier: "nonExistentProduct", kind: .nonConsumable)
+            
+        let state = controller.state(for: nonExistentProduct)
+        
+        XCTAssertEqual(state, .unknown)
+    }
+    
+    func testCommitPurchaseErrorMatchesExpectations() {
+        let testProductsAndPurchases = self.testProductsAndPurchases()
+        let testProducts = testProductsAndPurchases.map { $0.product }
+        
+        let mockDelegate = MockMerchantDelegate()
+        let mockStoreInterface = MockStoreInterface()
+        mockStoreInterface.receiptFetchResult = .success(Data())
+        mockStoreInterface.availablePurchasesResult = .success(PurchaseSet(from: testProductsAndPurchases.map { $0.purchase }))
+        
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.register(testProducts)
+        merchant.setup()
+        
+        let mockProductInterfaceControllerDelegate = MockProductInterfaceControllerDelegate()
+        
+        let controller = ProductInterfaceController(products: Set(testProducts), with: merchant)
+        controller.delegate = mockProductInterfaceControllerDelegate
+        
+        let (commitProduct, commitPurchase) = testProductsAndPurchases.first!
+        
+        let errorsAndExpectations: [(Error, ProductInterfaceController.CommitPurchaseError)] = [
+            (SKError(.paymentCancelled), .userCancelled),
+            (SKError(.storeProductNotAvailable), .purchaseNotAvailable),
+            (SKError(.paymentNotAllowed), .paymentNotAllowed),
+            (SKError(.paymentInvalid), .paymentInvalid),
+            (URLError(.notConnectedToInternet), .networkError(URLError(.notConnectedToInternet))),
+            (MockError.mockError, .genericProblem(MockError.mockError))
+        ]
+        
+        var index = 0
+        
+        let completionExpectation = self.expectation(description: "Commit purchase failed")
+        completionExpectation.expectedFulfillmentCount = errorsAndExpectations.count
+        
+        func isCommitPurchaseErrorEquivalent(_ error: ProductInterfaceController.CommitPurchaseError, otherError: ProductInterfaceController.CommitPurchaseError) -> Bool {
+            switch (error, otherError) {
+                case (.userCancelled, .userCancelled): return true
+                case (.networkError(let a), .networkError(let b)): return a.code == b.code
+                case (.purchaseNotAvailable, .purchaseNotAvailable): return true
+                case (.paymentNotAllowed, .paymentNotAllowed): return true
+                case (.paymentInvalid, .paymentInvalid): return true
+                case (.genericProblem(let a as MockError), .genericProblem(let b as MockError)): return a == b
+                default: return false
+            }
+        }
+        
+        func runNextMockFailure() {
+            guard index < errorsAndExpectations.endIndex else { return }
+
+            let (error, expectedError) = errorsAndExpectations[index]
+            
+            index += 1
+            
+            mockProductInterfaceControllerDelegate.didCommit = { (purchase, result) in
+                XCTAssertEqual(commitPurchase, purchase)
+                
+                switch result {
+                    case .success(_):
+                        break
+                    case .failure(let error):
+                        XCTAssertTrue(isCommitPurchaseErrorEquivalent(error, otherError: expectedError))
+                }
+                
+                completionExpectation.fulfill()
+                
+                runNextMockFailure()
+            }
+            
+            controller.commit(commitPurchase)
+            mockStoreInterface.dispatchCommitPurchaseEvent(forProductWith: commitProduct.identifier, result: .failure(error), afterDelay: 0.2)
+        }
+        
+        runNextMockFailure()
+        
+        self.wait(for: [completionExpectation], timeout: 10)
+    }
+    
+    func testFetchPurchaseErrorMatchesExpectations() {
+        let errors: [Error] = [
+            URLError(.notConnectedToInternet),
+            SKError(.storeProductNotAvailable),
+            MockError.mockError
+        ]
+        
+        func isFetchingErrorEquivalent(_ error: Error, to fetchReason: ProductInterfaceController.FetchingState.FailureReason) -> Bool {
+            switch (error, fetchReason) {
+                case (let a as URLError, .networkFailure(let b)): return a.code == b.code
+                case (let a as SKError, .storeKitFailure(let b)): return a.code == b.code
+                case (MockError.mockError, .genericProblem): return true
+                default: return false
+            }
+        }
+        
+        var index = 0
+        
+        let completionExpectation = self.expectation(description: "Commit purchase failed")
+        completionExpectation.expectedFulfillmentCount = errors.count
+        
+        func runNextMockFailure() {
+            guard index < errors.endIndex else { return }
+            
+            let error = errors[index]
+            
+            index += 1
+            
+            let testProductsAndPurchases = self.testProductsAndPurchases()
+            let testProducts = testProductsAndPurchases.map { $0.product }
+            
+            let mockDelegate = MockMerchantDelegate()
+            let mockStoreInterface = MockStoreInterface()
+            mockStoreInterface.receiptFetchResult = .success(Data())
+            mockStoreInterface.availablePurchasesResult = .failure(error)
+
+            let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+            merchant.register(testProducts)
+            merchant.setup()
+            
+            let mockProductInterfaceControllerDelegate = MockProductInterfaceControllerDelegate()
+            self.productInterfaceControllerDelegate = mockProductInterfaceControllerDelegate
+            
+            let controller = ProductInterfaceController(products: Set(testProducts), with: merchant)
+            controller.delegate = mockProductInterfaceControllerDelegate
+            
+            self.productInterfaceController = controller
+            
+            mockProductInterfaceControllerDelegate.didChangeFetchingState = {
+                switch controller.fetchingState {
+                    case .failed(let fetchReason):
+                        XCTAssertTrue(isFetchingErrorEquivalent(error, to: fetchReason))
+                        
+                        completionExpectation.fulfill()
+                        
+                        runNextMockFailure()
+                    default:
+                        break
+                }
+                
+            }
+            
+            controller.fetchDataIfNecessary()
+        }
+        
+        runNextMockFailure()
+        
+        self.wait(for: [completionExpectation], timeout: 10)
+    }
+    
+    func testCommitPurchaseErrorShouldDisplayInUserInterface() {
+        let allErrors: [ProductInterfaceController.CommitPurchaseError] = [
+           .genericProblem(MockError.mockError),
+           .networkError(URLError(.badURL)),
+           .paymentInvalid,
+           .paymentNotAllowed,
+           .purchaseNotAvailable,
+           .userCancelled
+        ]
+        
+        for error in allErrors {
+            switch error {
+                case .userCancelled:
+                    XCTAssertFalse(error.shouldDisplayInUserInterface)
+                default:
+                    XCTAssertTrue(error.shouldDisplayInUserInterface)
+            }
+        }
+    }
+    
+    func testCommitPurchaseNotRegisteredWithProductInterfaceController() {
+        let testProducts = self.testProductsAndPurchases().map { $0.product }
+
+        let mockDelegate = MockMerchantDelegate()
+        let mockStoreInterface = MockStoreInterface()
+        mockStoreInterface.receiptFetchResult = .success(Data())
+        
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.register(testProducts)
+        merchant.setup()
+        
+        let controller = ProductInterfaceController(products: Set(testProducts), with: merchant)
+        
+        let otherProduct = Product(identifier: "otherProduct", kind: .nonConsumable)
+        let otherProductPurchase = Purchase(from: .availableProduct(MockSKProduct(productIdentifier: otherProduct.identifier, price: NSDecimalNumber(string: "1.99"), priceLocale: Locale(identifier: "en_US_POSIX"))), for: otherProduct)
+        
+        let expectation = self.expectation(description: "Fatal error thrown.")
+        
+        MerchantKitFatalError.customHandler = {
+            expectation.fulfill()
+        }
+        
+        let testingQueue = DispatchQueue(label: "testing queue") // testing MerchantKitFatalError requires dispatch to a non-main thread
+
+        testingQueue.async {
+            controller.commit(otherProductPurchase)
+        }
+        
+        self.wait(for: [expectation], timeout: 5)
+    }
+    
+    func testRestorePurchases() {
+        let testProducts = self.testProductsAndPurchases().map { $0.product }
+
+        let results: [Result<Set<Product>, Error>] = [
+            .failure(MockError.mockError),
+            .success(Set(testProducts))
+        ]
+        
+        for expectedResult in results {
+            let testProducts = self.testProductsAndPurchases().map { $0.product }
+
+            let mockDelegate = MockMerchantDelegate()
+            
+            let mockStoreInterface = MockStoreInterface()
+            mockStoreInterface.receiptFetchResult = .success(Data())
+            mockStoreInterface.restoredProductsResult = expectedResult.map { products in
+                Set(products.map { $0.identifier })
+            }
+    
+            let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+            merchant.register(testProducts)
+            merchant.setup()
+            
+            let delegate = MockProductInterfaceControllerDelegate()
+            delegate.didRestore = { result in
+                switch (result, expectedResult) {
+                    case (.success(let a), .success(let b)) where a == b:
+                        break
+                    case (.failure(let a as MockError), .failure(let b as MockError)) where a == b:
+                        break
+                    case (.success(let products), .failure(let error)):
+                        XCTFail("The restore purchases succeeded with products \(products) when it was expected to fail with error \(error).")
+                    case (.failure(let error), .success(let products)):
+                        XCTFail("The restore purchases failed with error \(error) when it was expected to succeed with products \(products).")
+                    default:
+                        XCTFail("The restore purchases finished with result \(result) when \(expectedResult) was expected.")
+                }
+            }
+            
+            let controller = ProductInterfaceController(products: Set(testProducts), with: merchant)
+            controller.delegate = delegate
+        
+            controller.restorePurchases()
+        }
+    }
+    
+    private var productInterfaceController: ProductInterfaceController!
+    private var productInterfaceControllerDelegate: ProductInterfaceControllerDelegate!
 }
 
 extension ProductInterfaceControllerTests {
