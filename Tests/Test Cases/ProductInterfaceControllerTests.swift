@@ -347,15 +347,23 @@ class ProductInterfaceControllerTests : XCTestCase {
     
     func testRestorePurchases() {
         let testProducts = self.testProductsAndPurchases().map { $0.product }
-
-        let results: [Result<Set<Product>, Error>] = [
+        
+        let expectedResults: [Result<Set<Product>, Error>] = [
             .failure(MockError.mockError),
             .success(Set(testProducts))
         ]
         
-        for expectedResult in results {
-            let testProducts = self.testProductsAndPurchases().map { $0.product }
-
+        let completionExpectation = self.expectation(description: "Completed restore purchases.")
+        completionExpectation.expectedFulfillmentCount = expectedResults.count
+        
+        var index = 0
+        
+        func runNextResult() {
+            guard index < expectedResults.endIndex else { return }
+            let expectedResult = expectedResults[index]
+            
+            index += 1
+            
             let mockDelegate = MockMerchantDelegate()
             
             let mockStoreInterface = MockStoreInterface()
@@ -363,8 +371,36 @@ class ProductInterfaceControllerTests : XCTestCase {
             mockStoreInterface.restoredProductsResult = expectedResult.map { products in
                 Set(products.map { $0.identifier })
             }
+            
+            let mockReceiptValidator = MockReceiptValidator()
+            mockReceiptValidator.validateRequest = { request, completion in
+                let metadata = ReceiptMetadata(originalApplicationVersion: "")
+                
+                guard request.reason == .restorePurchases else {
+                    completion(.success(ConstructedReceipt(from: [], metadata: metadata)))
+                    
+                    return
+                }
+                
+                let entries: [ReceiptEntry] = testProducts.flatMap { product in
+                    switch product.kind {
+                        case .subscription(automaticallyRenews: _):
+                            return ReceiptEntry(productIdentifier: product.identifier, expiryDate: Date(timeIntervalSinceNow: 60 * 60 * 24 * 7))
+                        case .nonConsumable:
+                            return ReceiptEntry(productIdentifier: product.identifier, expiryDate: nil)
+                        default:
+                            return nil
+                    }
+                }
+                
+                let receipt = ConstructedReceipt(from: entries, metadata: metadata)
+                
+                completion(.success(receipt))
+            }
+
+            let configuration = Merchant.Configuration(receiptValidator: mockReceiptValidator, storage: EphemeralPurchaseStorage())
     
-            let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+            let merchant = Merchant(configuration: configuration, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
             merchant.register(testProducts)
             merchant.setup()
             
@@ -382,13 +418,24 @@ class ProductInterfaceControllerTests : XCTestCase {
                     default:
                         XCTFail("The restore purchases finished with result \(result) when \(expectedResult) was expected.")
                 }
+                
+                completionExpectation.fulfill()
+                
+                runNextResult()
             }
             
             let controller = ProductInterfaceController(products: Set(testProducts), with: merchant)
             controller.delegate = delegate
         
+            self.productInterfaceController = controller
+            self.productInterfaceControllerDelegate = delegate
+            
             controller.restorePurchases()
         }
+        
+        runNextResult()
+        
+        self.wait(for: [completionExpectation], timeout: 5)
     }
     
     private var productInterfaceController: ProductInterfaceController!
