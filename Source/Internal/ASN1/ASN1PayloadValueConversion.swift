@@ -66,7 +66,7 @@ extension ASN1 {
                 let value = byte != 0
                 return .boolean(value)
             case .integer:
-                let value = try ASN1.integer(from: buffer)
+                let value = ASN1.integer(from: buffer)
                 
                 return .integer(value)
             case .bitString:
