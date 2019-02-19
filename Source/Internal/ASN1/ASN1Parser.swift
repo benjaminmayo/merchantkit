@@ -56,12 +56,12 @@ extension ASN1 {
 }
 
 extension ASN1.Parser {
-    struct PayloadDescriptor {
-        let domain: Domain
-        let tag: Tag
-        let valueKind: ValueKind
+    internal struct PayloadDescriptor {
+        internal let domain: Domain
+        internal let tag: Tag
+        internal let valueKind: ValueKind
         
-        private init(domain: Domain, tag: Tag, valueKind: ValueKind) {
+        internal init(domain: Domain, tag: Tag, valueKind: ValueKind) {
             self.domain = domain
             self.tag = tag
             self.valueKind = valueKind

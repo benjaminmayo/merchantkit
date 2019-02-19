@@ -109,12 +109,23 @@ class StoreKitStoreInterfaceTests : XCTestCase {
     
     func testCommitPurchase() {
         self.commitPurchaseTestProduct = self.makeCommitPurchaseTestProduct()
+        
+        let mockSKProduct = MockSKProduct(productIdentifier: self.commitPurchaseTestProduct.identifier, price: NSDecimalNumber(string: "1.99"), priceLocale: Locale(identifier: "en_US_POSIX"))
+        let mockSKPayment = MockSKPayment(product: mockSKProduct)
+        
+        let purchaseSources: [Purchase.Source] = [
+            .availableProduct(mockSKProduct),
+            .pendingStorePayment(mockSKProduct, mockSKPayment)
+        ]
+        
         self.commitPurchaseCompletionExpectation = self.expectation(description: "Completed commit purchase.")
+        self.commitPurchaseCompletionExpectation.expectedFulfillmentCount = purchaseSources.count
         
-        let skProduct = MockSKProduct(productIdentifier: self.commitPurchaseTestProduct.identifier, price: NSDecimalNumber(string: "1.99"), priceLocale: Locale(identifier: "en_US_POSIX"))
-        
-        let purchase = Purchase(from: .availableProduct(skProduct), for: self.commitPurchaseTestProduct)
-        self.storeInterface.commitPurchase(purchase, using: StoreParameters(applicationUsername: ""))
+        for source in purchaseSources {
+            let purchase = Purchase(from: source, for: self.commitPurchaseTestProduct)
+            
+            self.storeInterface.commitPurchase(purchase, using: StoreParameters(applicationUsername: ""))
+        }
         
         self.wait(for: [self.commitPurchaseCompletionExpectation], timeout: 5)
     }

@@ -6,7 +6,7 @@ internal class LocalReceiptPayloadParser {
     private var inAppPurchaseSetProcessor: ReceiptAttributeASN1SetProcessor!
     
     private var foundInAppPurchaseAttributes = [(InAppPurchaseReceiptAttributeType, ReceiptAttributeASN1SetProcessor.ReceiptAttribute)]()
-    private var encounteredInAppPurchaseReceiptProcessorError: Error?
+    private var encounteredInAppPurchaseProcessorError: Error?
 
     private var receiptEntries = [ReceiptEntry]()
     private var metadataValues = ReceiptMetadataValues()
@@ -26,7 +26,7 @@ internal class LocalReceiptPayloadParser {
         try self.payloadProcessor.start()
         
         // if there are no receipt entries, then check to see if we hit an error in the sub-processor before proceeding
-        if self.receiptEntries.isEmpty, let error = self.encounteredInAppPurchaseReceiptProcessorError {
+        if self.receiptEntries.isEmpty, let error = self.encounteredInAppPurchaseProcessorError {
             throw error
         }
         
@@ -69,7 +69,7 @@ extension LocalReceiptPayloadParser {
         self.inAppPurchaseSetProcessor = nil
         
         self.resetInAppPurchaseProcessIntermediaryValues()
-        self.encounteredInAppPurchaseReceiptProcessorError = nil
+        self.encounteredInAppPurchaseProcessorError = nil
 
         self.receiptEntries.removeAll()
         self.metadataValues = ReceiptMetadataValues()
@@ -109,7 +109,7 @@ extension LocalReceiptPayloadParser {
                 self.receiptEntries.append(entry)
             }
         } catch let error {
-            self.encounteredInAppPurchaseReceiptProcessorError = error
+            self.encounteredInAppPurchaseProcessorError = error
         }
     }
     

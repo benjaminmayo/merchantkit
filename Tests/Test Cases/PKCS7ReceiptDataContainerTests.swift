@@ -39,4 +39,29 @@ class PKCS7ReceiptDataContainerTests : XCTestCase {
             }
         })
     }
+    
+    func testExtractContentEarlyDoesNotBubbleError() {
+        let contentBytes: [UInt8] = [8, 8, 8, 8]
+        
+        var data = Data()
+        data.append(ASN1.Parser.PayloadDescriptor(domain: .universal, tag: .type(.objectIdentifier), valueKind: .primitive).byte)
+        data.append(9)
+        data.append(contentsOf: [42, 134, 72, 134, 247, 13, 1, 7, 1])
+        data.append(ASN1.Parser.PayloadDescriptor(domain: .universal, tag: .type(.octetString), valueKind: .primitive).byte)
+        data.append(UInt8(contentBytes.count))
+        data.append(contentsOf: contentBytes)
+        data.append(8)
+        data.append(contentsOf: [UInt8](repeating: 0, count: 10))
+        
+        do {
+            let container = PKCS7ReceiptDataContainer(receiptData: data)
+        
+            let foundContent = try container.content()
+            let foundContentBytes = foundContent.map { $0 }
+            
+            XCTAssertEqual(contentBytes, foundContentBytes, "The content was expected to equal \(contentBytes) when \(foundContentBytes) was expected.")
+        } catch let error {
+            XCTFail("The container failed with error \(error) when it was expected to succeed.")
+        }
+    }
 }
