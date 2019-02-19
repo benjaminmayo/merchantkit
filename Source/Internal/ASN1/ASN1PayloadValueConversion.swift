@@ -7,21 +7,12 @@ extension ASN1 {
         case invalidDateFormat(String)
         case unsupportedBuffer(payloadType: BufferType)
         case invalidLength
-        case invalidIntegerRepresentation
     }
     
-    static func integer(from buffer: Data) throws -> Int {
-        var result: UInt64 = 0
-        
-        for (index, byte) in buffer.enumerated() {
-            result |= (UInt64(byte) << UInt64((buffer.count - 1 - index) * 8))
-        }
-        
-        guard let value = Int(exactly: result) else {
-            throw PayloadValueConversionError.invalidIntegerRepresentation
-        }
-        
-        return value
+    static func integer(from buffer: Data) -> Int {
+        return buffer.reduce(0, { result, byte in
+            (result << 8) | Int(byte)
+        })
     }
     
     typealias ConsumingConversionResult<T> = (value: T, remainingData: Data)
@@ -48,7 +39,11 @@ extension ASN1 {
         let endIndex = data.index(next, offsetBy: byteCount)
         let buffer = data[next..<endIndex]
         
-        let integer = try ASN1.integer(from: buffer)
+        let integer = ASN1.integer(from: buffer)
+        
+        guard integer > 0 else {
+            throw PayloadValueConversionError.invalidLength
+        }
         
         return (integer, data[endIndex...])
     }
