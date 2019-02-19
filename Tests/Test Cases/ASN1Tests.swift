@@ -160,6 +160,8 @@ class ASN1Tests : XCTestCase {
         }
     }
     
+    
+    
     func testTimeBufferTypeConversion() {
         for type in [ASN1.BufferType.generalizedTime, ASN1.BufferType.utcTime] {
             let asciiText = "this is a test"
@@ -227,6 +229,19 @@ class ASN1Tests : XCTestCase {
         let data = Data([130])
         
         XCTAssertThrowsError(_ = try ASN1.consumeLength(from: data), "An invalid length buffer value should be not supported.", { error in
+            switch error {
+                case ASN1.PayloadValueConversionError.invalidLength:
+                    break
+                case let error:
+                    XCTFail("The `ASN1.consumeLength(from:)` conversion failed with error \(error) but the error \(ASN1.PayloadValueConversionError.invalidLength) was expected.")
+            }
+        })
+    }
+    
+    func testThrowsConsumeLengthBecauseLengthSmallerOrEqualToZero() {
+        let data = Data([129, 0, 0])
+        
+        XCTAssertThrowsError(_ = try ASN1.consumeLength(from: data), "A buffer value should be not supported.", { error in
             switch error {
                 case ASN1.PayloadValueConversionError.invalidLength:
                     break
