@@ -22,7 +22,8 @@ public final class RestorePurchasesTask : MerchantTask {
         self.isStarted = true
         self.merchant.taskDidStart(self)
 
-        self.merchant.addProductPurchaseObserver(self)
+        self.merchant.storePurchaseObservers.add(self, forObserving: \.restorePurchasedProducts)
+        
         self.merchant.storeInterface.restorePurchases(using: self.merchant.storeParameters)
         
         self.merchant.logger.log(message: "Started restore purchases", category: .tasks)
@@ -33,7 +34,7 @@ extension RestorePurchasesTask {
     private func finish(with result: Result<RestoredProducts, Error>) {
         self.onCompletion?(result)
         
-        self.merchant.removeProductPurchaseObserver(self)
+        self.merchant.storePurchaseObservers.remove(self, forObserving: \.restorePurchasedProducts)
         
         DispatchQueue.main.async {
             self.merchant.taskDidResign(self)
@@ -43,17 +44,16 @@ extension RestorePurchasesTask {
     }
 }
 
-extension RestorePurchasesTask : MerchantProductPurchaseObserver {
-    func merchant(_ merchant: Merchant, didFinishPurchaseWith result: Result<Void, Error>, forProductWith productIdentifier: String) {
-        switch result {
-            case .success(_):
-                self.restoredProductIdentifiers.insert(productIdentifier)
-            case .failure(_):
-                break
-        }
+extension RestorePurchasesTask : Merchant.StorePurchaseObservers.RestorePurchasedProductsObserver {
+    func merchantDidStartRestoringProducts(_ merchant: Merchant) {
+        
     }
     
-    func merchant(_ merchant: Merchant, didCompleteRestoringProductsWith result: Result<Void, Error>) {
+    func merchant(_ merchant: Merchant, didRestorePurchasedProductWith productIdentifier: String) {
+        self.restoredProductIdentifiers.insert(productIdentifier)
+    }
+    
+    func merchant(_ merchant: Merchant, didFinishRestoringProductsWith result: Result<Void, Error>) {
         let result: Result<RestoredProducts, Error> = result.map { _ in
             let restoredProducts = Set(self.restoredProductIdentifiers.compactMap { self.merchant.product(withIdentifier: $0) })
 

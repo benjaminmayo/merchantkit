@@ -382,7 +382,7 @@ class ProductInterfaceControllerTests : XCTestCase {
                     return
                 }
                 
-                let entries: [ReceiptEntry] = testProducts.flatMap { product in
+                let entries: [ReceiptEntry] = testProducts.compactMap { product in
                     switch product.kind {
                         case .subscription(automaticallyRenews: _):
                             return ReceiptEntry(productIdentifier: product.identifier, expiryDate: Date(timeIntervalSinceNow: 60 * 60 * 24 * 7))
