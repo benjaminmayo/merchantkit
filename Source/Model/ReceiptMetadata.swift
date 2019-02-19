@@ -1,4 +1,4 @@
-public struct ReceiptMetadata {
+public struct ReceiptMetadata : Equatable {
     public let originalApplicationVersion: String
     
     internal init(originalApplicationVersion: String) {

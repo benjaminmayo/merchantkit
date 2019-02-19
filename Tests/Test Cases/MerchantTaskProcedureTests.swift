@@ -127,28 +127,130 @@ class MerchantTaskProcedureTests : XCTestCase {
         }
     }
     
-    func testReceiptMetadataFailure() {
+    func testReceiptMetadataResultsMatchExpectations() {
+        guard let dataForReceipt = self.dataForSampleResource(withName: "testSampleReceiptTwoNonConsumablesPurchased", extension: "data") else {
+            XCTFail("sample resource not found")
+            
+            return
+        }
+        
+        let resultsAndExpectations: [(Result<Data, Error>, Result<ReceiptMetadata, Error>)] = [
+            (.failure(MockError.mockError), .failure(MockError.mockError)),
+            (.success(Data()), .failure(ASN1.Parser.Error.emptyData)),
+            (.success(dataForReceipt), .success(ReceiptMetadata(originalApplicationVersion: "26")))
+        ]
+        
+        func evaluate(_ result: Result<ReceiptMetadata, Error>, withExpectation expectedResult: Result<ReceiptMetadata, Error>) {
+            switch (result, expectedResult) {
+                case (.success(let metadata), .success(let expectedMetadata)) where metadata == expectedMetadata:
+                    break
+                case (.success(let metadata), .success(let expectedMetadata)):
+                    XCTFail("The task succeeded with metadata \(metadata) when a success was expected with metadata \(expectedMetadata).")
+                case (.success(let metadata), .failure(let expectedError)):
+                    XCTFail("The task succeeded with metadata \(metadata) when a failure was expected with error \(expectedError).")
+                case (.failure(MockError.mockError), .failure(MockError.mockError)):
+                    break
+                case (.failure(ASN1.Parser.Error.emptyData), .failure(ASN1.Parser.Error.emptyData)):
+                    break
+                case (.failure(let error), .success(let expectedMetadata)):
+                    XCTFail("The task failed with error \(error) when a success with metadata \(expectedMetadata) was expected.")
+                case (.failure(let error), .failure(let expectedError)):
+                    XCTFail("The task failed with error \(error), when \(expectedError) was expected.")
+            }
+        }
+        
         let completionExpectation = self.expectation(description: "Completed fetching receipt metadata.")
+        completionExpectation.expectedFulfillmentCount = resultsAndExpectations.count
+        
+        var index = 0
+        
+        func runNextResult() {
+            guard index < resultsAndExpectations.endIndex else { return }
 
+            let (result, expectedResult) = resultsAndExpectations[index]
+
+            index += 1
+
+            let mockDelegate = MockMerchantDelegate()
+            let mockStoreInterface = MockStoreInterface()
+            mockStoreInterface.receiptFetchResult = result
+            
+            let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+            merchant.canGenerateLogs = true
+            
+            merchant.register([])
+            merchant.setup()
+            
+            let task = merchant.receiptMetadataTask()
+            task.onCompletion = { result in
+                evaluate(result, withExpectation: expectedResult)
+                
+                let repeatedTask = merchant.receiptMetadataTask()
+                repeatedTask.onCompletion = { repeatedResult in
+                    evaluate(result, withExpectation: repeatedResult)
+                    
+                    completionExpectation.fulfill()
+                    
+                    runNextResult()
+                }
+                
+                repeatedTask.start()
+            }
+            
+            task.start()
+        }
+        
+        runNextResult()
+        
+        self.wait(for: [completionExpectation], timeout: 5)
+    }
+    
+    func testReceiptMetadataUsesLatestReceipt() {
+        let testProduct = Product(identifier: "testProduct", kind: .nonConsumable)
+        
         let mockDelegate = MockMerchantDelegate()
         let mockStoreInterface = MockStoreInterface()
-        mockStoreInterface.receiptFetchResult = .failure(MockError.mockError)
+        mockStoreInterface.receiptFetchResult = .success(Data())
+
+        let mockReceipt = ConstructedReceipt(from: [ReceiptEntry(productIdentifier: testProduct.identifier, expiryDate: nil)], metadata: ReceiptMetadata(originalApplicationVersion: ""))
+
+        let mockReceiptValidator = MockReceiptValidator()
+        mockReceiptValidator.validateRequest = { (request, completion) in
+            completion(.success(mockReceipt))
+        }
         
-        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        let configuration = Merchant.Configuration(receiptValidator: mockReceiptValidator, storage: EphemeralPurchaseStorage())
+        let merchant = Merchant(configuration: configuration, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
         merchant.canGenerateLogs = true
         
-        merchant.register([])
+        merchant.register([testProduct])
         merchant.setup()
         
+        let latestFetchedReceiptExpectation = self.expectation(description: "Found a latest fetched receipt.")
+        
+        Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true, block: { timer in
+            if let receipt = merchant.latestFetchedReceipt {
+                timer.invalidate()
+                
+                XCTAssertEqual(receipt.productIdentifiers, mockReceipt.productIdentifiers)
+                
+                latestFetchedReceiptExpectation.fulfill()
+            }
+        })
+        
+        self.wait(for: [latestFetchedReceiptExpectation], timeout: 5)
+        
+        mockStoreInterface.receiptFetchResult = .failure(MockError.mockError)
+        
+        let completionExpectation = self.expectation(description: "Fetched receipt metadata.")
+
         let task = merchant.receiptMetadataTask()
         task.onCompletion = { result in
             switch result {
-                case .success(_):
-                    XCTFail("The task succeeded when a failure was expected.")
-                case .failure(MockError.mockError):
-                    break
+                case .success(let metadata):
+                    XCTAssertEqual(metadata, mockReceipt.metadata)
                 case .failure(let error):
-                    XCTFail("The task failed with error \(error), when \(MockError.mockError) was expected.")
+                    XCTFail("The task failed with \(error) when success was expected with receipt \(mockReceipt.metadata).")
             }
             
             completionExpectation.fulfill()
