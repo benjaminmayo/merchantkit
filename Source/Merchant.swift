@@ -28,8 +28,8 @@ public final class Merchant {
     
     internal let logger = Logger()
     internal let storeInterface: StoreInterface
-    internal var latestFetchedReceipt: Receipt?
-    internal var storePurchaseObservers = StorePurchaseObservers()
+    internal private(set) var latestFetchedReceipt: Receipt?
+    internal let storePurchaseObservers = StorePurchaseObservers()
 
     private let configuration: Configuration
 
