@@ -146,6 +146,20 @@ class ASN1Tests : XCTestCase {
         XCTAssertEqual(descriptor.valueKind, newDescriptor.valueKind)
     }
     
+    func testParserConsumeWithInvalidLengthNoMoreData() {
+        do {
+            let data = Data([2])
+            
+            let parser = ASN1.Parser(data: data)
+            
+            try parser.parse()
+        } catch ASN1.PayloadValueConversionError.invalidLength {
+            
+        } catch let error {
+            XCTFail("The parse failed with \(error) when a failure with error \(ASN1.PayloadValueConversionError.invalidLength) was expected.")
+        }
+    }
+    
     func testTimeBufferTypeConversion() {
         for type in [ASN1.BufferType.generalizedTime, ASN1.BufferType.utcTime] {
             let asciiText = "this is a test"
