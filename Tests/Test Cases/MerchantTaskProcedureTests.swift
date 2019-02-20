@@ -8,7 +8,13 @@ class MerchantTaskProcedureTests : XCTestCase {
         let commitPurchaseResults: [String : Result<Void, Error>] = Dictionary(uniqueKeysWithValues: productsAndPurchases.map { ($0.0.identifier, .success) })
         let availablePurchases = PurchaseSet(from: productsAndPurchases.map { $0.1 })
     
-        let outcomes = productsAndPurchases.map { $0.0 }.map { ProductExpectedOutcome(for: $0, finalState: .isPurchased(PurchasedProductInfo(expiryDate: nil)), isPurchaseExists: true, isSuccessfulCommit: true) }
+        let outcomes = productsAndPurchases.map { $0.0 }.map {
+            ProductExpectedOutcome(
+                for: $0,
+                finalState: $0.kind == .consumable ? .notPurchased : .isPurchased(PurchasedProductInfo(expiryDate: nil)),
+                isPurchaseExists: true,
+                isSuccessfulCommit: true)
+        }
         
         self.runTest(
             with: outcomes,
@@ -113,7 +119,9 @@ class MerchantTaskProcedureTests : XCTestCase {
             let task = merchant.restorePurchasesTask()
             task.onCompletion = { result in
                 for product in products {
-                    XCTAssertTrue(merchant.state(for: product).isPurchased, "Product \(product) was expected to be purchased after restoration, but the state reported it was not purchased.")
+                    if product.kind != .consumable {
+                        XCTAssertTrue(merchant.state(for: product).isPurchased, "Product \(product) was expected to be purchased after restoration, but the state reported it was not purchased.")
+                    }
                 }
                 
                 completionExpectation.fulfill()
@@ -286,6 +294,19 @@ extension MerchantTaskProcedureTests {
         let changeLoadingStateExpectation = self.expectation(description: "did change loading state expectation")
         changeLoadingStateExpectation.assertForOverFulfill = false
         
+        let consumedExpectation: XCTestExpectation? = {
+            let expectedConsumedCount = expectedOutcomes.count(where: {
+                $0.product.kind == .consumable && $0.isSuccessfulCommit
+            })
+            
+            guard expectedConsumedCount > 0 else { return nil }
+            
+            let expectation = self.expectation(description: "Consumed expectation.")
+            expectation.expectedFulfillmentCount = expectedConsumedCount
+            
+            return expectation
+        }()
+        
         var merchant: Merchant!
         let mockDelegate = MockMerchantDelegate()
         mockDelegate.didChangeLoadingState = {
@@ -294,11 +315,18 @@ extension MerchantTaskProcedureTests {
             }
         }
         
+        let mockConsumableProductsHandler = MockMerchantConsumableProductHandler()
+        mockConsumableProductsHandler.consumeProduct = { product, completion in
+            consumedExpectation?.fulfill()
+            
+            completion()
+        }
+        
         let mockStoreInterface = MockStoreInterface()
         mockStoreInterface.availablePurchasesResult = availablePurchasesResult.mapError { $0 as Error }
         mockStoreInterface.receiptFetchResult = .success(Data())
         
-        merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: mockConsumableProductsHandler, storeInterface: mockStoreInterface)
         merchant.canGenerateLogs = true
         
         merchant.register(products)
@@ -370,10 +398,10 @@ extension MerchantTaskProcedureTests {
         
         task.start()
         
-        self.wait(for: [completionExpectation, changeLoadingStateExpectation], timeout: 5, enforceOrder: true)
+        self.wait(for: [consumedExpectation, completionExpectation, changeLoadingStateExpectation].compactMap { $0 }, timeout: 5, enforceOrder: true)
     }
     
-    private func testProductsAndPurchases(forKinds kinds: [Product.Kind] = [.nonConsumable, .subscription(automaticallyRenews: false), .subscription(automaticallyRenews: true)]) -> [(product: Product, purchase: Purchase)] {
+    private func testProductsAndPurchases(forKinds kinds: [Product.Kind] = [.consumable, .nonConsumable, .subscription(automaticallyRenews: false), .subscription(automaticallyRenews: true)]) -> [(product: Product, purchase: Purchase)] {
         return kinds.enumerated().map { i, kind in
             let identifier = "testProduct\(i)"
             

@@ -14,7 +14,12 @@ class ProductInterfaceControllerTests : XCTestCase {
         mockStoreInterface.availablePurchasesResult = .success(PurchaseSet(from: testProductsAndPurchases.map { $0.purchase }))
         mockStoreInterface.receiptFetchResult = .success(Data())
         
-        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        let mockConsumableProductsHandler = MockMerchantConsumableProductHandler()
+        mockConsumableProductsHandler.consumeProduct = { product, completion in
+            completion()
+        }
+        
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: mockConsumableProductsHandler, storeInterface: mockStoreInterface)
         merchant.register(testProducts)
         merchant.setup()
         
@@ -74,7 +79,12 @@ class ProductInterfaceControllerTests : XCTestCase {
         mockStoreInterface.availablePurchasesResult = .failure(MockError.mockError)
         mockStoreInterface.receiptFetchResult = .success(Data())
         
-        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        let mockConsumableProductsHandler = MockMerchantConsumableProductHandler()
+        mockConsumableProductsHandler.consumeProduct = { product, completion in
+            completion()
+        }
+        
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: mockConsumableProductsHandler, storeInterface: mockStoreInterface)
         merchant.register(testProducts)
         merchant.setup()
         
@@ -134,7 +144,12 @@ class ProductInterfaceControllerTests : XCTestCase {
         let mockStoreInterface = MockStoreInterface()
         mockStoreInterface.receiptFetchResult = .success(Data())
         
-        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        let mockConsumableProductsHandler = MockMerchantConsumableProductHandler()
+        mockConsumableProductsHandler.consumeProduct = { product, completion in
+            completion()
+        }
+        
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: mockConsumableProductsHandler, storeInterface: mockStoreInterface)
         merchant.register(testProducts)
         merchant.setup()
             
@@ -156,7 +171,12 @@ class ProductInterfaceControllerTests : XCTestCase {
         mockStoreInterface.receiptFetchResult = .success(Data())
         mockStoreInterface.availablePurchasesResult = .success(PurchaseSet(from: testProductsAndPurchases.map { $0.purchase }))
         
-        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        let mockConsumableProductsHandler = MockMerchantConsumableProductHandler()
+        mockConsumableProductsHandler.consumeProduct = { product, completion in
+            completion()
+        }
+        
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: mockConsumableProductsHandler, storeInterface: mockStoreInterface)
         merchant.register(testProducts)
         merchant.setup()
         
@@ -260,7 +280,12 @@ class ProductInterfaceControllerTests : XCTestCase {
             mockStoreInterface.receiptFetchResult = .success(Data())
             mockStoreInterface.availablePurchasesResult = .failure(error)
 
-            let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+            let mockConsumableProductsHandler = MockMerchantConsumableProductHandler()
+            mockConsumableProductsHandler.consumeProduct = { product, completion in
+                completion()
+            }
+            
+            let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: mockConsumableProductsHandler, storeInterface: mockStoreInterface)
             merchant.register(testProducts)
             merchant.setup()
             
@@ -321,7 +346,12 @@ class ProductInterfaceControllerTests : XCTestCase {
         let mockStoreInterface = MockStoreInterface()
         mockStoreInterface.receiptFetchResult = .success(Data())
         
-        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        let mockConsumableProductsHandler = MockMerchantConsumableProductHandler()
+        mockConsumableProductsHandler.consumeProduct = { product, completion in
+            completion()
+        }
+
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: mockConsumableProductsHandler, storeInterface: mockStoreInterface)
         merchant.register(testProducts)
         merchant.setup()
         
@@ -397,10 +427,15 @@ class ProductInterfaceControllerTests : XCTestCase {
                 
                 completion(.success(receipt))
             }
+            
+            let mockConsumableProductsHandler = MockMerchantConsumableProductHandler()
+            mockConsumableProductsHandler.consumeProduct = { product, completion in
+                completion()
+            }
 
             let configuration = Merchant.Configuration(receiptValidator: mockReceiptValidator, storage: EphemeralPurchaseStorage())
     
-            let merchant = Merchant(configuration: configuration, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+            let merchant = Merchant(configuration: configuration, delegate: mockDelegate, consumableHandler: mockConsumableProductsHandler, storeInterface: mockStoreInterface)
             merchant.register(testProducts)
             merchant.setup()
             
@@ -443,7 +478,7 @@ class ProductInterfaceControllerTests : XCTestCase {
 }
 
 extension ProductInterfaceControllerTests {
-    private func testProductsAndPurchases(forKinds kinds: [Product.Kind] = [.nonConsumable, .subscription(automaticallyRenews: false), .subscription(automaticallyRenews: true)]) -> [(product: Product, purchase: Purchase)] {
+    private func testProductsAndPurchases(forKinds kinds: [Product.Kind] = [.consumable, .nonConsumable, .subscription(automaticallyRenews: false), .subscription(automaticallyRenews: true)]) -> [(product: Product, purchase: Purchase)] {
         return kinds.enumerated().map { i, kind in
             let identifier = "testProduct\(i)"
             
