@@ -73,6 +73,58 @@ class LocalReceiptPayloadParserTests : XCTestCase {
         }
     }
     
+    func testIncorrectInAppPurchaseSequenceErrorPropagated() {
+        let inAppPurchaseData: Data = {
+            var data = Data()
+            data.append(ASN1.Parser.PayloadDescriptor(domain: .universal, tag: .type(.set), valueKind: .constructed).byte)
+            data.append(12)
+            data.append(ASN1.Parser.PayloadDescriptor(domain: .universal, tag: .type(.sequence), valueKind: .constructed).byte)
+            data.append(10)
+            data.append(ASN1.BufferType.integer.rawValue)
+            data.append(2)
+            data.append(0x06)
+            data.append(0xA6)
+            data.append(ASN1.BufferType.integer.rawValue)
+            data.append(1)
+            data.append(1)
+            data.append(ASN1.BufferType.bitString.rawValue)
+            data.append(0)
+            data.append(0)
+            
+            return data
+        }()
+        
+        let inAppPurchaseDataLength = UInt8(inAppPurchaseData.count)
+        var data = Data()
+        data.append(ASN1.Parser.PayloadDescriptor(domain: .universal, tag: .type(.set), valueKind: .constructed).byte)
+        data.append(10 + inAppPurchaseDataLength)
+        data.append(ASN1.Parser.PayloadDescriptor(domain: .universal, tag: .type(.sequence), valueKind: .constructed).byte)
+        data.append(8 + inAppPurchaseDataLength)
+        data.append(ASN1.Parser.PayloadDescriptor(domain: .universal, tag: .type(.integer), valueKind: .primitive).byte)
+        data.append(1)
+        data.append(17)
+        data.append(ASN1.Parser.PayloadDescriptor(domain: .universal, tag: .type(.integer), valueKind: .primitive).byte)
+        data.append(1)
+        data.append(1)
+        data.append(ASN1.Parser.PayloadDescriptor(domain: .universal, tag: .type(.octetString), valueKind: .primitive).byte)
+        data.append(inAppPurchaseDataLength)
+        data.append(contentsOf: inAppPurchaseData)
+        
+        let expectedError = ASN1.PayloadValueConversionError.invalidBufferSize(foundByteCount: 0, payloadType: .bitString)
+        
+        do {
+            let parser = LocalReceiptPayloadParser()
+            let receipt = try parser.receipt(from: data)
+            
+            XCTAssertTrue(receipt.productIdentifiers.isEmpty)
+            XCTFail("The payload parsing succeeded when it was expected to fail with error \(expectedError).")
+        } catch ASN1.PayloadValueConversionError.invalidBufferSize(foundByteCount: 0, payloadType: .bitString) {
+            
+        } catch let error {
+            XCTFail("The payload parsing failed with error \(error) when it was expected to fail with error \(expectedError).")
+        }
+    }
+    
     func testSampleResources() {
         struct SampleResource {
             let name: String
