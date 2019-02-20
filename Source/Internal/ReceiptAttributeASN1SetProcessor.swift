@@ -63,10 +63,10 @@ internal class ReceiptAttributeASN1SetProcessor : Equatable {
         var stringValue: String? {
             guard let (type, buffer) = self.bufferWithType else { return nil }
             
-            guard let value = try? ASN1.value(convertedFrom: buffer, as: type) else { return nil }
+            let value = try? ASN1.value(convertedFrom: buffer, as: type)
             
             switch value {
-                case .string(let string):
+                case .string(let string)?:
                     return string
                 default:
                     return nil
@@ -76,10 +76,10 @@ internal class ReceiptAttributeASN1SetProcessor : Equatable {
         var integerValue: Int? {
             guard let (type, buffer) = self.bufferWithType else { return nil }
             
-            guard let value = try? ASN1.value(convertedFrom: buffer, as: type) else { return nil }
+            let value = try? ASN1.value(convertedFrom: buffer, as: type)
             
             switch value {
-                case .integer(let integer):
+                case .integer(let integer)?:
                     return integer
                 default:
                     return nil

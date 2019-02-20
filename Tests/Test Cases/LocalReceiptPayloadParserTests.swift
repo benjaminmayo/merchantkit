@@ -42,7 +42,7 @@ class LocalReceiptPayloadParserTests : XCTestCase {
         
         self.wait(for: [expectation], timeout: 1)
         
-        MerchantKitFatalError.customHandler = nil 
+        MerchantKitFatalError.customHandler = nil
     }
     
     func testIncorrectReceiptMetadataAttributeTypeHandledGracefully() {
