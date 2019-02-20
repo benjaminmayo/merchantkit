@@ -268,6 +268,24 @@ class MerchantTaskProcedureTests : XCTestCase {
         
         self.wait(for: [completionExpectation], timeout: 5)
     }
+    
+    public func testAvailablePurchasesDefaultsToAllProductsIfNoProductsSpecified() {
+        let testProducts = Set(self.testProductsAndPurchases().map { $0.product })
+        
+        let mockDelegate = MockMerchantDelegate()
+        let mockStoreInterface = MockStoreInterface()
+        mockStoreInterface.receiptFetchResult = .success(Data())
+        
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.canGenerateLogs = true
+        
+        merchant.register(testProducts)
+        merchant.setup()
+        
+        let task = merchant.availablePurchasesTask() // create task without specifying any products
+        
+        XCTAssertEqual(task.products, testProducts)
+    }
 }
 
 extension MerchantTaskProcedureTests {

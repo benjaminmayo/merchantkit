@@ -196,6 +196,49 @@ class MerchantTests : XCTestCase {
         
         MerchantKitFatalError.customHandler = nil
     }
+    
+    func testSubscriptionExpiredUponInitialization() {
+        let testProduct = Product(identifier: "testProduct", kind: .subscription(automaticallyRenews: true))
+        
+        let pastDate = Date(timeIntervalSinceNow: -60 * 60 * 24 * 7)
+        let outdatedRecord = PurchaseRecord(productIdentifier: testProduct.identifier, expiryDate: pastDate)
+        
+        let storage = EphemeralPurchaseStorage()
+        _ = storage.save(outdatedRecord)
+        
+        var merchant: Merchant!
+        
+        let expectation = self.expectation(description: "Subscription expired.")
+
+        let mockValidator = MockReceiptValidator()
+        mockValidator.validateRequest = { request, completion in
+            let entry = ReceiptEntry(productIdentifier: testProduct.identifier, expiryDate: pastDate)
+            
+            let receipt = ConstructedReceipt(from: [entry], metadata: ReceiptMetadata(originalApplicationVersion: ""))
+            
+            completion(.success(receipt))
+        }
+        
+        let mockDelegate = MockMerchantDelegate()
+        mockDelegate.didChangeStates = { products in            
+            guard products.contains(testProduct) else { return }
+            
+            let state = merchant.state(for: testProduct)
+            XCTAssertFalse(state.isPurchased, "The subscription state reported state \(state) when it was expected to be \(PurchasedState.notPurchased) as subscription expired in the past.")
+            
+            expectation.fulfill()
+        }
+        
+        let mockStoreInterface = MockStoreInterface()
+        mockStoreInterface.receiptFetchResult = .success(Data())
+        
+        merchant = Merchant(configuration: Merchant.Configuration(receiptValidator: mockValidator, storage: storage), delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.canGenerateLogs = true
+        merchant.register([testProduct])
+        merchant.setup()
+        
+        self.wait(for: [expectation], timeout: 5)
+    }
 }
 
 extension MerchantTests {
