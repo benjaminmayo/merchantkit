@@ -294,28 +294,20 @@ extension Merchant {
             
             let entries = receipt.entries(forProductIdentifier: productIdentifier)
             
-            let hasEntry = !entries.isEmpty
-            
             let result: PurchaseStorageUpdateResult
             
-            if hasEntry {
-                let expiryDate = entries.compactMap { $0.expiryDate }.max()
-                
-                if let expiryDate = expiryDate, !self.isSubscriptionActive(forExpiryDate: expiryDate) {
-                    result = self.configuration.storage.removeRecord(forProductIdentifier: productIdentifier)
-                    
-                    self.logger.log(message: "Removed record for \(productIdentifier), given expiry date \(expiryDate)", category: .purchaseStorage)
-                } else {
-                    let record = PurchaseRecord(productIdentifier: productIdentifier, expiryDate: expiryDate)
-                
-                    result = self.configuration.storage.save(record)
-                    
-                    self.logger.log(message: "Saved record: \(record)", category: .purchaseStorage)
-                }
-            } else {
+            let expiryDate = entries.compactMap { $0.expiryDate }.max()
+            
+            if let expiryDate = expiryDate, !self.isSubscriptionActive(forExpiryDate: expiryDate) {
                 result = self.configuration.storage.removeRecord(forProductIdentifier: productIdentifier)
                 
-                self.logger.log(message: "Removed record for \(productIdentifier)", category: .purchaseStorage)
+                self.logger.log(message: "Removed record for \(productIdentifier), given expiry date \(expiryDate)", category: .purchaseStorage)
+            } else {
+                let record = PurchaseRecord(productIdentifier: productIdentifier, expiryDate: expiryDate)
+            
+                result = self.configuration.storage.save(record)
+                
+                self.logger.log(message: "Saved record: \(record)", category: .purchaseStorage)
             }
             
             if result == .didChangeRecords {
@@ -467,7 +459,7 @@ extension Merchant : StoreInterfaceDelegate {
         if let pendingRestored = self.pendingProducts[.restored].nonEmpty {
             self.checkReceipt(updateProducts: .specific(productIdentifiers: Set(pendingRestored.map { $0.identifier })), policy: .onlyFetch, reason: .restorePurchases, completion: { updatedProductsResult in
                 let restoredProducts = (try? updatedProductsResult.get().filter { self.state(for: $0).isPurchased }) ?? []
-                
+                 
                 for observer in self.storePurchaseObservers.observers(for: \.restorePurchasedProducts) {
                     for product in restoredProducts {
                         observer.merchant(self, didRestorePurchasedProductWith: product.identifier)

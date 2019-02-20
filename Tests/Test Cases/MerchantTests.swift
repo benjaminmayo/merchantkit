@@ -164,6 +164,32 @@ class MerchantTests : XCTestCase {
         self.wait(for: [somethingChangedExpectation], timeout: 5)
     }
     
+    func testRestoreSubscriptionPurchaseSubscriptionWithFailingReceiptValidation() {
+        let completionExpectation = self.expectation(description: "Completed restore purchases.")
+        
+        let testProduct = Product(identifier: "testProduct", kind: .subscription(automaticallyRenews: true))
+        
+        let mockDelegate = MockMerchantDelegate()
+        
+        let mockStoreInterface = MockStoreInterface()
+        mockStoreInterface.receiptFetchResult = .failure(MockError.mockError)
+        mockStoreInterface.restoredProductsResult = .success(Set([testProduct.identifier]))
+        
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.canGenerateLogs = true
+        merchant.register([testProduct])
+        merchant.setup()
+
+        let task = merchant.restorePurchasesTask()
+        task.onCompletion = { _ in
+            completionExpectation.fulfill()
+        }
+        
+        task.start()
+        
+        self.wait(for: [completionExpectation], timeout: 4)
+    }
+    
     func testConsumeProductFailsIfConsumableHandlerUnset() {
         let testProduct = Product(identifier: "testProduct", kind: .consumable)
         
@@ -238,6 +264,43 @@ class MerchantTests : XCTestCase {
         merchant.setup()
         
         self.wait(for: [expectation], timeout: 5)
+    }
+    
+    func testProductRemovedFromReceipt() {
+        let completionExpectation = self.expectation(description: "Completed validate request.")
+        
+        let testProduct = Product(identifier: "testProduct", kind: .nonConsumable)
+        
+        let record = PurchaseRecord(productIdentifier: testProduct.identifier, expiryDate: nil)
+        
+        let storage = EphemeralPurchaseStorage()
+        _ = storage.save(record)
+        
+        var merchant: Merchant!
+        
+        let mockValidator = MockReceiptValidator()
+        mockValidator.validateRequest = { request, completion in
+            let receipt = ConstructedReceipt(from: [], metadata: ReceiptMetadata(originalApplicationVersion: ""))
+            
+            completion(.success(receipt))
+        }
+        
+        let mockDelegate = MockMerchantDelegate()
+        mockDelegate.didChangeStates = { products in
+            XCTAssertFalse(merchant.state(for: testProduct).isPurchased)
+            
+            completionExpectation.fulfill()
+        }
+        
+        let mockStoreInterface = MockStoreInterface()
+        mockStoreInterface.receiptFetchResult = .success(Data())
+        
+        merchant = Merchant(configuration: Merchant.Configuration(receiptValidator: mockValidator, storage: storage), delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.canGenerateLogs = true
+        merchant.register([testProduct])
+        merchant.setup()
+        
+        self.wait(for: [completionExpectation], timeout: 5)
     }
 }
 
