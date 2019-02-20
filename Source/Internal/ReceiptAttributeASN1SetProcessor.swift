@@ -19,15 +19,7 @@ internal class ReceiptAttributeASN1SetProcessor : Equatable {
     }
     
     func start() throws {
-        do {
-            try self.parser.parse()
-        } catch ASN1.Parser.Error.aborted {
-            
-        }
-    }
-    
-    func abort() {
-        self.parser.abortParsing()
+        try self.parser.parse()
     }
     
     struct ReceiptAttribute {
@@ -140,7 +132,6 @@ extension ReceiptAttributeASN1SetProcessor : ASN1ParserDelegate {
                 self.parsingState.nextExpectedValue = .type
             case .containerEnd(type: .sequence) where self.parsingState.hasStartedSet:
                 if let parsedAttributeData = self.parsingState.currentAttributeData {
-
                     if let attribute = ReceiptAttribute(from: parsedAttributeData) {
                         self.process(attribute)
                     }

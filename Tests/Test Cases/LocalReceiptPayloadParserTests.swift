@@ -45,13 +45,40 @@ class LocalReceiptPayloadParserTests : XCTestCase {
         MerchantKitFatalError.customHandler = nil 
     }
     
-    private struct SampleResource {
-        let name: String
-        let expectedProductIdentifiers: Set<String>
+    func testIncorrectReceiptMetadataAttributeTypeHandledGracefully() {
+        var data = Data()
+        data.append(ASN1.Parser.PayloadDescriptor(domain: .universal, tag: .type(.set), valueKind: .constructed).byte)
+        data.append(13)
+        data.append(ASN1.Parser.PayloadDescriptor(domain: .universal, tag: .type(.sequence), valueKind: .constructed).byte)
+        data.append(11)
+        data.append(ASN1.BufferType.integer.rawValue)
+        data.append(1)
+        data.append(19)
+        data.append(ASN1.BufferType.integer.rawValue)
+        data.append(1)
+        data.append(1)
+        data.append(ASN1.BufferType.bitString.rawValue)
+        data.append(3)
+        data.append(ASN1.BufferType.integer.rawValue)
+        data.append(1)
+        data.append(42)
+        
+        do {
+            let parser = LocalReceiptPayloadParser()
+            let receipt = try parser.receipt(from: data)
+            
+            XCTAssertEqual(receipt.metadata.originalApplicationVersion, "", "The originalApplicationVersion was \(receipt.metadata.originalApplicationVersion) when an empty string was expected.")
+        } catch let error {
+            XCTFail("The parser failed with error \(error) when it was expected to succeed.")
+        }
     }
     
     func testSampleResources() {
-        // TODO: Replace these resources with actual payload data resources; essentially the calls to `PKCS7ReceiptDataContainer` should not be part of this method.
+        struct SampleResource {
+            let name: String
+            let expectedProductIdentifiers: Set<String>
+        }
+        
         let twoNonconsumablesResource = SampleResource(name: "testSampleReceiptTwoNonConsumablesPurchased", expectedProductIdentifiers: ["codeSharingUnlockable", "saveScannedCodeUnlockable"])
         let subscriptionResource = SampleResource(name: "testSampleReceiptOneSubscriptionPurchased", expectedProductIdentifiers: ["premiumsubscription"])
         
