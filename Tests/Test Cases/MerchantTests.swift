@@ -125,6 +125,77 @@ class MerchantTests : XCTestCase {
             })
         })
     }
+    
+    func testIgnoresStoreInterfaceMessagesForUnregisteredProducts() {
+        let somethingChangedExpectation = self.expectation(description: "Some event triggered.")
+        somethingChangedExpectation.isInverted = true
+        
+        let mockDelegate = MockMerchantDelegate()
+        mockDelegate.didChangeLoadingState = {
+            somethingChangedExpectation.fulfill()
+        }
+        mockDelegate.didChangeStates = { _ in
+            somethingChangedExpectation.fulfill()
+        }
+        
+        let mockConsumableProductHandler = MockMerchantConsumableProductHandler()
+        mockConsumableProductHandler.consumeProduct = { (_, completion) in
+            somethingChangedExpectation.fulfill()
+            
+            completion()
+        }
+        
+        let mockStoreInterface = MockStoreInterface()
+        mockStoreInterface.receiptFetchResult = .success(Data())
+        mockStoreInterface.restoredProductsResult = .success(Set(["unrelatedProduct"]))
+        
+        let testProduct = Product(identifier: "testProduct", kind: .nonConsumable)
+        
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.canGenerateLogs = true
+        merchant.register([testProduct])
+        merchant.setup()
+        
+        mockStoreInterface.dispatchCommitPurchaseEvent(forProductWith: "unrelatedProduct", result: .success, afterDelay: 0.1)
+        mockStoreInterface.dispatchCommitPurchaseEvent(forProductWith: "unrelatedProduct2", result: .success, afterDelay: 0.1)
+        mockStoreInterface.dispatchCommitPurchaseEvent(forProductWith: "unrelatedProduct", result: .failure(MockError.mockError), afterDelay: 0.1)
+        mockStoreInterface.restorePurchases(using: merchant.storeParameters)
+        
+        self.wait(for: [somethingChangedExpectation], timeout: 5)
+    }
+    
+    func testConsumeProductFailsIfConsumableHandlerUnset() {
+        let testProduct = Product(identifier: "testProduct", kind: .consumable)
+        
+        let mockDelegate = MockMerchantDelegate()
+        
+        let expectation = self.expectation(description: "Fatal error thrown.")
+        
+        let mockStoreInterface = MockStoreInterface()
+        mockStoreInterface.receiptFetchResult = .success(Data())
+        mockStoreInterface.restoredProductsResult = .success(Set(["unrelatedProduct"]))
+        
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.canGenerateLogs = true
+        merchant.register([testProduct])
+        merchant.setup()
+     
+        MerchantKitFatalError.customHandler = {
+            expectation.fulfill()
+        }
+        
+        let mockSKProduct = MockSKProduct(productIdentifier: testProduct.identifier, price: NSDecimalNumber(string: "0.99"), priceLocale: Locale(identifier: "en_US_POSIX"))
+        let purchase = Purchase(from: .availableProduct(mockSKProduct), for: testProduct)
+        
+        let task = merchant.commitPurchaseTask(for: purchase)
+        task.start()
+        
+        mockStoreInterface.dispatchCommitPurchaseEvent(forProductWith: testProduct.identifier, result: .success, afterDelay: 0.1, on: DispatchQueue.global(qos: .background))
+        
+        self.wait(for: [expectation], timeout: 3)
+        
+        MerchantKitFatalError.customHandler = nil
+    }
 }
 
 extension MerchantTests {

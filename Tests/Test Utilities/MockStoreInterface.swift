@@ -13,8 +13,8 @@ internal class MockStoreInterface {
         
     }
     
-    func dispatchCommitPurchaseEvent(forProductWith productIdentifier: String, result: Result<Void, Error>, afterDelay delay: TimeInterval = 0) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
+    func dispatchCommitPurchaseEvent(forProductWith productIdentifier: String, result: Result<Void, Error>, afterDelay delay: TimeInterval = 0, on queue: DispatchQueue = .main) {
+        queue.asyncAfter(deadline: .now() + delay, execute: {
             self.delegate?.storeInterfaceWillUpdatePurchases(self)
             
             switch result {
