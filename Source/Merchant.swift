@@ -40,8 +40,7 @@ public final class Merchant {
     
     private var receiptFetchers: [ReceiptFetchPolicy : ReceiptDataFetcher] = [:]
     
-    private var identifiersForPendingObservedPurchases: Set<String> = []
-    private var identifiersForPendingObservedRestoredPurchases: Set<String> = []
+    private var pendingProducts = PendingProductSet()
     
     private let nowDate: Date = Date()
 
@@ -380,13 +379,13 @@ extension Merchant : StoreInterfaceDelegate {
     }
     
     internal func storeInterfaceDidUpdatePurchases(_ storeInterface: StoreInterface) {
-        if !self.identifiersForPendingObservedPurchases.isEmpty {
-            self.logger.log(message: "Invoked receipt update for purchases \(self.identifiersForPendingObservedPurchases)", category: .receipt)
+        if let pendingPurchased = self.pendingProducts[.purchased].nonEmpty {
+            self.logger.log(message: "Invoked receipt update for purchases \(pendingPurchased)", category: .receipt)
             
-            self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedPurchases), policy: .onlyFetch, reason: .completePurchase)
+            self.checkReceipt(updateProducts: .specific(productIdentifiers: Set(pendingPurchased.map { $0.identifier })), policy: .onlyFetch, reason: .completePurchase)
         }
         
-        self.identifiersForPendingObservedPurchases.removeAll()
+        self.pendingProducts[.purchased].removeAll()
     }
     
     internal func storeInterface(_ storeInterface: StoreInterface, didPurchaseProductWith productIdentifier: String, completion: @escaping () -> Void) {
@@ -412,7 +411,7 @@ extension Merchant : StoreInterfaceDelegate {
                 }
                 
                 if case .subscription(_) = product.kind {
-                    self.identifiersForPendingObservedPurchases.insert(product.identifier) // we need to get the receipt to find the new expiry date, the `PurchaseRecord` will be updated when that information is available
+                    self.pendingProducts[.purchased].insert(product) // we need to get the receipt to find the new expiry date, the `PurchaseRecord` will be updated when that information is available
                 }
                 
                 didCompletePurchase()
@@ -429,7 +428,7 @@ extension Merchant : StoreInterfaceDelegate {
     internal func storeInterface(_ storeInterface: StoreInterface, didRestorePurchaseForProductWith productIdentifier: String) {
         if let product = self.product(withIdentifier: productIdentifier) {
             if case .subscription(_) = product.kind {
-                self.identifiersForPendingObservedRestoredPurchases.insert(product.identifier)
+                self.pendingProducts[.restored].insert(product)
             } else {
                 let record = PurchaseRecord(productIdentifier: product.identifier, expiryDate: nil)
 
@@ -465,12 +464,8 @@ extension Merchant : StoreInterfaceDelegate {
     }
     
     internal func storeInterface(_ storeInterface: StoreInterface, didFinishRestoringPurchasesWith result: Result<Void, Error>) {
-        if self.identifiersForPendingObservedRestoredPurchases.isEmpty {
-            for observer in self.storePurchaseObservers.observers(for: \.restorePurchasedProducts) {
-                observer.merchant(self, didFinishRestoringProductsWith: result)
-            }
-        } else {
-            self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedRestoredPurchases), policy: .onlyFetch, reason: .restorePurchases, completion: { updatedProductsResult in
+        if let pendingRestored = self.pendingProducts[.restored].nonEmpty {
+            self.checkReceipt(updateProducts: .specific(productIdentifiers: Set(pendingRestored.map { $0.identifier })), policy: .onlyFetch, reason: .restorePurchases, completion: { updatedProductsResult in
                 let restoredProducts = (try? updatedProductsResult.get().filter { self.state(for: $0).isPurchased }) ?? []
                 
                 for observer in self.storePurchaseObservers.observers(for: \.restorePurchasedProducts) {
@@ -483,9 +478,15 @@ extension Merchant : StoreInterfaceDelegate {
                     observer.merchant(self, didFinishRestoringProductsWith: result)
                 }
             })
+            
+            self.logger.log(message: "Invoked receipt update for restored purchases \(pendingRestored)", category: .receipt)
+        } else {
+            for observer in self.storePurchaseObservers.observers(for: \.restorePurchasedProducts) {
+                observer.merchant(self, didFinishRestoringProductsWith: result)
+            }
         }
         
-        self.identifiersForPendingObservedRestoredPurchases.removeAll()
+        self.pendingProducts[.restored].removeAll()
     }
     
     internal func storeInterface(_ storeInterface: StoreInterface, responseForStoreIntentToCommitPurchaseFrom source: Purchase.Source) -> StoreIntentResponse {

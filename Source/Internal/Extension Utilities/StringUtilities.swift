@@ -10,11 +10,4 @@ extension String {
         
         return result
     }
-    
-    /// Returns `nil` if the string is zero length, else returns the string. This is used to flatten a fair few logical tests in the framework, typically related to Objective-C interoperability.
-    internal var nonEmpty: String? {
-        guard !self.isEmpty else { return nil }
-        
-        return self
-    }
 }
