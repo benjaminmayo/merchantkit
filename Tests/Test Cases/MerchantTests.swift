@@ -15,6 +15,36 @@ class MerchantTests : XCTestCase {
         XCTAssertFalse(merchant.isLoading)
     }
     
+    func testSetupAndSetupAgainIsNoop() {
+        let validateExpectation = self.expectation(description: "Validated once.")
+        validateExpectation.expectedFulfillmentCount = 1
+        validateExpectation.assertForOverFulfill = true
+        
+        let testProduct = Product(identifier: "testProduct", kind: .nonConsumable)
+        let storage = EphemeralPurchaseStorage()
+        
+        let mockReceiptValidator = MockReceiptValidator()
+        mockReceiptValidator.validateRequest = { request, completion in
+            validateExpectation.fulfill()
+            
+            completion(.failure(MockError.mockError))
+        }
+        
+        let mockDelegate = MockMerchantDelegate()
+        
+        let mockStoreInterface = MockStoreInterface()
+        mockStoreInterface.receiptFetchResult = .success(Data())
+        
+        let merchant = Merchant(configuration: Merchant.Configuration(receiptValidator: mockReceiptValidator, storage: storage), delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.canGenerateLogs = true
+        merchant.register([testProduct])
+        
+        merchant.setup()
+        merchant.setup()
+        
+        self.wait(for: [validateExpectation], timeout: 3)
+    }
+    
     func testProductRegistration() {
         let mockDelegate = MockMerchantDelegate()
         let mockStoreInterface = MockStoreInterface()
