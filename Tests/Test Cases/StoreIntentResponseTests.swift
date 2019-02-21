@@ -54,7 +54,7 @@ class StoreIntentResponseTests : XCTestCase {
         
         let source = Purchase.Source.pendingStorePayment(skProduct, skPayment)
         
-        let possibleResponses: [StoreIntentResponse] = [.automaticallyCommit, StoreIntentResponse.defer]
+        let possibleResponses: [StoreIntentResponse] = [.automaticallyCommit, .defer]
         
         for response in possibleResponses {
             mockMerchantDelegate.storeIntentResponse = response

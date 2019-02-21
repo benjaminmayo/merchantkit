@@ -1,15 +1,19 @@
 import StoreKit
 
 internal class StoreKitStoreInterface : StoreInterface {
+    private let paymentQueue: SKPaymentQueue
     private var transactionObserver: StoreKitTransactionObserver!
+    
     fileprivate var delegate: StoreInterfaceDelegate? {
         didSet {
             self.transactionObserver.delegate = self.delegate
         }
     }
     
-    internal init() {
-        self.transactionObserver = StoreKitTransactionObserver(storeInterface: self)
+    internal init(paymentQueue: SKPaymentQueue) {
+        self.paymentQueue = paymentQueue
+        
+        self.transactionObserver = StoreKitTransactionObserver(storeInterface: self, paymentQueue: self.paymentQueue)
     }
     
     internal func setup(withDelegate delegate: StoreInterfaceDelegate) {
@@ -36,13 +40,13 @@ internal class StoreKitStoreInterface : StoreInterface {
                 payment = pendingPayment
         }
         
-        SKPaymentQueue.default().add(payment)
+        self.paymentQueue.add(payment)
     }
     
     internal func restorePurchases(using storeParameters: StoreParameters) {
         self.delegate?.storeInterfaceWillStartRestoringPurchases(self)
         
-        SKPaymentQueue.default().restoreCompletedTransactions(withApplicationUsername: storeParameters.applicationUsername.nonEmpty)
+        self.paymentQueue.restoreCompletedTransactions(withApplicationUsername: storeParameters.applicationUsername.nonEmpty)
     }
 }
 

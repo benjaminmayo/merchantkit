@@ -52,7 +52,7 @@ public final class Merchant {
         self.delegate = delegate
         self.consumableHandler = consumableHandler
         
-        self.storeInterface = StoreKitStoreInterface()
+        self.storeInterface = StoreKitStoreInterface(paymentQueue: .default())
     }
     
     /// Register products that you want to use in your application. Products must be registered before their states are consistently valid. Products should be registered as early as possible, typically just before calling `setup()`.

@@ -102,6 +102,11 @@
 		43A74AB922030C0100F22264 /* MerchantConsumableProductHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A74AB822030C0100F22264 /* MerchantConsumableProductHandler.swift */; };
 		43A74ABB2203104E00F22264 /* TestingReceiptValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A74ABA2203104E00F22264 /* TestingReceiptValidator.swift */; };
 		43B0F3491F5C6CF300D4039A /* LocalReceiptPayloadParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B0F3481F5C6CF300D4039A /* LocalReceiptPayloadParser.swift */; };
+		43BF6F7F221ECBF200E693FF /* StoreKitTransactionObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BF6F7D221ECBEB00E693FF /* StoreKitTransactionObserverTests.swift */; };
+		43BF6F82221ECD1300E693FF /* MockStoreInterfaceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BF6F80221ECC3C00E693FF /* MockStoreInterfaceDelegate.swift */; };
+		43BF6F85221EE1C300E693FF /* MockSKPaymentTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BF6F83221EE15B00E693FF /* MockSKPaymentTransaction.swift */; };
+		43BF6F88221EE4A500E693FF /* MockSKPaymentQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BF6F86221EE4A200E693FF /* MockSKPaymentQueue.swift */; };
+		43BF6F8D221EF29700E693FF /* MockSKProductDiscountWithNilPriceLocale.m in Sources */ = {isa = PBXBuildFile; fileRef = 43BF6F8C221EF29700E693FF /* MockSKProductDiscountWithNilPriceLocale.m */; };
 		43C5AE0C2088AB7200F804CE /* SubscriptionDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5AE0B2088AB7200F804CE /* SubscriptionDuration.swift */; };
 		43C9B819221C11920093BDDD /* MerchantProductPurchaseObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C9B818221C11920093BDDD /* MerchantProductPurchaseObservers.swift */; };
 		43C9B81C221CA54A0093BDDD /* StoreKitAvailablePurchasesFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C9B81A221CA5400093BDDD /* StoreKitAvailablePurchasesFetcherTests.swift */; };
@@ -256,6 +261,13 @@
 		43A74AB822030C0100F22264 /* MerchantConsumableProductHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantConsumableProductHandler.swift; sourceTree = "<group>"; };
 		43A74ABA2203104E00F22264 /* TestingReceiptValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingReceiptValidator.swift; sourceTree = "<group>"; };
 		43B0F3481F5C6CF300D4039A /* LocalReceiptPayloadParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalReceiptPayloadParser.swift; sourceTree = "<group>"; };
+		43BF6F7D221ECBEB00E693FF /* StoreKitTransactionObserverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitTransactionObserverTests.swift; sourceTree = "<group>"; };
+		43BF6F80221ECC3C00E693FF /* MockStoreInterfaceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStoreInterfaceDelegate.swift; sourceTree = "<group>"; };
+		43BF6F83221EE15B00E693FF /* MockSKPaymentTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSKPaymentTransaction.swift; sourceTree = "<group>"; };
+		43BF6F86221EE4A200E693FF /* MockSKPaymentQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSKPaymentQueue.swift; sourceTree = "<group>"; };
+		43BF6F8A221EF29600E693FF /* MerchantKitTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MerchantKitTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		43BF6F8B221EF29700E693FF /* MockSKProductDiscountWithNilPriceLocale.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MockSKProductDiscountWithNilPriceLocale.h; sourceTree = "<group>"; };
+		43BF6F8C221EF29700E693FF /* MockSKProductDiscountWithNilPriceLocale.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MockSKProductDiscountWithNilPriceLocale.m; sourceTree = "<group>"; };
 		43C5AE0920889D3E00F804CE /* README.md */ = {isa = PBXFileReference; explicitFileType = net.daringfireball.markdown; fileEncoding = 4; path = README.md; sourceTree = "<group>"; };
 		43C5AE0B2088AB7200F804CE /* SubscriptionDuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionDuration.swift; sourceTree = "<group>"; };
 		43C9B818221C11920093BDDD /* MerchantProductPurchaseObservers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantProductPurchaseObservers.swift; sourceTree = "<group>"; };
@@ -548,6 +560,7 @@
 				4314B2632082CEC800ECC35C /* SubscriptionPeriodFormatterTests.swift */,
 				4314B277208375F900ECC35C /* PriceFormatterTests.swift */,
 				43DD2C882219A55700288149 /* StoreKitStoreInterfaceTests.swift */,
+				43BF6F7D221ECBEB00E693FF /* StoreKitTransactionObserverTests.swift */,
 				43C9B81A221CA5400093BDDD /* StoreKitAvailablePurchasesFetcherTests.swift */,
 				43F7EB3B221A01870084DA17 /* ProductInterfaceControllerTests.swift */,
 				43703A4520855198003AA087 /* ASN1Tests.swift */,
@@ -563,14 +576,20 @@
 			isa = PBXGroup;
 			children = (
 				4377345B2212F9060010EF79 /* MockStoreInterface.swift */,
+				43BF6F80221ECC3C00E693FF /* MockStoreInterfaceDelegate.swift */,
 				437734652213872A0010EF79 /* MockMerchantDelegate.swift */,
 				43C9B822221D9B4E0093BDDD /* MockMerchantConsumableProductHandler.swift */,
 				43773467221387510010EF79 /* MockSKProduct.swift */,
 				439BD1E322144FB900D361A3 /* MockSKPayment.swift */,
+				43BF6F83221EE15B00E693FF /* MockSKPaymentTransaction.swift */,
+				43BF6F86221EE4A200E693FF /* MockSKPaymentQueue.swift */,
+				43BF6F8B221EF29700E693FF /* MockSKProductDiscountWithNilPriceLocale.h */,
+				43BF6F8C221EF29700E693FF /* MockSKProductDiscountWithNilPriceLocale.m */,
 				43773469221387800010EF79 /* MockReceiptValidator.swift */,
 				439BD1E62214509100D361A3 /* MockError.swift */,
 				439546922086010C00B9D2C6 /* TestsUtilities.swift */,
 				43C9B81D221CBE650093BDDD /* ASN1Utilities.swift */,
+				43BF6F8A221EF29600E693FF /* MerchantKitTests-Bridging-Header.h */,
 			);
 			path = "Test Utilities";
 			sourceTree = "<group>";
@@ -671,7 +690,7 @@
 					};
 					434202651EAE08F80012983A = {
 						CreatedOnToolsVersion = 8.3.2;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1020;
 					};
 					4370FCFF220C48CF003BA681 = {
 						CreatedOnToolsVersion = 10.1;
@@ -823,6 +842,7 @@
 				4377346422137D750010EF79 /* MockStoreInterface.swift in Sources */,
 				439DD22F2086840300B0F0C4 /* SubscriptionPriceFormatterTests.swift in Sources */,
 				4314B2792083763800ECC35C /* PriceFormatterTests.swift in Sources */,
+				43BF6F88221EE4A500E693FF /* MockSKPaymentQueue.swift in Sources */,
 				432BFFD3208E0CC400257585 /* MerchantTests.swift in Sources */,
 				4337A89D1EB1FE3300EAF633 /* PurchaseRecordTests.swift in Sources */,
 				439546912086009700B9D2C6 /* PKCS7ReceiptDataContainerTests.swift in Sources */,
@@ -835,10 +855,12 @@
 				431C1FF51F5E0815009E2CD7 /* LocalReceiptPayloadParserTests.swift in Sources */,
 				432BFFDC208E65F600257585 /* PurchaseTests.swift in Sources */,
 				4319AC6320927AFB000ACC04 /* LocalReceiptValidatorTests.swift in Sources */,
+				43BF6F7F221ECBF200E693FF /* StoreKitTransactionObserverTests.swift in Sources */,
 				43C9B823221D9B4E0093BDDD /* MockMerchantConsumableProductHandler.swift in Sources */,
 				439BD1E72214509100D361A3 /* MockError.swift in Sources */,
 				4337A8971EB1F1CA00EAF633 /* ServerReceiptResponseParserTests.swift in Sources */,
 				4377346A221387800010EF79 /* MockReceiptValidator.swift in Sources */,
+				43BF6F82221ECD1300E693FF /* MockStoreInterfaceDelegate.swift in Sources */,
 				43773468221387510010EF79 /* MockSKProduct.swift in Sources */,
 				4370FCFB220C4451003BA681 /* MerchantConfigurationTests.swift in Sources */,
 				43DD2C8A2219A56900288149 /* StoreKitStoreInterfaceTests.swift in Sources */,
@@ -847,12 +869,14 @@
 				43DD2C872218E7F200288149 /* PriceTests.swift in Sources */,
 				4319AC6820936DC4000ACC04 /* ConstructedReceiptTests.swift in Sources */,
 				432BFFDA208E2F9700257585 /* DescriptionUtilitiesTests.swift in Sources */,
+				43BF6F8D221EF29700E693FF /* MockSKProductDiscountWithNilPriceLocale.m in Sources */,
 				4314B2622082C6A300ECC35C /* LocalizedResourcesTests.swift in Sources */,
 				43C9B821221D8DED0093BDDD /* ReceiptAttributeASN1SetProcessorTests.swift in Sources */,
 				43C9B81C221CA54A0093BDDD /* StoreKitAvailablePurchasesFetcherTests.swift in Sources */,
 				4377345F22137BA70010EF79 /* MerchantTaskProcedureTests.swift in Sources */,
 				43C9B81F221CBE890093BDDD /* ASN1Utilities.swift in Sources */,
 				439BD1DF2214424400D361A3 /* MerchantDelegateTests.swift in Sources */,
+				43BF6F85221EE1C300E693FF /* MockSKPaymentTransaction.swift in Sources */,
 				43C9B825221DAD7A0093BDDD /* LoggerTests.swift in Sources */,
 				432BFFD8208E1DB100257585 /* PurchaseStorageTests.swift in Sources */,
 			);
@@ -1113,6 +1137,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 2ZTW4G3PG5;
 				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
@@ -1125,6 +1150,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.anthonymayo.MerchantKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/Test Utilities/MerchantKitTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MerchantKitTestsHost.app/MerchantKitTestsHost";
@@ -1135,6 +1162,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
@@ -1147,6 +1175,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.anthonymayo.MerchantKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/Test Utilities/MerchantKitTests-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MerchantKitTestsHost.app/MerchantKitTestsHost";

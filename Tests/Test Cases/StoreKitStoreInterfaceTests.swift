@@ -4,20 +4,31 @@ import StoreKit
 
 class StoreKitStoreInterfaceTests : XCTestCase {
     private var storeInterface: StoreKitStoreInterface!
+    private var storeInterfaceDelegate: MockStoreInterfaceDelegate!
     
     private var availablePurchasesFetcher: AvailablePurchasesFetcher!
     
     override func setUp() {
         super.setUp()
+        
+        self.storeInterfaceDelegate = MockStoreInterfaceDelegate()
+
+        self.storeInterface = StoreKitStoreInterface(paymentQueue: .default())
+        self.storeInterface.setup(withDelegate: self.storeInterfaceDelegate)
+    }
     
-        self.storeInterface = StoreKitStoreInterface()
-        self.storeInterface.setup(withDelegate: self)
+    override func tearDown() {
+        super.tearDown()
+        
+        self.storeInterface = nil
+        self.storeInterfaceDelegate = nil
     }
     
     func testFetchAvailablePurchasesWithNonExistentProduct() {
+        let testProduct = Product(identifier: "availablePurchasesTestProduct", kind: .nonConsumable)
+
         let completionExpectation = self.expectation(description: "Completed fetch available purchases.")
-        let testProduct = self.availablePurchasesTestProduct
-        
+
         let fetcher = self.storeInterface.makeAvailablePurchasesFetcher(for: [testProduct])
         fetcher.enqueueCompletion({ result in
             switch result {
@@ -108,9 +119,9 @@ class StoreKitStoreInterfaceTests : XCTestCase {
     }
     
     func testCommitPurchase() {
-        self.commitPurchaseTestProduct = self.makeCommitPurchaseTestProduct()
+        let testProduct = self.makeCommitPurchaseTestProduct()
         
-        let mockSKProduct = MockSKProduct(productIdentifier: self.commitPurchaseTestProduct.identifier, price: NSDecimalNumber(string: "1.99"), priceLocale: Locale(identifier: "en_US_POSIX"))
+        let mockSKProduct = MockSKProduct(productIdentifier: testProduct.identifier, price: NSDecimalNumber(string: "1.99"), priceLocale: Locale(identifier: "en_US_POSIX"))
         let mockSKPayment = MockSKPayment(product: mockSKProduct)
         
         let purchaseSources: [Purchase.Source] = [
@@ -118,77 +129,44 @@ class StoreKitStoreInterfaceTests : XCTestCase {
             .pendingStorePayment(mockSKProduct, mockSKPayment)
         ]
         
-        self.commitPurchaseCompletionExpectation = self.expectation(description: "Completed commit purchase.")
-        self.commitPurchaseCompletionExpectation.expectedFulfillmentCount = purchaseSources.count
+        let completionExpectation = self.expectation(description: "Completed commit purchase.")
+        completionExpectation.expectedFulfillmentCount = purchaseSources.count
+
+        self.storeInterfaceDelegate.didPurchaseProduct = { productIdentifier, completion in
+            if productIdentifier == testProduct.identifier {
+                XCTFail("The commit purchase succeeded but was expected to fail.")
+                
+                completionExpectation.fulfill()
+            }
+            
+            completion()
+        }
+        
+        self.storeInterfaceDelegate.didFailToPurchase = { productIdentifier, error in
+            if productIdentifier == testProduct.identifier {
+                switch error {
+                    case SKError.unknown:
+                        break
+                    case let error:
+                        XCTFail("The commit purchase failed with error \(error) but was expected to fail with error \(SKError.unknown).")
+                }
+                
+                completionExpectation.fulfill()
+            }
+        }
         
         for source in purchaseSources {
-            let purchase = Purchase(from: source, for: self.commitPurchaseTestProduct)
+            let purchase = Purchase(from: source, for: testProduct)
             
             self.storeInterface.commitPurchase(purchase, using: StoreParameters(applicationUsername: ""))
         }
         
-        self.wait(for: [self.commitPurchaseCompletionExpectation], timeout: 5)
+        self.wait(for: [completionExpectation], timeout: 5)
     }
-    
-    private var commitPurchaseCompletionExpectation: XCTestExpectation!
-    private var commitPurchaseTestProduct: Product!
 }
 
 extension StoreKitStoreInterfaceTests {
-    private var availablePurchasesTestProduct: Product {
-        return Product(identifier: "availablePurchasesTestProduct", kind: .nonConsumable)
-    }
-    
     private func makeCommitPurchaseTestProduct() -> Product {
         return Product(identifier: UUID().uuidString, kind: .nonConsumable)
-    }
-}
-
-extension StoreKitStoreInterfaceTests : StoreInterfaceDelegate {
-    func storeInterfaceWillUpdatePurchases(_ storeInterface: StoreInterface) {
-        
-    }
-    
-    func storeInterfaceDidUpdatePurchases(_ storeInterface: StoreInterface) {
-        
-    }
-    
-    func storeInterfaceWillStartRestoringPurchases(_ storeInterface: StoreInterface) {
-        
-    }
-    
-    func storeInterface(_ storeInterface: StoreInterface, didFinishRestoringPurchasesWith result: Result<Void, Error>) {
-        
-    }
-    
-    func storeInterface(_ storeInterface: StoreInterface, didPurchaseProductWith productIdentifier: String, completion: @escaping () -> Void) {
-        if productIdentifier == self.commitPurchaseTestProduct.identifier {
-            XCTFail("The commit purchase succeeded but was expected to fail.")
-            
-            self.commitPurchaseCompletionExpectation.fulfill()
-        }
-        
-        completion()
-    }
-    
-    func storeInterface(_ storeInterface: StoreInterface, didFailToPurchaseProductWith productIdentifier: String, error: Error) {
-        if productIdentifier == self.commitPurchaseTestProduct?.identifier {
-            switch error {
-                case SKError.unknown:
-                    break
-                case let error:
-                    XCTFail("The commit purchase failed with error \(error) but was expected to fail with error \(SKError.unknown).")
-            }
-            
-            self.commitPurchaseCompletionExpectation?.fulfill()
-        }
-    }
-    
-    func storeInterface(_ storeInterface: StoreInterface, didRestorePurchaseForProductWith productIdentifier: String) {
-        
-    }
-    
-    func storeInterface(_ storeInterface: StoreInterface, responseForStoreIntentToCommitPurchaseFrom source: Purchase.Source) -> StoreIntentResponse {
-        return .default
     }
 }

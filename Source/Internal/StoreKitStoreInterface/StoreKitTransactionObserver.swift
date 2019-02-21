@@ -2,38 +2,40 @@ import StoreKit
 
 /// Observes the payment queue for changes and notifies the delegate of significant updates.
 internal final class StoreKitTransactionObserver : NSObject {
-    public weak var delegate: StoreInterfaceDelegate?
+    internal weak var delegate: StoreInterfaceDelegate?
     
     private unowned let storeInterface: StoreInterface
+    private let paymentQueue: SKPaymentQueue
     
-    internal init(storeInterface: StoreInterface) {
+    internal init(storeInterface: StoreInterface, paymentQueue: SKPaymentQueue) {
         self.storeInterface = storeInterface
+        self.paymentQueue = paymentQueue
         
         super.init()
     }
     
     internal func start() {
-        SKPaymentQueue.default().add(self)
+        self.paymentQueue.add(self)
     }
 }
 
 extension StoreKitTransactionObserver {
-    fileprivate func completePurchase(for transaction: SKPaymentTransaction) {
+    fileprivate func completePurchase(for transaction: SKPaymentTransaction, on paymentQueue: SKPaymentQueue) {
         self.delegate?.storeInterface(self.storeInterface, didPurchaseProductWith: transaction.payment.productIdentifier, completion: {
-            SKPaymentQueue.default().finishTransaction(transaction)
+            paymentQueue.finishTransaction(transaction)
         })
     }
     
-    fileprivate func completeRestorePurchase(for transaction: SKPaymentTransaction, original: SKPaymentTransaction?) {
+    fileprivate func completeRestorePurchase(for transaction: SKPaymentTransaction, original: SKPaymentTransaction?, on paymentQueue: SKPaymentQueue) {
         self.delegate?.storeInterface(self.storeInterface, didRestorePurchaseForProductWith: transaction.payment.productIdentifier)
         
-        SKPaymentQueue.default().finishTransaction(transaction)
+        paymentQueue.finishTransaction(transaction)
     }
     
-    fileprivate func failPurchase(for transaction: SKPaymentTransaction) {
+    fileprivate func failPurchase(for transaction: SKPaymentTransaction, on paymentQueue: SKPaymentQueue) {
         self.delegate?.storeInterface(self.storeInterface, didFailToPurchaseProductWith: transaction.payment.productIdentifier, error: transaction.error!)
         
-        SKPaymentQueue.default().finishTransaction(transaction)
+        paymentQueue.finishTransaction(transaction)
     }
 }
 
@@ -44,13 +46,13 @@ extension StoreKitTransactionObserver : SKPaymentTransactionObserver {
         for transaction in transactions {            
             switch transaction.transactionState {
                 case .purchased:
-                    self.completePurchase(for: transaction)
+                    self.completePurchase(for: transaction, on: queue)
                 case .purchasing:
                     break
                 case .restored:
-                    self.completeRestorePurchase(for: transaction, original: transaction.original)
+                    self.completeRestorePurchase(for: transaction, original: transaction.original, on: queue)
                 case .failed:
-                    self.failPurchase(for: transaction)
+                    self.failPurchase(for: transaction, on: queue)
                 case .deferred:
                     break
                 @unknown default:

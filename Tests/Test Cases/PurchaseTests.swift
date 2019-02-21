@@ -91,6 +91,21 @@ class PurchaseTests : XCTestCase {
         }
     }
     
+    func testShimHandlesPriceLocaleIsNullFromProductDiscountOnIntroductoryOfferDueToStoreKitBug() {
+        guard #available(iOS 11.2, *) else { return }
+        
+        for subscriptionTestProduct in self.testProducts(areSubscriptions: true) {
+            let mockSubscriptionPeriod = MockSKProductSubscriptionPeriod(unit: .day, numberOfUnits: 1)
+            let introductoryOffer = MockSKProductDiscountWithNilPriceLocale(price: NSDecimalNumber(string: "0.00"), subscriptionPeriod: mockSubscriptionPeriod, numberOfPeriods: 1, paymentMode: .freeTrial)
+            
+            let mockProduct = MockSKProductWithSubscription(productIdentifier: subscriptionTestProduct.identifier, price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, introductoryOffer: introductoryOffer)
+            
+            let purchase = Purchase(from: .availableProduct(mockProduct), for: subscriptionTestProduct)
+            
+            XCTAssertNotNil(purchase.subscriptionTerms)
+        }
+    }
+    
     private func testProducts(areSubscriptions: Bool) -> Set<Product> {
         let productKinds: [Product.Kind]
             
@@ -175,12 +190,12 @@ private class MockSKProductSubscriptionPeriod : SKProductSubscriptionPeriod {
 @available(iOS 11.2, *)
 private class MockSKProductDiscount : SKProductDiscount {
     let _price: NSDecimalNumber
-    let _priceLocale: Locale!
+    let _priceLocale: Locale
     let _subscriptionPeriod: SKProductSubscriptionPeriod
     let _numberOfPeriods: Int
     let _paymentMode: SKProductDiscount.PaymentMode
     
-    init(price: NSDecimalNumber, priceLocale: Locale!, subscriptionPeriod: SKProductSubscriptionPeriod, numberOfPeriods: Int, paymentMode: SKProductDiscount.PaymentMode) {
+    init(price: NSDecimalNumber, priceLocale: Locale, subscriptionPeriod: SKProductSubscriptionPeriod, numberOfPeriods: Int, paymentMode: SKProductDiscount.PaymentMode) {
         self._price = price
         self._priceLocale = priceLocale
         self._subscriptionPeriod = subscriptionPeriod
