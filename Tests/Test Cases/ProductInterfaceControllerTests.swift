@@ -43,7 +43,7 @@ class ProductInterfaceControllerTests : XCTestCase {
                                 controller.commit(foundPurchase)
                             
                                 mockStoreInterface.dispatchCommitPurchaseEvent(forProductWith: product.identifier, result: .success)
-                            case let state:
+                            default:
                                 XCTFail("The controller reported state \(state) for product \(product), but `purchasable` was expected.")
                         }
                     }
@@ -52,10 +52,26 @@ class ProductInterfaceControllerTests : XCTestCase {
             }
         }
         
-        delegate.didCommit = { (product, result) in
+        delegate.didCommit = { (purchase, result) in
             switch result {
                 case .success(_):
-                    break
+                    let product = controller.products.first(where: { $0.identifier ==  purchase.productIdentifier })!
+                    let state = controller.state(for: product)
+                
+                    switch state {
+                        case .purchased(_, let metadata):
+                            if #available(iOS 11.2, *) {
+                                if case .subscription(automaticallyRenews: _) = product.kind {
+                                    XCTAssertNotNil(metadata?.subscriptionTerms, "Subscription products should have associated subscription terms.")
+                                } else {
+                                    XCTAssertNil(metadata?.subscriptionTerms, "Non-subscription products should not have associated subscription terms.")
+                                }
+                            }
+                        default:
+                            if product.kind != .consumable {
+                                XCTFail("The commit purchase succeeded but the state was not correctly updated to `purchased`.")
+                            }
+                    }
                 case .failure(let error):
                     XCTFail("The commit purchase failed with \(error) when it was expected to succeed.")
             }
@@ -478,12 +494,23 @@ class ProductInterfaceControllerTests : XCTestCase {
 }
 
 extension ProductInterfaceControllerTests {
-    private func testProductsAndPurchases(forKinds kinds: [Product.Kind] = [.consumable, .nonConsumable, .subscription(automaticallyRenews: false), .subscription(automaticallyRenews: true)]) -> [(product: Product, purchase: Purchase)] {
+    private func testProductsAndPurchases() -> [(product: Product, purchase: Purchase)] {
+        let kinds: [Product.Kind] = [.consumable, .nonConsumable, .subscription(automaticallyRenews: false), .subscription(automaticallyRenews: true)]
+        
         return kinds.enumerated().map { i, kind in
             let identifier = "testProduct\(i)"
             
             let product = Product(identifier: identifier, kind: kind)
-            let skProduct = MockSKProduct(productIdentifier: identifier, price: NSDecimalNumber(string: "0.99"), priceLocale: Locale(identifier: "en_US_POSIX"))
+            let skProduct: SKProduct
+            
+            if case .subscription(automaticallyRenews: _) = kind, #available(iOS 11.2, *) {
+                let subscriptionPeriod = MockSKProductSubscriptionPeriod(unit: .month, numberOfUnits: 1)
+                
+                skProduct = MockSKProductWithSubscription(productIdentifier: identifier, price: NSDecimalNumber(string: "0.99"), priceLocale: Locale(identifier: "en_US_POSIX"), subscriptionPeriod: subscriptionPeriod, introductoryOffer: nil)
+            } else {
+                skProduct = MockSKProduct(productIdentifier: identifier, price: NSDecimalNumber(string: "0.99"), priceLocale: Locale(identifier: "en_US_POSIX"))
+            }
+
             let purchase = Purchase(from: .availableProduct(skProduct), for: product)
             
             return (product, purchase)

@@ -107,6 +107,9 @@
 		43BF6F85221EE1C300E693FF /* MockSKPaymentTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BF6F83221EE15B00E693FF /* MockSKPaymentTransaction.swift */; };
 		43BF6F88221EE4A500E693FF /* MockSKPaymentQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BF6F86221EE4A200E693FF /* MockSKPaymentQueue.swift */; };
 		43BF6F8D221EF29700E693FF /* MockSKProductDiscountWithNilPriceLocale.m in Sources */ = {isa = PBXBuildFile; fileRef = 43BF6F8C221EF29700E693FF /* MockSKProductDiscountWithNilPriceLocale.m */; };
+		43BF6F91221EFEBC00E693FF /* MockSKProductWithSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BF6F90221EFEBC00E693FF /* MockSKProductWithSubscription.swift */; };
+		43BF6F93221EFEE400E693FF /* MockSKProductSubscriptionPeriod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BF6F92221EFEE400E693FF /* MockSKProductSubscriptionPeriod.swift */; };
+		43BF6F95221EFF0200E693FF /* MockSKProductDiscount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BF6F94221EFF0200E693FF /* MockSKProductDiscount.swift */; };
 		43C5AE0C2088AB7200F804CE /* SubscriptionDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C5AE0B2088AB7200F804CE /* SubscriptionDuration.swift */; };
 		43C9B819221C11920093BDDD /* MerchantProductPurchaseObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C9B818221C11920093BDDD /* MerchantProductPurchaseObservers.swift */; };
 		43C9B81C221CA54A0093BDDD /* StoreKitAvailablePurchasesFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C9B81A221CA5400093BDDD /* StoreKitAvailablePurchasesFetcherTests.swift */; };
@@ -268,6 +271,9 @@
 		43BF6F8A221EF29600E693FF /* MerchantKitTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MerchantKitTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		43BF6F8B221EF29700E693FF /* MockSKProductDiscountWithNilPriceLocale.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MockSKProductDiscountWithNilPriceLocale.h; sourceTree = "<group>"; };
 		43BF6F8C221EF29700E693FF /* MockSKProductDiscountWithNilPriceLocale.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MockSKProductDiscountWithNilPriceLocale.m; sourceTree = "<group>"; };
+		43BF6F90221EFEBC00E693FF /* MockSKProductWithSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSKProductWithSubscription.swift; sourceTree = "<group>"; };
+		43BF6F92221EFEE400E693FF /* MockSKProductSubscriptionPeriod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSKProductSubscriptionPeriod.swift; sourceTree = "<group>"; };
+		43BF6F94221EFF0200E693FF /* MockSKProductDiscount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSKProductDiscount.swift; sourceTree = "<group>"; };
 		43C5AE0920889D3E00F804CE /* README.md */ = {isa = PBXFileReference; explicitFileType = net.daringfireball.markdown; fileEncoding = 4; path = README.md; sourceTree = "<group>"; };
 		43C5AE0B2088AB7200F804CE /* SubscriptionDuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionDuration.swift; sourceTree = "<group>"; };
 		43C9B818221C11920093BDDD /* MerchantProductPurchaseObservers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantProductPurchaseObservers.swift; sourceTree = "<group>"; };
@@ -580,6 +586,9 @@
 				437734652213872A0010EF79 /* MockMerchantDelegate.swift */,
 				43C9B822221D9B4E0093BDDD /* MockMerchantConsumableProductHandler.swift */,
 				43773467221387510010EF79 /* MockSKProduct.swift */,
+				43BF6F90221EFEBC00E693FF /* MockSKProductWithSubscription.swift */,
+				43BF6F92221EFEE400E693FF /* MockSKProductSubscriptionPeriod.swift */,
+				43BF6F94221EFF0200E693FF /* MockSKProductDiscount.swift */,
 				439BD1E322144FB900D361A3 /* MockSKPayment.swift */,
 				43BF6F83221EE15B00E693FF /* MockSKPaymentTransaction.swift */,
 				43BF6F86221EE4A200E693FF /* MockSKPaymentQueue.swift */,
@@ -844,6 +853,7 @@
 				4314B2792083763800ECC35C /* PriceFormatterTests.swift in Sources */,
 				43BF6F88221EE4A500E693FF /* MockSKPaymentQueue.swift in Sources */,
 				432BFFD3208E0CC400257585 /* MerchantTests.swift in Sources */,
+				43BF6F95221EFF0200E693FF /* MockSKProductDiscount.swift in Sources */,
 				4337A89D1EB1FE3300EAF633 /* PurchaseRecordTests.swift in Sources */,
 				439546912086009700B9D2C6 /* PKCS7ReceiptDataContainerTests.swift in Sources */,
 				4319AC6D2093CD03000ACC04 /* MerchantTaskTests.swift in Sources */,
@@ -866,6 +876,7 @@
 				43DD2C8A2219A56900288149 /* StoreKitStoreInterfaceTests.swift in Sources */,
 				4314B2652082CF5600ECC35C /* SubscriptionPeriodFormatterTests.swift in Sources */,
 				437734662213872A0010EF79 /* MockMerchantDelegate.swift in Sources */,
+				43BF6F93221EFEE400E693FF /* MockSKProductSubscriptionPeriod.swift in Sources */,
 				43DD2C872218E7F200288149 /* PriceTests.swift in Sources */,
 				4319AC6820936DC4000ACC04 /* ConstructedReceiptTests.swift in Sources */,
 				432BFFDA208E2F9700257585 /* DescriptionUtilitiesTests.swift in Sources */,
@@ -878,6 +889,7 @@
 				439BD1DF2214424400D361A3 /* MerchantDelegateTests.swift in Sources */,
 				43BF6F85221EE1C300E693FF /* MockSKPaymentTransaction.swift in Sources */,
 				43C9B825221DAD7A0093BDDD /* LoggerTests.swift in Sources */,
+				43BF6F91221EFEBC00E693FF /* MockSKProductWithSubscription.swift in Sources */,
 				432BFFD8208E1DB100257585 /* PurchaseStorageTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
