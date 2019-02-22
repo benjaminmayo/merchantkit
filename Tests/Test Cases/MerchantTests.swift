@@ -161,9 +161,6 @@ class MerchantTests : XCTestCase {
         somethingChangedExpectation.isInverted = true
         
         let mockDelegate = MockMerchantDelegate()
-        mockDelegate.didChangeLoadingState = {
-            somethingChangedExpectation.fulfill()
-        }
         mockDelegate.didChangeStates = { _ in
             somethingChangedExpectation.fulfill()
         }
@@ -348,7 +345,7 @@ class MerchantTests : XCTestCase {
         XCTAssertFalse(merchant.canGenerateLogs)
     }
     
-    func testReuseFetcher() {
+    func testReuseReceiptFetcher() {
         let completionExpectation = self.expectation(description: "Completed commit.")
         let receiptFetchCompleteExpectation = self.expectation(description: "Fetched from receipt.")
         receiptFetchCompleteExpectation.assertForOverFulfill = true
@@ -375,7 +372,7 @@ class MerchantTests : XCTestCase {
         
         let mockStoreInterface = MockStoreInterface()
         mockStoreInterface.receiptFetchResult = .success(Data())
-        mockStoreInterface.receiptFetchDelay = 1
+        mockStoreInterface.receiptFetchDelay = 3
         mockStoreInterface.receiptFetchDidComplete = {
             receiptFetchCompleteExpectation.fulfill()
         }
@@ -383,6 +380,7 @@ class MerchantTests : XCTestCase {
         mockStoreInterface.availablePurchasesResult = .success(PurchaseSet(from: [purchase]))
         
         let merchant = Merchant(configuration: Merchant.Configuration(receiptValidator: mockReceiptValidator, storage: storage), delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.canGenerateLogs = true
         merchant.register([testProduct])
         merchant.setup()
         
@@ -410,7 +408,7 @@ class MerchantTests : XCTestCase {
         
         task.start()
         
-        self.wait(for: [receiptFetchCompleteExpectation, completionExpectation], timeout: 5)
+        self.wait(for: [receiptFetchCompleteExpectation, completionExpectation], timeout: 10)
     }
 }
 
@@ -478,16 +476,14 @@ extension MerchantTests {
         merchant.register(outcomes.map { $0.product })
         merchant.setup()
         
-        self.waitForExpectations(timeout: 5, handler: { error in
-            guard error == nil else { return }
+        self.wait(for: [validateRequestCompletionExpectation] + testExpectations, timeout: 5)
+        
+        // sanity check every test product one more time
             
-            // sanity check every test product one more time
-            
-            for expectation in outcomes {
-                let foundState = merchant.state(for: expectation.product)
+        for expectation in outcomes {
+            let foundState = merchant.state(for: expectation.product)
                 
-                XCTAssertEqual(expectation.finalState, foundState)
-            }
-        })
+            XCTAssertEqual(expectation.finalState, foundState)
+        }
     }
 }
