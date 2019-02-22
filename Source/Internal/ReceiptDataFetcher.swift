@@ -1,8 +1,6 @@
 import Foundation
 
 internal protocol ReceiptDataFetcher : AnyObject {
-    init(policy: ReceiptFetchPolicy)
-    
     func enqueueCompletion(_ completion: @escaping (Result<Data, Error>) -> Void)
     func start()
     func cancel()

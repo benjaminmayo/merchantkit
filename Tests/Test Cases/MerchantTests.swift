@@ -332,6 +332,86 @@ class MerchantTests : XCTestCase {
         
         self.wait(for: [completionExpectation], timeout: 5)
     }
+    
+    func testMerchantLoggerActivatedDeactivated() {
+        let mockDelegate = MockMerchantDelegate()
+
+        let mockStoreInterface = MockStoreInterface()
+
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        XCTAssertFalse(merchant.canGenerateLogs)
+        
+        merchant.canGenerateLogs = true
+        XCTAssertTrue(merchant.canGenerateLogs)
+        
+        merchant.canGenerateLogs = false
+        XCTAssertFalse(merchant.canGenerateLogs)
+    }
+    
+    func testReuseFetcher() {
+        let completionExpectation = self.expectation(description: "Completed commit.")
+        let receiptFetchCompleteExpectation = self.expectation(description: "Fetched from receipt.")
+        receiptFetchCompleteExpectation.assertForOverFulfill = true
+        
+        let testProduct = Product(identifier: "testProduct", kind: .subscription(automaticallyRenews: true))
+        
+        let mockSKProduct = MockSKProduct(productIdentifier: testProduct.identifier, price: NSDecimalNumber(string: "1.99"), priceLocale: Locale(identifier: "en_US_POSIX"))
+        let purchase = Purchase(from: .availableProduct(mockSKProduct), for: testProduct)
+        
+        let storage = EphemeralPurchaseStorage()
+        
+        let mockReceiptValidator = MockReceiptValidator()
+        mockReceiptValidator.validateRequest = { request, completion in
+            let entry = ReceiptEntry(productIdentifier: testProduct.identifier, expiryDate: Date(timeIntervalSinceNow: 60 * 60 * 24 * 7))
+            
+            let receipt = ConstructedReceipt(from: [entry], metadata: ReceiptMetadata(originalApplicationVersion: ""))
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                completion(.success(receipt))
+            })
+        }
+        
+        let mockDelegate = MockMerchantDelegate()
+        
+        let mockStoreInterface = MockStoreInterface()
+        mockStoreInterface.receiptFetchResult = .success(Data())
+        mockStoreInterface.receiptFetchDelay = 1
+        mockStoreInterface.receiptFetchDidComplete = {
+            receiptFetchCompleteExpectation.fulfill()
+        }
+        
+        mockStoreInterface.availablePurchasesResult = .success(PurchaseSet(from: [purchase]))
+        
+        let merchant = Merchant(configuration: Merchant.Configuration(receiptValidator: mockReceiptValidator, storage: storage), delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        merchant.register([testProduct])
+        merchant.setup()
+        
+        let task = merchant.availablePurchasesTask(for: [testProduct])
+        task.onCompletion = { result in
+            switch result {
+                case .success(let purchases):
+                    guard let purchase = purchases.purchase(for: testProduct) else {
+                        XCTFail("The available purchases task succeeded but did not provide a product for the \(testProduct).")
+                        
+                        return
+                    }
+                    
+                    let task = merchant.commitPurchaseTask(for: purchase)
+                    task.onCompletion = { result in
+                        completionExpectation.fulfill()
+                    }
+                    
+                    task.start()
+                    mockStoreInterface.dispatchCommitPurchaseEvent(forProductWith: testProduct.identifier, result: .success)
+                case .failure(let error):
+                    XCTFail("The available purchases task failed with error \(error) when it was expected to succeed.")
+            }
+        }
+        
+        task.start()
+        
+        self.wait(for: [receiptFetchCompleteExpectation, completionExpectation], timeout: 5)
+    }
 }
 
 extension MerchantTests {

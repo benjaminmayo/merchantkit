@@ -3,6 +3,10 @@ import Foundation
 
 internal class MockStoreInterface {
     internal var receiptFetchResult: Result<Data, Error>!
+    internal var receiptFetchDelay: TimeInterval = 0.1
+
+    internal var receiptFetchDidComplete: (() -> Void)?
+    
     internal var availablePurchasesResult: Result<PurchaseSet, Error>!
     internal var didCommitPurchase: ((Purchase) -> Void)?
     internal var restoredProductsResult: Result<Set<String>, Error>!
@@ -37,8 +41,11 @@ internal class MockStoreInterface {
 
 extension MockStoreInterface : StoreInterface {
     internal func makeReceiptFetcher(for policy: ReceiptFetchPolicy) -> ReceiptDataFetcher {
-        let fetcher = MockReceiptDataFetcher(policy: policy)
+        let fetcher = MockReceiptDataFetcher(policy: policy, delay: self.receiptFetchDelay)
         fetcher.result = self.receiptFetchResult
+        fetcher.enqueueCompletion({ _ in
+            self.receiptFetchDidComplete?()
+        })
         
         return fetcher
     }
@@ -82,6 +89,7 @@ private class MockAvailablePurchasesFetcher : AvailablePurchasesFetcher {
     private var isCancelled: Bool = false
     
     var result: Result<PurchaseSet, Error>!
+
     
     required init(forProducts products: Set<Product>) {
         self.products = products
@@ -116,9 +124,10 @@ private class MockReceiptDataFetcher : ReceiptDataFetcher {
     typealias Completion = (Result<Data, Error>) -> Void
     
     var result: Result<Data, Error>!
+    private let delay: TimeInterval
     
-    required init(policy: ReceiptFetchPolicy) {
-        
+    required init(policy: ReceiptFetchPolicy, delay: TimeInterval) {
+        self.delay = delay
     }
     
     func enqueueCompletion(_ completion: @escaping Completion) {
@@ -126,9 +135,11 @@ private class MockReceiptDataFetcher : ReceiptDataFetcher {
     }
     
     func start() {
-        for block in self.completionBlocks {
-            block(self.result)
-        }
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + self.delay, execute: {
+            for block in self.completionBlocks {
+                block(self.result)
+            }
+        })
     }
     
     func cancel() {
