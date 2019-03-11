@@ -66,4 +66,16 @@ internal class StoreKitReceiptDataFetcherTests : XCTestCase {
         
         self.wait(for: [completionExpectation], timeout: 4)
     }
+    
+    func testCancelFinishesFetcher() {
+        let policies: [ReceiptFetchPolicy] = [.alwaysRefresh, .fetchElseRefresh, .onlyFetch]
+
+        for policy in policies {
+            let fetcher = StoreKitReceiptDataFetcher(policy: policy)
+            fetcher.start()
+            fetcher.cancel()
+            
+            XCTAssertTrue(fetcher.isFinished, "The fetcher should be finished as `cancel()` was called.")
+        }
+    }
 }
