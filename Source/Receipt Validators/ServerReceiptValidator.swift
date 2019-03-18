@@ -61,10 +61,10 @@ fileprivate class ServerReceiptValidatorTask {
         return fetcher
     }
     
-    private func didFetchVerificationData(with result: Result<Data, Error>) {
-        let result = result.attemptMap { data -> Receipt in
+    private func didFetchVerificationData(with dataResult: Result<Data, Error>) {
+        let result = Result<Receipt, Error> {
             let parser = ServerReceiptVerificationResponseParser() // this object handles the actual parsing of the data
-            let response = try parser.response(from: data)
+            let response = try parser.response(from: dataResult.get())
             let validatedReceipt = try parser.receipt(from: response)
             
             return validatedReceipt

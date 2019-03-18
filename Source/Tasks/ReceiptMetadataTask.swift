@@ -29,10 +29,11 @@ public final class ReceiptMetadataTask : MerchantTask {
         } else {
             let fetcher = self.merchant.storeInterface.makeReceiptFetcher(for: .onlyFetch)
             
-            fetcher.enqueueCompletion { [weak self] result in
-                let result = result.attemptMap { data in
-                    try LocalReceiptDataDecoder().decode(data).metadata
+            fetcher.enqueueCompletion { [weak self] fetchResult in
+                let result = Result {
+                    try LocalReceiptDataDecoder().decode(fetchResult.get()).metadata
                 }
+                
                 
                 self?.finish(with: result)
             }
