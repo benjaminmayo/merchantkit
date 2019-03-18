@@ -1,4 +1,4 @@
-extension Result where Failure == Error {
+extension Result {
     internal func attemptMap<NewSuccess>(_ transform: (Success) throws -> NewSuccess) -> Result<NewSuccess, Error> {
         switch self {
             case .success(let value):
