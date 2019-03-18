@@ -71,11 +71,11 @@ fileprivate class ServerReceiptValidatorTask {
         }
         
         switch result {
-        case .failure(ServerReceiptVerificationResponseParser.ReceiptStatusError.receiptIncompatibleWithProductionEnvironment):
-            self.dataFetcher = self.makeFetcher(for: .sandbox)
-            self.dataFetcher.start()
-        default:
-            self.complete(with: result)
+            case .failure(ServerReceiptVerificationResponseParser.ReceiptStatusError.receiptIncompatibleWithProductionEnvironment):
+                self.dataFetcher = self.makeFetcher(for: .sandbox)
+                self.dataFetcher.start()
+            default:
+                self.complete(with: result)
         }
     }
 }
