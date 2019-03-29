@@ -7,4 +7,12 @@ extension Collection {
         
         return self
     }
+    
+    internal func count(where predicate: (Element) -> Bool) -> Int {
+        return self.reduce(into: 0, { total, element in
+            if predicate(element) {
+                total += 1
+            }
+        })
+    }
 }

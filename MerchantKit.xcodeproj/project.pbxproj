@@ -716,7 +716,7 @@
 			};
 			buildConfigurationList = 434202571EAE08F80012983A /* Build configuration list for PBXProject "MerchantKit" */;
 			compatibilityVersion = "Xcode 9.3";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
