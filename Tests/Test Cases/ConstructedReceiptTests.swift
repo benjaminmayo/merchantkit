@@ -3,7 +3,7 @@ import Foundation
 import StoreKit
 @testable import MerchantKit
 
-class ReceiptTests : XCTestCase {
+class ConstructedReceiptTests : XCTestCase {
     private let metadata = ReceiptMetadata(originalApplicationVersion: "1.0")
     
     func testDefaultDescription() {
@@ -43,5 +43,12 @@ class ReceiptTests : XCTestCase {
         let result = "ConstructedReceipt\n\n\t- testProduct1 (1 entries)\n\t\t- [ReceiptEntry productIdentifier: testProduct1, expiryDate: nil]\n\n\t- testProduct2 (2 entries)\n\t\t- [ReceiptEntry productIdentifier: testProduct2, expiryDate: 2000-01-01 00:00:00 +0000]\n\t\t- [ReceiptEntry productIdentifier: testProduct2, expiryDate: 2000-01-02 00:00:00 +0000]"
 
         XCTAssertEqual(receipt.debugDescription, result)
+    }
+    
+    func testWithNoEntries() {
+        let receipt = ConstructedReceipt(from: [], metadata: self.metadata)
+        
+        XCTAssertTrue(receipt.productIdentifiers.isEmpty)
+        XCTAssertTrue(receipt.entries(forProductIdentifier: "").isEmpty)
     }
 }

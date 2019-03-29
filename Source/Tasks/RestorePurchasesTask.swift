@@ -1,9 +1,9 @@
 /// This task restores previous purchases made by the signed-in user. Executing this task may present UI.
 /// If using MerchantKit, it is important to use this task rather than manually invoking StoreKit.
 public final class RestorePurchasesTask : MerchantTask {
-    public typealias RestoredPurchases = Set<Product>
+    public typealias RestoredProducts = Set<Product>
     
-    public var onCompletion: TaskCompletion<RestoredPurchases>?
+    public var onCompletion: MerchantTaskCompletion<RestoredProducts>?
     public private(set) var isStarted: Bool = false
     
     private unowned let merchant: Merchant
@@ -22,21 +22,19 @@ public final class RestorePurchasesTask : MerchantTask {
         self.isStarted = true
         self.merchant.taskDidStart(self)
 
-        let applicationUsername = self.merchant.storeParameters.applicationUsername.isEmpty ? nil : self.merchant.storeParameters.applicationUsername
+        self.merchant.storePurchaseObservers.add(self, forObserving: \.restorePurchasedProducts)
         
-        self.merchant.addPurchaseObserver(self)
-        
-        SKPaymentQueue.default().restoreCompletedTransactions(withApplicationUsername: applicationUsername)
+        self.merchant.storeInterface.restorePurchases(using: self.merchant.storeParameters)
         
         self.merchant.logger.log(message: "Started restore purchases", category: .tasks)
     }
 }
 
 extension RestorePurchasesTask {
-    private func finish(with result: Result<RestoredPurchases>) {
+    private func finish(with result: Result<RestoredProducts, Error>) {
         self.onCompletion?(result)
         
-        self.merchant.removePurchaseObserver(self)
+        self.merchant.storePurchaseObservers.remove(self, forObserving: \.restorePurchasedProducts)
         
         DispatchQueue.main.async {
             self.merchant.taskDidResign(self)
@@ -46,22 +44,22 @@ extension RestorePurchasesTask {
     }
 }
 
-extension RestorePurchasesTask : MerchantPurchaseObserver {
-    func merchant(_ merchant: Merchant, didCompletePurchaseForProductWith productIdentifier: String) {
-        self.restoredProductIdentifiers.insert(productIdentifier)
-    }
-    
-    func merchant(_ merchant: Merchant, didFailPurchaseWith error: Error, forProductWith productIdentifier: String) {
+extension RestorePurchasesTask : Merchant.StorePurchaseObservers.RestorePurchasedProductsObserver {
+    func merchantDidStartRestoringProducts(_ merchant: Merchant) {
         
     }
     
-    func merchant(_ merchant: Merchant, didCompleteRestoringPurchasesWith error: Error?) {
-        if let error = error {
-            self.finish(with: .failed(error))
-        } else {
+    func merchant(_ merchant: Merchant, didRestorePurchasedProductWith productIdentifier: String) {
+        self.restoredProductIdentifiers.insert(productIdentifier)
+    }
+    
+    func merchant(_ merchant: Merchant, didFinishRestoringProductsWith result: Result<Void, Error>) {
+        let result: Result<RestoredProducts, Error> = result.map { _ in
             let restoredProducts = Set(self.restoredProductIdentifiers.compactMap { self.merchant.product(withIdentifier: $0) })
-            
-            self.finish(with: .succeeded(restoredProducts))
+
+            return restoredProducts
         }
+        
+        self.finish(with: result)
     }
 }

@@ -22,11 +22,11 @@ internal final class PKCS7ReceiptDataContainer {
             
         }
         
-        if let data = self.extractedContent {
-            return data
-        } else {
+        guard let data = self.extractedContent else {
             throw Error.malformedContainer
         }
+        
+        return data
     }
     
     enum Error : Swift.Error {

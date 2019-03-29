@@ -5,9 +5,9 @@ internal class TestingReceiptValidator : ReceiptValidator {
         self.wrapping = validator
     }
     
-    func validate(_ request: ReceiptValidationRequest, completion: @escaping (Result<Receipt>) -> Void) {
+    func validate(_ request: ReceiptValidationRequest, completion: @escaping (Result<Receipt, Swift.Error>) -> Void) {
         if request.reason == .initialization {
-            completion(.failed(Error.failingInitializationOnPurposeForTesting))
+            completion(.failure(Error.failingInitializationOnPurposeForTesting))
         } else {
             self.wrapping.validate(request, completion: completion)
         }

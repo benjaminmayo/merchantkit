@@ -2,12 +2,12 @@ import Foundation
 
 /// Parse a payload from a local App Store receipt file.
 internal class LocalReceiptPayloadParser {
-    private var parser: ASN1.Parser!
     private var payloadProcessor: ReceiptAttributeASN1SetProcessor!
     private var inAppPurchaseSetProcessor: ReceiptAttributeASN1SetProcessor!
     
     private var foundInAppPurchaseAttributes = [(InAppPurchaseReceiptAttributeType, ReceiptAttributeASN1SetProcessor.ReceiptAttribute)]()
-    
+    private var encounteredInAppPurchaseProcessorError: Error?
+
     private var receiptEntries = [ReceiptEntry]()
     private var metadataValues = ReceiptMetadataValues()
     
@@ -16,10 +16,19 @@ internal class LocalReceiptPayloadParser {
     }
     
     func receipt(from payload: Data) throws -> Receipt {
+        self.reset()
+        
+        self.inAppPurchaseSetProcessor = nil
+        
         self.payloadProcessor = ReceiptAttributeASN1SetProcessor(data: payload)
         self.payloadProcessor.delegate = self
         
         try self.payloadProcessor.start()
+        
+        // if there are no receipt entries, then check to see if we hit an error in the sub-processor before proceeding
+        if self.receiptEntries.isEmpty, let error = self.encounteredInAppPurchaseProcessorError {
+            throw error
+        }
         
         // self.metadataValues is populated with available fields
         
@@ -55,8 +64,23 @@ extension LocalReceiptPayloadParser {
         case webOrderLineItemIdentifier = 1711
     }
     
-    private func processInAppPurchaseSet(_ data: Data) {
+    private func reset() {
+        self.payloadProcessor = nil
+        self.inAppPurchaseSetProcessor = nil
+        
+        self.resetInAppPurchaseProcessIntermediaryValues()
+        self.encounteredInAppPurchaseProcessorError = nil
+
+        self.receiptEntries.removeAll()
+        self.metadataValues = ReceiptMetadataValues()
+    }
+    
+    private func resetInAppPurchaseProcessIntermediaryValues() {
         self.foundInAppPurchaseAttributes.removeAll()
+    }
+    
+    private func processInAppPurchaseSet(_ data: Data) {
+        self.resetInAppPurchaseProcessIntermediaryValues()
         
         self.inAppPurchaseSetProcessor = ReceiptAttributeASN1SetProcessor(data: data)
         self.inAppPurchaseSetProcessor.delegate = self
@@ -85,7 +109,7 @@ extension LocalReceiptPayloadParser {
                 self.receiptEntries.append(entry)
             }
         } catch let error {
-            print(error)
+            self.encounteredInAppPurchaseProcessorError = error
         }
     }
     

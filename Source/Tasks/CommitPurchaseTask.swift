@@ -1,11 +1,10 @@
-import Foundation 
-import StoreKit
+import Foundation
 
 /// This task starts the purchase flow for a purchase discovered by a previous `AvailablePurchasesTask` callback.
 public final class CommitPurchaseTask : MerchantTask {
     public let purchase: Purchase
     
-    public var onCompletion: TaskCompletion<Void>!
+    public var onCompletion: MerchantTaskCompletion<Void>!
     public private(set) var isStarted: Bool = false
     
     private unowned let merchant: Merchant
@@ -23,35 +22,19 @@ public final class CommitPurchaseTask : MerchantTask {
         self.isStarted = true
         self.merchant.taskDidStart(self)
         
-        self.merchant.addPurchaseObserver(self)
+        self.merchant.storePurchaseObservers.add(self, forObserving: \.purchaseProducts)
         
-        let payment: SKPayment
-        
-        switch self.purchase.source {
-            case .availableProduct(let product):
-                payment = self.payment(forAvailableProduct: product)
-            case .pendingStorePayment(_, let pendingPayment):
-                payment = pendingPayment
-        }
-        
-        SKPaymentQueue.default().add(payment)
+        self.merchant.storeInterface.commitPurchase(self.purchase, using: self.merchant.storeParameters)
         
         self.merchant.logger.log(message: "Started commit purchase task for product: \(self.purchase.productIdentifier)", category: .tasks)
-    }
-    
-    /// Cancel the task. Cancellation does not fire the `onCompletion` handler.
-    public func cancel() {
-        self.merchant.removePurchaseObserver(self)
-        
-        self.merchant.taskDidResign(self)
     }
 }
 
 extension CommitPurchaseTask {
-    private func finish(with result: Result<Void>) {
+    private func finish(with result: Result<Void, Error>) {
         self.onCompletion(result)
         
-        self.merchant.removePurchaseObserver(self)
+        self.merchant.storePurchaseObservers.remove(self, forObserving: \.purchaseProducts)
         
         DispatchQueue.main.async {
             self.merchant.taskDidResign(self)
@@ -59,32 +42,12 @@ extension CommitPurchaseTask {
         
         self.merchant.logger.log(message: "Finished commit purchase purchase task: \(result)", category: .tasks)
     }
-    
-    private func payment(forAvailableProduct: SKProduct) -> SKPayment {
-        let payment = SKMutablePayment(product: self.purchase.source.skProduct)
-        
-        if !self.merchant.storeParameters.applicationUsername.isEmpty {
-            payment.applicationUsername = self.merchant.storeParameters.applicationUsername
-        }
-        
-        return payment
-    }
 }
 
-extension CommitPurchaseTask : MerchantPurchaseObserver {
-    func merchant(_ merchant: Merchant, didCompletePurchaseForProductWith productIdentifier: String) {
-        if self.purchase.productIdentifier == productIdentifier {
-            self.finish(with: .succeeded(()))
-        }
-    }
-    
-    func merchant(_ merchant: Merchant, didFailPurchaseWith error: Error, forProductWith productIdentifier: String) {
-        if self.purchase.productIdentifier == productIdentifier {
-            self.finish(with: .failed(error))
-        }
-    }
-    
-    func merchant(_ merchant: Merchant, didCompleteRestoringPurchasesWith error: Error?) {
+extension CommitPurchaseTask : Merchant.StorePurchaseObservers.PurchaseProductsObserver {
+    func merchant(_ merchant: Merchant, didFinishPurchaseWith result: Result<Void, Error>, forProductWith productIdentifier: String) {
+        guard self.purchase.productIdentifier == productIdentifier else { return }
         
+        self.finish(with: result)
     }
 }

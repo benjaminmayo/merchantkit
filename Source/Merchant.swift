@@ -27,26 +27,23 @@ public final class Merchant {
     }
     
     internal let logger = Logger()
-    
+    internal let storeInterface: StoreInterface
+    internal private(set) var latestFetchedReceipt: Receipt?
+    internal let storePurchaseObservers = StorePurchaseObservers()
+
     private let configuration: Configuration
-    
-    private let transactionObserver: StoreKitTransactionObserver = StoreKitTransactionObserver()
-    
-    private var _registeredProducts: [String : Product] = [:]
+
+    private var registeredProducts: [String : Product] = [:]
     private var activeTasks: [MerchantTask] = []
     
-    private var purchaseObservers = [MerchantPurchaseObserver]()
     private var hasSetup: Bool = false
     
     private var receiptFetchers: [ReceiptFetchPolicy : ReceiptDataFetcher] = [:]
-    private var receiptDataFetcherCustomInitializer: ReceiptDataFetcherInitializer?
     
-    private var identifiersForPendingObservedPurchases: Set<String> = []
-    private var identifiersForPendingObservedRestoredPurchases: Set<String> = []
+    private var pendingProducts = PendingProductSet()
     
     private let nowDate: Date = Date()
-    internal var latestFetchedReceipt: Receipt?
-    
+
     /// Create a `Merchant` as part of application launch lifecycle. Use `Merchant.Configuration.default` for an appropriate default setup, or you can supply your own customized `Merchant.Configuration`.
     /// The `delegate` enables the application to be centrally alerted to changes in state. Depending on the functionality of your app, you may not need to do any actual work in the delegate methods. Remember, you can always ask for the current purchased state of a `Product` using `Merchant.state(for:)`.
     /// The `consumableHandler` is **required** if your application uses consumable products.
@@ -54,17 +51,14 @@ public final class Merchant {
         self.configuration = configuration
         self.delegate = delegate
         self.consumableHandler = consumableHandler
-    }
-    
-    @available(*, unavailable, message: "This initializer has been removed. Use `Merchant.init(configuration:delegate:consumableHandler:)`, likely passing a `.default` configuration as the first parameter — the `consumableHandler` is optional. You will need to migrate `Merchant` and your `MerchantDelegate` conformance to the new API.")
-    public init(storage: PurchaseStorage, delegate: MerchantDelegate) {
-        fatalError("Merchant.init(storage:delegate:) initializer is no longer supported. Please switch to Merchant.init(configuration:delegate:consumableHandler:)")
+        
+        self.storeInterface = StoreKitStoreInterface(paymentQueue: .default())
     }
     
     /// Register products that you want to use in your application. Products must be registered before their states are consistently valid. Products should be registered as early as possible, typically just before calling `setup()`.
     public func register<Products : Sequence>(_ products: Products) where Products.Iterator.Element == Product {
         for product in products {
-            self._registeredProducts[product.identifier] = product
+            self.registeredProducts[product.identifier] = product
         }
     }
     
@@ -73,16 +67,20 @@ public final class Merchant {
         guard !self.hasSetup else { return }
         self.hasSetup = true
         
-        self.beginObservingTransactions()
+        self.storeInterface.setup(withDelegate: self)
         
         self.checkReceipt(updateProducts: .all, policy: .onlyFetch, reason: .initialization)
         
-        self.logger.log(message: "Merchant has been setup, with \(self._registeredProducts.count) registered \(self._registeredProducts.count == 1 ? "product" : "products").", category: .initialization)
+        self.logger.log(message: "Merchant has been setup, with \(self.registeredProducts.count) registered \(self.registeredProducts.count == 1 ? "product" : "products").", category: .initialization)
+        
+        if self.registeredProducts.isEmpty {
+            self.logger.log(message: "There are no registered products for the `Merchant`. Remember to call `Merchant.register(_)` to register a sequence of `Product` items.", category: .initialization)
+        }
     }
     
     /// Returns a registered product for a given `productIdentifier`, or `nil` if not found.
     public func product(withIdentifier productIdentifier: String) -> Product? {
-        return self._registeredProducts[productIdentifier]
+        return self.registeredProducts[productIdentifier]
     }
     
     /// Returns the state for a `product`. Consumable products always report that they are `notPurchased`.
@@ -106,7 +104,7 @@ public final class Merchant {
         self.ensureSetup()
         
         return self.makeTask(initializing: {
-            let products = products.isEmpty ? Set(self._registeredProducts.values) : products
+            let products = products.isEmpty ? Set(self.registeredProducts.values) : products
             
             let task = AvailablePurchasesTask(for: products, with: self)
     
@@ -140,30 +138,14 @@ public final class Merchant {
             return task
         })
     }
-}
-
-// MARK: Testing hooks
-extension Merchant {
-    typealias ReceiptDataFetcherInitializer = (ReceiptFetchPolicy) -> ReceiptDataFetcher
     
-    /// Allows tests in the test suite to change the receipt data fetcher that is created.
-    internal func setCustomReceiptDataFetcherInitializer(_ initializer: @escaping ReceiptDataFetcherInitializer) {
-        self.receiptDataFetcherCustomInitializer = initializer
-    }
-}
-
-// MARK: Purchase observers
-extension Merchant {
-    internal func addPurchaseObserver(_ observer: MerchantPurchaseObserver) {
-        if !self.purchaseObservers.contains(where: { $0 === observer }) {
-            self.purchaseObservers.append(observer)
-        }
-    }
-    
-    internal func removePurchaseObserver(_ observer: MerchantPurchaseObserver) {
-        if let index = self.purchaseObservers.index(where: { $0 === observer }) {
-            self.purchaseObservers.remove(at: index)
-        }
+    /// Internal initializer to enable hooks for testing. The public initializer always uses the `StoreKitStoreInterface`.
+    internal init(configuration: Configuration, delegate: MerchantDelegate, consumableHandler: MerchantConsumableProductHandler?, storeInterface: StoreInterface) {
+        self.configuration = configuration
+        self.delegate = delegate
+        self.consumableHandler = consumableHandler
+        
+        self.storeInterface = storeInterface
     }
 }
 
@@ -184,7 +166,7 @@ extension Merchant {
     
     // Call on main thread only.
     internal func taskDidResign(_ task: MerchantTask) {
-        guard let index = self.activeTasks.index(where: { $0 === task }) else { return }
+        guard let index = self.activeTasks.firstIndex(where: { $0 === task }) else { return }
         
         self.activeTasks.remove(at: index)
         self.updateLoadingStateIfNecessary()
@@ -213,41 +195,11 @@ extension Merchant {
     }
 }
 
-// MARK: Subscription utilities
-extension Merchant {
-    private func isSubscriptionActive(forExpiryDate expiryDate: Date) -> Bool {
-        let leeway: TimeInterval = 60 // one minute of leeway, could make this a configurable setting in future
-        
-        return expiryDate.addingTimeInterval(leeway) > self.nowDate
-    }
-}
-
-// MARK: Payment queue related behaviour
-extension Merchant {
-    private func beginObservingTransactions() {
-        self.transactionObserver.delegate = self
-        
-        SKPaymentQueue.default().add(self.transactionObserver)
-    }
-    
-    private func stopObservingTransactions() {
-        SKPaymentQueue.default().remove(self.transactionObserver)
-    }
-    
-    // Warns users if `Merchant` has not been correctly configured.
-    private func ensureSetup() {
-        guard !self.hasSetup else { return }
-        
-        // Print the warning to the console. As this is a serious usage error, we do not route it through the optional framework logging.
-        print("Merchant is attempting to vend purchases, but the Merchant has not been setup. Remember to call `Merchant.setup()` during application launch.")
-    }
-}
-
 // MARK: Receipt fetch and validation
 extension Merchant {
-    internal typealias CheckReceiptCompletion = (_ updatedProducts: Set<Product>, Error?) -> Void
+    internal typealias CheckReceiptCompletion = (Result<Set<Product>, Error>) -> Void
     
-    private func checkReceipt(updateProducts updateType: ReceiptUpdateType, policy: ReceiptFetchPolicy, reason: ReceiptValidationRequest.Reason, completion: @escaping CheckReceiptCompletion = { _,_ in }) {
+    private func checkReceipt(updateProducts updateType: ReceiptUpdateType, policy: ReceiptFetchPolicy, reason: ReceiptValidationRequest.Reason, completion: @escaping CheckReceiptCompletion = { _ in }) {
         let fetcher: ReceiptDataFetcher
         let isStarted: Bool
         
@@ -257,7 +209,7 @@ extension Merchant {
             
             self.logger.log(message: "Reused receipt fetcher for \(policy)", category: .receipt)
         } else {
-            fetcher = self.makeFetcher(for: policy)
+            fetcher = self.storeInterface.makeReceiptFetcher(for: policy)
             isStarted = false
             
             self.receiptFetchers[policy] = fetcher
@@ -268,14 +220,14 @@ extension Merchant {
             guard let self = self else { return }
             
             switch dataResult {
-                case .succeeded(let receiptData):
+                case .success(let receiptData):
                     self.logger.log(message: "Receipt fetch succeeded: found \(receiptData.count) bytes", category: .receipt)
                     
                     self.validateReceipt(with: receiptData, reason: reason, completion: { [weak self] validateResult in
                         guard let self = self else { return }
                         
                         switch validateResult {
-                            case .succeeded(let receipt):
+                            case .success(let receipt):
                                 self.logger.log(message: "Receipt validation succeeded: \(receipt)", category: .receipt)
                                 
                                 self.latestFetchedReceipt = receipt
@@ -288,17 +240,17 @@ extension Merchant {
                                     }
                                 }
                                 
-                                completion(updatedProducts, nil)
-                            case .failed(let error):
+                                completion(.success(updatedProducts))
+                            case .failure(let error):
                                 self.logger.log(message: "Receipt validation failed: \(error)", category: .receipt)
 
-                                completion([], error)
+                                completion(.failure(error))
                         }
                     })
-                case .failed(let error):
+                case .failure(let error):
                     self.logger.log(message: "Receipt fetch failed: \(error)", category: .receipt)
 
-                    completion([], error)
+                    completion(.failure(error))
             }
             
             self.receiptFetchers.removeValue(forKey: policy)
@@ -319,15 +271,7 @@ extension Merchant {
         }
     }
     
-    private func makeFetcher(for policy: ReceiptFetchPolicy) -> ReceiptDataFetcher {
-        if let initializer = self.receiptDataFetcherCustomInitializer {
-            return initializer(policy)
-        }
-        
-        return StoreKitReceiptDataFetcher(policy: policy)
-    }
-    
-    private func validateReceipt(with data: Data, reason: ReceiptValidationRequest.Reason, completion: @escaping (Result<Receipt>) -> Void) {
+    private func validateReceipt(with data: Data, reason: ReceiptValidationRequest.Reason, completion: @escaping (Result<Receipt, Error>) -> Void) {
         let request = ReceiptValidationRequest(data: data, reason: reason)
         
         self.configuration.receiptValidator.validate(request, completion: completion)
@@ -350,28 +294,20 @@ extension Merchant {
             
             let entries = receipt.entries(forProductIdentifier: productIdentifier)
             
-            let hasEntry = !entries.isEmpty
-            
             let result: PurchaseStorageUpdateResult
             
-            if hasEntry {
-                let expiryDate = entries.compactMap { $0.expiryDate }.max()
-                
-                if let expiryDate = expiryDate, !self.isSubscriptionActive(forExpiryDate: expiryDate) {
-                    result = self.configuration.storage.removeRecord(forProductIdentifier: productIdentifier)
-                    
-                    self.logger.log(message: "Removed record for \(productIdentifier), given expiry date \(expiryDate)", category: .purchaseStorage)
-                } else {
-                    let record = PurchaseRecord(productIdentifier: productIdentifier, expiryDate: expiryDate)
-                
-                    result = self.configuration.storage.save(record)
-                    
-                    self.logger.log(message: "Saved record: \(record)", category: .purchaseStorage)
-                }
-            } else {
+            let expiryDate = entries.compactMap { $0.expiryDate }.max()
+            
+            if let expiryDate = expiryDate, !self.isSubscriptionActive(forExpiryDate: expiryDate) {
                 result = self.configuration.storage.removeRecord(forProductIdentifier: productIdentifier)
                 
-                self.logger.log(message: "Removed record for \(productIdentifier)", category: .purchaseStorage)
+                self.logger.log(message: "Removed record for \(productIdentifier), given expiry date \(expiryDate)", category: .purchaseStorage)
+            } else {
+                let record = PurchaseRecord(productIdentifier: productIdentifier, expiryDate: expiryDate)
+            
+                result = self.configuration.storage.save(record)
+                
+                self.logger.log(message: "Saved record: \(record)", category: .purchaseStorage)
             }
             
             if result == .didChangeRecords {
@@ -380,7 +316,7 @@ extension Merchant {
         }
         
         if updateType == .all { // clean out from storage if registered products are not in the receipt
-            let registeredProductIdentifiers = Set(self._registeredProducts.map { $0.key })
+            let registeredProductIdentifiers = Set(self.registeredProducts.map { $0.key })
             let identifiersForProductsNotInReceipt = registeredProductIdentifiers.subtracting(receipt.productIdentifiers)
             
             for productIdentifier in identifiersForProductsNotInReceipt {
@@ -388,7 +324,7 @@ extension Merchant {
                 self.logger.log(message: "Removed record for \(productIdentifier): product not in receipt", category: .purchaseStorage)
 
                 if result == .didChangeRecords {
-                    updatedProducts.insert(self._registeredProducts[productIdentifier]!)
+                    updatedProducts.insert(self.registeredProducts[productIdentifier]!)
                 }
             }
         }
@@ -410,18 +346,46 @@ extension Merchant {
     }
 }
 
-// MARK: `StoreKitTransactionObserverDelegate` Conformance
-extension Merchant : StoreKitTransactionObserverDelegate {
-    internal func storeKitTransactionObserverWillUpdatePurchases(_ observer: StoreKitTransactionObserver) {
+// MARK: Utilities
+extension Merchant {
+    /// Check if a subscription should be considered active for a given expiry date.
+    private func isSubscriptionActive(forExpiryDate expiryDate: Date) -> Bool {
+        let leeway: TimeInterval = 60 // one minute of leeway, could make this a configurable setting in future
+        
+        return expiryDate.addingTimeInterval(leeway) > self.nowDate
+    }
+    
+    /// Warns users if `Merchant` has not been correctly configured.
+    private func ensureSetup() {
+        guard !self.hasSetup else { return }
+        
+        // Print the warning to the console. As this is a serious usage error, we do not route it through the optional framework logging.
+        print("Merchant is attempting to vend purchases, but the `Merchant` has not been setup. Remember to call `Merchant.setup()` during application launch.")
+    }
+}
+
+// MARK: `StoreInterfaceDelegate` Conformance
+extension Merchant : StoreInterfaceDelegate {
+    internal func storeInterfaceWillUpdatePurchases(_ storeInterface: StoreInterface) {
         
     }
     
-    internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didPurchaseProductWith identifier: String, completion: @escaping () -> Void) {
+    internal func storeInterfaceDidUpdatePurchases(_ storeInterface: StoreInterface) {
+        if let pendingPurchased = self.pendingProducts[.purchased].nonEmpty {
+            self.logger.log(message: "Invoked receipt update for purchases \(pendingPurchased)", category: .receipt)
+            
+            self.checkReceipt(updateProducts: .specific(productIdentifiers: Set(pendingPurchased.map { $0.identifier })), policy: .onlyFetch, reason: .completePurchase)
+        }
+        
+        self.pendingProducts[.purchased].removeAll()
+    }
+    
+    internal func storeInterface(_ storeInterface: StoreInterface, didPurchaseProductWith productIdentifier: String, completion: @escaping () -> Void) {
         func didCompletePurchase() {
             completion()
         }
         
-        if let product = self.product(withIdentifier: identifier) {
+        if let product = self.product(withIdentifier: productIdentifier) {
             if product.kind == .consumable { // consumable product purchases are not recorded
                 guard let consumableHandler = self.consumableHandler else {
                     MerchantKitFatalError.raise("`Merchant` tried to purchase a consumable product but the `Merchant.consumableHandler` was not set. You must provide a `consumbleHandler` when you instantiate the `Merchant` to handle consumables.")
@@ -429,9 +393,9 @@ extension Merchant : StoreKitTransactionObserverDelegate {
                 
                 consumableHandler.merchant(self, consume: product, completion: didCompletePurchase)
             } else { // non-consumable and subscription products are recorded
-                let knownExpiryDate = self.configuration.storage.record(forProductIdentifier: identifier)?.expiryDate
+                let knownExpiryDate = self.configuration.storage.record(forProductIdentifier: product.identifier)?.expiryDate
                 
-                let record = PurchaseRecord(productIdentifier: identifier, expiryDate: knownExpiryDate)
+                let record = PurchaseRecord(productIdentifier: product.identifier, expiryDate: knownExpiryDate)
                 let result = self.configuration.storage.save(record)
             
                 if result == .didChangeRecords {
@@ -439,24 +403,26 @@ extension Merchant : StoreKitTransactionObserverDelegate {
                 }
                 
                 if case .subscription(_) = product.kind {
-                    self.identifiersForPendingObservedPurchases.insert(product.identifier) // we need to get the receipt to find the new expiry date, the `PurchaseRecord` will be updated when that information is available
+                    self.pendingProducts[.purchased].insert(product) // we need to get the receipt to find the new expiry date, the `PurchaseRecord` will be updated when that information is available
                 }
                 
                 didCompletePurchase()
             }
-        }
-        
-        for observer in self.purchaseObservers {
-            observer.merchant(self, didCompletePurchaseForProductWith: identifier)
+            
+            for observer in self.storePurchaseObservers.observers(for: \.purchaseProducts) {
+                observer.merchant(self, didFinishPurchaseWith: .success, forProductWith: product.identifier)
+            }
+        } else {
+            self.logger.log(message: "Purchase was not handled as the productIdentifier (\"\(productIdentifier)\") was unknown to the `Merchant`. If you recognize the product identifier, ensure the corresponding `Product` has been registered before attempting to commit purchases.", category: .storeInterface)
         }
     }
     
-    internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didRestoreProductWith identifier: String) {
-        if let product = self.product(withIdentifier: identifier) {
+    internal func storeInterface(_ storeInterface: StoreInterface, didRestorePurchaseForProductWith productIdentifier: String) {
+        if let product = self.product(withIdentifier: productIdentifier) {
             if case .subscription(_) = product.kind {
-                self.identifiersForPendingObservedRestoredPurchases.insert(product.identifier)
+                self.pendingProducts[.restored].insert(product)
             } else {
-                let record = PurchaseRecord(productIdentifier: identifier, expiryDate: nil)
+                let record = PurchaseRecord(productIdentifier: product.identifier, expiryDate: nil)
 
                 let result = self.configuration.storage.save(record)
                 
@@ -464,60 +430,61 @@ extension Merchant : StoreKitTransactionObserverDelegate {
                     self.didChangeState(for: [product])
                 }
                 
-                for observer in self.purchaseObservers {
-                    observer.merchant(self, didCompletePurchaseForProductWith: product.identifier)
+                for observer in self.storePurchaseObservers.observers(for: \.restorePurchasedProducts) {
+                    observer.merchant(self, didRestorePurchasedProductWith: product.identifier)
                 }
             }
+        } else {
+            self.logger.log(message: "Restored purchase was not handled as the productIdentifier (\"\(productIdentifier)\") was unknown to the `Merchant`. If you recognize the product identifier, ensure the corresponding `Product` has been registered before attempting to restore purchases.", category: .storeInterface)
         }
     }
     
-    internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFailToPurchaseWith error: Error, forProductWith identifier: String) {
-        for observer in self.purchaseObservers {
-            observer.merchant(self, didFailPurchaseWith: error, forProductWith: identifier)
-        }
-    }
-    
-    internal func storeKitTransactionObserverDidUpdatePurchases(_ observer: StoreKitTransactionObserver) {
-        if !self.identifiersForPendingObservedPurchases.isEmpty {
-            self.logger.log(message: "Invoked receipt update for purchases \(self.identifiersForPendingObservedPurchases)", category: .receipt)
-
-            self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedPurchases), policy: .onlyFetch, reason: .completePurchase, completion: { _, _ in })
-        }
-        
-        self.identifiersForPendingObservedPurchases.removeAll()
-    }
-    
-    internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, didFinishRestoringPurchasesWith error: Error?) {
-        if self.identifiersForPendingObservedRestoredPurchases.isEmpty {
-            for observer in self.purchaseObservers {
-                observer.merchant(self, didCompleteRestoringPurchasesWith: error)
+    internal func storeInterface(_ storeInterface: StoreInterface, didFailToPurchaseProductWith productIdentifier: String, error: Error) {
+        if let product = self.product(withIdentifier: productIdentifier) {
+            for observer in self.storePurchaseObservers.observers(for: \.purchaseProducts) {
+                observer.merchant(self, didFinishPurchaseWith: .failure(error), forProductWith: product.identifier)
             }
         } else {
-            self.checkReceipt(updateProducts: .specific(productIdentifiers: self.identifiersForPendingObservedRestoredPurchases), policy: .onlyFetch, reason: .completePurchase, completion: { restoredProducts, _ in
-                let restored = restoredProducts.filter { self.state(for: $0).isPurchased }
-                
-                for observer in self.purchaseObservers {
-                    for product in restored {
-                        observer.merchant(self, didCompletePurchaseForProductWith: product.identifier)
+            self.logger.log(message: "Purchase failure \"\(error.localizedDescription)\" was not handled as the productIdentifier (\"\(productIdentifier)\") was unknown to the `Merchant`. If you recognize the product identifier, ensure the corresponding `Product` has been registered before attempting to commit purchases.", category: .storeInterface)
+        }
+    }
+    
+    internal func storeInterfaceWillStartRestoringPurchases(_ storeInterface: StoreInterface) {
+        for observer in self.storePurchaseObservers.observers(for: \.restorePurchasedProducts) {
+            observer.merchantDidStartRestoringProducts(self)
+        }
+    }
+    
+    internal func storeInterface(_ storeInterface: StoreInterface, didFinishRestoringPurchasesWith result: Result<Void, Error>) {
+        if let pendingRestored = self.pendingProducts[.restored].nonEmpty {
+            self.checkReceipt(updateProducts: .specific(productIdentifiers: Set(pendingRestored.map { $0.identifier })), policy: .onlyFetch, reason: .restorePurchases, completion: { updatedProductsResult in
+                let restoredProducts = (try? updatedProductsResult.get().filter { self.state(for: $0).isPurchased }) ?? []
+                 
+                for observer in self.storePurchaseObservers.observers(for: \.restorePurchasedProducts) {
+                    for product in restoredProducts {
+                        observer.merchant(self, didRestorePurchasedProductWith: product.identifier)
                     }
                 }
                 
-                for observer in self.purchaseObservers {
-                    observer.merchant(self, didCompleteRestoringPurchasesWith: error)
+                for observer in self.storePurchaseObservers.observers(for: \.restorePurchasedProducts) {
+                    observer.merchant(self, didFinishRestoringProductsWith: result)
                 }
             })
+            
+            self.logger.log(message: "Invoked receipt update for restored purchases \(pendingRestored)", category: .receipt)
+        } else {
+            for observer in self.storePurchaseObservers.observers(for: \.restorePurchasedProducts) {
+                observer.merchant(self, didFinishRestoringProductsWith: result)
+            }
         }
         
-        self.identifiersForPendingObservedRestoredPurchases.removeAll()
+        self.pendingProducts[.restored].removeAll()
     }
     
-    internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, purchaseFor source: Purchase.Source) -> Purchase? {
-        guard let product = self.product(withIdentifier: source.skProduct.productIdentifier) else { return nil }
+    internal func storeInterface(_ storeInterface: StoreInterface, responseForStoreIntentToCommitPurchaseFrom source: Purchase.Source) -> StoreIntentResponse {
+        guard let product = self.product(withIdentifier: source.skProduct.productIdentifier) else { return .defer }
         
-        return Purchase(from: source, for: product)
-    }
-    
-    internal func storeKitTransactionObserver(_ observer: StoreKitTransactionObserver, responseForStoreIntentToCommit purchase: Purchase) -> StoreIntentResponse {
+        let purchase = Purchase(from: source, for: product)
         let intent = self.delegate.merchant(self, didReceiveStoreIntentToCommit: purchase)
         
         return intent

@@ -6,28 +6,16 @@ public final class LocalReceiptValidator : ReceiptValidator {
         
     }
     
-    public func validate(_ request: ReceiptValidationRequest, completion: @escaping (Result<Receipt>) -> Void) {
+    public func validate(_ request: ReceiptValidationRequest, completion: @escaping (Result<Receipt, Error>) -> Void) {
         DispatchQueue.global(qos: .background).async {
             do {
-                let receipt = try self.receipt(from: request.data)
+                let decoder = LocalReceiptDataDecoder()
+                let receipt = try decoder.decode(request.data)
                 
-                completion(.succeeded(receipt))
+                completion(.success(receipt))
             } catch let error {
-                completion(.failed(error))
+                completion(.failure(error))
             }
-        }
-    }
-}
-
-extension LocalReceiptValidator {
-    private func receipt(from receiptData: Data) throws -> Receipt {
-        do {
-            let container = PKCS7ReceiptDataContainer(receiptData: receiptData)
-            let content = try container.content()
-
-            let parser = LocalReceiptPayloadParser()
-            
-            return try parser.receipt(from: content)
         }
     }
 }

@@ -28,10 +28,10 @@ class LocalReceiptValidatorTests : XCTestCase {
             let validator = LocalReceiptValidator()
             validator.validate(request, completion: { result in
                 switch result {
-                    case .succeeded(let receipt):
+                    case .success(let receipt):
                         XCTAssertEqual(receipt.metadata.originalApplicationVersion, resource.expectedOriginalApplicationVersion)
                         XCTAssertEqual(receipt.productIdentifiers, resource.expectedProductIdentifiers)
-                    case .failed(let error):
+                    case .failure(let error):
                         XCTFail(String(describing: error))
                 }
                 

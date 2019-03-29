@@ -45,7 +45,7 @@ public struct Purchase : Hashable, CustomStringConvertible {
     /// Describes the terms of the subscription purchase, such as renewal period and any introductory offers. Returns nil for non-subscription purchases.
     @available(iOS 11.2, *)
     public var subscriptionTerms: SubscriptionTerms? {
-        func subscriptionPeriod(from skSubscriptionPeriod: SKProductSubscriptionPeriod) -> SubscriptionPeriod {
+        func subscriptionPeriod(from skSubscriptionPeriod: SKProductSubscriptionPeriod) -> SubscriptionPeriod? {
             let unitCount = skSubscriptionPeriod.numberOfUnits
             let unit: SubscriptionPeriod.Unit
             
@@ -58,6 +58,8 @@ public struct Purchase : Hashable, CustomStringConvertible {
                     unit = .month
                 case .year:
                     unit = .year
+                @unknown default:
+                    return nil
             }
             
             return SubscriptionPeriod(unit: unit, unitCount: unitCount)
@@ -67,27 +69,31 @@ public struct Purchase : Hashable, CustomStringConvertible {
             return nil
         }
         
-        let period: SubscriptionPeriod = subscriptionPeriod(from: skSubscriptionPeriod)
+        guard let period = subscriptionPeriod(from: skSubscriptionPeriod) else {
+            return nil
+        }
         
         let introductoryOffer: SubscriptionTerms.IntroductoryOffer? = {
-            if let skDiscount = self.source.skProduct.introductoryPrice {
-                let locale = priceLocaleFromProductDiscount(skDiscount) ?? Locale.current
-                
-                let price = Price(value: (skDiscount.price as Decimal, locale))
+            guard
+                let skDiscount = self.source.skProduct.introductoryPrice,
                 let introductoryPeriod = subscriptionPeriod(from: skDiscount.subscriptionPeriod)
-                
-                switch skDiscount.paymentMode {
-                    case .payAsYouGo:
-                        return .recurringDiscount(discountedPrice: price, recurringPeriod: introductoryPeriod, discountedPeriodCount: skDiscount.numberOfPeriods)
-                    case .payUpFront:
-                        let totalPeriod = SubscriptionPeriod(unit: introductoryPeriod.unit, unitCount: introductoryPeriod.unitCount * skDiscount.numberOfPeriods)
-                        
-                        return .upfrontDiscount(discountedPrice: price, period: totalPeriod)
-                    case .freeTrial:
-                        return .freeTrial(period: introductoryPeriod)
-                }
-            } else {
-                return nil
+            else { return nil }
+            
+            let locale = priceLocaleFromProductDiscount(skDiscount) ?? Locale.current
+            
+            let price = Price(value: (skDiscount.price as Decimal, locale))
+            
+            switch skDiscount.paymentMode {
+                case .payAsYouGo:
+                    return .recurringDiscount(discountedPrice: price, recurringPeriod: introductoryPeriod, discountedPeriodCount: skDiscount.numberOfPeriods)
+                case .payUpFront:
+                    let totalPeriod = SubscriptionPeriod(unit: introductoryPeriod.unit, unitCount: introductoryPeriod.unitCount * skDiscount.numberOfPeriods)
+                    
+                    return .upfrontDiscount(discountedPrice: price, period: totalPeriod)
+                case .freeTrial:
+                    return .freeTrial(period: introductoryPeriod)
+                @unknown default:
+                    return nil
             }
         }()
         

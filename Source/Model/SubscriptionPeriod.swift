@@ -4,7 +4,7 @@ public struct SubscriptionPeriod : Hashable {
     public let unitCount: Int
     
     /// Create a `SubscriptionPeriod` with the given `unit` and `unitCount`. A `Unit.day` with a count of 5 represents five days, for example.
-    // Typically, you do not need to construct `SubscriptionPeriod` instances manually.
+    /// Typically, you do not need to construct `SubscriptionPeriod` instances manually.
     public init(unit: Unit, unitCount: Int) {
         self.unit = unit
         self.unitCount = unitCount

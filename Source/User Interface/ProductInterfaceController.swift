@@ -48,7 +48,7 @@ public final class ProductInterfaceController {
     private var commitPurchaseTask: CommitPurchaseTask?
     private var restorePurchasesTask: RestorePurchasesTask?
     
-    private var availablePurchasesFetchResult: FetchResult<PurchaseSet>?
+    private var availablePurchasesFetchResult: FetchResult?
     
     private var stateForProductIdentifier = [String : ProductState]()
     
@@ -72,8 +72,15 @@ public final class ProductInterfaceController {
     }
     
     public func fetchDataIfNecessary() {
-        guard self.availablePurchasesFetchResult == nil else { return }
-        
+        switch self.availablePurchasesFetchResult {
+            case .succeeded(_)?: return
+            case .failed(_)?:
+                self.refetchAvailablePurchases(silentlyFetch: false)
+                return
+            default:
+                break
+        }
+                
         self.fetchPurchases(onFetchingStateChanged: { [weak self] in
             guard let self = self else { return }
             
@@ -100,40 +107,33 @@ public final class ProductInterfaceController {
             self.didChangeState(for: [product])
             
             switch result {
-                case .succeeded(_):
+                case .success(_):
                     DispatchQueue.main.async {
-                        self.delegate?.productInterfaceController(self, didCommit: purchase, with: .succeeded)
+                        self.delegate?.productInterfaceController(self, didCommit: purchase, with: .success)
                     }
-                case .failed(let baseError):
-                    let error: CommitPurchaseResult.Error
-                    let shouldDisplayError: Bool
+                case .failure(let baseError):
+                    let error: CommitPurchaseError
                     
                     let underlyingError = (baseError as NSError).userInfo[NSUnderlyingErrorKey] as? Error
                     
                     switch (baseError, underlyingError) {
                         case (SKError.paymentCancelled, _):
                             error = .userCancelled
-                            shouldDisplayError = false
                         case (SKError.storeProductNotAvailable, _):
                             error = .purchaseNotAvailable
-                            shouldDisplayError = true
                         case (SKError.paymentInvalid, _):
                             error = .paymentInvalid
-                            shouldDisplayError = true
                         case (SKError.paymentNotAllowed, _):
                             error = .paymentNotAllowed
-                            shouldDisplayError = true
                         case (let networkError as URLError, _), (_, let networkError as URLError):
                             error = .networkError(networkError)
-                            shouldDisplayError = true
                         default:
                             error = .genericProblem(baseError)
-                            shouldDisplayError = true
-                }
-                
-                DispatchQueue.main.async {
-                    self.delegate?.productInterfaceController(self, didCommit: purchase, with: .failed(error, shouldDisplayError: shouldDisplayError))
-                }
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.delegate?.productInterfaceController(self, didCommit: purchase, with: .failure(error))
+                    }
             }
         }
         
@@ -153,16 +153,12 @@ public final class ProductInterfaceController {
             self.restorePurchasesTask = nil
             
             DispatchQueue.main.async {
-                let restoreResult: RestorePurchasesResult
+                let restoreResult: RestorePurchasesResult = result.map { restoredProducts in
+                    self.products.intersection(restoredProducts)
+                }
                 
-                switch result {
-                    case .succeeded(let restoredProducts):
-                        let updatedProducts = self.products.intersection(restoredProducts)
-                        self.didChangeState(for: updatedProducts)
-                        
-                        restoreResult = .succeeded(updatedProducts)
-                    case .failed(let error):
-                        restoreResult = .failed(error)
+                if let updatedProducts = try? restoreResult.get() {
+                    self.didChangeState(for: updatedProducts)
                 }
                 
                 self.delegate?.productInterfaceController(self, didRestorePurchasesWith: restoreResult)
@@ -210,43 +206,44 @@ extension ProductInterfaceController {
         }
     }
     
-    public enum CommitPurchaseResult {
-        case succeeded
-        case failed(Error, shouldDisplayError: Bool)
+    public typealias CommitPurchaseResult = Result<Void, CommitPurchaseError>
+    
+    public enum CommitPurchaseError : Error {
+        case userCancelled
+        case networkError(URLError)
+        case purchaseNotAvailable
+        case paymentNotAllowed
+        case paymentInvalid
+        case genericProblem(Swift.Error)
         
-        public enum Error : Swift.Error {
-            case userCancelled
-            case networkError(URLError)
-            case purchaseNotAvailable
-            case paymentNotAllowed
-            case paymentInvalid
-            case genericProblem(Swift.Error)
+        public var shouldDisplayInUserInterface: Bool {
+            switch self {
+                case .userCancelled: return false
+                default: return true
+            }
         }
     }
     
-    public enum RestorePurchasesResult {
-        case succeeded(Set<Product>)
-        case failed(Error)
-    }
+    public typealias RestorePurchasesResult = Result<Set<Product>, Error>
 }
 
 extension ProductInterfaceController {
-    private enum FetchResult<T> {
-        case succeeded(T)
+    private enum FetchResult {
+        case succeeded(PurchaseSet)
         case failed(FetchingState.FailureReason)
     }
     
-    private func fetchPurchases(onFetchingStateChanged fetchingStateChanged: @escaping () -> Void, onCompletion completion: @escaping (FetchResult<PurchaseSet>) -> Void) {
+    private func fetchPurchases(onFetchingStateChanged fetchingStateChanged: @escaping () -> Void, onCompletion completion: @escaping (FetchResult) -> Void) {
         let task = self.merchant.availablePurchasesTask(for: self.products)
         task.onCompletion = { [weak self] result in
             guard let self = self else { return }
             
             self.availablePurchasesTask = nil
             
-            let loadResult: FetchResult<PurchaseSet>
+            let loadResult: FetchResult
             
             switch result {
-                case .failed(let error):
+                case .failure(let error):
                     let failureReason: FetchingState.FailureReason
                     let underlyingError = (error as NSError).userInfo[NSUnderlyingErrorKey] as? Error
                     
@@ -260,14 +257,13 @@ extension ProductInterfaceController {
                     }
                     
                     loadResult = .failed(failureReason)
-                case .succeeded(let purchases):
+                case .success(let purchases):
                     loadResult = .succeeded(purchases)
             }
             
             DispatchQueue.main.async {
-                fetchingStateChanged()
-                
                 completion(loadResult)
+                fetchingStateChanged()
             }
         }
         
@@ -277,27 +273,30 @@ extension ProductInterfaceController {
         fetchingStateChanged()
     }
     
-    private func refetchAvailablePurchases() {
-        self.fetchPurchases(onFetchingStateChanged: {}, onCompletion: { [weak self] result in
+    private func refetchAvailablePurchases(silentlyFetch: Bool) {
+        self.fetchPurchases(onFetchingStateChanged: { [weak self] in
+            guard !silentlyFetch, let self = self else { return }
+
+            self.delegate?.productInterfaceControllerDidChangeFetchingState(self)
+        }, onCompletion: { [weak self] result in
             guard let self = self else { return }
             
-            let didChange: Bool
+            let didSucceed: Bool
             
             switch (self.availablePurchasesFetchResult, result) {
                 case (.failed(_)?, .succeeded(_)):
-                    self.availablePurchasesFetchResult = result
-                    didChange = true
+                    didSucceed = true
                 case (.succeeded(_)?, .succeeded(_)):
-                    self.availablePurchasesFetchResult = result
-                    didChange = true
+                    didSucceed = true
                 case (nil, _):
-                    self.availablePurchasesFetchResult = result
-                    didChange = true
+                    didSucceed = true
                 case (_, .failed(_)):
-                    didChange = false
+                    didSucceed = false
             }
             
-            if didChange {
+            if didSucceed {
+                self.availablePurchasesFetchResult = result
+
                 self.didChangeState(for: self.products)
             }
         })
@@ -385,7 +384,7 @@ extension ProductInterfaceController {
         
         if case .failed(.networkFailure(_))? = self.availablePurchasesFetchResult {
             DispatchQueue.main.async {
-                self.refetchAvailablePurchases()
+                self.refetchAvailablePurchases(silentlyFetch: true)
             }
         }
     }

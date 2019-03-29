@@ -3,14 +3,8 @@ import os.log
 internal class Logger {
     internal var isActive: Bool = false
     
-    fileprivate let loggingSubsystem: String = {
-        let subsystem: String
-        
-        if let identifier = Bundle.main.bundleIdentifier {
-            return "\(identifier).MerchantKit"
-        } else {
-            return "MerchantKit"
-        }
+    internal let loggingSubsystem: String = {
+        return [Bundle.main.bundleIdentifier, "MerchantKit"].compactMap { $0 }.joined(separator: ".")
     }()
     
     internal init() {
@@ -21,9 +15,10 @@ internal class Logger {
         guard self.isActive else { return }
         
         let storage = self.logStorage(for: category)
-        guard storage.isEnabled(type: type) else { return }
         
-        os_log("%{public}@", log: storage, type: type, message())
+        if storage.isEnabled(type: type) {
+            os_log("%{public}@", log: storage, type: type, message())
+        }
     }
     
     internal enum Category {
@@ -31,6 +26,7 @@ internal class Logger {
         case tasks
         case receipt
         case purchaseStorage
+        case storeInterface
         
         fileprivate var stringValue: String {
             switch self {
@@ -42,6 +38,8 @@ internal class Logger {
                     return "Receipt"
                 case .purchaseStorage:
                     return "Purchase Storage"
+                case .storeInterface:
+                    return "Store Interface"
             }
         }
     }

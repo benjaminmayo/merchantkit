@@ -50,25 +50,24 @@ extension ASN1 {
             case aborted
             case unknownASN1Type(UInt8)
             case usesLongFormNotSupported
-            case invalidDomain
             case malformedLengthForData
         }
     }
 }
 
 extension ASN1.Parser {
-    struct PayloadDescriptor {
-        let domain: Domain
-        let tag: Tag
-        let valueKind: ValueKind
+    internal struct PayloadDescriptor {
+        internal let domain: Domain
+        internal let tag: Tag
+        internal let valueKind: ValueKind
         
-        private init(domain: Domain, tag: Tag, valueKind: ValueKind) {
+        internal init(domain: Domain, tag: Tag, valueKind: ValueKind) {
             self.domain = domain
             self.tag = tag
             self.valueKind = valueKind
         }
         
-        init(from byte: UInt8) throws {
+        internal init(from byte: UInt8) {
             // Octet:   | 8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 |
             // Decoded: |Domain_|IsC|TagNumber__________|
             
@@ -78,32 +77,31 @@ extension ASN1.Parser {
             
             let domainRawValue = byte >> 6
             
-            guard let domain = Domain(rawValue: domainRawValue) else { throw Error.invalidDomain }
-            self.domain = domain
+            let domain = Domain(rawValue: domainRawValue)!
             
             let isConstructed = ((byte >> 5) & 1) == 1
-            self.valueKind = isConstructed ? .constructed : .primitive
+            let valueKind: ValueKind = isConstructed ? .constructed : .primitive
             
             let tagRawValue = byte & 0x1f
 
             let tag: Tag = ASN1.BufferType(rawValue: tagRawValue).map { .type($0) } ?? .custom(tagRawValue)
             
-            self.tag = tag
+            self.init(domain: domain, tag: tag, valueKind: valueKind)
         }
         
-        enum Domain : UInt8 {
+        enum Domain : UInt8, Equatable {
             case universal = 0x0
             case application = 0x1
             case contextSpecific = 0x2
             case `private` = 0x3
         }
         
-        enum ValueKind {
+        enum ValueKind : Equatable {
             case primitive
             case constructed
         }
         
-        enum Tag {
+        enum Tag : Equatable {
             case custom(UInt8)
             case type(ASN1.BufferType)
             
@@ -139,7 +137,7 @@ extension ASN1.Parser {
             throw Error.aborted
         }
 
-        var descriptor = try PayloadDescriptor(from: subdata.first!)
+        var descriptor = PayloadDescriptor(from: subdata.first!)
         
         if descriptor.tag.type == ASN1.BufferType.usesLongForm {
             throw Error.usesLongFormNotSupported

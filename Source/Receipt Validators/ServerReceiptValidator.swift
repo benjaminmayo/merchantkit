@@ -1,7 +1,7 @@
 /// Sends a request to the iTunes server for validation.
 /// Attempts to make a validated receipt from the response and calls `onCompletion` when finished.
 public final class ServerReceiptValidator : ReceiptValidator {
-    public typealias Completion = (Result<Receipt>) -> Void
+    public typealias Completion = (Result<Receipt, Error>) -> Void
     
     private let sharedSecret: String?
     
@@ -48,7 +48,7 @@ fileprivate class ServerReceiptValidatorTask {
         self.dataFetcher.start()
     }
     
-    private func complete(with result: Result<Receipt>) {
+    private func complete(with result: Result<Receipt, Error>) {
         self.onCompletion?(result)
     }
     
@@ -61,26 +61,17 @@ fileprivate class ServerReceiptValidatorTask {
         return fetcher
     }
     
-    private func didFetchVerificationData(with dataResult: Result<Data>) {
-        let result: Result<Receipt>
+    private func didFetchVerificationData(with dataResult: Result<Data, Error>) {
+        let result = Result<Receipt, Error> {
+            let parser = ServerReceiptVerificationResponseParser() // this object handles the actual parsing of the data
+            let response = try parser.response(from: dataResult.get())
+            let validatedReceipt = try parser.receipt(from: response)
             
-        do {
-            switch dataResult {
-                case .succeeded(let data):
-                    let parser = ServerReceiptVerificationResponseParser() // this object handles the actual parsing of the data
-                    let response = try parser.response(from: data)
-                    let validatedReceipt = try parser.receipt(from: response)
-
-                    result = .succeeded(validatedReceipt)
-                case .failed(let error):
-                    result = .failed(error)
-            }
-        } catch let error {
-            result = .failed(error)
+            return validatedReceipt
         }
         
         switch result {
-            case .failed(ServerReceiptVerificationResponseParser.ReceiptStatusError.receiptIncompatibleWithProductionEnvironment):
+            case .failure(ServerReceiptVerificationResponseParser.ReceiptStatusError.receiptIncompatibleWithProductionEnvironment):
                 self.dataFetcher = self.makeFetcher(for: .sandbox)
                 self.dataFetcher.start()
             default:

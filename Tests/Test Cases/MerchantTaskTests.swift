@@ -22,6 +22,17 @@ class MerchantTaskTests : XCTestCase {
         
         MerchantKitFatalError.customHandler = nil 
     }
+    
+    func testStartAndResignNonActivatedTaskDoesNotConfuseMerchant() {
+        let mockDelegate = MockMerchantDelegate()
+        
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate)
+        let mockTask = MockMerchantTask()
+        mockTask.start()
+        
+        merchant.taskDidStart(mockTask)
+        merchant.taskDidResign(mockTask)
+    }
 }
 
 private class MockMerchantTask : MerchantTask {
