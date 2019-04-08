@@ -72,13 +72,13 @@ public final class Merchant {
         self.checkReceipt(updateProducts: .all, policy: .onlyFetch, reason: .initialization, completion: { result in
             switch result {
                 case .failure(TestingReceiptValidator.Error.failingInitializationOnPurposeForTesting):
-                    self.logger.log(message: "Merchant is using a testing configuration that intentionally fails to validate receipts upon initialization. This is useful for testing but should not be deployed to production.", category: .initialization)
+                    self.logger.log(message: "`Merchant` is using a testing configuration that intentionally fails to validate receipts upon initialization. This is useful for testing but should not be deployed to production.", category: .initialization)
                 case .success(_), .failure(_):
                     break
             }
         })
         
-        self.logger.log(message: "Merchant has been setup, with \(self.registeredProducts.count) registered \(self.registeredProducts.count == 1 ? "product" : "products").", category: .initialization)
+        self.logger.log(message: "`Merchant` has been setup, with \(self.registeredProducts.count) registered \(self.registeredProducts.count == 1 ? "product" : "products").", category: .initialization)
         
         if self.registeredProducts.isEmpty {
             self.logger.log(message: "There are no registered products for the `Merchant`. Remember to call `Merchant.register(_)` to register a sequence of `Product` items.", category: .initialization)
@@ -420,7 +420,7 @@ extension Merchant : StoreInterfaceDelegate {
                 observer.merchant(self, didFinishPurchaseWith: .success, forProductWith: product.identifier)
             }
         } else {
-            self.logger.log(message: "Purchase was not handled as the productIdentifier (\"\(productIdentifier)\") was unknown to the `Merchant`. If you recognize the product identifier, ensure the corresponding `Product` has been registered before attempting to commit purchases.", category: .storeInterface)
+            self.logger.log(message: "Purchase was not handled as the `productIdentifier` (\"\(productIdentifier)\") was unknown to the `Merchant`. If you recognize the product identifier, ensure the corresponding `Product` has been registered before attempting to commit purchases.", category: .storeInterface)
         }
     }
     
@@ -442,7 +442,7 @@ extension Merchant : StoreInterfaceDelegate {
                 }
             }
         } else {
-            self.logger.log(message: "Restored purchase was not handled as the productIdentifier (\"\(productIdentifier)\") was unknown to the `Merchant`. If you recognize the product identifier, ensure the corresponding `Product` has been registered before attempting to restore purchases.", category: .storeInterface)
+            self.logger.log(message: "Restored purchase was not handled as the `productIdentifier` (\"\(productIdentifier)\") was unknown to the `Merchant`. If you recognize the product identifier, ensure the corresponding `Product` has been registered before attempting to restore purchases.", category: .storeInterface)
         }
     }
     
@@ -452,7 +452,7 @@ extension Merchant : StoreInterfaceDelegate {
                 observer.merchant(self, didFinishPurchaseWith: .failure(error), forProductWith: product.identifier)
             }
         } else {
-            self.logger.log(message: "Purchase failure \"\(error.localizedDescription)\" was not handled as the productIdentifier (\"\(productIdentifier)\") was unknown to the `Merchant`. If you recognize the product identifier, ensure the corresponding `Product` has been registered before attempting to commit purchases.", category: .storeInterface)
+            self.logger.log(message: "Purchase failure \"\(error.localizedDescription)\" was not handled as the `productIdentifier` (\"\(productIdentifier)\") was unknown to the `Merchant`. If you recognize the product identifier, ensure the corresponding `Product` has been registered before attempting to commit purchases.", category: .storeInterface)
         }
     }
     
