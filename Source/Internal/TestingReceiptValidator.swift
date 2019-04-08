@@ -1,11 +1,11 @@
 internal class TestingReceiptValidator : ReceiptValidator {
     private let wrapping: ReceiptValidator
     
-    init(wrapping validator: ReceiptValidator) {
+    internal init(wrapping validator: ReceiptValidator) {
         self.wrapping = validator
     }
-    
-    func validate(_ request: ReceiptValidationRequest, completion: @escaping (Result<Receipt, Swift.Error>) -> Void) {
+
+    internal func validate(_ request: ReceiptValidationRequest, completion: @escaping (Result<Receipt, Swift.Error>) -> Void) {
         if request.reason == .initialization {
             completion(.failure(Error.failingInitializationOnPurposeForTesting))
         } else {
@@ -13,7 +13,7 @@ internal class TestingReceiptValidator : ReceiptValidator {
         }
     }
     
-    private enum Error : Swift.Error {
+    internal enum Error : Swift.Error {
         case failingInitializationOnPurposeForTesting
     }
 }

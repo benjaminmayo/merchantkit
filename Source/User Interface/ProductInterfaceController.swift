@@ -119,8 +119,10 @@ public final class ProductInterfaceController {
                     switch (baseError, underlyingError) {
                         case (SKError.paymentCancelled, _):
                             error = .userCancelled
+                        #if os(iOS)
                         case (SKError.storeProductNotAvailable, _):
                             error = .purchaseNotAvailable
+                        #endif
                         case (SKError.paymentInvalid, _):
                             error = .paymentInvalid
                         case (SKError.paymentNotAllowed, _):

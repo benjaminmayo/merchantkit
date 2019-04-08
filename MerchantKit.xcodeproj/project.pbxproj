@@ -201,8 +201,10 @@
 		4337A8981EB1F1EB00EAF633 /* testSubscriptionReceiptResponse.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testSubscriptionReceiptResponse.json; sourceTree = "<group>"; };
 		4337A89C1EB1FE3300EAF633 /* PurchaseRecordTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseRecordTests.swift; sourceTree = "<group>"; };
 		4337A8A21EB2433A00EAF633 /* EphemeralPurchaseStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EphemeralPurchaseStorage.swift; sourceTree = "<group>"; };
+		4340AD7E225B76C500CE1C6D /* MerchantKitTests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantKitTests_macOS.swift; sourceTree = "<group>"; };
+		4340AD80225B76C500CE1C6D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4342025D1EAE08F80012983A /* MerchantKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MerchantKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		434202661EAE08F80012983A /* MerchantKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MerchantKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		434202661EAE08F80012983A /* MerchantKitTests-iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MerchantKitTests-iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4342026D1EAE08F80012983A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		434202771EAE09100012983A /* Merchant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Merchant.swift; sourceTree = "<group>"; };
 		434202781EAE09100012983A /* PurchaseRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseRecord.swift; sourceTree = "<group>"; };
@@ -237,7 +239,7 @@
 		43703A4E20856C12003AA087 /* testSampleReceiptTwoNonConsumablesPurchased.data */ = {isa = PBXFileReference; lastKnownFileType = file; path = testSampleReceiptTwoNonConsumablesPurchased.data; sourceTree = "<group>"; };
 		43703A502085EB38003AA087 /* ReceiptAttributeASN1SetProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptAttributeASN1SetProcessor.swift; sourceTree = "<group>"; };
 		4370FCFA220C4451003BA681 /* MerchantConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantConfigurationTests.swift; sourceTree = "<group>"; };
-		4370FD00220C48CF003BA681 /* MerchantKitTestsHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MerchantKitTestsHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4370FD00220C48CF003BA681 /* MerchantKitTestsHost-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MerchantKitTestsHost-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4370FD02220C48CF003BA681 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4370FD0E220C48D3003BA681 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4370FD12220C4E8B003BA681 /* TestsHost.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestsHost.entitlements; sourceTree = "<group>"; };
@@ -362,6 +364,15 @@
 			path = "Sample Resources";
 			sourceTree = "<group>";
 		};
+		4340AD7D225B76C500CE1C6D /* MerchantKitTests-macOS */ = {
+			isa = PBXGroup;
+			children = (
+				4340AD7E225B76C500CE1C6D /* MerchantKitTests_macOS.swift */,
+				4340AD80225B76C500CE1C6D /* Info.plist */,
+			);
+			path = "MerchantKitTests-macOS";
+			sourceTree = "<group>";
+		};
 		434202531EAE08F80012983A = {
 			isa = PBXGroup;
 			children = (
@@ -370,6 +381,7 @@
 				4342025F1EAE08F80012983A /* Source */,
 				4342026A1EAE08F80012983A /* Tests */,
 				4370FD01220C48CF003BA681 /* TestsHost */,
+				4340AD7D225B76C500CE1C6D /* MerchantKitTests-macOS */,
 				4342025E1EAE08F80012983A /* Products */,
 				436CE15D1EB0EF3D00AB41CD /* Frameworks */,
 			);
@@ -379,8 +391,8 @@
 			isa = PBXGroup;
 			children = (
 				4342025D1EAE08F80012983A /* MerchantKit.framework */,
-				434202661EAE08F80012983A /* MerchantKitTests.xctest */,
-				4370FD00220C48CF003BA681 /* MerchantKitTestsHost.app */,
+				434202661EAE08F80012983A /* MerchantKitTests-iOS.xctest */,
+				4370FD00220C48CF003BA681 /* MerchantKitTestsHost-iOS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -650,9 +662,9 @@
 			productReference = 4342025D1EAE08F80012983A /* MerchantKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		434202651EAE08F80012983A /* MerchantKitTests */ = {
+		434202651EAE08F80012983A /* MerchantKitTests-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 434202741EAE08F80012983A /* Build configuration list for PBXNativeTarget "MerchantKitTests" */;
+			buildConfigurationList = 434202741EAE08F80012983A /* Build configuration list for PBXNativeTarget "MerchantKitTests-iOS" */;
 			buildPhases = (
 				434202621EAE08F80012983A /* Sources */,
 				434202631EAE08F80012983A /* Frameworks */,
@@ -663,14 +675,14 @@
 			dependencies = (
 				434202691EAE08F80012983A /* PBXTargetDependency */,
 			);
-			name = MerchantKitTests;
+			name = "MerchantKitTests-iOS";
 			productName = MerchantKitTests;
-			productReference = 434202661EAE08F80012983A /* MerchantKitTests.xctest */;
+			productReference = 434202661EAE08F80012983A /* MerchantKitTests-iOS.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		4370FCFF220C48CF003BA681 /* MerchantKitTestsHost */ = {
+		4370FCFF220C48CF003BA681 /* MerchantKitTestsHost-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4370FD0F220C48D3003BA681 /* Build configuration list for PBXNativeTarget "MerchantKitTestsHost" */;
+			buildConfigurationList = 4370FD0F220C48D3003BA681 /* Build configuration list for PBXNativeTarget "MerchantKitTestsHost-iOS" */;
 			buildPhases = (
 				4370FCFC220C48CF003BA681 /* Sources */,
 				4370FCFD220C48CF003BA681 /* Frameworks */,
@@ -680,9 +692,9 @@
 			);
 			dependencies = (
 			);
-			name = MerchantKitTestsHost;
+			name = "MerchantKitTestsHost-iOS";
 			productName = TestsHost;
-			productReference = 4370FD00220C48CF003BA681 /* MerchantKitTestsHost.app */;
+			productReference = 4370FD00220C48CF003BA681 /* MerchantKitTestsHost-iOS.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -691,7 +703,8 @@
 		434202541EAE08F80012983A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1010;
+				DefaultBuildSystemTypeForWorkspace = Original;
+				LastSwiftUpdateCheck = 1020;
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Benjamin Mayo";
 				TargetAttributes = {
@@ -730,8 +743,8 @@
 			projectRoot = "";
 			targets = (
 				4342025C1EAE08F80012983A /* MerchantKit */,
-				434202651EAE08F80012983A /* MerchantKitTests */,
-				4370FCFF220C48CF003BA681 /* MerchantKitTestsHost */,
+				434202651EAE08F80012983A /* MerchantKitTests-iOS */,
+				4370FCFF220C48CF003BA681 /* MerchantKitTestsHost-iOS */,
 			);
 		};
 /* End PBXProject section */
@@ -989,10 +1002,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1047,9 +1061,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				SDKROOT = iphoneos;
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1154,7 +1169,8 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2ZTW4G3PG5;
 				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1166,11 +1182,13 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.anthonymayo.MerchantKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_OBJC_BRIDGING_HEADER = "Tests/Test Utilities/MerchantKitTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MerchantKitTestsHost.app/MerchantKitTestsHost";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MerchantKitTestsHost.app/MerchantKitTestsHost-iOS";
 			};
 			name = Debug;
 		};
@@ -1179,8 +1197,9 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2ZTW4G3PG5;
 				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1191,10 +1210,12 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.anthonymayo.MerchantKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_OBJC_BRIDGING_HEADER = "Tests/Test Utilities/MerchantKitTests-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MerchantKitTestsHost.app/MerchantKitTestsHost";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MerchantKitTestsHost.app/MerchantKitTestsHost-iOS";
 			};
 			name = Release;
 		};
@@ -1220,6 +1241,9 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.anthonymayo.MerchantKitTestsHost;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1246,6 +1270,9 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.anthonymayo.MerchantKitTestsHost;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1272,7 +1299,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		434202741EAE08F80012983A /* Build configuration list for PBXNativeTarget "MerchantKitTests" */ = {
+		434202741EAE08F80012983A /* Build configuration list for PBXNativeTarget "MerchantKitTests-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				434202751EAE08F80012983A /* Debug */,
@@ -1281,7 +1308,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4370FD0F220C48D3003BA681 /* Build configuration list for PBXNativeTarget "MerchantKitTestsHost" */ = {
+		4370FD0F220C48D3003BA681 /* Build configuration list for PBXNativeTarget "MerchantKitTestsHost-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4370FD10220C48D3003BA681 /* Debug */,

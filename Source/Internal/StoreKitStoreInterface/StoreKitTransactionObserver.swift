@@ -63,6 +63,7 @@ extension StoreKitTransactionObserver : SKPaymentTransactionObserver {
         self.delegate?.storeInterfaceDidUpdatePurchases(self.storeInterface)
     }
     
+    #if os(iOS)
     internal func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {
         let response = self.delegate?.storeInterface(self.storeInterface, responseForStoreIntentToCommitPurchaseFrom: .pendingStorePayment(product, payment)) ?? .default
         
@@ -73,6 +74,7 @@ extension StoreKitTransactionObserver : SKPaymentTransactionObserver {
                 return false
         }
     }
+    #endif
     
     internal func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
         self.delegate?.storeInterface(self.storeInterface, didFinishRestoringPurchasesWith: .success)
