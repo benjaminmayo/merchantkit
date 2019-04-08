@@ -69,7 +69,14 @@ public final class Merchant {
         
         self.storeInterface.setup(withDelegate: self)
         
-        self.checkReceipt(updateProducts: .all, policy: .onlyFetch, reason: .initialization)
+        self.checkReceipt(updateProducts: .all, policy: .onlyFetch, reason: .initialization, completion: { result in
+            switch result {
+                case .failure(TestingReceiptValidator.Error.failingInitializationOnPurposeForTesting):
+                    self.logger.log(message: "Merchant is using a testing configuration that intentionally fails to validate receipts upon initialization. This is useful for testing but should not be deployed to production.", category: .initialization)
+                case .success(_), .failure(_):
+                    break
+            }
+        })
         
         self.logger.log(message: "Merchant has been setup, with \(self.registeredProducts.count) registered \(self.registeredProducts.count == 1 ? "product" : "products").", category: .initialization)
         
