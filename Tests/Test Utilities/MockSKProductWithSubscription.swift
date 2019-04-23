@@ -7,13 +7,16 @@ internal class MockSKProductWithSubscription : SKProduct {
     private let _priceLocale: Locale
     private let _subscriptionPeriod: SKProductSubscriptionPeriod?
     private let _introductoryOffer: SKProductDiscount?
+    private let _discounts: [SKProductDiscount]
     
-    internal init(productIdentifier: String, price: NSDecimalNumber, priceLocale: Locale, subscriptionPeriod: SKProductSubscriptionPeriod?, introductoryOffer: SKProductDiscount?) {
+    internal init(productIdentifier: String, price: NSDecimalNumber, priceLocale: Locale, subscriptionPeriod: SKProductSubscriptionPeriod?, introductoryOffer: SKProductDiscount?, discounts: [SKProductDiscount] = []) {
         self._productIdentifier = productIdentifier
         self._price = price
         self._priceLocale = priceLocale
         self._subscriptionPeriod = subscriptionPeriod
         self._introductoryOffer = introductoryOffer
+        
+        self._discounts = discounts
     }
     
     override var productIdentifier: String {
@@ -34,5 +37,9 @@ internal class MockSKProductWithSubscription : SKProduct {
     
     override var introductoryPrice: SKProductDiscount? {
         return self._introductoryOffer
+    }
+    
+    override var discounts: [SKProductDiscount] {
+        return self._discounts
     }
 }
