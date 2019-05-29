@@ -305,16 +305,25 @@ extension Merchant {
             
             let expiryDate = entries.compactMap { $0.expiryDate }.max()
             
+            func logMessage(for result: PurchaseStorageUpdateResult) -> String {
+                switch result {
+                    case .didChangeRecords:
+                        return "Purchase storage did change."
+                    case .noChanges:
+                        return "Purchase storage unchanged."
+                }
+            }
+                
             if let expiryDate = expiryDate, !self.isSubscriptionActive(forExpiryDate: expiryDate) {
                 result = self.configuration.storage.removeRecord(forProductIdentifier: productIdentifier)
                 
-                self.logger.log(message: "Removed record for \(productIdentifier), given expiry date \(expiryDate)", category: .purchaseStorage)
+                self.logger.log(message: "Removed record for \(productIdentifier), given expiry date \(expiryDate). " + logMessage(for: result), category: .purchaseStorage)
             } else {
                 let record = PurchaseRecord(productIdentifier: productIdentifier, expiryDate: expiryDate)
             
                 result = self.configuration.storage.save(record)
                 
-                self.logger.log(message: "Saved record: \(record)", category: .purchaseStorage)
+                self.logger.log(message: "Saved record: \(record). " + logMessage(for: result), category: .purchaseStorage)
             }
             
             if result == .didChangeRecords {
