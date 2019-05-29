@@ -36,3 +36,18 @@ internal class MockSKProductDiscount : SKProductDiscount {
         return self._paymentMode
     }
 }
+
+@available(iOS 12.2, *)
+internal class MockSKProductDiscountWithIdentifier : MockSKProductDiscount {
+    private let _identifier: String
+    
+    internal init(identifier: String, price: NSDecimalNumber, priceLocale: Locale, subscriptionPeriod: SKProductSubscriptionPeriod, numberOfPeriods: Int, paymentMode: SKProductDiscount.PaymentMode) {
+        self._identifier = identifier
+    
+        super.init(price: price, priceLocale: priceLocale, subscriptionPeriod: subscriptionPeriod, numberOfPeriods: numberOfPeriods, paymentMode: paymentMode)
+    }
+    
+    override var identifier: String? {
+        return self._identifier
+    }
+}
