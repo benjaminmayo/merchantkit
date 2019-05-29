@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4370FCFF220C48CF003BA681"
-               BuildableName = "MerchantKitTestsHost.app"
-               BlueprintName = "MerchantKitTestsHost"
+               BuildableName = "MerchantKitTestsHost-iOS.app"
+               BlueprintName = "MerchantKitTestsHost-iOS"
                ReferencedContainer = "container:MerchantKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,8 +33,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "434202651EAE08F80012983A"
-               BuildableName = "MerchantKitTests.xctest"
-               BlueprintName = "MerchantKitTests"
+               BuildableName = "MerchantKitTests-iOS.xctest"
+               BlueprintName = "MerchantKitTests-iOS"
                ReferencedContainer = "container:MerchantKit.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -43,8 +43,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4370FCFF220C48CF003BA681"
-            BuildableName = "MerchantKitTestsHost.app"
-            BlueprintName = "MerchantKitTestsHost"
+            BuildableName = "MerchantKitTestsHost-iOS.app"
+            BlueprintName = "MerchantKitTestsHost-iOS"
             ReferencedContainer = "container:MerchantKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -66,8 +66,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4370FCFF220C48CF003BA681"
-            BuildableName = "MerchantKitTestsHost.app"
-            BlueprintName = "MerchantKitTestsHost"
+            BuildableName = "MerchantKitTestsHost-iOS.app"
+            BlueprintName = "MerchantKitTestsHost-iOS"
             ReferencedContainer = "container:MerchantKit.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -85,8 +85,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4370FCFF220C48CF003BA681"
-            BuildableName = "MerchantKitTestsHost.app"
-            BlueprintName = "MerchantKitTestsHost"
+            BuildableName = "MerchantKitTestsHost-iOS.app"
+            BlueprintName = "MerchantKitTestsHost-iOS"
             ReferencedContainer = "container:MerchantKit.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
