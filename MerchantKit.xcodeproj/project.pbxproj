@@ -144,6 +144,13 @@
 			remoteGlobalIDString = 4342025C1EAE08F80012983A;
 			remoteInfo = MerchantKit;
 		};
+		434D16E8229EA6E000180AE4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 434202541EAE08F80012983A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4370FCFF220C48CF003BA681;
+			remoteInfo = "MerchantKitTestsHost-iOS";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -674,6 +681,7 @@
 			);
 			dependencies = (
 				434202691EAE08F80012983A /* PBXTargetDependency */,
+				434D16E9229EA6E000180AE4 /* PBXTargetDependency */,
 			);
 			name = "MerchantKitTests-iOS";
 			productName = MerchantKitTests;
@@ -716,6 +724,7 @@
 					434202651EAE08F80012983A = {
 						CreatedOnToolsVersion = 8.3.2;
 						LastSwiftMigration = 1020;
+						TestTargetID = 4370FCFF220C48CF003BA681;
 					};
 					4370FCFF220C48CF003BA681 = {
 						CreatedOnToolsVersion = 10.1;
@@ -926,6 +935,11 @@
 			isa = PBXTargetDependency;
 			target = 4342025C1EAE08F80012983A /* MerchantKit */;
 			targetProxy = 434202681EAE08F80012983A /* PBXContainerItemProxy */;
+		};
+		434D16E9229EA6E000180AE4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4370FCFF220C48CF003BA681 /* MerchantKitTestsHost-iOS */;
+			targetProxy = 434D16E8229EA6E000180AE4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1186,7 +1200,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MerchantKitTestsHost.app/MerchantKitTestsHost-iOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MerchantKitTestsHost-iOS.app/MerchantKitTestsHost-iOS";
 			};
 			name = Debug;
 		};
@@ -1213,7 +1227,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "Tests/Test Utilities/MerchantKitTests-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MerchantKitTestsHost.app/MerchantKitTestsHost-iOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MerchantKitTestsHost-iOS.app/MerchantKitTestsHost-iOS";
 			};
 			name = Release;
 		};

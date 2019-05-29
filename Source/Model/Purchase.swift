@@ -97,7 +97,7 @@ public struct Purchase : Hashable, CustomStringConvertible {
             
             switch skProductDiscount.paymentMode {
                 case .payAsYouGo:
-                    discount = .recurring(discountedPrice: price, period: subscriptionPeriod, discountedPeriodCount: skProductDiscount.numberOfPeriods)
+                    discount = .recurring(discountedPrice: price, recurringPeriod: subscriptionPeriod, discountedPeriodCount: skProductDiscount.numberOfPeriods)
                 case .payUpFront:
                     let totalPeriod = SubscriptionPeriod(unit: subscriptionPeriod.unit, unitCount: subscriptionPeriod.unitCount * skProductDiscount.numberOfPeriods)
                     

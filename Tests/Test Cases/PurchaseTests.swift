@@ -59,27 +59,29 @@ class PurchaseTests : XCTestCase {
                 let terms = purchase.subscriptionTerms
                 XCTAssertNotNil(terms)
                 
-                let introductoryOffer = terms!.introductoryOffer
-                XCTAssertNotNil(introductoryOffer)
-                
-                XCTAssertEqual(introductoryOffer!, expectation.1)
+                if let terms = terms {
+                    XCTAssertNotNil(terms.introductoryOffer)
+                    
+                    if let introductoryOffer = terms.introductoryOffer {
+                        XCTAssertEqual(introductoryOffer, expectation.1)
+                    }
+                }
             }
         }
     }
     
-    func testMatchingSubscriptionOffers() {
-        guard #available(iOS 11.2, *) else { return }
+    func testMatchingRetentionOffers() {
+        guard #available(iOS 12.2, *) else { return }
         
         let mockSubscriptionPeriod = MockSKProductSubscriptionPeriod(unit: .month, numberOfUnits: 1)
         
-        let expectations: [(SKProductDiscount, SubscriptionTerms.IntroductoryOffer)] = [
-            (MockSKProductDiscount(price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, numberOfPeriods: 6, paymentMode: .payAsYouGo), SubscriptionTerms.Discount.recurringDiscount(discountedPrice: Price(value: (Decimal(string: "1.00")!, .current)), recurringPeriod: .months(1), discountedPeriodCount: 6)),
-            (MockSKProductDiscount(price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, numberOfPeriods: 6, paymentMode: .payUpFront), SubscriptionTerms.Discount.upfrontDiscount(discountedPrice: Price(value: (Decimal(string: "1.00")!, .current)), period: .months(6))),
-            (MockSKProductDiscount(price: NSDecimalNumber(string: "0.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, numberOfPeriods: 1, paymentMode: .freeTrial), SubscriptionTerms.Discount.freeTrial(period: .months(1)))
+        let expectations: [(SKProductDiscount, SubscriptionTerms.RetentionOffer)] = [
+            (MockSKProductDiscountWithIdentifier(identifier: "identifier1", price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, numberOfPeriods: 6, paymentMode: .payAsYouGo), SubscriptionTerms.RetentionOffer(identifier: "identifier1", discount: .recurring(discountedPrice: Price(value: (Decimal(string: "1.00")!, .current)), recurringPeriod: .months(1), discountedPeriodCount: 6))),
+            (MockSKProductDiscountWithIdentifier(identifier: "identifier2", price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, numberOfPeriods: 6, paymentMode: .payUpFront), SubscriptionTerms.RetentionOffer(identifier: "identifier2", discount: .upfront(discountedPrice: Price(value: (Decimal(string: "1.00")!, .current)), period: .months(6)))),
+            (MockSKProductDiscountWithIdentifier(identifier: "identifier3", price: NSDecimalNumber(string: "0.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, numberOfPeriods: 1, paymentMode: .freeTrial), SubscriptionTerms.RetentionOffer(identifier: "identifier3", discount: .freeTerm(period: .months(1))))
         ]
         
         for subscriptionTestProduct in self.testProducts(areSubscriptions: true) {
-            
             let productDiscounts = expectations.map { $0.0 }
             let mockProduct = MockSKProductWithSubscription(productIdentifier: subscriptionTestProduct.identifier, price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, introductoryOffer: nil, discounts: productDiscounts)
             
@@ -88,12 +90,11 @@ class PurchaseTests : XCTestCase {
             let terms = purchase.subscriptionTerms
             XCTAssertNotNil(terms)
             
-            let discounts = terms!.discounts
-            XCTAssertNotNil(discounts)
-            
-            let termsDiscounts = expectations.map { $0.1 }
-            XCTAssertEqual(discounts!, termsDiscounts)
-            
+            if let terms = terms {
+                let termsDiscounts = expectations.map { $0.1 }
+                
+                XCTAssertEqual(terms.availableRetentionOffers, termsDiscounts)
+            }
         }
     }
     
