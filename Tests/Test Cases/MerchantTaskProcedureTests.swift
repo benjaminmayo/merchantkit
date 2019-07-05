@@ -145,7 +145,7 @@ class MerchantTaskProcedureTests : XCTestCase {
         let resultsAndExpectations: [(Result<Data, Error>, Result<ReceiptMetadata, Error>)] = [
             (.failure(MockError.mockError), .failure(MockError.mockError)),
             (.success(Data()), .failure(ASN1.Parser.Error.emptyData)),
-            (.success(dataForReceipt), .success(ReceiptMetadata(originalApplicationVersion: "26")))
+            (.success(dataForReceipt), .success(ReceiptMetadata(originalApplicationVersion: "26", bundleIdentifier: "com.anthonymayo.qrcodes", creationDate: Date(timeIntervalSince1970: 1523813798.0))))
         ]
         
         func evaluate(_ result: Result<ReceiptMetadata, Error>, withExpectation expectedResult: Result<ReceiptMetadata, Error>) {
