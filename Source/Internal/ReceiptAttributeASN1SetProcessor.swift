@@ -85,6 +85,10 @@ internal class ReceiptAttributeASN1SetProcessor : Equatable {
                     return nil
             }
         }
+
+        var iso8601DateValue: Date? {
+            return self.stringValue.flatMap { Date(fromISO8601: $0) }
+        }
     }
     
     static func == (lhs: ReceiptAttributeASN1SetProcessor, rhs: ReceiptAttributeASN1SetProcessor) -> Bool {
