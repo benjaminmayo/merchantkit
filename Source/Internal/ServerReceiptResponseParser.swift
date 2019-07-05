@@ -26,7 +26,7 @@ internal struct ServerReceiptVerificationResponseParser {
         switch response {
             case .receiptJSON(let receiptJSON):
                 let originalApplicationVersion = receiptJSON["original_application_version"] as? String ?? ""
-                let metadata = ReceiptMetadata(originalApplicationVersion: originalApplicationVersion)
+                let metadata = ReceiptMetadata(from: ReceiptMetadataValues(originalApplicationVersion: originalApplicationVersion))
                 
                 guard let inAppPurchaseInfos = receiptJSON["in_app"] as? [[String : Any]] else { throw ResponseDataError.missingOrInvalidKey("in_app") }
                 

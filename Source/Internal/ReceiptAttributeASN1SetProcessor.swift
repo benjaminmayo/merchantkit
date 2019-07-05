@@ -87,8 +87,7 @@ internal class ReceiptAttributeASN1SetProcessor : Equatable {
         }
 
         var iso8601DateValue: Date? {
-            guard let dateString = stringValue else { return nil }
-            return Date(fromISO8601: dateString)
+            return self.stringValue.flatMap { Date(fromISO8601: $0) }
         }
     }
     

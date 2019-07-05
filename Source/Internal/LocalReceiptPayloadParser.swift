@@ -32,7 +32,7 @@ internal class LocalReceiptPayloadParser {
 
         // self.metadataValues is populated with available fields
 
-        let metadata = ReceiptMetadata(withMetadataValues: metadataValues)
+        let metadata = ReceiptMetadata(from: self.metadataValues)
 
         // self.receiptEntries is populated in the processor delegate
 
@@ -93,14 +93,12 @@ extension LocalReceiptPayloadParser {
 
             for (type, attribute) in self.foundInAppPurchaseAttributes {
                 switch type {
-                case .productIdentifier:
-                    productIdentifier = attribute.stringValue
-                case .subscriptionExpirationDate:
-                    expiryDate = attribute.stringValue.flatMap {
-                        Date(fromISO8601: $0)
-                    }
-                default:
-                    break
+                    case .productIdentifier:
+                        productIdentifier = attribute.stringValue
+                    case .subscriptionExpirationDate:
+                        expiryDate = attribute.iso8601DateValue
+                    default:
+                        break
                 }
             }
 
@@ -115,35 +113,21 @@ extension LocalReceiptPayloadParser {
 
     private func didFindPayloadReceiptAttribute(of attributeType: PayloadReceiptAttributeType, attribute: ReceiptAttributeASN1SetProcessor.ReceiptAttribute) {
         switch attributeType {
-        case .inAppPurchase:
-            self.processInAppPurchaseSet(attribute.rawBuffer)
-        case .originalApplicationVersion:
-            self.metadataValues.originalApplicationVersion = attribute.stringValue ?? ""
-        case .bundleIdentifier:
-            self.metadataValues.bundleIdentifier = attribute.stringValue
-        case .creationDate:
-            self.metadataValues.creationDate = attribute.iso8601DateValue
-        default:
-            break
+            case .inAppPurchase:
+                self.processInAppPurchaseSet(attribute.rawBuffer)
+            case .originalApplicationVersion:
+                self.metadataValues.originalApplicationVersion = attribute.stringValue ?? ""
+            case .bundleIdentifier:
+                self.metadataValues.bundleIdentifier = attribute.stringValue ?? ""
+            case .creationDate:
+                self.metadataValues.creationDate = attribute.iso8601DateValue
+            default:
+                break
         }
     }
 
     private func didFindInAppPurchaseReceiptAttribute(of attributeType: InAppPurchaseReceiptAttributeType, attribute: ReceiptAttributeASN1SetProcessor.ReceiptAttribute) {
         self.foundInAppPurchaseAttributes.append((attributeType, attribute))
-        switch attributeType {
-        case .transactionIdentifier:
-            self.metadataValues.transactionIdentifier = attribute.stringValue
-        case .originalTransactionIdentifier:
-            self.metadataValues.originalTransactionIdentifier = attribute.stringValue
-        case .purchaseDate:
-            self.metadataValues.purchaseDate = attribute.iso8601DateValue
-        case .originalPurchaseDate:
-            self.metadataValues.originalPurchaseDate = attribute.iso8601DateValue
-        case .subscriptionExpirationDate:
-            self.metadataValues.subscriptionExpirationDate = attribute.iso8601DateValue
-        default:
-            break
-        }
     }
 }
 
