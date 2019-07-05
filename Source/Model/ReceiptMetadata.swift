@@ -5,9 +5,9 @@ public struct ReceiptMetadata : Equatable {
     public let bundleIdentifier: String
     public let creationDate: Date?
 
-    internal init(from values: ReceiptMetadataValues) {
-        self.originalApplicationVersion = values.originalApplicationVersion
-        self.bundleIdentifier = values.bundleIdentifier
-        self.creationDate = values.creationDate
+    public init(originalApplicationVersion: String = "", bundleIdentifier: String = "", creationDate: Date? = nil) {
+        self.originalApplicationVersion = originalApplicationVersion
+        self.bundleIdentifier = bundleIdentifier
+        self.creationDate = creationDate
     }
 }

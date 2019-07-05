@@ -9,7 +9,7 @@ internal class LocalReceiptPayloadParser {
     private var encounteredInAppPurchaseProcessorError: Error?
 
     private var receiptEntries = [ReceiptEntry]()
-    private var metadataValues = ReceiptMetadataValues()
+    private var metadataBuilder = ReceiptMetadataBuilder()
 
     init() {
 
@@ -30,9 +30,9 @@ internal class LocalReceiptPayloadParser {
             throw error
         }
 
-        // self.metadataValues is populated with available fields
+        // self.metadataBuilder is populated with available fields
 
-        let metadata = ReceiptMetadata(from: self.metadataValues)
+        let metadata = self.metadataBuilder.build()
 
         // self.receiptEntries is populated in the processor delegate
 
@@ -72,7 +72,7 @@ extension LocalReceiptPayloadParser {
         self.encounteredInAppPurchaseProcessorError = nil
 
         self.receiptEntries.removeAll()
-        self.metadataValues = ReceiptMetadataValues()
+        self.metadataBuilder = ReceiptMetadataBuilder()
     }
 
     private func resetInAppPurchaseProcessIntermediaryValues() {
@@ -116,11 +116,11 @@ extension LocalReceiptPayloadParser {
             case .inAppPurchase:
                 self.processInAppPurchaseSet(attribute.rawBuffer)
             case .originalApplicationVersion:
-                self.metadataValues.originalApplicationVersion = attribute.stringValue ?? ""
+                self.metadataBuilder.originalApplicationVersion = attribute.stringValue ?? ""
             case .bundleIdentifier:
-                self.metadataValues.bundleIdentifier = attribute.stringValue ?? ""
+                self.metadataBuilder.bundleIdentifier = attribute.stringValue ?? ""
             case .creationDate:
-                self.metadataValues.creationDate = attribute.iso8601DateValue
+                self.metadataBuilder.creationDate = attribute.iso8601DateValue
             default:
                 break
         }

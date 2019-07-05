@@ -30,7 +30,7 @@
 		432133B81EAE311E0096919B /* MerchantTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133B71EAE311E0096919B /* MerchantTask.swift */; };
 		432133BA1EAE36170096919B /* Purchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133B91EAE36170096919B /* Purchase.swift */; };
 		432133BC1EAE39640096919B /* Price.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432133BB1EAE39640096919B /* Price.swift */; };
-		43222A0921E778EE006A227F /* ReceiptMetadataValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43222A0821E778EE006A227F /* ReceiptMetadataValues.swift */; };
+		43222A0921E778EE006A227F /* ReceiptMetadataBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43222A0821E778EE006A227F /* ReceiptMetadataBuilder.swift */; };
 		43222A0B21E77A55006A227F /* ReceiptMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43222A0A21E77A55006A227F /* ReceiptMetadata.swift */; };
 		43222A0D21E77FC8006A227F /* ReceiptMetadataTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43222A0C21E77FC8006A227F /* ReceiptMetadataTask.swift */; };
 		4329BE4A1EB8A43400052D3E /* MerchantTaskUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4329BE491EB8A43400052D3E /* MerchantTaskUtilities.swift */; };
@@ -193,7 +193,7 @@
 		432133B71EAE311E0096919B /* MerchantTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MerchantTask.swift; sourceTree = "<group>"; };
 		432133B91EAE36170096919B /* Purchase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Purchase.swift; sourceTree = "<group>"; };
 		432133BB1EAE39640096919B /* Price.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Price.swift; sourceTree = "<group>"; };
-		43222A0821E778EE006A227F /* ReceiptMetadataValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptMetadataValues.swift; sourceTree = "<group>"; };
+		43222A0821E778EE006A227F /* ReceiptMetadataBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptMetadataBuilder.swift; sourceTree = "<group>"; };
 		43222A0A21E77A55006A227F /* ReceiptMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptMetadata.swift; sourceTree = "<group>"; };
 		43222A0C21E77FC8006A227F /* ReceiptMetadataTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptMetadataTask.swift; sourceTree = "<group>"; };
 		4329BE491EB8A43400052D3E /* MerchantTaskUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MerchantTaskUtilities.swift; sourceTree = "<group>"; };
@@ -517,7 +517,7 @@
 				43D0AD792072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift */,
 				43A74ABA2203104E00F22264 /* TestingReceiptValidator.swift */,
 				436CE14F1EB0A5B900AB41CD /* ConstructedReceipt.swift */,
-				43222A0821E778EE006A227F /* ReceiptMetadataValues.swift */,
+				43222A0821E778EE006A227F /* ReceiptMetadataBuilder.swift */,
 				43703A502085EB38003AA087 /* ReceiptAttributeASN1SetProcessor.swift */,
 				43703A49208563EA003AA087 /* PKCS7ReceiptDataContainer.swift */,
 				4377345A2212EEFB0010EF79 /* Extension Utilities */,
@@ -840,7 +840,7 @@
 				436CE1301EAE7B6400AB41CD /* PriceFormatter.swift in Sources */,
 				432BFFCE208E099600257585 /* PurchasedProductInfo.swift in Sources */,
 				436CE1561EB0C0D300AB41CD /* KeychainPurchaseStorage.swift in Sources */,
-				43222A0921E778EE006A227F /* ReceiptMetadataValues.swift in Sources */,
+				43222A0921E778EE006A227F /* ReceiptMetadataBuilder.swift in Sources */,
 				43703A522085EB67003AA087 /* ReceiptAttributeASN1SetProcessor.swift in Sources */,
 				43DE5719220AF2B2005442FE /* ResultUtilities.swift in Sources */,
 				437734592212E7770010EF79 /* StoreInterfaceDelegate.swift in Sources */,
