@@ -86,7 +86,7 @@ public struct Purchase : Hashable, CustomStringConvertible {
             }
         }
         
-        @available(iOS 12.2, *)
+        @available(iOS 12.2, macOS 10.14.4, *)
         func subscriptionTermsRetentionOffer(from skProductDiscount: SKProductDiscount) -> SubscriptionTerms.RetentionOffer? {
             guard let subscriptionPeriod = subscriptionPeriod(from: skProductDiscount.subscriptionPeriod) else { return nil }
             
@@ -124,7 +124,7 @@ public struct Purchase : Hashable, CustomStringConvertible {
         }()
         
         let retentionOffers: [SubscriptionTerms.RetentionOffer] = {
-            if #available(iOS 12.2, *) {
+            if #available(iOS 12.2, macOS 10.14.4, *) {
                 return self.source.skProduct.discounts.compactMap { subscriptionTermsRetentionOffer(from: $0) }
             } else {
                 return []
