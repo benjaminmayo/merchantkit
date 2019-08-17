@@ -2,7 +2,7 @@
 //  MerchantKitTests_macOS.swift
 //  MerchantKitTests-macOS
 //
-//  Created by Benjamin on 08/04/2019.
+//  Created by Benjamin on 17/08/2019.
 //  Copyright © 2019 Benjamin Mayo. All rights reserved.
 //
 
