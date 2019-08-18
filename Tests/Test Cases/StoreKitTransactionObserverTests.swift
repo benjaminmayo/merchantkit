@@ -27,6 +27,7 @@ class StoreKitTransactionObserverTests : XCTestCase {
         self.transactionObserver = nil
     }
     
+    #if os(iOS)
     func testShouldAddStorePaymentReturnsConsistentResult() {
         let responsesAndExpectations: [(StoreIntentResponse, Bool)] = [
             (.automaticallyCommit, true),
@@ -58,6 +59,7 @@ class StoreKitTransactionObserverTests : XCTestCase {
         
         XCTAssertEqual(result, expectedResult, "Without a delegate set, the observer returned result \(result) when result \(expectedResult) was expected.")
     }
+    #endif
     
     func testRestorePurchasesEventActivateDelegateCallbacks() {
         let eventAndExpectedResults: [(() -> Void, Result<Void, Error>)] = [
