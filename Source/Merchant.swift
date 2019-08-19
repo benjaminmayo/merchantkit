@@ -92,18 +92,7 @@ public final class Merchant {
     
     /// Returns the state for a `product`. Consumable products always report that they are `notPurchased`.
     public func state(for product: Product) -> PurchasedState {
-        guard let record = self.configuration.storage.record(forProductIdentifier: product.identifier) else {
-            return .notPurchased
-        }
-        
-        switch product.kind {
-            case .consumable:
-                return .notPurchased
-            case .nonConsumable, .subscription(automaticallyRenews: _):
-                let info = PurchasedProductInfo(expiryDate: record.expiryDate)
-            
-                return .isPurchased(info)
-        }
+        return self.configuration.storage.state(for: product)
     }
     
     /// Find possible purchases for the given products. If `products` is empty, then the zMerchantz finds purchases for all registered products.
