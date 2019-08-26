@@ -7,11 +7,11 @@ Pod::Spec.new do |spec|
     spec.summary = "A modern In-App Purchases management framework for iOS developers."
     spec.requires_arc = true
 
-    spec.version = "0.12.0"
+    spec.version = "0.13.0"
 
     spec.license = { :type => "MIT", :file => "LICENSE" }
 
-    spec.author = { "Benjamin Mayo" => "me@benjaminmayo.co.uk" }
+    spec.author = { "Benjamin Mayo" => "me@bzamayo.com" }
 
     spec.homepage = "http://github.com/benjaminmayo/merchantkit"
 

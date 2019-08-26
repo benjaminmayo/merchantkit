@@ -192,4 +192,4 @@ The `Merchant` will always report a consumable product's state as `PurchasedStat
 
 ## Credits
 
-Developed and managed by [Benjamin Mayo](http://benjaminmayo.co.uk), [@bzamayo](http://twitter.com/bzamayo) on Twitter.
+Developed and managed by [Benjamin Mayo](https://bzamayo.com), [@bzamayo](http://twitter.com/bzamayo) on Twitter.
