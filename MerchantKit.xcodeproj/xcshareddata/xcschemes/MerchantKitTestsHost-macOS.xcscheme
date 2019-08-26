@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "439FA1822309735A00FCCBA3"
-               BuildableName = "TestsHost-macOS.app"
-               BlueprintName = "TestsHost-macOS"
+               BuildableName = "MerchantKitTestsHost-macOS.app"
+               BlueprintName = "MerchantKitTestsHost-macOS"
                ReferencedContainer = "container:MerchantKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,8 +33,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "439FA1822309735A00FCCBA3"
-            BuildableName = "TestsHost-macOS.app"
-            BlueprintName = "TestsHost-macOS"
+            BuildableName = "MerchantKitTestsHost-macOS.app"
+            BlueprintName = "MerchantKitTestsHost-macOS"
             ReferencedContainer = "container:MerchantKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -56,8 +56,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "439FA1822309735A00FCCBA3"
-            BuildableName = "TestsHost-macOS.app"
-            BlueprintName = "TestsHost-macOS"
+            BuildableName = "MerchantKitTestsHost-macOS.app"
+            BlueprintName = "MerchantKitTestsHost-macOS"
             ReferencedContainer = "container:MerchantKit.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -75,8 +75,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "439FA1822309735A00FCCBA3"
-            BuildableName = "TestsHost-macOS.app"
-            BlueprintName = "TestsHost-macOS"
+            BuildableName = "MerchantKitTestsHost-macOS.app"
+            BlueprintName = "MerchantKitTestsHost-macOS"
             ReferencedContainer = "container:MerchantKit.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

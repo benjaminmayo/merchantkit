@@ -118,6 +118,7 @@ class StoreKitStoreInterfaceTests : XCTestCase {
         self.storeInterface.restorePurchases(using: StoreParameters(applicationUsername: ""))
     }
     
+    #if os(iOS)
     func testCommitPurchase() {
         let testProduct = self.makeCommitPurchaseTestProduct()
         
@@ -163,6 +164,7 @@ class StoreKitStoreInterfaceTests : XCTestCase {
         
         self.wait(for: [completionExpectation], timeout: 5)
     }
+    #endif
 }
 
 extension StoreKitStoreInterfaceTests {

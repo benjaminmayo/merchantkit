@@ -43,7 +43,7 @@ extension StoreKitTransactionObserver : SKPaymentTransactionObserver {
     internal func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         self.delegate?.storeInterfaceWillUpdatePurchases(self.storeInterface)
         
-        for transaction in transactions {            
+        for transaction in transactions {
             switch transaction.transactionState {
                 case .purchased:
                     self.completePurchase(for: transaction, on: queue)
