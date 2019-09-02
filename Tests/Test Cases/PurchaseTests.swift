@@ -121,56 +121,7 @@ class PurchaseTests : XCTestCase {
             XCTAssertNil(purchase.subscriptionTerms)
         }
     }
-    
-    func testShimHandlesPriceLocaleIsNullFromProductDiscountOnIntroductoryOfferDueToStoreKitBug() {
-        guard #available(iOS 11.2, *) else { return }
-        
-        for subscriptionTestProduct in self.testProducts(areSubscriptions: true) {
-            let mockSubscriptionPeriod = MockSKProductSubscriptionPeriod(unit: .day, numberOfUnits: 1)
-            let introductoryOffer = MockSKProductDiscountWithNilPriceLocale(price: NSDecimalNumber(string: "0.00"), subscriptionPeriod: mockSubscriptionPeriod, numberOfPeriods: 1, paymentMode: .freeTrial)
-            
-            let mockProduct = MockSKProductWithSubscription(productIdentifier: subscriptionTestProduct.identifier, price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, introductoryOffer: introductoryOffer)
-            
-            let purchase = Purchase(from: .availableProduct(mockProduct), for: subscriptionTestProduct)
-            
-            XCTAssertNotNil(purchase.subscriptionTerms)
-        }
-    }
-    
-    func testNilIntroductoryOfferForUnknownSKProductSubscriptionPeriodUnit() {
-        guard #available(iOS 11.2, *) else { return }
-        
-        for subscriptionTestProduct in self.testProducts(areSubscriptions: true) {
-            let mockSubscriptionPeriod = MockSKProductSubscriptionPeriod(unit: SKProduct.PeriodUnit(rawValue: 95325234)! /* unknown future value */, numberOfUnits: 1)
-            let introductoryOffer = MockSKProductDiscountWithNilPriceLocale(price: NSDecimalNumber(string: "0.00"), subscriptionPeriod: mockSubscriptionPeriod, numberOfPeriods: 1, paymentMode: SKProductDiscount.PaymentMode(rawValue: 435345345)! /* unknown future case */)
-            
-            let mockProduct = MockSKProductWithSubscription(productIdentifier: subscriptionTestProduct.identifier, price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, introductoryOffer: introductoryOffer)
-            
-            let purchase = Purchase(from: .availableProduct(mockProduct), for: subscriptionTestProduct)
-            
-            XCTAssertNil(purchase.subscriptionTerms)
-        }
-    }
-    
-    func testNilIntroductoryOfferForUnknownSKPaymentMode() {
-        guard #available(iOS 11.2, *) else { return }
-        
-        for subscriptionTestProduct in self.testProducts(areSubscriptions: true) {
-            let mockSubscriptionPeriod = MockSKProductSubscriptionPeriod(unit: .day, numberOfUnits: 1)
-            let introductoryOffer = MockSKProductDiscountWithNilPriceLocale(price: NSDecimalNumber(string: "0.00"), subscriptionPeriod: mockSubscriptionPeriod, numberOfPeriods: 1, paymentMode: SKProductDiscount.PaymentMode(rawValue: 435345345)! /* unknown future case */)
-            
-            let mockProduct = MockSKProductWithSubscription(productIdentifier: subscriptionTestProduct.identifier, price: NSDecimalNumber(string: "1.00"), priceLocale: .current, subscriptionPeriod: mockSubscriptionPeriod, introductoryOffer: introductoryOffer)
-            
-            let purchase = Purchase(from: .availableProduct(mockProduct), for: subscriptionTestProduct)
-            
-            XCTAssertNotNil(purchase.subscriptionTerms)
-            
-            if let terms = purchase.subscriptionTerms {
-                XCTAssertNil(terms.introductoryOffer)
-            }
-        }
-    }
-    
+
     private func testProducts(areSubscriptions: Bool) -> Set<Product> {
         let productKinds: [Product.Kind]
             
