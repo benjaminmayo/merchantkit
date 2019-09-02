@@ -1,3 +1,5 @@
+import Foundation
+
 /// A request for a `ReceiptValidator` to handle. Validators can inspect the `reason` to handle validation differently at different stages. For instance, a testing validator may want to fail, on purpose, during initialization.
 public struct ReceiptValidationRequest {
     public let data: Data

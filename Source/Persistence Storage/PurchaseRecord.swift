@@ -1,3 +1,5 @@
+import Foundation
+
 /// A storage item encapsulating information about a purchase.
 public struct PurchaseRecord : Equatable, CustomStringConvertible {
     /// The unique string identifying a particular product.

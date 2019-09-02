@@ -1,3 +1,5 @@
+import Foundation
+
 /// This task fetches receipt metadata that some app business logic may be interested in knowing.
 /// In general, this task will be rarely used and many apps will not need to use it at all.
 public final class ReceiptMetadataTask : MerchantTask {
