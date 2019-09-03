@@ -8,6 +8,7 @@ let package = Package(
         .library(name: "MerchantKit", targets: ["MerchantKit"])
     ],
     targets: [
-        .target(name: "MerchantKit", path: "Source")
+        .target(name: "MerchantKit", path: "Source"),
+        .testTarget(name: "MerchantKitTests", dependencies: ["MerchantKit"], path: "Tests")
     ]
 )
