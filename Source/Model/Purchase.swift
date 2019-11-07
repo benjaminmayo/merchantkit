@@ -44,6 +44,7 @@ public struct Purchase : Hashable, CustomStringConvertible {
     
     /// Describes the terms of the subscription purchase, such as renewal period and any introductory offers. Returns nil for non-subscription purchases.
     @available(iOS 11.2, *)
+    @available(OSX 10.13.2, *)
     public var subscriptionTerms: SubscriptionTerms? {
         func subscriptionPeriod(from skSubscriptionPeriod: SKProductSubscriptionPeriod) -> SubscriptionPeriod? {
             let unitCount = skSubscriptionPeriod.numberOfUnits
