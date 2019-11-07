@@ -11,6 +11,15 @@ internal class Logger {
         
     }
     
+    internal func log(message: @autoclosure () -> String, category: Category) {
+        guard #available(OSX 10.12, *) else {
+            return
+        }
+        
+        log(message: message(), category: category, type: .debug)
+    }
+    
+    @available(OSX 10.12, *)
     internal func log(message: @autoclosure () -> String, category: Category, type: OSLogType = .debug) {
         guard self.isActive else { return }
         
@@ -46,6 +55,7 @@ internal class Logger {
 }
 
 extension Logger {
+    @available(OSX 10.12, *)
     private func logStorage(for category: Category) -> OSLog {
         return OSLog(subsystem: self.loggingSubsystem, category: category.stringValue)
     }
