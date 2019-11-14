@@ -190,6 +190,7 @@ extension ProductInterfaceController {
             }
             
             @available(iOS 11.2, *)
+            @available(OSX 10.13.2, *)
             public var subscriptionTerms: SubscriptionTerms? {
                 return self._subscriptionTerms
             }
