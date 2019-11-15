@@ -189,8 +189,7 @@ extension ProductInterfaceController {
                 self._subscriptionTerms = subscriptionTerms
             }
             
-            @available(iOS 11.2, *)
-            @available(OSX 10.13.2, *)
+            @available(iOS 11.2, macOS 10.13.2, *)
             public var subscriptionTerms: SubscriptionTerms? {
                 return self._subscriptionTerms
             }
@@ -316,7 +315,7 @@ extension ProductInterfaceController {
                         if let purchase = purchases.purchase(for: product) {
                             let subscriptionTerms: SubscriptionTerms?
                             
-                            if #available(iOS 11.2, *), #available(OSX 10.13.2, *) {
+                            if #available(iOS 11.2, macOS 10.13.2, *) {
                                 subscriptionTerms = purchase.subscriptionTerms
                             } else {
                                 subscriptionTerms = nil
