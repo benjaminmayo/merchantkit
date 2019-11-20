@@ -6,6 +6,10 @@ public final class LocalReceiptValidator : ReceiptValidator {
         
     }
     
+    public var subscriptionRenewalLeeway: ReceiptValidatorSubscriptionRenewalLeeway {
+        return .default
+    }
+    
     public func validate(_ request: ReceiptValidationRequest, completion: @escaping (Result<Receipt, Error>) -> Void) {
         DispatchQueue.global(qos: .background).async {
             do {
