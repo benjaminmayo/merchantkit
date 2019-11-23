@@ -5,12 +5,12 @@ public protocol ReceiptValidator {
 }
 
 /// The leeway represents the additional amount of time to accept a subscription as active, even if the known renewal date has technically elapsed. This is required because the `StoreKit` framework does not fastidiously update the local receipt storage. The leeway gives the system time to refresh the local receipts without interrupting the experience of legitimate paying users interacting with your application.
-public struct ReceiptValidatorSubscriptionRenewalLeeway {
+public struct ReceiptValidatorSubscriptionRenewalLeeway : Equatable {
     /// The leeway expressed as a duration in seconds. This time interval must be non-negative.
     internal let allowedElapsedDuration: TimeInterval
     
     public init(allowedElapsedDuration: TimeInterval) {
-        precondition(allowedElapsedDuration >= 0, "`allowedElapsedDuration` must be non-negative.")
+        guard allowedElapsedDuration >= 0 else { MerchantKitFatalError.raise("`allowedElapsedDuration` must be non-negative.") }
         
         self.allowedElapsedDuration = allowedElapsedDuration
     }

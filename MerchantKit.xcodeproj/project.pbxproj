@@ -85,6 +85,10 @@
 		437734662213872A0010EF79 /* MockMerchantDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437734652213872A0010EF79 /* MockMerchantDelegate.swift */; };
 		43773468221387510010EF79 /* MockSKProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43773467221387510010EF79 /* MockSKProduct.swift */; };
 		4377346A221387800010EF79 /* MockReceiptValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43773469221387800010EF79 /* MockReceiptValidator.swift */; };
+		437B40902389DC03004BEAE1 /* TestingReceiptValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437B408F2389DC03004BEAE1 /* TestingReceiptValidatorTests.swift */; };
+		437B40912389DC03004BEAE1 /* TestingReceiptValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437B408F2389DC03004BEAE1 /* TestingReceiptValidatorTests.swift */; };
+		437B40932389E0CD004BEAE1 /* ReceiptValidatorSubscriptionRenewalLeewayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437B40922389E0CD004BEAE1 /* ReceiptValidatorSubscriptionRenewalLeewayTests.swift */; };
+		437B40942389E0CD004BEAE1 /* ReceiptValidatorSubscriptionRenewalLeewayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437B40922389E0CD004BEAE1 /* ReceiptValidatorSubscriptionRenewalLeewayTests.swift */; };
 		438BDB3120FA3EE6003AAADA /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438BDB3020FA3EE6003AAADA /* Logger.swift */; };
 		438C5D2F2080BD5400D303C8 /* SubscriptionPeriodFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438C5D2E2080BD5400D303C8 /* SubscriptionPeriodFormatter.swift */; };
 		438C9DA81F548E7A00C5F0E0 /* ReceiptValidationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438C9DA71F548E7A00C5F0E0 /* ReceiptValidationRequest.swift */; };
@@ -320,6 +324,8 @@
 		437734652213872A0010EF79 /* MockMerchantDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMerchantDelegate.swift; sourceTree = "<group>"; };
 		43773467221387510010EF79 /* MockSKProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSKProduct.swift; sourceTree = "<group>"; };
 		43773469221387800010EF79 /* MockReceiptValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockReceiptValidator.swift; sourceTree = "<group>"; };
+		437B408F2389DC03004BEAE1 /* TestingReceiptValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingReceiptValidatorTests.swift; sourceTree = "<group>"; };
+		437B40922389E0CD004BEAE1 /* ReceiptValidatorSubscriptionRenewalLeewayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptValidatorSubscriptionRenewalLeewayTests.swift; sourceTree = "<group>"; };
 		438BDB3020FA3EE6003AAADA /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		438C5D2E2080BD5400D303C8 /* SubscriptionPeriodFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionPeriodFormatter.swift; sourceTree = "<group>"; };
 		438C9DA71F548E7A00C5F0E0 /* ReceiptValidationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptValidationRequest.swift; sourceTree = "<group>"; };
@@ -651,6 +657,7 @@
 				431C1FF31F5E07D9009E2CD7 /* LocalReceiptPayloadParserTests.swift */,
 				43C9B820221D8DED0093BDDD /* ReceiptAttributeASN1SetProcessorTests.swift */,
 				4319AC612092797C000ACC04 /* LocalReceiptValidatorTests.swift */,
+				437B408F2389DC03004BEAE1 /* TestingReceiptValidatorTests.swift */,
 				432BFFD7208E1DB100257585 /* PurchaseStorageTests.swift */,
 				4337A89C1EB1FE3300EAF633 /* PurchaseRecordTests.swift */,
 				43128DCF1EC38A3000DBA2EE /* PurchaseSetTests.swift */,
@@ -672,6 +679,7 @@
 				439546902086009700B9D2C6 /* PKCS7ReceiptDataContainerTests.swift */,
 				439DD22E2086840300B0F0C4 /* SubscriptionPriceFormatterTests.swift */,
 				432BFFD9208E2F9700257585 /* DescriptionUtilitiesTests.swift */,
+				437B40922389E0CD004BEAE1 /* ReceiptValidatorSubscriptionRenewalLeewayTests.swift */,
 				43C9B824221DAD7A0093BDDD /* LoggerTests.swift */,
 			);
 			path = "Test Cases";
@@ -836,7 +844,7 @@
 			attributes = {
 				DefaultBuildSystemTypeForWorkspace = Original;
 				LastSwiftUpdateCheck = 1030;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1120;
 				ORGANIZATIONNAME = "Benjamin Mayo";
 				TargetAttributes = {
 					4342025C1EAE08F80012983A = {
@@ -1035,6 +1043,7 @@
 				43F7EB3D221A019E0084DA17 /* ProductInterfaceControllerTests.swift in Sources */,
 				4314B27B208377B300ECC35C /* PurchasedStateTests.swift in Sources */,
 				4377346322137D710010EF79 /* TestsUtilities.swift in Sources */,
+				437B40932389E0CD004BEAE1 /* ReceiptValidatorSubscriptionRenewalLeewayTests.swift in Sources */,
 				43703A4620855198003AA087 /* ASN1Tests.swift in Sources */,
 				43BF6F9922201AC200E693FF /* StoreKitReceiptDataFetcherTests.swift in Sources */,
 				439BD1E52214505400D361A3 /* MockSKPayment.swift in Sources */,
@@ -1064,6 +1073,7 @@
 				43C9B81F221CBE890093BDDD /* ASN1Utilities.swift in Sources */,
 				439BD1DF2214424400D361A3 /* MerchantDelegateTests.swift in Sources */,
 				43BF6F85221EE1C300E693FF /* MockSKPaymentTransaction.swift in Sources */,
+				437B40902389DC03004BEAE1 /* TestingReceiptValidatorTests.swift in Sources */,
 				43C9B825221DAD7A0093BDDD /* LoggerTests.swift in Sources */,
 				43BF6F91221EFEBC00E693FF /* MockSKProductWithSubscription.swift in Sources */,
 				432BFFD8208E1DB100257585 /* PurchaseStorageTests.swift in Sources */,
@@ -1096,6 +1106,7 @@
 				439FA14E23096FD700FCCBA3 /* MerchantTaskProcedureTests.swift in Sources */,
 				439FA15E23096FD700FCCBA3 /* LocalizedResourcesTests.swift in Sources */,
 				439FA172230970BB00FCCBA3 /* MockSKProductDiscount.swift in Sources */,
+				437B40942389E0CD004BEAE1 /* ReceiptValidatorSubscriptionRenewalLeewayTests.swift in Sources */,
 				439FA16F230970BB00FCCBA3 /* MockSKProduct.swift in Sources */,
 				439FA15523096FD700FCCBA3 /* PurchaseStorageTests.swift in Sources */,
 				439FA15C23096FD700FCCBA3 /* MerchantDelegateTests.swift in Sources */,
@@ -1125,6 +1136,7 @@
 				439FA16E230970BB00FCCBA3 /* MockMerchantConsumableProductHandler.swift in Sources */,
 				439FA15123096FD700FCCBA3 /* ServerReceiptResponseParserTests.swift in Sources */,
 				439FA174230970BB00FCCBA3 /* MockSKPaymentTransaction.swift in Sources */,
+				437B40912389DC03004BEAE1 /* TestingReceiptValidatorTests.swift in Sources */,
 				439FA17A230970BB00FCCBA3 /* ASN1Utilities.swift in Sources */,
 				439FA173230970BB00FCCBA3 /* MockSKPayment.swift in Sources */,
 				439FA15723096FD700FCCBA3 /* PurchaseSetTests.swift in Sources */,
@@ -1577,6 +1589,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 2ZTW4G3PG5;
+				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "TestsHost-macOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1603,6 +1616,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 2ZTW4G3PG5;
+				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "TestsHost-macOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (

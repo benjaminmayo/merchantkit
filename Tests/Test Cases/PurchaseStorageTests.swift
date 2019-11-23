@@ -19,15 +19,15 @@ class PurchaseStorageTests : XCTestCase {
     
     func testSaveRecord() {
         for storage in self.testablePurchaseStorages {
-            let testRecord = self.testRecord
-            
-            let result = storage.save(testRecord)
-            
-            XCTAssertEqual(result, PurchaseStorageUpdateResult.didChangeRecords)
-            let record = storage.record(forProductIdentifier: testRecord.productIdentifier)
-            
-            XCTAssertNotNil(record)
-            XCTAssertEqual(record, testRecord)
+            for testRecord in [self.testRecord, self.testRecordWithDifferentExpiryDate] {
+                let result = storage.save(testRecord)
+                
+                XCTAssertEqual(result, PurchaseStorageUpdateResult.didChangeRecords)
+                let record = storage.record(forProductIdentifier: testRecord.productIdentifier)
+                
+                XCTAssertNotNil(record)
+                XCTAssertEqual(record, testRecord)
+            }
         }
     }
     
@@ -81,5 +81,9 @@ class PurchaseStorageTests : XCTestCase {
     
     private var testRecord: PurchaseRecord {
         return PurchaseRecord(productIdentifier: "testSubscriptionProduct", expiryDate: Date())
+    }
+    
+    private var testRecordWithDifferentExpiryDate: PurchaseRecord {
+        return PurchaseRecord(productIdentifier: "testSubscriptionProduct", expiryDate: Date(timeIntervalSinceNow: 60 * 60 * 24 * 7))
     }
 }

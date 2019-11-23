@@ -6,7 +6,7 @@ internal class TestingReceiptValidator : ReceiptValidator {
     }
 
     internal var subscriptionRenewalLeeway: ReceiptValidatorSubscriptionRenewalLeeway {
-        return .default
+        return self.wrapping.subscriptionRenewalLeeway
     }
     
     internal func validate(_ request: ReceiptValidationRequest, completion: @escaping (Result<Receipt, Swift.Error>) -> Void) {

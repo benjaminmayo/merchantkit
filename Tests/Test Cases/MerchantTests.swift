@@ -264,6 +264,7 @@ class MerchantTests : XCTestCase {
         let expectation = self.expectation(description: "Subscription expired.")
 
         let mockValidator = MockReceiptValidator()
+        mockValidator.subscriptionRenewalLeeway = .init(allowedElapsedDuration: 0)
         mockValidator.validateRequest = { request, completion in
             let entry = ReceiptEntry(productIdentifier: testProduct.identifier, expiryDate: pastDate)
             
@@ -409,6 +410,14 @@ class MerchantTests : XCTestCase {
         task.start()
         
         self.wait(for: [receiptFetchCompleteExpectation, completionExpectation], timeout: 10)
+    }
+    
+    func testEnsureSetupMessageLogged() {
+        let mockDelegate = MockMerchantDelegate()
+        let mockStoreInterface = MockStoreInterface()
+
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: nil, storeInterface: mockStoreInterface)
+        _ = merchant.availablePurchasesTask()
     }
 }
 
