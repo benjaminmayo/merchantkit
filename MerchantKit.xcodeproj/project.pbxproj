@@ -176,6 +176,7 @@
 		43C9B825221DAD7A0093BDDD /* LoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C9B824221DAD7A0093BDDD /* LoggerTests.swift */; };
 		43C9B828221DB1BC0093BDDD /* MerchantPendingProductSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C9B826221DB0CF0093BDDD /* MerchantPendingProductSet.swift */; };
 		43C9B82B221DBD5C0093BDDD /* CollectionUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C9B829221DBD460093BDDD /* CollectionUtilities.swift */; };
+		43CD8556238F0FC000270BD8 /* MerchantKit.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 43CD8555238F0FBF00270BD8 /* MerchantKit.podspec */; };
 		43D0AD7A2072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0AD792072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift */; };
 		43D4FE6F207F7E8700AEA92F /* SubscriptionTerms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D4FE6E207F7E8700AEA92F /* SubscriptionTerms.swift */; };
 		43D65ACE2211B39B0092B0B2 /* StoreInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D65ACD2211B39B0092B0B2 /* StoreInterface.swift */; };
@@ -370,6 +371,7 @@
 		43C9B824221DAD7A0093BDDD /* LoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerTests.swift; sourceTree = "<group>"; };
 		43C9B826221DB0CF0093BDDD /* MerchantPendingProductSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantPendingProductSet.swift; sourceTree = "<group>"; };
 		43C9B829221DBD460093BDDD /* CollectionUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionUtilities.swift; sourceTree = "<group>"; };
+		43CD8555238F0FBF00270BD8 /* MerchantKit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MerchantKit.podspec; sourceTree = "<group>"; };
 		43D0AD792072545F00F25597 /* ServerReceiptVerificationDataFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerReceiptVerificationDataFetcher.swift; sourceTree = "<group>"; };
 		43D4FE6E207F7E8700AEA92F /* SubscriptionTerms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionTerms.swift; sourceTree = "<group>"; };
 		43D65ACD2211B39B0092B0B2 /* StoreInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreInterface.swift; sourceTree = "<group>"; };
@@ -466,6 +468,7 @@
 			children = (
 				43C5AE0920889D3E00F804CE /* README.md */,
 				431C84461EC1E3490098516E /* Info.plist */,
+				43CD8555238F0FBF00270BD8 /* MerchantKit.podspec */,
 				4342025F1EAE08F80012983A /* Source */,
 				4342026A1EAE08F80012983A /* Tests */,
 				4370FD01220C48CF003BA681 /* TestsHost-iOS */,
@@ -905,6 +908,7 @@
 			files = (
 				439DD22B2086805B00B0F0C4 /* MerchantKitResourcesLocalizedSubscriptionPricePhrases.stringsdict in Resources */,
 				4314B25B2082C2BF00ECC35C /* MerchantKitResourcesLocalizedPeriodUnits.stringsdict in Resources */,
+				43CD8556238F0FC000270BD8 /* MerchantKit.podspec in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1251,6 +1255,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 0.14.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -1311,6 +1316,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 0.14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";

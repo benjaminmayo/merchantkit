@@ -7,7 +7,7 @@ Pod::Spec.new do |spec|
     spec.summary = "A modern In-App Purchases management framework for iOS developers."
     spec.requires_arc = true
 
-    spec.version = "0.13.0"
+    spec.version = "0.14.0"
 
     spec.license = { :type => "MIT", :file => "LICENSE" }
 
