@@ -120,9 +120,9 @@ public final class Merchant {
     }
     
     /// Begin buying a product, supplying a `purchase` fetched from the `AvailablePurchasesTask`.
-    public func commitPurchaseTask(for purchase: Purchase) -> CommitPurchaseTask {
+    public func commitPurchaseTask(for purchase: Purchase, applying discount: PurchaseDiscount? = nil) -> CommitPurchaseTask {
         return self.makeTask(initializing: {
-            let task = CommitPurchaseTask(for: purchase, with: self)
+            let task = CommitPurchaseTask(for: purchase, applying: discount, with: self)
             
             return task 
         })

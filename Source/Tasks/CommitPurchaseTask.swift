@@ -3,6 +3,7 @@ import Foundation
 /// This task starts the purchase flow for a purchase discovered by a previous `AvailablePurchasesTask` callback.
 public final class CommitPurchaseTask : MerchantTask {
     public let purchase: Purchase
+    public let discount: PurchaseDiscount?
     
     public var onCompletion: MerchantTaskCompletion<Void>!
     public private(set) var isStarted: Bool = false
@@ -10,8 +11,9 @@ public final class CommitPurchaseTask : MerchantTask {
     private unowned let merchant: Merchant
     
     /// Create a task by using the `Merchant.commitPurchaseTask(for:)` API.
-    internal init(for purchase: Purchase, with merchant: Merchant) {
+    internal init(for purchase: Purchase, applying discount: PurchaseDiscount?, with merchant: Merchant) {
         self.purchase = purchase
+        self.discount = discount
         self.merchant = merchant
     }
     
@@ -24,7 +26,7 @@ public final class CommitPurchaseTask : MerchantTask {
         
         self.merchant.storePurchaseObservers.add(self, forObserving: \.purchaseProducts)
         
-        self.merchant.storeInterface.commitPurchase(self.purchase, using: self.merchant.storeParameters)
+        self.merchant.storeInterface.commitPurchase(self.purchase, with: self.discount, using: self.merchant.storeParameters)
         
         self.merchant.logger.log(message: "Started commit purchase task for product: \(self.purchase.productIdentifier)", category: .tasks)
     }

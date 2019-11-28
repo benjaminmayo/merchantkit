@@ -30,12 +30,12 @@ internal class StoreKitStoreInterface : StoreInterface {
         return StoreKitAvailablePurchasesFetcher(forProducts: products)
     }
     
-    internal func commitPurchase(_ purchase: Purchase, using storeParameters: StoreParameters) {
+    internal func commitPurchase(_ purchase: Purchase, with discount: PurchaseDiscount?, using storeParameters: StoreParameters) {
         let payment: SKPayment
         
         switch purchase.source {
             case .availableProduct(let product):
-                payment = self.payment(forAvailableProduct: product, using: storeParameters)
+                payment = self.payment(forAvailableProduct: product, with: discount, using: storeParameters)
             case .pendingStorePayment(_, let pendingPayment):
                 payment = pendingPayment
         }
@@ -51,9 +51,13 @@ internal class StoreKitStoreInterface : StoreInterface {
 }
 
 extension StoreKitStoreInterface {
-    private func payment(forAvailableProduct product: SKProduct, using storeParameters: StoreParameters) -> SKPayment {
+    private func payment(forAvailableProduct product: SKProduct, with discount: PurchaseDiscount? = nil, using storeParameters: StoreParameters) -> SKPayment {
         let payment = SKMutablePayment(product: product)
         payment.applicationUsername = storeParameters.applicationUsername.nonEmpty
+        
+        if let discount = discount, #available(iOS 12.2, *) {
+            payment.paymentDiscount = SKPaymentDiscount(identifier: discount.offerIdentifier, keyIdentifier: discount.keyIdentifier, nonce: discount.nonce, signature: discount.signature, timestamp: NSNumber(value: discount.timestamp.timeIntervalSince1970))
+        }
         
         return payment
     }

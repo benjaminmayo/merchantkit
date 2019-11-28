@@ -4,6 +4,6 @@ internal protocol StoreInterface : AnyObject {
     func makeReceiptFetcher(for policy: ReceiptFetchPolicy) -> ReceiptDataFetcher
     func makeAvailablePurchasesFetcher(for products: Set<Product>) -> AvailablePurchasesFetcher
     
-    func commitPurchase(_ purchase: Purchase, using storeParameters: StoreParameters)
+    func commitPurchase(_ purchase: Purchase, with discount: PurchaseDiscount?, using storeParameters: StoreParameters)
     func restorePurchases(using storeParameters: StoreParameters)
 }
