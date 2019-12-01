@@ -12,7 +12,7 @@ public protocol ProductInterfaceControllerDelegate : AnyObject {
 /// This controller is actively being worked on and the API surface is considered volatile.
 /// This controller manages the purchased state of the supplied `products`. This controller is a convenience wrapper around several `Merchant` tasks and is intended to be used to display a user interface, like a storefront.
 ///
-/// Create a controller and call `fetchDataIfNecessary()` when the user interface is presented. Update UI in response to state changes, via the `delegate`.
+/// Create a controller and call `fetchDataIfNecessary()` when the user interface is presented. Update UI in response to state changes, via the `delegate`. Delegate methods are invoked on the main queue.
 ///
 /// If the user decides to purchase a displayed product, use the `commit(_:)` method to begin a purchase flow. Alternatively, call `restorePurchases()` if the user wants to restore an earlier transaction.
 
