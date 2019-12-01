@@ -104,38 +104,36 @@ public final class ProductInterfaceController {
         task.onCompletion = { result in
             self.commitPurchaseTask = nil
             
-            self.didChangeState(for: [product])
-            
-            switch result {
-                case .success(_):
-                    DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                self.didChangeState(for: [product])
+                
+                switch result {
+                    case .success(_):
                         self.delegate?.productInterfaceController(self, didCommit: purchase, with: .success)
-                    }
-                case .failure(let baseError):
-                    let error: CommitPurchaseError
-                    
-                    let underlyingError = (baseError as NSError).userInfo[NSUnderlyingErrorKey] as? Error
-                    
-                    switch (baseError, underlyingError) {
-                        case (SKError.paymentCancelled, _):
-                            error = .userCancelled
-                        #if os(iOS)
-                        case (SKError.storeProductNotAvailable, _):
-                            error = .purchaseNotAvailable
-                        #endif
-                        case (SKError.paymentInvalid, _):
-                            error = .paymentInvalid
-                        case (SKError.paymentNotAllowed, _):
-                            error = .paymentNotAllowed
-                        case (let networkError as URLError, _), (_, let networkError as URLError):
-                            error = .networkError(networkError)
-                        default:
-                            error = .genericProblem(baseError)
-                    }
-                    
-                    DispatchQueue.main.async {
+                    case .failure(let baseError):
+                        let error: CommitPurchaseError
+                        
+                        let underlyingError = (baseError as NSError).userInfo[NSUnderlyingErrorKey] as? Error
+                        
+                        switch (baseError, underlyingError) {
+                            case (SKError.paymentCancelled, _):
+                                error = .userCancelled
+                            #if os(iOS)
+                            case (SKError.storeProductNotAvailable, _):
+                                error = .purchaseNotAvailable
+                            #endif
+                            case (SKError.paymentInvalid, _):
+                                error = .paymentInvalid
+                            case (SKError.paymentNotAllowed, _):
+                                error = .paymentNotAllowed
+                            case (let networkError as URLError, _), (_, let networkError as URLError):
+                                error = .networkError(networkError)
+                            default:
+                                error = .genericProblem(baseError)
+                        }
+
                         self.delegate?.productInterfaceController(self, didCommit: purchase, with: .failure(error))
-                    }
+                }
             }
         }
         
