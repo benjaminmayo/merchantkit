@@ -56,7 +56,7 @@ extension StoreKitStoreInterface {
         payment.applicationUsername = storeParameters.applicationUsername.nonEmpty
         
         if let discount = discount, #available(iOS 12.2, *) {
-            payment.paymentDiscount = SKPaymentDiscount(identifier: discount.offerIdentifier, keyIdentifier: discount.keyIdentifier, nonce: discount.nonce, signature: discount.signature, timestamp: NSNumber(value: discount.timestamp.timeIntervalSince1970))
+            payment.paymentDiscount = SKPaymentDiscount(identifier: discount.offerIdentifier, keyIdentifier: discount.keyIdentifier, nonce: discount.nonce, signature: discount.signature, timestamp: NSNumber(value: discount.timestamp))
         }
         
         return payment
