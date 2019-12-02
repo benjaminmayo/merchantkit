@@ -8,7 +8,7 @@ internal class MockStoreInterface {
     internal var receiptFetchDidComplete: (() -> Void)?
     
     internal var availablePurchasesResult: Result<PurchaseSet, Error>!
-    internal var didCommitPurchase: ((Purchase) -> Void)?
+    internal var didCommitPurchase: ((Purchase, PurchaseDiscount?) -> Void)?
     internal var restoredProductsResult: Result<Set<String>, Error>!
     
     private var delegate: StoreInterfaceDelegate?
@@ -61,8 +61,8 @@ extension MockStoreInterface : StoreInterface {
         return fetcher
     }
     
-    internal func commitPurchase(_ purchase: Purchase, using storeParameters: StoreParameters) {
-        self.didCommitPurchase?(purchase)
+    internal func commitPurchase(_ purchase: Purchase, with discount: PurchaseDiscount?, using storeParameters: StoreParameters) {
+        self.didCommitPurchase?(purchase, discount)
     }
     
     internal func restorePurchases(using storeParameters: StoreParameters) {
