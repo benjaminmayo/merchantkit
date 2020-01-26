@@ -33,10 +33,16 @@ extension StoreKitTransactionObserver {
     }
     
     fileprivate func failPurchase(for transaction: SKPaymentTransaction, on paymentQueue: SKPaymentQueue) {
-        self.delegate?.storeInterface(self.storeInterface, didFailToPurchaseProductWith: transaction.payment.productIdentifier, error: transaction.error!)
+		let error = transaction.error ?? Error.unknownStoreKitFailure // in some esoteric cases, like when switching between production and sandbox environments, StoreKit does not set an error here. A previous version of the framework used a force-unwrap, but this was inconvenience to developers testing their apps in sandbox environments. Instead, we provide a generic fallback error.
+		
+        self.delegate?.storeInterface(self.storeInterface, didFailToPurchaseProductWith: transaction.payment.productIdentifier, error: error)
         
         paymentQueue.finishTransaction(transaction)
     }
+	
+	private enum Error : Swift.Error {
+		case unknownStoreKitFailure
+	}
 }
 
 extension StoreKitTransactionObserver : SKPaymentTransactionObserver {
@@ -80,7 +86,7 @@ extension StoreKitTransactionObserver : SKPaymentTransactionObserver {
         self.delegate?.storeInterface(self.storeInterface, didFinishRestoringPurchasesWith: .success)
     }
     
-    internal func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
+	internal func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Swift.Error) {
         self.delegate?.storeInterface(self.storeInterface, didFinishRestoringPurchasesWith: .failure(error))
     }
 }
