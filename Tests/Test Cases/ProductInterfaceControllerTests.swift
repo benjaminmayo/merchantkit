@@ -111,7 +111,7 @@ class ProductInterfaceControllerTests : XCTestCase {
         
         mockProductInterfaceControllerDelegate.didChangeFetchingState = {
             switch controller.fetchingState {
-                case .failed(.genericProblem):
+                case .failed(.genericProblem(MockError.mockError)):
                     mockStoreInterface.availablePurchasesResult = .success(PurchaseSet(from: testProductsAndPurchases.map { $0.purchase }))
                     
                     mockProductInterfaceControllerDelegate.didChangeFetchingState = {
@@ -141,7 +141,7 @@ class ProductInterfaceControllerTests : XCTestCase {
                     
                     controller.fetchDataIfNecessary()
                 case .failed(let reason):
-                    XCTFail("The fetching state failed with \(reason) when \(ProductInterfaceController.FetchingState.FailureReason.genericProblem) was expected.")
+                    XCTFail("The fetching state failed with \(reason) when \(ProductInterfaceController.FetchingState.FailureReason.genericProblem(MockError.mockError)) was expected.")
                 default:
                     break
             }

@@ -202,7 +202,7 @@ extension ProductInterfaceController {
         public enum FailureReason {
             case networkFailure(URLError)
             case storeKitFailure(SKError)
-            case genericProblem
+            case genericProblem(Error)
         }
     }
     
@@ -250,10 +250,10 @@ extension ProductInterfaceController {
                     switch (error, underlyingError) {
                         case (let networkError as URLError, _), (_, let networkError as URLError):
                             failureReason = .networkFailure(networkError)
-                        case (let error as SKError, _):
-                            failureReason = .storeKitFailure(error)
+                        case (let skError as SKError, _):
+                            failureReason = .storeKitFailure(skError)
                         default:
-                            failureReason = .genericProblem
+                            failureReason = .genericProblem(error)
                     }
                     
                     loadResult = .failed(failureReason)
