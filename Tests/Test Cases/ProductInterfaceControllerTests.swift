@@ -92,7 +92,7 @@ class ProductInterfaceControllerTests : XCTestCase {
         
         let mockDelegate = MockMerchantDelegate()
         let mockStoreInterface = MockStoreInterface()
-        mockStoreInterface.availablePurchasesResult = .failure(MockError.mockError)
+		mockStoreInterface.availablePurchasesResult = .failure(.other(MockError.mockError))
         mockStoreInterface.receiptFetchResult = .success(Data())
         
         let mockConsumableProductsHandler = MockMerchantConsumableProductHandler()
@@ -111,7 +111,7 @@ class ProductInterfaceControllerTests : XCTestCase {
         
         mockProductInterfaceControllerDelegate.didChangeFetchingState = {
             switch controller.fetchingState {
-                case .failed(.genericProblem(MockError.mockError)):
+				case .failed(.genericProblem(MockError.mockError)):
                     mockStoreInterface.availablePurchasesResult = .success(PurchaseSet(from: testProductsAndPurchases.map { $0.purchase }))
                     
                     mockProductInterfaceControllerDelegate.didChangeFetchingState = {
@@ -309,7 +309,7 @@ class ProductInterfaceControllerTests : XCTestCase {
             let mockDelegate = MockMerchantDelegate()
             let mockStoreInterface = MockStoreInterface()
             mockStoreInterface.receiptFetchResult = .success(Data())
-            mockStoreInterface.availablePurchasesResult = .failure(error)
+			mockStoreInterface.availablePurchasesResult = .failure(.other(error))
 
             let mockConsumableProductsHandler = MockMerchantConsumableProductHandler()
             mockConsumableProductsHandler.consumeProduct = { product, completion in

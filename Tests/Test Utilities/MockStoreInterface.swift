@@ -7,7 +7,7 @@ internal class MockStoreInterface {
 
     internal var receiptFetchDidComplete: (() -> Void)?
     
-    internal var availablePurchasesResult: Result<PurchaseSet, Error>!
+    internal var availablePurchasesResult: Result<PurchaseSet, AvailablePurchasesFetcherError>!
     internal var didCommitPurchase: ((Purchase, PurchaseDiscount?) -> Void)?
     internal var restoredProductsResult: Result<Set<String>, Error>!
     
@@ -81,14 +81,14 @@ extension MockStoreInterface : StoreInterface {
 private class MockAvailablePurchasesFetcher : AvailablePurchasesFetcher {
     private let products: Set<Product>
     
-    typealias Completion = (Result<PurchaseSet, Error>) -> Void
+    typealias Completion = (Result<PurchaseSet, AvailablePurchasesFetcherError>) -> Void
     
     private var completionHandlers = [Completion]()
     
     private var isFinished: Bool = false
     private var isCancelled: Bool = false
     
-    var result: Result<PurchaseSet, Error>!
+    var result: Result<PurchaseSet, AvailablePurchasesFetcherError>!
 
     
     required init(forProducts products: Set<Product>) {

@@ -27,7 +27,7 @@ internal class StoreKitStoreInterface : StoreInterface {
     }
     
     internal func makeAvailablePurchasesFetcher(for products: Set<Product>) -> AvailablePurchasesFetcher {
-        return StoreKitAvailablePurchasesFetcher(forProducts: products)
+		return StoreKitAvailablePurchasesFetcher(forProducts: products, paymentQueue: self.paymentQueue)
     }
     
     internal func commitPurchase(_ purchase: Purchase, with discount: PurchaseDiscount?, using storeParameters: StoreParameters) {

@@ -42,8 +42,10 @@ public final class AvailablePurchasesTask : MerchantTask {
         self.merchant.taskDidResign(self)
     }
     
-    private func finish(with result: Result<Purchases, Error>) {
-        self.onCompletion(result)
+    private func finish(with result: Result<Purchases, AvailablePurchasesFetcherError>) {
+		let mapped = result.mapError { $0 as Error }
+		
+        self.onCompletion(mapped)
         
         DispatchQueue.main.async {
             self.merchant.taskDidResign(self)

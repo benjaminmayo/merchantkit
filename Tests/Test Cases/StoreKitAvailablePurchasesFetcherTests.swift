@@ -9,7 +9,7 @@ class StoreKitAvailablePurchasesFetcherTests : XCTestCase {
         
         let mockSKProduct = MockSKProduct(productIdentifier: testProduct.identifier, price: NSDecimalNumber(string: "1.99"), priceLocale: Locale(identifier: "en_US_POSIX"))
         
-        let fetcher = StoreKitAvailablePurchasesFetcher(forProducts: [testProduct])
+        let fetcher = StoreKitAvailablePurchasesFetcher(forProducts: [testProduct], paymentQueue: MockSKPaymentQueue())
         fetcher.enqueueCompletion({ result in
             let purchase = Purchase(from: .availableProduct(mockSKProduct), for: testProduct)
             let expectedPurchases = PurchaseSet(from: [purchase])

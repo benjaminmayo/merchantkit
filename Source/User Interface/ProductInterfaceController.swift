@@ -203,6 +203,7 @@ extension ProductInterfaceController {
             case networkFailure(URLError)
             case storeKitFailure(SKError)
             case genericProblem(Error)
+			case userNotAllowedToMakePurchases
         }
     }
     
@@ -248,10 +249,16 @@ extension ProductInterfaceController {
                     let underlyingError = (error as NSError).userInfo[NSUnderlyingErrorKey] as? Error
                     
                     switch (error, underlyingError) {
+						case (AvailablePurchasesFetcherError.userNotAllowedToMakePurchases, _):
+							failureReason = .userNotAllowedToMakePurchases
                         case (let networkError as URLError, _), (_, let networkError as URLError):
                             failureReason = .networkFailure(networkError)
                         case (let skError as SKError, _):
                             failureReason = .storeKitFailure(skError)
+						case (_, let skError as SKError):
+							failureReason = .storeKitFailure(skError)
+						case (AvailablePurchasesFetcherError.other(let error), _):
+							failureReason = .genericProblem(error)
                         default:
                             failureReason = .genericProblem(error)
                     }

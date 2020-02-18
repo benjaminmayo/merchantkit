@@ -18,7 +18,7 @@ class MerchantTaskProcedureTests : XCTestCase {
         
         self.runTest(
             with: outcomes,
-            availablePurchasesResult: Result<PurchaseSet, MockError>.success(availablePurchases),
+            availablePurchasesResult: .success(availablePurchases),
             commitPurchaseResults: commitPurchaseResults
         )
     }
@@ -27,7 +27,7 @@ class MerchantTaskProcedureTests : XCTestCase {
         let productsAndPurchases = self.testProductsAndPurchases()
         let outcomes = productsAndPurchases.map { $0.product }.map { ProductExpectedOutcome(for: $0, finalState: .notPurchased, isPurchaseExists: false, isSuccessfulCommit: false) }
 
-        self.runTest(with: outcomes, availablePurchasesResult: .failure(MockError.mockError), commitPurchaseResults: [:])
+		self.runTest(with: outcomes, availablePurchasesResult: .failure(.other(MockError.mockError)), commitPurchaseResults: [:])
     }
     
     func testCancelledFetch() {
@@ -68,7 +68,7 @@ class MerchantTaskProcedureTests : XCTestCase {
         
         self.runTest(
             with: outcomes,
-            availablePurchasesResult: Result<PurchaseSet, MockError>.success(availablePurchases),
+            availablePurchasesResult: .success(availablePurchases),
             commitPurchaseResults: commitPurchaseResults
         )
     }
@@ -303,7 +303,7 @@ extension MerchantTaskProcedureTests {
         }
     }
     
-    private func runTest<AvailablePurchasesError>(with expectedOutcomes: [ProductExpectedOutcome], availablePurchasesResult: Result<PurchaseSet, AvailablePurchasesError>, commitPurchaseResults: [String : Result<Void, Error>]) where AvailablePurchasesError : Error & Equatable {
+    private func runTest(with expectedOutcomes: [ProductExpectedOutcome], availablePurchasesResult: Result<PurchaseSet, AvailablePurchasesFetcherError>, commitPurchaseResults: [String : Result<Void, Error>]) {
         let products = Set(expectedOutcomes.map { $0.product })
         XCTAssertEqual(products.count, expectedOutcomes.count)
         
@@ -341,7 +341,7 @@ extension MerchantTaskProcedureTests {
         }
         
         let mockStoreInterface = MockStoreInterface()
-        mockStoreInterface.availablePurchasesResult = availablePurchasesResult.mapError { $0 as Error }
+        mockStoreInterface.availablePurchasesResult = availablePurchasesResult
         mockStoreInterface.receiptFetchResult = .success(Data())
         
         merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: mockConsumableProductsHandler, storeInterface: mockStoreInterface)
@@ -397,10 +397,14 @@ extension MerchantTaskProcedureTests {
                     case .success(_):
                         XCTFail("Failed to fetch purchases when success was expected.")
                     case .failure(let expectedError):// where let expectedError = expectedError as AvailablePurchasesError:
-                        if let foundError = error as? AvailablePurchasesError {
-                            if foundError != expectedError {
-                                XCTFail("Failed to fetch purchases with error \(foundError), when error \(expectedError) was expected.")
-                            }
+                        if let foundError = error as? AvailablePurchasesFetcherError {
+							switch (foundError, expectedError) {
+								case (.userNotAllowedToMakePurchases, .userNotAllowedToMakePurchases): break
+								case (.noAvailablePurchases(let a), .noAvailablePurchases(let b)) where a == b: break
+								case (.other(let a as NSError), .other(let b as NSError)) where a == b: break
+								default:
+									XCTFail("Failed to fetch purchases with error \(foundError), when error \(expectedError) was expected.")
+							}
                         } else {
                             XCTFail("Failed to fetch purchases with error \(error), when error \(expectedError) was expected.")
                         }
