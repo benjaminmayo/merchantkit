@@ -388,6 +388,12 @@
 		43DE5718220AF2B2005442FE /* ResultUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultUtilities.swift; sourceTree = "<group>"; };
 		43DE571A220B20B8005442FE /* StoreIntentResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreIntentResponse.swift; sourceTree = "<group>"; };
 		43F7EB3B221A01870084DA17 /* ProductInterfaceControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductInterfaceControllerTests.swift; sourceTree = "<group>"; };
+		9F27993E25BAAA7200B344DD /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "zh-Hans"; path = "zh-Hans.lproj/MerchantKitResourcesLocalizedPeriodUnits.stringsdict"; sourceTree = "<group>"; };
+		9F27993F25BAAA7200B344DD /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "zh-Hans"; path = "zh-Hans.lproj/MerchantKitResourcesLocalizedSubscriptionPricePhrases.stringsdict"; sourceTree = "<group>"; };
+		9F27994025BAAA7900B344DD /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "zh-Hant"; path = "zh-Hant.lproj/MerchantKitResourcesLocalizedPeriodUnits.stringsdict"; sourceTree = "<group>"; };
+		9F27994125BAAA7900B344DD /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "zh-Hant"; path = "zh-Hant.lproj/MerchantKitResourcesLocalizedSubscriptionPricePhrases.stringsdict"; sourceTree = "<group>"; };
+		9F27994225BAAA8000B344DD /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "zh-HK"; path = "zh-HK.lproj/MerchantKitResourcesLocalizedPeriodUnits.stringsdict"; sourceTree = "<group>"; };
+		9F27994325BAAA8000B344DD /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "zh-HK"; path = "zh-HK.lproj/MerchantKitResourcesLocalizedSubscriptionPricePhrases.stringsdict"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -889,6 +895,9 @@
 				fr,
 				es,
 				Base,
+				"zh-Hans",
+				"zh-Hant",
+				"zh-HK",
 			);
 			mainGroup = 434202531EAE08F80012983A;
 			productRefGroup = 4342025E1EAE08F80012983A /* Products */;
@@ -1191,6 +1200,9 @@
 				4314B25C2082C2BF00ECC35C /* en */,
 				4314B26D20831AEF00ECC35C /* fr */,
 				4314B26E20831CA800ECC35C /* es */,
+				9F27993E25BAAA7200B344DD /* zh-Hans */,
+				9F27994025BAAA7900B344DD /* zh-Hant */,
+				9F27994225BAAA8000B344DD /* zh-HK */,
 			);
 			name = MerchantKitResourcesLocalizedPeriodUnits.stringsdict;
 			sourceTree = "<group>";
@@ -1199,6 +1211,9 @@
 			isa = PBXVariantGroup;
 			children = (
 				439DD22C2086805B00B0F0C4 /* en */,
+				9F27993F25BAAA7200B344DD /* zh-Hans */,
+				9F27994125BAAA7900B344DD /* zh-Hant */,
+				9F27994325BAAA8000B344DD /* zh-HK */,
 			);
 			name = MerchantKitResourcesLocalizedSubscriptionPricePhrases.stringsdict;
 			sourceTree = "<group>";
