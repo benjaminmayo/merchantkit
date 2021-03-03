@@ -322,6 +322,8 @@ extension PurchaseProductsViewController : UITableViewDelegate {
                 return "There was an error connecting to the Internet. Check your network connectivity and try again later. (Error code: \(error.code.rawValue))"
             case .genericProblem:
                 return "There was an error loading products. Try again later."
+            case .userNotAllowedToMakePurchases:
+                return "There was an error. User is not allowed to make purchases."
         }
     }
     
