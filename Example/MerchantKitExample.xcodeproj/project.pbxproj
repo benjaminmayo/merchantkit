@@ -39,6 +39,20 @@
 			remoteGlobalIDString = 4342025C1EAE08F80012983A;
 			remoteInfo = MerchantKit;
 		};
+		43CFEE0A25EFB71A0092FAD4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4369E54C2179D8F4002086C3 /* MerchantKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 439FA1422308A4D700FCCBA3;
+			remoteInfo = "MerchantKitTests-macOS";
+		};
+		43CFEE0C25EFB71A0092FAD4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4369E54C2179D8F4002086C3 /* MerchantKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 439FA1832309735A00FCCBA3;
+			remoteInfo = "MerchantKitTestsHost-macOS";
+		};
 		43D2D79E220F94B900ABDB94 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4369E54C2179D8F4002086C3 /* MerchantKit.xcodeproj */;
@@ -91,8 +105,10 @@
 			isa = PBXGroup;
 			children = (
 				4311F103217D10DF00ED9A2E /* MerchantKit.framework */,
-				4311F105217D10DF00ED9A2E /* MerchantKitTests.xctest */,
-				43D2D79F220F94B900ABDB94 /* MerchantKitTestsHost.app */,
+				4311F105217D10DF00ED9A2E /* MerchantKitTests-iOS.xctest */,
+				43D2D79F220F94B900ABDB94 /* MerchantKitTestsHost-iOS.app */,
+				43CFEE0B25EFB71A0092FAD4 /* MerchantKitTests-macOS.xctest */,
+				43CFEE0D25EFB71A0092FAD4 /* MerchantKitTestsHost-macOS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -166,7 +182,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1000;
-				LastUpgradeCheck = 1000;
+				LastUpgradeCheck = 1240;
 				ORGANIZATIONNAME = Benjamin;
 				TargetAttributes = {
 					4359BC402177CA71003DC630 = {
@@ -206,17 +222,31 @@
 			remoteRef = 4311F102217D10DF00ED9A2E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		4311F105217D10DF00ED9A2E /* MerchantKitTests.xctest */ = {
+		4311F105217D10DF00ED9A2E /* MerchantKitTests-iOS.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = MerchantKitTests.xctest;
+			path = "MerchantKitTests-iOS.xctest";
 			remoteRef = 4311F104217D10DF00ED9A2E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		43D2D79F220F94B900ABDB94 /* MerchantKitTestsHost.app */ = {
+		43CFEE0B25EFB71A0092FAD4 /* MerchantKitTests-macOS.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "MerchantKitTests-macOS.xctest";
+			remoteRef = 43CFEE0A25EFB71A0092FAD4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		43CFEE0D25EFB71A0092FAD4 /* MerchantKitTestsHost-macOS.app */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.application;
-			path = MerchantKitTestsHost.app;
+			path = "MerchantKitTestsHost-macOS.app";
+			remoteRef = 43CFEE0C25EFB71A0092FAD4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		43D2D79F220F94B900ABDB94 /* MerchantKitTestsHost-iOS.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = "MerchantKitTestsHost-iOS.app";
 			remoteRef = 43D2D79E220F94B900ABDB94 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -283,6 +313,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -344,6 +375,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -381,7 +413,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -402,7 +434,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
