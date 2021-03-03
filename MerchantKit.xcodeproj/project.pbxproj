@@ -239,6 +239,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		347ADBD525EF3F35008FC7BD /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		4305D7FA1EAE12BD0085CAA3 /* StoreKitTransactionObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreKitTransactionObserver.swift; sourceTree = "<group>"; };
 		430B637B2084D55500292FFE /* ASN1Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASN1Parser.swift; sourceTree = "<group>"; };
 		43128DCF1EC38A3000DBA2EE /* PurchaseSetTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseSetTests.swift; sourceTree = "<group>"; };
@@ -471,6 +472,7 @@
 				43C5AE0920889D3E00F804CE /* README.md */,
 				431C84461EC1E3490098516E /* Info.plist */,
 				43CD8555238F0FBF00270BD8 /* MerchantKit.podspec */,
+				347ADBD525EF3F35008FC7BD /* Package.swift */,
 				4342025F1EAE08F80012983A /* Source */,
 				4342026A1EAE08F80012983A /* Tests */,
 				4370FD01220C48CF003BA681 /* TestsHost-iOS */,

@@ -1,3 +1,5 @@
+import Foundation
+
 internal protocol AvailablePurchasesFetcher : AnyObject {
     func enqueueCompletion(_ completion: @escaping (Result<PurchaseSet, AvailablePurchasesFetcherError>) -> Void)
     func start()

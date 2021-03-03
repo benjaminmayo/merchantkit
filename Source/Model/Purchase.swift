@@ -1,6 +1,12 @@
 import Foundation 
 import StoreKit
 
+// I couldn't figure out how to get SPM to reference Source/MerchantKit.h
+@available(macOS 10.13.2, iOS 11.2, *)
+func priceLocaleFromProductDiscount(_ product: SKProductDiscount) -> Locale? {
+    return product.priceLocale
+}
+
 /// A `Purchase` represents a possible transaction between the application and the user. 
 /// A typical flow comprises fetching possible purchases using the `AvailablePurchasesTask`, then displaying these purchases to the user in UI. Begin buying a `Purchase` using the `CommitPurchaseTask`.
 public struct Purchase : Hashable, CustomStringConvertible {

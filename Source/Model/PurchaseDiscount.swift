@@ -1,3 +1,5 @@
+import Foundation
+
 /// A `PurchaseDiscount` is made up of parameters that must be generated on an application's server, if you want to apply an available discount for a `Purchase`. The `offerIdentifier` corresponds to the `identifier` of a `SubscriptionTerms.RetentionOffer`.
 /// You can supply this `PurchaseDiscount` when you commit a compatible purchase.
 public struct PurchaseDiscount {

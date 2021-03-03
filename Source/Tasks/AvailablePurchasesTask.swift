@@ -1,3 +1,5 @@
+import Foundation
+
 /// This task fetches possible purchases the user may wish to execute.
 /// The fetched purchases can represent products that the user has already purchased. These should be filtered out by the client, if desired. If you are implementing a storefront UI in your app, you may want to use `ProductInterfaceController` rather than dealing with the lower-level tasks.
 public final class AvailablePurchasesTask : MerchantTask {
