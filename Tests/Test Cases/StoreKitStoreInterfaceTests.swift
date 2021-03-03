@@ -37,6 +37,12 @@ class StoreKitStoreInterfaceTests : XCTestCase {
                 case .failure(AvailablePurchasesFetcherError.noAvailablePurchases(invalidProducts: [testProduct])):
                     break
                 case .failure(let error):
+                    #if os(macOS) // macOS returns a generic unknown error here
+                    if case .other(SKError.unknown) = error {
+                        break
+                    }
+                    #endif
+                    
                     XCTFail("The available purchases fetcher failed with error \(error) when a failure with error \(AvailablePurchasesFetcherError.noAvailablePurchases(invalidProducts: [testProduct])) was expected.")
             }
             

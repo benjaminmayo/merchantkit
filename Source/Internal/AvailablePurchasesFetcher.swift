@@ -1,10 +1,12 @@
+import Foundation
+
 internal protocol AvailablePurchasesFetcher : AnyObject {
     func enqueueCompletion(_ completion: @escaping (Result<PurchaseSet, AvailablePurchasesFetcherError>) -> Void)
     func start()
     func cancel()
 }
 
-enum AvailablePurchasesFetcherError : Swift.Error, CustomNSError {
+internal enum AvailablePurchasesFetcherError : Swift.Error, CustomNSError {
 	case userNotAllowedToMakePurchases
 	case noAvailablePurchases(invalidProducts: Set<Product>)
 	case other(Error)

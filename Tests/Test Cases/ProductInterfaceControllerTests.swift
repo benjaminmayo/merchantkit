@@ -1,4 +1,5 @@
 import XCTest
+import StoreKit
 @testable import MerchantKit
 
 class ProductInterfaceControllerTests : XCTestCase {
@@ -500,6 +501,44 @@ class ProductInterfaceControllerTests : XCTestCase {
         }
         
         runNextResult()
+        
+        self.wait(for: [completionExpectation], timeout: 5)
+    }
+    
+    func testUserNotAllowedToMakePurchasesError() {
+        let completionExpectation = self.expectation(description: "Completed.")
+
+        let testProductsAndPurchases = self.testProductsAndPurchases()
+        let testProducts = testProductsAndPurchases.map { $0.product }
+        
+        let mockDelegate = MockMerchantDelegate()
+        let mockStoreInterface = MockStoreInterface()
+        mockStoreInterface.receiptFetchResult = .success(Data())
+        mockStoreInterface.availablePurchasesResult = .failure(.userNotAllowedToMakePurchases)
+        
+        let mockConsumableProductsHandler = MockMerchantConsumableProductHandler()
+        mockConsumableProductsHandler.consumeProduct = { product, completion in
+            completion()
+        }
+        
+        let merchant = Merchant(configuration: .usefulForTestingAsPurchasedStateResetsOnApplicationLaunch, delegate: mockDelegate, consumableHandler: mockConsumableProductsHandler, storeInterface: mockStoreInterface)
+        merchant.register(testProducts)
+        merchant.setup()
+            
+        let delegate = MockProductInterfaceControllerDelegate()
+        let controller = ProductInterfaceController(products: Set(testProducts), with: merchant)
+        controller.delegate = delegate
+        
+        delegate.didChangeFetchingState = {
+            switch controller.fetchingState {
+                case .failed(.userNotAllowedToMakePurchases):
+                    completionExpectation.fulfill()
+                default:
+                    break
+            }
+        }
+        
+        controller.fetchDataIfNecessary()
         
         self.wait(for: [completionExpectation], timeout: 5)
     }

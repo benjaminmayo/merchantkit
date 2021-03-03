@@ -1,4 +1,5 @@
 import XCTest
+import StoreKit
 
 @available(iOS 11.2, *)
 internal class MockSKProductDiscount : SKProductDiscount {

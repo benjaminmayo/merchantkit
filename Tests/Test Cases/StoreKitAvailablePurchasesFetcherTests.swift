@@ -1,4 +1,5 @@
 import XCTest
+import StoreKit
 @testable import MerchantKit
 
 class StoreKitAvailablePurchasesFetcherTests : XCTestCase {
@@ -46,6 +47,34 @@ class StoreKitAvailablePurchasesFetcherTests : XCTestCase {
         let mockProductsResponse = MockSKProductsResponse(products: [mockSKProduct])
         
         fetcher.productsRequest(mockRequest, didReceive: mockProductsResponse)
+        
+        self.wait(for: [completionExpectation], timeout: 5)
+    }
+    
+    func testSimulateCannotMakePayments() {
+        class MockSKPaymentQueueWithPaymentsDisabled : SKPaymentQueue {
+            override class func canMakePayments() -> Bool {
+                return false
+            }
+        }
+        
+        let completionExpectation = self.expectation(description: "Completed available purchases fetch.")
+        let fetcher = StoreKitAvailablePurchasesFetcher(forProducts: [], paymentQueue: MockSKPaymentQueueWithPaymentsDisabled())
+        
+        fetcher.enqueueCompletion({ result in
+            switch result {
+                case .success(let purchases):
+                    XCTFail("The fetcher succeeded with purchases \(purchases) when it was expected to fail with error \(AvailablePurchasesFetcherError.userNotAllowedToMakePurchases).")
+                case .failure(.userNotAllowedToMakePurchases):
+                    break
+                case .failure(let error):
+                    XCTFail("The fetcher failed with error \(error) when it was expected to fail with error \(AvailablePurchasesFetcherError.userNotAllowedToMakePurchases).")
+            }
+            
+            completionExpectation.fulfill()
+        })
+        
+        fetcher.start()
         
         self.wait(for: [completionExpectation], timeout: 5)
     }

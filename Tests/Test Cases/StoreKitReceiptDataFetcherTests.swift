@@ -1,4 +1,5 @@
 import XCTest
+import StoreKit
 @testable import MerchantKit
 
 internal class StoreKitReceiptDataFetcherTests : XCTestCase {

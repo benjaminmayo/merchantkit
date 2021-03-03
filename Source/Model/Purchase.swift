@@ -68,7 +68,7 @@ public struct Purchase : Hashable, CustomStringConvertible {
         func subscriptionTermsIntroductoryOffer(from skProductDiscount: SKProductDiscount) -> SubscriptionTerms.IntroductoryOffer? {
             guard let subscriptionPeriod = subscriptionPeriod(from: skProductDiscount.subscriptionPeriod) else { return nil }
             
-            let locale = priceLocaleFromProductDiscount(skProductDiscount) ?? Locale.current
+            let locale = skProductDiscount.priceLocale
             
             let price = Price(value: (skProductDiscount.price as Decimal, locale))
             
@@ -91,7 +91,7 @@ public struct Purchase : Hashable, CustomStringConvertible {
             guard let subscriptionPeriod = subscriptionPeriod(from: skProductDiscount.subscriptionPeriod) else { return nil }
             
             let identifier = skProductDiscount.identifier!
-            let locale = priceLocaleFromProductDiscount(skProductDiscount) ?? Locale.current
+            let locale = skProductDiscount.priceLocale
             let price = Price(value: (skProductDiscount.price as Decimal, locale))
             let discount: SubscriptionTerms.RetentionOffer.Discount
             
