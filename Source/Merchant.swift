@@ -99,10 +99,15 @@ public final class Merchant {
         switch product.kind {
             case .consumable:
                 return .notPurchased
-            case .nonConsumable, .subscription(automaticallyRenews: _):
-                let info = PurchasedProductInfo(expiryDate: record.expiryDate)
-            
-                return .isPurchased(info)
+			case .nonConsumable, .subscription:
+				if let expiryDate = record.expiryDate,
+				   expiryDate.timeIntervalSince1970 < Date().timeIntervalSince1970
+				{
+					return .notPurchased
+				} else {
+					let info = PurchasedProductInfo(expiryDate: record.expiryDate)
+					return .isPurchased(info)
+				}
         }
     }
     
