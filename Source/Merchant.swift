@@ -505,4 +505,17 @@ extension Merchant : StoreInterfaceDelegate {
         
         return intent
     }
+  
+    internal func storeInterface(_ storeInterface: StoreInterface, didRevokeEntitlementsForProductIdentifiers productIdentifiers: [String]) {
+        checkReceipt(updateProducts: .specific(productIdentifiers: Set(productIdentifiers)), policy: .alwaysRefresh, reason: .restorePurchases) { result in
+            switch result {
+            case .success(let products):
+                for product in products {
+                    _ = self.configuration.storage.removeRecord(forProductIdentifier: product.identifier)
+                }
+            case .failure(let error):
+                self.logger.log(message: "\(error)", category: .tasks)
+            }
+        }
+    }
 }

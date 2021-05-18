@@ -89,4 +89,8 @@ extension StoreKitTransactionObserver : SKPaymentTransactionObserver {
 	internal func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Swift.Error) {
         self.delegate?.storeInterface(self.storeInterface, didFinishRestoringPurchasesWith: .failure(error))
     }
+  
+  internal func paymentQueue(_ queue: SKPaymentQueue, didRevokeEntitlementsForProductIdentifiers productIdentifiers: [String]) {
+        self.delegate?.storeInterface(self.storeInterface, didRevokeEntitlementsForProductIdentifiers: productIdentifiers)
+    }
 }
