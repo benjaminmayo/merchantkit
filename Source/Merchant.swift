@@ -197,7 +197,9 @@ extension Merchant {
         if updatedIsLoading != isLoading {
             self.isLoading = updatedIsLoading
             
-            self.delegate.merchantDidChangeLoadingState(self)
+            DispatchQueue.main.async {
+                self.delegate.merchantDidChangeLoadingState(self)
+            }
         }
     }
 }

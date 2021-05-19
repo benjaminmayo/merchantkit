@@ -54,8 +54,6 @@ extension AppDelegate : MerchantDelegate {
     // You could adjust some global interface element here, or simply do nothing, if appropriate.
     // For this example, we toggle the `UIApplication.shared.isNetworkActivityIndicatorVisible` property to show a loading indicator in the status bar.
     public func merchantDidChangeLoadingState(_ merchant: Merchant) {
-        DispatchQueue.main.async {
-            UIApplication.shared.isNetworkActivityIndicatorVisible = merchant.isLoading
-        }
+        UIApplication.shared.isNetworkActivityIndicatorVisible = merchant.isLoading
     }
 }
