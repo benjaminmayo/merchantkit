@@ -1,0 +1,48 @@
+{
+  "identifier" : "0A4DCE04",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : false,
+      "internalID" : "A97AB5D9",
+      "localizations" : [
+        {
+          "description" : "Product One",
+          "displayName" : "Product One",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "product.one",
+      "referenceName" : "Product One",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : false,
+      "internalID" : "B7994930",
+      "localizations" : [
+        {
+          "description" : "Product Another",
+          "displayName" : "Product Another",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "product.another",
+      "referenceName" : "Product Another",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 1,
+    "minor" : 1
+  }
+}

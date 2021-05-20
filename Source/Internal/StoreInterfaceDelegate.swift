@@ -10,4 +10,6 @@ internal protocol StoreInterfaceDelegate : AnyObject {
     func storeInterface(_ storeInterface: StoreInterface, didRestorePurchaseForProductWith productIdentifier: String)
     
     func storeInterface(_ storeInterface: StoreInterface, responseForStoreIntentToCommitPurchaseFrom source: Purchase.Source) -> StoreIntentResponse
+  
+    func storeInterface(_ storeInterface: StoreInterface, didRevokeEntitlementsForProductIdentifiers productIdentifiers: [String])
 }
