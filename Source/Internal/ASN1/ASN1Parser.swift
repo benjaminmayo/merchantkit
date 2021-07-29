@@ -18,7 +18,7 @@ extension ASN1 {
             self.data = data
         }
         
-        enum Token {
+        enum Token : Equatable {
             case contextStart(type: UInt8)
             case contextEnd(type: UInt8)
             case containerStart(type: ASN1.BufferType)
@@ -51,6 +51,7 @@ extension ASN1 {
             case unknownASN1Type(UInt8)
             case usesLongFormNotSupported
             case malformedLengthForData
+            case cannotResolveIndefiniteLengthForData
         }
     }
 }
@@ -143,7 +144,21 @@ extension ASN1.Parser {
             throw Error.usesLongFormNotSupported
         }
         
-        let (length, subdata) = try ASN1.consumeLength(from: subdata[subdata.index(after: subdata.startIndex)...])
+        let (parsedLength, subdata) = try ASN1.consumeLength(from: subdata[subdata.index(after: subdata.startIndex)...])
+        
+        let length: Int
+        let skipByteCountAfterBuffer: Int
+        
+        switch parsedLength {
+            case .definite(let value):
+                length = value
+                skipByteCountAfterBuffer = 0
+            case .indefinite:
+                let result = try self.resolveIndefiniteLength(from: subdata)
+                
+                length = result.bufferLength
+                skipByteCountAfterBuffer = result.skipBytes
+        }
         
         guard let bufferEndIndex = subdata.index(subdata.startIndex, offsetBy: length, limitedBy: subdata.endIndex) else {
             throw Error.malformedLengthForData
@@ -205,6 +220,53 @@ extension ASN1.Parser {
             throw stopParsingError
         }
         
-        return subdata[buffer.endIndex...]
+        guard let newStartIndex = subdata.index(buffer.endIndex, offsetBy: skipByteCountAfterBuffer, limitedBy: subdata.endIndex) else {
+            throw Error.malformedLengthForData
+        }
+        
+        return subdata[newStartIndex...]
+    }
+    
+    private func resolveIndefiniteLength(from data: Data) throws -> IndefiniteLengthResult {
+        var data = data
+        let startingAt = data.startIndex
+                
+        while !data.isEmpty {
+            let descriptor = PayloadDescriptor(from: data.first!)
+            
+            if descriptor.tag == .type(.eoc) && descriptor.domain == .universal {
+                let length = data.startIndex - startingAt
+        
+                return IndefiniteLengthResult(bufferLength: length, skipBytes: 2)
+            }
+            
+            let (parsedLength, buffer) = try ASN1.consumeLength(from: data[data.index(after: data.startIndex)...])
+            
+            let length: Int
+            let skipBytesCount: Int
+            
+            switch parsedLength {
+                case .definite(let value):
+                    length = value
+                    skipBytesCount = 0
+                case .indefinite:
+                    let result = try self.resolveIndefiniteLength(from: buffer)
+                    length = result.bufferLength
+                    skipBytesCount = result.skipBytes
+            }
+            
+            guard let bufferEndIndex = buffer.index(buffer.startIndex, offsetBy: length + skipBytesCount, limitedBy: buffer.endIndex) else {
+                throw Error.malformedLengthForData
+            }
+            
+            data = buffer[bufferEndIndex...]
+        }
+                
+        throw Error.cannotResolveIndefiniteLengthForData
+    }
+    
+    struct IndefiniteLengthResult {
+        let bufferLength: Int
+        let skipBytes: Int
     }
 }

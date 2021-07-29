@@ -11,8 +11,9 @@ class LocalReceiptValidatorTests : XCTestCase {
     func testSampleResources() {
         let twoNonconsumablesResource = SampleResource(name: "testSampleReceiptTwoNonConsumablesPurchased", expectedProductIdentifiers: ["codeSharingUnlockable", "saveScannedCodeUnlockable"], expectedOriginalApplicationVersion: "26")
         let subscriptionResource = SampleResource(name: "testSampleReceiptOneSubscriptionPurchased", expectedProductIdentifiers: ["premiumsubscription"], expectedOriginalApplicationVersion: "1.0.21")
+        let emptyResource = SampleResource(name: "testSameEmptyReceiptGeneratedByXcodeStoreKitTestConfiguration", expectedProductIdentifiers: [], expectedOriginalApplicationVersion: "")
         
-        let resources = [twoNonconsumablesResource, subscriptionResource]
+        let resources = [twoNonconsumablesResource, subscriptionResource, emptyResource]
         
         for resource in resources {
             guard let data = self.dataForSampleResource(withName: resource.name, extension: "data") else {

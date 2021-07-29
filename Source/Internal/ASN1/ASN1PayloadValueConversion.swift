@@ -17,18 +17,28 @@ extension ASN1 {
     
     typealias ConsumingConversionResult<T> = (value: T, remainingData: Data)
     
-    static func consumeLength(from data: Data) throws -> ConsumingConversionResult<Int> {
+    enum Length : Hashable {
+        case definite(Int)
+        case indefinite
+    }
+    
+    static func consumeLength(from data: Data) throws -> ConsumingConversionResult<Length> {
         guard let byte = data.first else { throw PayloadValueConversionError.invalidLength }
         
         let next = data.index(after: data.startIndex)
         
-        if ((byte & 0x80) == 0x00) {
-            return (Int(byte), data[next...])
+        guard byte >= 0x80 else {
+            return (.definite(Int(byte)), data[next...])
         }
         
         let byteCount = Int(byte & 0x7f)
         
         guard byteCount > 0 else {
+            if byte == 0x80 {
+                // indefinite length
+                return (.indefinite, data[next...])
+            }
+            
             throw PayloadValueConversionError.invalidLength // infinite length not supported
         }
         
@@ -45,7 +55,7 @@ extension ASN1 {
             throw PayloadValueConversionError.invalidLength
         }
         
-        return (integer, data[endIndex...])
+        return (.definite(integer), data[endIndex...])
     }
     
     static func value(convertedFrom buffer: Data, as bufferType: BufferType) throws -> ASN1.BufferValue {

@@ -1,5 +1,5 @@
 extension ASN1 {
-    enum BufferType : UInt8 {
+    enum BufferType : UInt8, Equatable {
         case eoc = 0x00
         case boolean = 0x01
         case integer = 0x02

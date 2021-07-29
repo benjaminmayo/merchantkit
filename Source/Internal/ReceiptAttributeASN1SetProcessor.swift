@@ -54,8 +54,9 @@ internal class ReceiptAttributeASN1SetProcessor : Equatable {
             }
             
             guard let (length, remaining) = try? ASN1.consumeLength(from: self.data[self.data.index(after: self.data.startIndex)...]) else { return nil }
+            guard case .definite(let lengthValue) = length else { return nil }
             
-            guard length <= remaining.count else { return nil }
+            guard lengthValue <= remaining.count else { return nil }
             
             return (bufferType, remaining)
         }

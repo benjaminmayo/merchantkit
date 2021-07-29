@@ -212,19 +212,6 @@ class ASN1Tests : XCTestCase {
         }
     }
     
-    func testThrowsConsumeLengthBecauseInfinite() {
-        let empty = Data([128])
-        
-        XCTAssertThrowsError(_ = try ASN1.consumeLength(from: empty), "An infinite length should be not supported.", { error in
-            switch error {
-                case ASN1.PayloadValueConversionError.invalidLength:
-                    break
-                case let error:
-                    XCTFail("The `ASN1.consumeLength(from:)` conversion failed with error \(error) but the error \(ASN1.PayloadValueConversionError.invalidLength) was expected.")
-            }
-        })
-    }
-    
     func testThrowsConsumeLengthBecauseInvalidLength() {
         let data = Data([130])
         
@@ -249,5 +236,49 @@ class ASN1Tests : XCTestCase {
                     XCTFail("The `ASN1.consumeLength(from:)` conversion failed with error \(error) but the error \(ASN1.PayloadValueConversionError.invalidLength) was expected.")
             }
         })
+    }
+    
+    func testParseSequenceWithInfiniteLength() {
+        let data = Data([0x30, 0x80, 0x2, 0x1, 0x1, 0x00, 0x00])
+        
+        let delegate = ValidatingSequenceParserDelegate(expectedTokens: [.containerStart(type: .sequence), .value(.integer(1)), .containerEnd(type: .sequence)])
+        
+        let parser = ASN1.Parser(data: data)
+        parser.delegate = delegate
+            
+        XCTAssertNoThrow(try parser.parse())
+        
+        delegate.assertValid()
+    }
+    
+    func testParseNestedSequenceWithInfiniteLength() {
+        let data = Data([0x30, 0x80, 0x2, 0x1, 0x1, 0x30, 0x80, 0x2, 0x1, 0x2, 0x00, 0x00, 0x00, 0x00])
+        
+        let delegate = ValidatingSequenceParserDelegate(expectedTokens: [.containerStart(type: .sequence), .value(.integer(1)), .containerStart(type: .sequence), .value(.integer(2)), .containerEnd(type: .sequence), .containerEnd(type: .sequence)])
+        
+        let parser = ASN1.Parser(data: data)
+        parser.delegate = delegate
+            
+        XCTAssertNoThrow(try parser.parse())
+        
+        delegate.assertValid()
+    }
+}
+
+fileprivate class ValidatingSequenceParserDelegate : ASN1ParserDelegate {
+    private let expectedTokens: [ASN1.Parser.Token]
+    
+    var parsedTokens = [ASN1.Parser.Token]()
+    
+    init(expectedTokens: [ASN1.Parser.Token]) {
+        self.expectedTokens = expectedTokens
+    }
+    
+    func assertValid() {
+        XCTAssertEqual(self.expectedTokens, self.parsedTokens)
+    }
+    
+    func asn1Parser(_ parser: ASN1.Parser, didParse token: ASN1.Parser.Token) {
+        parsedTokens.append(token)
     }
 }
