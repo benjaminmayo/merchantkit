@@ -9,7 +9,7 @@ public final class LocalReceiptValidator : ReceiptValidator {
     public var subscriptionRenewalLeeway: ReceiptValidatorSubscriptionRenewalLeeway = .default
     
     public func validate(_ request: ReceiptValidationRequest, completion: @escaping (Result<Receipt, Error>) -> Void) {
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .utility).async {
             do {
                 let decoder = LocalReceiptDataDecoder()
                 let receipt = try decoder.decode(request.data)

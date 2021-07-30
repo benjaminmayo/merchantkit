@@ -230,12 +230,16 @@ extension Merchant {
                 case .success(let receiptData):
                     self.logger.log(message: "Receipt fetch succeeded: found \(receiptData.count) bytes", category: .receipt)
                     
+                    let startTime = ProcessInfo.processInfo.systemUptime
+                    
                     self.validateReceipt(with: receiptData, reason: reason, completion: { [weak self] validateResult in
                         guard let self = self else { return }
                         
+                        let timeTaken = ProcessInfo.processInfo.systemUptime - startTime
+                        
                         switch validateResult {
                             case .success(let receipt):
-                                self.logger.log(message: "Receipt validation succeeded: \(receipt)", category: .receipt)
+                                self.logger.log(message: "Receipt validation succeeded, took \(String(format: "%g", timeTaken))s: \(receipt)", category: .receipt)
                                 
                                 self.latestFetchedReceipt = receipt
                                 
@@ -249,7 +253,7 @@ extension Merchant {
                                 
                                 completion(.success(updatedProducts))
                             case .failure(let error):
-                                self.logger.log(message: "Receipt validation failed: \(error)", category: .receipt)
+                                self.logger.log(message: "Receipt validation failed, , took \(String(format: "%g", timeTaken))s: \(error)", category: .receipt)
 
                                 completion(.failure(error))
                         }
@@ -295,6 +299,15 @@ extension Merchant {
                 productIdentifiers = identifiers
         }
         
+        func logMessage(for result: PurchaseStorageUpdateResult) -> String {
+            switch result {
+                case .didChangeRecords:
+                    return "Purchase storage did change."
+                case .noChanges:
+                    return "Purchase storage unchanged."
+            }
+        }
+            
         for productIdentifier in productIdentifiers {
             guard let product = self.product(withIdentifier: productIdentifier) else { continue }
             guard product.kind != .consumable else { continue } // consumables are special-cased as they are not recorded, but may temporarily appear in receipts
@@ -305,15 +318,6 @@ extension Merchant {
             
             let expiryDate = entries.compactMap { $0.expiryDate }.max()
             
-            func logMessage(for result: PurchaseStorageUpdateResult) -> String {
-                switch result {
-                    case .didChangeRecords:
-                        return "Purchase storage did change."
-                    case .noChanges:
-                        return "Purchase storage unchanged."
-                }
-            }
-                
             if let expiryDate = expiryDate, !self.isSubscriptionActive(forExpiryDate: expiryDate) {
                 result = self.configuration.storage.removeRecord(forProductIdentifier: productIdentifier)
                 
@@ -337,7 +341,7 @@ extension Merchant {
             
             for productIdentifier in identifiersForProductsNotInReceipt {
                 let result = self.configuration.storage.removeRecord(forProductIdentifier: productIdentifier)
-                self.logger.log(message: "Removed record for \(productIdentifier): product not in receipt", category: .purchaseStorage)
+                self.logger.log(message: "Removed record for \(productIdentifier): product not in receipt. " + logMessage(for: result), category: .purchaseStorage)
 
                 if result == .didChangeRecords {
                     updatedProducts.insert(self.registeredProducts[productIdentifier]!)
