@@ -156,8 +156,8 @@ class PurchaseTests : XCTestCase {
         }
     }
     
-    private func testProducts(areSubscriptions: Bool) -> Set<Product> {
-        let productKinds: [Product.Kind]
+    private func testProducts(areSubscriptions: Bool) -> Set<MerchantKit.Product> {
+        let productKinds: [MerchantKit.Product.Kind]
             
         if areSubscriptions {
             productKinds = [.subscription(automaticallyRenews: true), .subscription(automaticallyRenews: false)]
@@ -171,7 +171,7 @@ class PurchaseTests : XCTestCase {
     }
     
     func testLocalizedTitleAndDescriptionMatchUnderlyingSKProduct() {
-        let product = Product(identifier: "testProduct", kind: .nonConsumable)
+        let product = MerchantKit.Product(identifier: "testProduct", kind: .nonConsumable)
         let skProduct = MockSKProduct(productIdentifier: product.identifier, price: NSDecimalNumber(string: "1.99"), priceLocale: Locale(identifier: "en_US_POSIX"), localizedTitle: "LocalizedTitle", localizedDescription: "LocalizedDescription")
         
         let purchase = Purchase(from: .availableProduct(skProduct), for: product)

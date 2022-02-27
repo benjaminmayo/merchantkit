@@ -1,7 +1,7 @@
 /// The delegate for a `Merchant`. All delegate methods are called on the main thread.
 public protocol MerchantDelegate : AnyObject {
     /// Called when the state of a registered product changes. Update your application state as appropriate. Some applications may be able to implement this delegate method as a no-op, depending on how they are structured.
-    func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<Product>)
+    func merchant(_ merchant: Merchant, didChangeStatesFor products: Set<MerchantKit.Product>)
     
     /// Called when the `isLoading` property on the `Merchant` changes. You may want to update UI in response to loading state changes, e.g. show/hide the status bar network activity indicator, or you may want to do nothing. The default implementation of this delegate method does nothing.
     func merchantDidChangeLoadingState(_ merchant: Merchant)

@@ -410,7 +410,7 @@ class ProductInterfaceControllerTests : XCTestCase {
     func testRestorePurchases() {
         let testProducts = self.testProductsAndPurchases().map { $0.product }
         
-        let expectedResults: [Result<Set<Product>, Error>] = [
+        let expectedResults: [Result<Set<MerchantKit.Product>, Error>] = [
             .failure(MockError.mockError),
             .success(Set(testProducts))
         ]
@@ -548,8 +548,8 @@ class ProductInterfaceControllerTests : XCTestCase {
 }
 
 extension ProductInterfaceControllerTests {
-    private func testProductsAndPurchases() -> [(product: Product, purchase: Purchase)] {
-        let kinds: [Product.Kind] = [.consumable, .nonConsumable, .subscription(automaticallyRenews: false), .subscription(automaticallyRenews: true)]
+    private func testProductsAndPurchases() -> [(product: MerchantKit.Product, purchase: Purchase)] {
+        let kinds: [MerchantKit.Product.Kind] = [.consumable, .nonConsumable, .subscription(automaticallyRenews: false), .subscription(automaticallyRenews: true)]
         
         return kinds.enumerated().map { i, kind in
             let identifier = "testProduct\(i)"
@@ -574,7 +574,7 @@ extension ProductInterfaceControllerTests {
 
 fileprivate class MockProductInterfaceControllerDelegate : ProductInterfaceControllerDelegate {
     var didChangeFetchingState: (() -> Void)?
-    var didChangeStates: ((Set<Product>) -> Void)?
+    var didChangeStates: ((Set<MerchantKit.Product>) -> Void)?
     var didCommit: ((Purchase, ProductInterfaceController.CommitPurchaseResult) -> Void)?
     var didRestore: ((ProductInterfaceController.RestorePurchasesResult) -> Void)?
     
@@ -582,7 +582,7 @@ fileprivate class MockProductInterfaceControllerDelegate : ProductInterfaceContr
         self.didChangeFetchingState?()
     }
     
-    func productInterfaceController(_ controller: ProductInterfaceController, didChangeStatesFor products: Set<Product>) {
+    func productInterfaceController(_ controller: ProductInterfaceController, didChangeStatesFor products: Set<MerchantKit.Product>) {
         self.didChangeStates?(products)
     }
     

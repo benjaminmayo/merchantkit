@@ -4,7 +4,7 @@ import StoreKit
 public protocol ProductInterfaceControllerDelegate : AnyObject {
     func productInterfaceControllerDidChangeFetchingState(_ controller: ProductInterfaceController)
     
-    func productInterfaceController(_ controller: ProductInterfaceController, didChangeStatesFor products: Set<Product>)
+    func productInterfaceController(_ controller: ProductInterfaceController, didChangeStatesFor products: Set<MerchantKit.Product>)
     func productInterfaceController(_ controller: ProductInterfaceController, didCommit purchase: Purchase, with result: ProductInterfaceController.CommitPurchaseResult)
     func productInterfaceController(_ controller: ProductInterfaceController, didRestorePurchasesWith result: ProductInterfaceController.RestorePurchasesResult)
 }

@@ -174,7 +174,7 @@ class StoreKitStoreInterfaceTests : XCTestCase {
 }
 
 extension StoreKitStoreInterfaceTests {
-    private func makeCommitPurchaseTestProduct() -> Product {
+    private func makeCommitPurchaseTestProduct() -> MerchantKit.Product {
         return Product(identifier: UUID().uuidString, kind: .nonConsumable)
     }
 }
