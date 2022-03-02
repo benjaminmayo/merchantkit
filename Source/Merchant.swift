@@ -197,7 +197,9 @@ extension Merchant {
         if updatedIsLoading != isLoading {
             self.isLoading = updatedIsLoading
             
-            self.delegate.merchantDidChangeLoadingState(self)
+            DispatchQueue.main.async {
+                self.delegate.merchantDidChangeLoadingState(self)
+            }
         }
     }
 }
@@ -508,5 +510,18 @@ extension Merchant : StoreInterfaceDelegate {
         let intent = self.delegate.merchant(self, didReceiveStoreIntentToCommit: purchase)
         
         return intent
+    }
+  
+    internal func storeInterface(_ storeInterface: StoreInterface, didRevokeEntitlementsForProductIdentifiers productIdentifiers: [String]) {
+        checkReceipt(updateProducts: .specific(productIdentifiers: Set(productIdentifiers)), policy: .alwaysRefresh, reason: .restorePurchases) { result in
+            switch result {
+            case .success(let products):
+                for product in products {
+                    _ = self.configuration.storage.removeRecord(forProductIdentifier: product.identifier)
+                }
+            case .failure(let error):
+                self.logger.log(message: "\(error)", category: .tasks)
+            }
+        }
     }
 }
